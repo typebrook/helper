@@ -1,0 +1,17 @@
+alias al='vim ~/.bash_aliases'
+alias sa='source ~/.bash_aliases'
+alias cdd='cd ~/Downloads'
+alias cdg='cd ~/git'
+alias geo='cd ~/git/geoBingAnWeb'
+alias ai='sudo apt-get install'
+alias hg='history|grep'
+alias gc='git clone'
+alias co='curl -O'
+alias ptt='ssh bbsu@ptt.cc'
+alias geo='cd ~/git/geoBingAnWeb'
+alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
+alias dp='docker ps'
+alias dpa='docker ps -a'
+
+# tmp
+alias cdt='cd ~/git/tiles'
