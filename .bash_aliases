@@ -3,15 +3,17 @@ alias al='vim ~/.bash_aliases'
 alias sa='source ~/.bash_aliases'
 
 # cd to certain directories
-alias cdd='cd ~/Downloads'
 alias ..='cd ..'
+alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
+alias cds='cd ~/git/settings'
 
 # docker
 alias dp='docker ps'
 alias dpa='docker ps -a'
 
 # misc
+alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
 alias gc='git clone'
