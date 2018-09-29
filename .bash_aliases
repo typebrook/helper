@@ -1,6 +1,7 @@
 # modify alias
 alias al='vim ~/.bash_aliases'
 alias sa='source ~/.bash_aliases'
+alias vimrc='vim ~/.vimrc'
 
 # cd to certain directories
 alias ..='cd ..'
