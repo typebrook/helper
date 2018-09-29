@@ -48,7 +48,7 @@ set incsearch
 set undofile
 set visualbell
 
-" 如果行尾有多余的空格（包括 Tab 键），该配置将让这些空格显示成可见的小方块。
+" 顯示特殊字符
 set list
 set listchars=tab:»■,trail:■
 hi SpecialKey	ctermfg=53
