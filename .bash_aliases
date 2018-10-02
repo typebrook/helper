@@ -25,3 +25,4 @@ alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
 alias cdo='cd ~/git/openmaptiles'
+alias and='cd ~/git/geoBingAn.Android'
