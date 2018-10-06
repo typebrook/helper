@@ -11,3 +11,4 @@ catch
 endtry
 
 set cursorline
+set relativenumber
