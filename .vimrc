@@ -20,6 +20,7 @@ set cursorline
 set number
 set relativenumber
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Make Alt key works on Gnome terminal
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
