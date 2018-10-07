@@ -19,6 +19,8 @@ endtry
 set cursorline
 set number
 set relativenumber
+set showcmd
+set mouse=a
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -32,3 +34,15 @@ while c <= 'z'
   let c = nr2char(1+char2nr(c))
 endw
 set timeout ttimeoutlen=50
+ 
+ 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-plug
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/plugged')
+
+" Add indent line
+Plug 'Yggdroot/indentLine'
+
+" Initialize plugin system
+call plug#end()
