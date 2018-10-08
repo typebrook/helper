@@ -14,7 +14,8 @@ alias dp='docker ps'
 alias dpa='docker ps -a'
 
 # misc
-alias tig='tig --all'
+alias ta='tig --all'
+alias tiga='tig --all'
 alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
