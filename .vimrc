@@ -21,6 +21,7 @@ set number
 set relativenumber
 set showcmd
 set mouse=a
+nmap <c-c> :q<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
