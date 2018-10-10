@@ -13,9 +13,12 @@ alias cds='cd ~/git/settings'
 alias dp='docker ps'
 alias dpa='docker ps -a'
 
-# misc
+#tig
 alias ta='tig --all'
 alias tiga='tig --all'
+
+# misc
+alias ll='ll -h'
 alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
