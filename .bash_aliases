@@ -13,6 +13,9 @@ alias cds='cd ~/git/settings'
 alias dp='docker ps'
 alias dpa='docker ps -a'
 
+# ssh
+alias topo='ssh typebrook@topo.tw'
+
 # misc
 alias ta='tig --all'
 alias tiga='tig --all'
