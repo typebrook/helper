@@ -25,7 +25,6 @@ alias hg='history|grep'
 alias gc='git clone'
 alias co='curl -O'
 alias ptt='ssh bbsu@ptt.cc'
-alias gcp='ssh typebrook@topo.tw'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 
 # tmp
