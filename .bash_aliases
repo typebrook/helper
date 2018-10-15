@@ -13,14 +13,11 @@ alias cds='cd ~/git/settings'
 alias dp='docker ps'
 alias dpa='docker ps -a'
 
-<<<<<<< HEAD
 # ssh
 alias topo='ssh typebrook@topo.tw'
+alias ptt='ssh bbsu@ptt.cc'
 
-# misc
-=======
 #tig
->>>>>>> fe017342dc93d52ff6c85b041c1905377521e3ab
 alias ta='tig --all'
 alias tiga='tig --all'
 
@@ -31,7 +28,6 @@ alias ai='sudo apt-get install'
 alias hg='history|grep'
 alias gc='git clone'
 alias co='curl -O'
-alias ptt='ssh bbsu@ptt.cc'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 
 # tmp
