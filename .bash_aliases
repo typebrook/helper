@@ -22,7 +22,7 @@ alias ta='tig --all'
 alias tiga='tig --all'
 
 # misc
-alias ll='ll -h'
+alias ll='ls -lh'
 alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
