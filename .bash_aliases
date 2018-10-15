@@ -13,12 +13,19 @@ alias cds='cd ~/git/settings'
 alias dp='docker ps'
 alias dpa='docker ps -a'
 
+<<<<<<< HEAD
 # ssh
 alias topo='ssh typebrook@topo.tw'
 
 # misc
+=======
+#tig
+>>>>>>> fe017342dc93d52ff6c85b041c1905377521e3ab
 alias ta='tig --all'
 alias tiga='tig --all'
+
+# misc
+alias ll='ll -h'
 alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
