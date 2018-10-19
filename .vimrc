@@ -10,6 +10,22 @@ nmap <c-c> :q<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Open URL under cursor
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Solution is here: https://stackoverflow.com/questions/9458294/
+function! HandleURL()
+  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*')
+  echo s:uri
+  if s:uri != ""
+    silent exec "!xdg-open ".s:uri.""
+  else
+    echo "No URI found in line."
+  endif
+endfunction
+nmap gx :call HandleURL()<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Make Alt key works on Gnome terminal
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Solution is here: https://stackoverflow.com/questions/6778961
