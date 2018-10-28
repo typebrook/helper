@@ -19,6 +19,7 @@ alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
 
 #tig
+alias t='tig'
 alias ta='tig --all'
 alias tiga='tig --all'
 
