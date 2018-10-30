@@ -17,6 +17,7 @@ alias dpa='docker ps -a'
 # ssh
 alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
+alias geothings='ssh geothings@geobingan.info'
 
 #tig
 alias t='tig'
