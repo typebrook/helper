@@ -10,6 +10,12 @@ alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
 
+# git
+alias g='git'
+alias check='git checkout'
+alias stash='git stash'
+alias commit='git commit'
+
 # docker
 alias dp='docker ps'
 alias dpa='docker ps -a'
