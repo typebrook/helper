@@ -33,6 +33,7 @@ alias gc='git clone'
 alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias x='xdg-open'
+alias f='free -h'
 
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
