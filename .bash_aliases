@@ -43,6 +43,5 @@ alias x='xdg-open'
 alias f='free -h'
 
 # tmp
-alias geo='cd ~/git/geoBingAnWeb'
 alias cdo='cd ~/git/openmaptiles'
 alias and='cd ~/git/geoBingAn.Android'
