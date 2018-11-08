@@ -12,9 +12,12 @@ alias cds='cd ~/git/settings'
 
 # git
 alias g='git'
+alias gc='git clone'
 alias check='git checkout'
+alias gs='git stash'
 alias stash='git stash'
 alias commit='git commit'
+alias branch='git branch'
 
 # docker
 alias dp='docker ps'
@@ -36,11 +39,11 @@ alias ll='ls -lh'
 alias v='vim'
 alias ai='sudo apt-get install'
 alias hg='history|grep'
-alias gc='git clone'
 alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias x='xdg-open'
 alias f='free -h'
+alias yl='youtube-dl'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
