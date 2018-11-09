@@ -1,7 +1,8 @@
-# modify alias
+# settings
 alias al='vim ~/.bash_aliases'
 alias sa='source ~/.bash_aliases'
 alias vimrc='vim ~/.vimrc'
+alias bashrc='vim ~/.bashrc'
 
 # cd to certain directories
 alias ..='cd ..'
@@ -32,7 +33,9 @@ alias test='ssh geothings@test.geothings.tw'
 #tig
 alias t='tig'
 alias ta='tig --all'
-alias tiga='tig --all'
+alias ts='tig status'
+alias tg='tig grep'
+alias tr='tig refs'
 
 # misc
 alias ll='ls -lh'
@@ -46,5 +49,6 @@ alias f='free -h'
 alias yl='youtube-dl'
 
 # tmp
+alias geo='cd ~/git/geoBingAnWeb'
 alias cdo='cd ~/git/openmaptiles'
 alias and='cd ~/git/geoBingAn.Android'
