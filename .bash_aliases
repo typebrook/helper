@@ -20,6 +20,8 @@ alias gs='git stash'
 alias stash='git stash'
 alias commit='git commit'
 alias branch='git branch'
+alias pull='git pull'
+alias fetch='git fetch'
 
 # docker
 alias dp='docker ps'
@@ -48,6 +50,7 @@ alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
+alias raw='echo "https://raw.githubusercontent.com"'
 
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
