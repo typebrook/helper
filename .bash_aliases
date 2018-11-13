@@ -28,6 +28,7 @@ alias dp='docker ps'
 alias dpa='docker ps -a'
 
 # ssh
+alias keygen='ssh-keygen -t rsa -C "typebrook@gmail.com"'
 alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
 alias geothings='ssh geothings@geobingan.info'
