@@ -42,6 +42,7 @@ alias ts='tig status'
 alias tg='tig grep'
 alias tr='tig refs'
 alias tl='tig log'
+alias ty='tig stash'
 
 # misc
 alias ll='ls -lh'
