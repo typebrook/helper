@@ -22,6 +22,7 @@ alias commit='git commit'
 alias branch='git branch'
 alias pull='git pull'
 alias fetch='git fetch'
+alias merge='git merge'
 
 # docker
 alias dp='docker ps'
@@ -53,8 +54,6 @@ alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
 alias raw='echo "https://raw.githubusercontent.com"'
-alias sshkey='curl $(raw)/typebrook/settings/master/blob/master/gcp | cat'
-alias sshgcp='curl $(raw)/typebrook/settings/master/blob/master/gcp > ./gcp'
 
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
