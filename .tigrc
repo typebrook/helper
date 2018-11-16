@@ -1,4 +1,5 @@
 bind main P !git push
 bind stash D !?git stash drop %(stash)
 bind stash A !?git stash apply %(stash)
+bind status D !rm %(file)
 bind main c !?git checkout %(commit)
