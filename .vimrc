@@ -25,10 +25,13 @@ set timeout ttimeoutlen=50
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-plug
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" run :PlugInstall to install plugins
+
 call plug#begin('~/.vim/plugged')
 
 " Add indent line
 Plug 'Yggdroot/indentLine'
+Plug 'rking/ag.vim'
 
 " Initialize plugin system
 call plug#end()
