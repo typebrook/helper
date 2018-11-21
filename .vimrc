@@ -31,7 +31,6 @@ call plug#begin('~/.vim/plugged')
 
 " Add indent line
 Plug 'Yggdroot/indentLine'
-Plug 'rking/ag.vim'
 
 " Initialize plugin system
 call plug#end()
