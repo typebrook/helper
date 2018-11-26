@@ -32,6 +32,8 @@ call plug#begin('~/.vim/plugged')
 " Add indent line
 Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-surround'
+Plug 'lifepillar/pgsql.vim'
 
 " Initialize plugin system
 call plug#end()
