@@ -14,10 +14,10 @@ alias cds='cd ~/git/settings'
 
 # git
 alias g='git'
+alias gls='git log -S'
 alias gc='git clone'
 alias check='git checkout'
 alias checkout='git checkout'
-alias gs='git stash'
 alias stash='git stash'
 alias commit='git commit'
 alias branch='git branch'
