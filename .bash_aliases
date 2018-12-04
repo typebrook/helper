@@ -60,6 +60,7 @@ alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
 alias raw='echo "https://raw.githubusercontent.com"'
+alias nl='PS1="$PS1\n"'
 
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
