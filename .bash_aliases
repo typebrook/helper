@@ -53,6 +53,7 @@ alias debug='./gradlew app:installDebug && adb shell am start -n adb shell am st
 alias ll='ls -lh'
 alias v='vim'
 alias ai='sudo apt-get install'
+alias ss='sudo !!'
 alias hg='history|grep'
 alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
