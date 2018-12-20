@@ -48,6 +48,8 @@ alias ty='tig stash'
 
 # adb
 alias debug='./gradlew app:installDebug && adb shell am start -n adb shell am start -n com.geothings.geobingan/.MainActivity_'
+alias adbdefault='adb shell dumpsys package domain-preferred-apps'
+alias adblist='adb shell dumpsys package d'
 
 # misc
 alias ll='ls -lh'
