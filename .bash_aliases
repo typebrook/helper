@@ -55,6 +55,7 @@ alias adblist='adb shell dumpsys package d'
 # misc
 alias ll='ls -lh'
 alias v='vim'
+alias vr='vim -R'
 alias ai='sudo apt-get install'
 alias ss='sudo !!'
 alias hg='history|grep'
