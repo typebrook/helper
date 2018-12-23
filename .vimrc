@@ -6,7 +6,7 @@ set number
 set relativenumber
 set showcmd
 set mouse=a
-set clipboard=unnamedplus
+"set clipboard=unnamedplus
 nmap <c-c> :q<cr>
 
 
