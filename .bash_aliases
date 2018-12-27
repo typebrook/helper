@@ -48,10 +48,11 @@ alias tr='tig refs'
 alias tl='tig log'
 alias ty='tig stash'
 
-# adb
+# Android
 alias debug='./gradlew app:installDebug && adb shell am start -n adb shell am start -n com.geothings.geobingan/.MainActivity_'
 alias adbdefault='adb shell dumpsys package domain-preferred-apps'
 alias adblist='adb shell dumpsys package d'
+alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 
 # misc
 alias ll='ls -lh'
