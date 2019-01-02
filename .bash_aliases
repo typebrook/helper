@@ -31,6 +31,8 @@ alias remote='git remote'
 # docker
 alias dp='docker ps'
 alias dpa='docker ps -a'
+alias di='docker images'
+alias dc='docker-compose run --rm'
 
 # ssh
 alias keygen='ssh-keygen -t rsa -C "typebrook@gmail.com"'
@@ -73,3 +75,4 @@ alias nl='PS1="$PS1\n"'
 alias geo='cd ~/git/geoBingAnWeb'
 alias cdo='cd ~/git/openmaptiles'
 alias and='cd ~/git/geoBingAn.Android'
+alias gdal='docker-compose run --rm gdal'
