@@ -27,6 +27,7 @@ alias fetch='git fetch'
 alias merge='git merge'
 alias push='git push'
 alias remote='git remote'
+alias rebase='git rebase'
 
 # docker
 alias dp='docker ps'
