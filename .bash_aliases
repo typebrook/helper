@@ -5,6 +5,16 @@ alias vimrc='vim ~/.vimrc'
 alias bashrc='vim ~/.bashrc'
 alias tigrc='vim ~/.tigrc'
 
+# vim
+alias v='vim'
+alias vr='vim -R'
+
+# shell
+alias ll='ls -lh'
+alias ai='sudo apt-get install'
+alias ss='sudo !!'
+alias hg='history|grep'
+
 # cd to certain directories
 alias ..='cd ..'
 alias .='cd -'
@@ -58,12 +68,6 @@ alias adblist='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 
 # misc
-alias ll='ls -lh'
-alias v='vim'
-alias vr='vim -R'
-alias ai='sudo apt-get install'
-alias ss='sudo !!'
-alias hg='history|grep'
 alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias x='xdg-open'
