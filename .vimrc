@@ -5,7 +5,7 @@ set cursorline
 set number
 set relativenumber
 set showcmd
-set clipboard=unnamedplus
+"set clipboard=unnamedplus
 nmap <c-c> :q<cr>
 
 

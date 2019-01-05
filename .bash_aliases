@@ -23,6 +23,7 @@ alias .='cd -'
 alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
+alias r='ranger'
 
 # git
 alias g='git'
@@ -90,6 +91,7 @@ alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
 alias raw='echo "https://raw.githubusercontent.com"'
+alias editor='select-editor'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
