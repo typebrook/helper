@@ -76,6 +76,12 @@ alias f='free -h'
 alias yl='youtube-dl'
 alias raw='echo "https://raw.githubusercontent.com"'
 alias nl='PS1="$PS1\n"'
+alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/NOTE/note && \
+            vim ~/NOTE/note && \
+            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/NOTE/note'
+alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/NOTE/todo && \
+            vim ~/NOTE/todo && \
+            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/NOTE/todo'
 
 # tmp
 alias geo='cd ~/git/geoBingAnWeb'
