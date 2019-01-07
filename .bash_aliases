@@ -12,6 +12,7 @@ alias vr='vim -R'
 # shell
 alias ll='ls -lh'
 alias ai='sudo apt-get install'
+alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
 
