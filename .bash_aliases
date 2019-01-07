@@ -72,7 +72,7 @@ alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/
 alias gl='gist -l > ~/gist && cat ~/gist'
 alias gi='_gistRead'
 _gistRead() { 
-    awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR == row {print $NF}'
+    gist -r $(awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR==row {print $NF}')
 }
 alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/NOTE/note && \
             vim ~/NOTE/note && \
