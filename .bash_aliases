@@ -68,11 +68,13 @@ alias debug='./gradlew app:installDebug && adb shell am start -n adb shell am st
 alias adbdefault='adb shell dumpsys package domain-preferred-apps'
 alias adblist='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
+
 # gist
-alias gl='gist -l > ~/gist && cat -n ~/gist'
+alias gl='nl ~/gist'
+alias gll='gist -l > ~/gist && nl ~/gist'
 alias gi='_gistRead'
 _gistRead() { 
-    gist -r $(awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR==row {print $NF}')
+    gist -r $(awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
 alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/NOTE/note && \
             vim ~/NOTE/note && \
@@ -88,7 +90,6 @@ alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
 alias raw='echo "https://raw.githubusercontent.com"'
-alias nl='PS1="$PS1\n"'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
