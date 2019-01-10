@@ -70,8 +70,8 @@ alias adblist='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 
 # gist
-alias gl='nl ~/gist'
-alias gll='gist -l > ~/gist && nl ~/gist'
+alias gl='nl ~/.gist'
+alias gll='gist -l > ~/.gist && nl ~/.gist'
 alias gi='_gistRead'
 _gistRead() { 
     gist -r $(awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
