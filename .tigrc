@@ -3,4 +3,5 @@ bind stash A !?git stash apply %(stash)
 bind status D !rm %(file)
 bind refs d !?git branch -d %(branch)
 bind main c !?git checkout %(commit)
-bind generic 9 !@sh -c "echo -n %(commit) | xclip -selection c"
+bind main T !?git show %(tag)
+bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
