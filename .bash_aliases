@@ -1,5 +1,5 @@
 # settings
-alias al='vim ~/.bash_aliases'
+alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
 alias sa='source ~/.bash_aliases'
 alias vimrc='vim ~/.vimrc'
 alias bashrc='vim ~/.bashrc'
@@ -71,18 +71,19 @@ alias adblist='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 
 # gist
-alias gl='nl ~/.gist'
-alias gll='gist -l > ~/.gist && nl ~/.gist'
+gist_list=~/gist/gist.list
+alias gl='nl $gist_list'
+alias gll='gist -l > $gist_list && nl $gist_list'
 alias gi='_gistRead'
 _gistRead() { 
-    gist -r $(awk '{print $1}' ~/gist | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
+    gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
 alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/NOTE/note && \
-            vim ~/NOTE/note && \
+            vim ~/gist/note && \
             gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/NOTE/note'
-alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/NOTE/todo && \
-            vim ~/NOTE/todo && \
-            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/NOTE/todo'
+alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/gist/todo && \
+            vim ~/gist/todo && \
+            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/todo'
 
 # misc
 alias co='curl -O'
