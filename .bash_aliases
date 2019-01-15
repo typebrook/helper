@@ -78,9 +78,9 @@ alias gi='_gistRead'
 _gistRead() { 
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
-alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/NOTE/note && \
+alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/gist/note && \
             vim ~/gist/note && \
-            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/NOTE/note'
+            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/note'
 alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/gist/todo && \
             vim ~/gist/todo && \
             gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/todo'
@@ -98,3 +98,4 @@ alias editor='select-editor'
 alias cdo='cd ~/git/openmaptiles'
 alias and='cd ~/git/geoBingAn.Android'
 alias gdal='docker-compose run --rm gdal'
+alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
