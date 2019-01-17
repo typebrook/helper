@@ -19,7 +19,6 @@ alias r='ranger'
 
 # cd to certain directories
 alias ..='cd ..'
-alias .='cd -'
 alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
