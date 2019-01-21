@@ -52,7 +52,7 @@ alias keygen='ssh-keygen -t rsa -C "typebrook@gmail.com"'
 alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
 alias geothings='ssh geothings@geobingan.info'
-alias test='ssh geothings@test.geothings.tw'
+alias geothings-test='ssh geothings@test.geothings.tw'
 
 # tig
 alias t='tig'
