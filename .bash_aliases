@@ -19,6 +19,7 @@ alias r='ranger'
 
 # cd to certain directories
 alias ..='cd ..'
+alias ld='cd -' # last directory
 alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
