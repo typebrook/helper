@@ -10,7 +10,7 @@ alias v='vim'
 alias vr='vim -R'
 
 # shell
-alias ll='ls -lh'
+alias ll='ls -alh'
 alias ai='sudo apt-get install'
 alias si='sudo snap install'
 alias ss='sudo !!'
