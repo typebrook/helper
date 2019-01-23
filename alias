@@ -1,6 +1,5 @@
 # settings
 alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
-alias sa='source ~/.bash_aliases'
 alias vimrc='vim ~/.vimrc'
 alias bashrc='vim ~/.bashrc'
 alias tigrc='vim ~/.tigrc'
