@@ -1,7 +1,12 @@
-bind stash D !?git stash drop %(stash)
-bind stash A !?git stash apply %(stash)
-bind status D !rm %(file)
-bind refs d !?git branch -d %(branch)
+bind generic x :toggle id
+bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+
 bind main c !?git checkout %(commit)
 bind main T !?git show %(tag)
-bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+
+bind status D !rm %(file)
+
+bind stash D !?git stash drop %(stash)
+bind stash A !?git stash apply %(stash)
+
+bind refs d !?git branch -d %(branch)
