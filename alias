@@ -4,6 +4,7 @@ alias sa='source ~/.bash_aliases'
 alias vimrc='vim ~/.vimrc'
 alias bashrc='vim ~/.bashrc'
 alias tigrc='vim ~/.tigrc'
+alias gitrc='vim ~/.gitconfig'
 
 # vim
 alias v='vim'
