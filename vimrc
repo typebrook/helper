@@ -7,6 +7,7 @@ set relativenumber
 set showcmd
 "set clipboard=unnamedplus
 nmap <c-c> :q<cr>
+nnoremap <leader>r :.w !bash<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

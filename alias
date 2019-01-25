@@ -15,7 +15,6 @@ alias ai='sudo apt-get install'
 alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
-alias r='ranger'
 
 # cd to certain directories
 alias ..='cd ..'
