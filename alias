@@ -25,6 +25,9 @@ alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
 alias r='ranger'
 
+# disk
+alias df='df -h'
+
 # git
 alias g='git'
 alias gls='git log -S'
