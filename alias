@@ -71,6 +71,7 @@ alias debug='./gradlew app:installDebug && adb shell am start -n adb shell am st
 alias adbdefault='adb shell dumpsys package domain-preferred-apps'
 alias adblist='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
+alias adb-last-screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
 
 # gist
 gist_list=~/gist/gist.list

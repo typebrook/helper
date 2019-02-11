@@ -3,8 +3,14 @@ bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 
 bind main c !?git checkout %(commit)
 bind main T !?git show %(tag)
+set main-view = \
+    date:default \
+    author:abbreviated \
+    id:no \
+    commit-title:yes,graph=v2 
 
 bind status D !rm %(file)
+bind status a !git commit --amend
 
 bind stash D !?git stash drop %(stash)
 bind stash A !?git stash apply %(stash)
