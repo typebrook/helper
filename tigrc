@@ -7,7 +7,7 @@ set main-view = \
     date:default \
     author:abbreviated \
     id:no \
-    commit-title:yes,graph=v2 
+    commit-title:yes,graph=v2,refs=true 
 
 bind status D !rm %(file)
 bind status a !git commit --amend
