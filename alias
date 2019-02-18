@@ -8,6 +8,7 @@ alias gitrc='vim ~/.gitconfig'
 # vim
 alias v='vim'
 alias vr='vim -R'
+alias amix-update='cd _/.vim_runtime && git pull --rebase'
 
 # shell
 alias ll='ls -alh'
