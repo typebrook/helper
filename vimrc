@@ -5,7 +5,9 @@ set cursorline
 set number
 set relativenumber
 set showcmd
+set nowrap
 "set clipboard=unnamedplus
+
 nmap <c-c> :q<cr>
 nnoremap <leader>r :.w !bash<cr>
 
@@ -35,6 +37,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'lifepillar/pgsql.vim'
+Plug 'dhruvasagar/vim-table-mode'
 
 " Initialize plugin system
 call plug#end()
