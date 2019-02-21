@@ -3,11 +3,19 @@ bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 
 bind main c !?git checkout %(commit)
 bind main T !?git show %(tag)
+
 set main-view = \
     date:default \
     author:abbreviated \
     id \
     commit-title:graph=v2,refs=true 
+
+set blame-view = \
+       date:default \
+       author:abbreviated \
+       file-name:no \
+       id:yes,color \
+       line-number:yes,interval=5 text
 
 bind status D !rm %(file)
 bind status a !git commit --amend
