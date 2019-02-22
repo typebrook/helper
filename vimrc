@@ -6,6 +6,8 @@ set number
 set relativenumber
 set showcmd
 set nowrap
+set ss=1
+set siso=55
 "set clipboard=unnamedplus
 
 nmap <c-c> :q<cr>
