@@ -7,7 +7,7 @@ set relativenumber
 set showcmd
 set nowrap
 set ss=1
-set siso=55
+set siso=999
 "set clipboard=unnamedplus
 
 nmap <c-c> :q<cr>
