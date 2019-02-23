@@ -6,6 +6,7 @@ set number
 set relativenumber
 set showcmd
 set nowrap
+set nosol
 set ss=1
 set siso=999
 "set clipboard=unnamedplus
