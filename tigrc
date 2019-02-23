@@ -18,6 +18,7 @@ set blame-view = \
        id:yes,color \
        line-number:yes,interval=5 text
 
+bind status S !?git stash 
 bind status D !rm %(file)
 bind status a !git commit --amend
 
