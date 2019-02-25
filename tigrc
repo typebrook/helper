@@ -2,7 +2,7 @@ bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 
 bind main c !?git checkout %(commit)
-bind main T !?git show %(tag)
+bind main T !@git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 
 set main-view = \
@@ -19,6 +19,7 @@ set blame-view = \
        line-number:yes,interval=5 text
 
 bind status S !?git stash 
+bind status P !?git stash pop
 bind status D !rm %(file)
 bind status a !git commit --amend
 
@@ -26,3 +27,4 @@ bind stash D !?git stash drop %(stash)
 bind stash A !?git stash apply %(stash)
 
 bind refs d !?git branch -d %(branch)
+bind refs c !?git checkout %(branch)
