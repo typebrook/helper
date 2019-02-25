@@ -21,12 +21,8 @@ set main-view = \
     id \
     commit-title:graph=v2,refs=true 
 
-set blame-view = \
-    date:default \
-    author:abbreviated \
-    file-name:no \
-    id:yes,color \
-    line-number:yes,interval=5 text
+set blame-view-file-name = no
+set blame-view-line-number = yes,interval=5
 
 bind status s ?git stash 
 bind status p ?git stash pop
@@ -45,4 +41,4 @@ set line-graphics = utf-8
 # set mouse = true
 
 color diff-header default magenta
-color diff-chunk black yellow
+color diff-chunk black blue
