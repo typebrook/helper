@@ -1,9 +1,19 @@
+# ref:
+# https://qiita.com/sfus/items/063797a1dd8fdc7d032f
+# https://github.com/jonas/tig/wiki/Bindings
+
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+bind generic <Esc>g move-first-line
+bind generic <Esc>G move-last-line
+bind generic w :toggle ignore-case 
 
-bind main c !?git checkout %(commit)
-bind main T !@git tag "%(prompt Enter tag name: )" %(commit)
+bind main c ?git checkout %(commit)
+bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
+bind main M ?git merge %(commit)
+bind main P ?git push
+bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
 
 set main-view = \
     date:default \
@@ -12,19 +22,27 @@ set main-view = \
     commit-title:graph=v2,refs=true 
 
 set blame-view = \
-       date:default \
-       author:abbreviated \
-       file-name:no \
-       id:yes,color \
-       line-number:yes,interval=5 text
+    date:default \
+    author:abbreviated \
+    file-name:no \
+    id:yes,color \
+    line-number:yes,interval=5 text
 
-bind status S !?git stash 
-bind status P !?git stash pop
-bind status D !rm %(file)
-bind status a !git commit --amend
+bind status s ?git stash 
+bind status p ?git stash pop
+bind status D ?rm %(file)
+bind status a ?git commit --amend
 
-bind stash D !?git stash drop %(stash)
-bind stash A !?git stash apply %(stash)
+bind stash D ?git stash drop %(stash)
+bind stash a ?git stash apply %(stash)
 
-bind refs d !?git branch -d %(branch)
-bind refs c !?git checkout %(branch)
+bind refs d ?git branch -d %(branch)
+bind refs <Esc>d ?git branch -D %(branch)
+bind refs c ?git checkout %(branch)
+
+set ignore-case = true
+set line-graphics = utf-8
+# set mouse = true
+
+color diff-header default magenta
+color diff-chunk black yellow
