@@ -4,16 +4,23 @@
 
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
-bind generic <Esc>g move-first-line
-bind generic <Esc>G move-last-line
+bind generic g none
+bind generic gg move-first-line
+bind generic gr view-grep
+bind generic G move-last-line
 bind generic w :toggle ignore-case 
 
+bind main gG :toggle commit-title-graph
+bind main G move-last-line
 bind main c ?git checkout %(commit)
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main M ?git merge %(commit)
 bind main P ?git push
 bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
+bind main V @git log -S "%(prompt Enter search word: )"
+bind main gd ?git branch -d %(branch)
+bind main gD ?git branch -D %(branch)
 
 set main-view = \
     date:default \
@@ -38,7 +45,9 @@ bind refs c ?git checkout %(branch)
 
 set ignore-case = true
 set line-graphics = utf-8
+set refresh-mode = after-command
 # set mouse = true
 
-color diff-header default magenta
-color diff-chunk black blue
+color diff-header black yellow
+color diff-chunk white magenta
+bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
