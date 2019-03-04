@@ -12,7 +12,7 @@ bind generic w :toggle ignore-case
 
 bind main gG :toggle commit-title-graph
 bind main G move-last-line
-bind main c ?git checkout %(commit)
+bind main c @git checkout %(commit)
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main M ?git merge %(commit)
