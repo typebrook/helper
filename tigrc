@@ -32,6 +32,7 @@ set blame-view-file-name = no
 set blame-view-line-number = yes,interval=5
 
 bind status s ?git stash 
+bind status S @git stash save "%(prompt Enter stash name: )"
 bind status p ?git stash pop
 bind status D ?rm %(file)
 bind status a ?git commit --amend
