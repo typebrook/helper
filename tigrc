@@ -21,6 +21,7 @@ bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
 bind main V @git log -S "%(prompt Enter search word: )"
 bind main gd ?git branch -d %(branch)
 bind main gD ?git branch -D %(branch)
+bind main C !git branch --points-at=%(commit) | echo
 
 set main-view = \
     date:default \
@@ -40,9 +41,10 @@ bind status a ?git commit --amend
 bind stash D ?git stash drop %(stash)
 bind stash a ?git stash apply %(stash)
 
-bind refs d ?git branch -d %(branch)
-bind refs <Esc>d ?git branch -D %(branch)
+bind refs C none
 bind refs c ?git checkout %(branch)
+bind refs d @git branch -d %(branch)
+bind refs b @git branch %(branch) %(commit)
 
 set ignore-case = true
 set line-graphics = utf-8

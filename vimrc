@@ -10,9 +10,11 @@ set nosol
 set ss=1
 set siso=999
 "set clipboard=unnamedplus
+let g:vim_markdown_conceal = 0
 
 nmap <c-c> :q<cr>
 nnoremap <leader>r :.w !bash<cr>
+nnoremap <leader>tt :TableFormat<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,7 +42,11 @@ Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'lifepillar/pgsql.vim'
-Plug 'dhruvasagar/vim-table-mode'
+
+" Install vim-maktaba plugin for plugin developers - used in foldcol
+Plug 'google/vim-maktaba'
+" Install foldcol - folding columns using <ctrl-v> visual mark, then :VFoldCol
+" Plug 'paulhybryant/foldcol'
 
 " Initialize plugin system
 call plug#end()
