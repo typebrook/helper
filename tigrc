@@ -12,7 +12,11 @@ bind generic w :toggle ignore-case
 
 bind main gG :toggle commit-title-graph
 bind main G move-last-line
-bind main c @git checkout %(commit)
+bind main c @sh -c "git branch --points-at=%(commit) | \
+                    sed -n '/^*/ {n;p}' | \
+                    (cat -; echo %(commit)) | \
+                    head -1 | \
+                    xargs git checkout"
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main M ?git merge %(commit)
