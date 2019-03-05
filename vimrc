@@ -43,10 +43,5 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'lifepillar/pgsql.vim'
 
-" Install vim-maktaba plugin for plugin developers - used in foldcol
-Plug 'google/vim-maktaba'
-" Install foldcol - folding columns using <ctrl-v> visual mark, then :VFoldCol
-" Plug 'paulhybryant/foldcol'
-
 " Initialize plugin system
 call plug#end()
