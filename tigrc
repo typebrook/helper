@@ -25,7 +25,6 @@ bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
 bind main V @git log -S "%(prompt Enter search word: )"
 bind main gd ?git branch -d %(branch)
 bind main gD ?git branch -D %(branch)
-bind main C !git branch --points-at=%(commit) | echo
 
 set main-view = \
     date:default \
