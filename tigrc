@@ -24,8 +24,8 @@ bind main P ?git push
 bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
 bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
-bind main gd ?git branch -d %(branch)
-bind main gD ?git branch -D %(branch)
+bind main gd !git branch -d "%(prompt Delete branch: )"
+bind main gD ?git branch -D "%(prompt Delete branch anyway: )"
 bind main gR ?git reset %(commit)
 
 set main-view = \
