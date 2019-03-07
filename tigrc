@@ -19,12 +19,14 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     xargs git checkout"
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main <Ctrl-r> !?git rebase -i %(commit)
-bind main M ?git merge %(commit)
+bind main m ?git merge %(commit)
 bind main P ?git push
 bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
+bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 bind main gd ?git branch -d %(branch)
 bind main gD ?git branch -D %(branch)
+bind main gR ?git reset %(commit)
 
 set main-view = \
     date:default \
