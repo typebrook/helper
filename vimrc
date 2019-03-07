@@ -42,6 +42,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'lifepillar/pgsql.vim'
+Plug 'vimwiki/vimwiki'
 
 " Initialize plugin system
 call plug#end()
