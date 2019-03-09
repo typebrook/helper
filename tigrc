@@ -26,7 +26,8 @@ bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 bind main gd !git branch -d "%(prompt Delete branch: )"
 bind main gD ?git branch -D "%(prompt Delete branch anyway: )"
-bind main gR ?git reset %(commit)
+bind main gsr ?git reset %(commit) --soft
+bind main ghr ?git reset %(commit) --hard
 
 set main-view = \
     date:default \
