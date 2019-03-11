@@ -2,6 +2,7 @@
 # https://qiita.com/sfus/items/063797a1dd8fdc7d032f
 # https://github.com/jonas/tig/wiki/Bindings
 
+# geineric
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic g none
@@ -10,6 +11,11 @@ bind generic gr view-grep
 bind generic G move-last-line
 bind generic w :toggle ignore-case 
 
+set ignore-case = true
+set line-graphics = utf-8
+set refresh-mode = after-command
+
+# main view
 bind main gG :toggle commit-title-graph
 bind main G move-last-line
 bind main c @sh -c "git branch --points-at=%(commit) | \
@@ -36,9 +42,11 @@ set main-view = \
     id \
     commit-title:graph=v2,refs=true 
 
+# blame view
 set blame-view-file-name = no
 set blame-view-line-number = yes,interval=5
 
+# status view
 bind status s ?git stash 
 bind status S @git stash save "%(prompt Enter stash name: )"
 bind status p ?git stash pop
@@ -47,19 +55,17 @@ bind status a ?git commit --amend
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
 
+# stash view
 bind stash D ?git stash drop %(stash)
 bind stash a ?git stash apply %(stash)
 
+# refs view
 bind refs C none
 bind refs c ?git checkout %(branch)
 bind refs d @git branch -d %(branch)
 bind refs b @git branch %(branch) %(commit)
 
-set ignore-case = true
-set line-graphics = utf-8
-set refresh-mode = after-command
-# set mouse = true
-
+# color
 color diff-header black yellow
 color diff-chunk white magenta
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
