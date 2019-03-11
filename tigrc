@@ -18,15 +18,17 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     head -1 | \
                     xargs git checkout"
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
+bind main gdt @git tag -d %(tag)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main m ?git merge %(commit)
 bind main P ?git push
-bind main b @git checkout -b "%(prompt Enter branch name: )" %(commit)
+bind main b @git checkout -b "%(prompt Enter branch name: )"
 bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
-bind main gd !git branch -d "%(prompt Delete branch: )"
-bind main gD ?git branch -D "%(prompt Delete branch anyway: )"
-bind main gR ?git reset %(commit)
+bind main gdb !git branch -d "%(prompt Delete branch: )"
+bind main gDb ?git branch -D "%(prompt Delete branch anyway: )"
+bind main gsr ?git reset %(commit) --soft
+bind main ghr ?git reset %(commit) --hard
 
 set main-view = \
     date:default \
@@ -42,6 +44,8 @@ bind status S @git stash save "%(prompt Enter stash name: )"
 bind status p ?git stash pop
 bind status D ?rm %(file)
 bind status a ?git commit --amend
+bind status j :/^[MADR?]
+bind status k :?^[MADR?]
 
 bind stash D ?git stash drop %(stash)
 bind stash a ?git stash apply %(stash)
