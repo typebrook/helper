@@ -49,7 +49,7 @@ set blame-view-line-number = yes,interval=5
 # status view
 bind status s ?git stash 
 bind status S @git stash save "%(prompt Enter stash name: )"
-bind status p ?git stash pop
+bind status p !git checkout --patch -- %(file)
 bind status D ?rm %(file)
 bind status a ?git commit --amend
 bind status j :/^[MADRU?]
