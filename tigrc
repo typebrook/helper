@@ -27,6 +27,7 @@ bind main T @git tag "%(prompt Enter tag name: )" %(commit)
 bind main gdt @git tag -d %(tag)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main m ?git merge %(commit)
+bind main M ?git merge %(commit) --no-ff
 bind main P ?git push
 bind main b @git checkout -b "%(prompt Enter branch name: )"
 bind main B !sh scripts/bump_version.sh
