@@ -29,13 +29,15 @@ bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main m ?git merge %(commit)
 bind main M ?git merge %(commit) --no-ff
 bind main P ?git push
-bind main b @git checkout -b "%(prompt Enter branch name: )"
 bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
-bind main gdb !git branch -d "%(prompt Delete branch: )"
-bind main gDb ?git branch -D "%(prompt Delete branch anyway: )"
-bind main gsr ?git reset %(commit) --soft
-bind main ghr ?git reset %(commit) --hard
+bind main b none
+bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
+bind main bd @git branch -d "%(prompt Delete branch: )"
+bind main bD ?git branch -D "%(prompt Delete branch anyway: )"
+bind main bv +git branch -vv
+bind main u ?git reset %(commit) --soft
+bind main gu ?git reset %(commit) --hard
 
 set main-view = \
     date:default \
@@ -60,11 +62,14 @@ bind status k :?^[MADRU?]
 bind stash D ?git stash drop %(stash)
 bind stash a ?git stash apply %(stash)
 
+# tree view
+bind tree d ?rm %(file)
+
 # refs view
 bind refs C none
-bind refs c ?git checkout %(branch)
-bind refs d @git branch -d %(branch)
-bind refs b @git branch %(branch) %(commit)
+bind refs c @git checkout %(branch)
+bind refs bd ?git branch -d %(branch)
+bind refs bD ?git branch -D %(branch)
 
 # color
 color diff-header black yellow
