@@ -23,7 +23,9 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     (cat -; echo %(commit)) | \
                     head -1 | \
                     xargs git checkout"
-bind main T @git tag "%(prompt Enter tag name: )" %(commit)
+bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
+bind main Td @git tag -d "%(prompt Delete tag: )"
+bind main Tp ?git push --tags
 bind main gdt @git tag -d %(tag)
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main m ?git merge %(commit)
@@ -64,6 +66,7 @@ bind stash a ?git stash apply %(stash)
 
 # tree view
 bind tree d ?rm %(file)
+bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 
 # refs view
 bind refs C none
