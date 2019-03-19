@@ -16,7 +16,7 @@ set line-graphics = utf-8
 set refresh-mode = after-command
 
 # main view
-bind main gG :toggle commit-title-graph
+bind main ` :toggle commit-title-graph
 bind main G move-last-line
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
@@ -24,6 +24,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     head -1 | \
                     xargs git checkout"
 bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
+bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
 bind main gdt @git tag -d %(tag)
@@ -54,12 +55,15 @@ set blame-view-line-number = yes,interval=5
 # status view
 bind status s ?git stash 
 bind status S @git stash save "%(prompt Enter stash name: )"
+bind status gs !git stash save -p "%(prompt Enter stash name: )"
 bind status p !git checkout --patch -- %(file)
 bind status D ?rm %(file)
 bind status a ?git commit --amend
-bind status c ?git commit
+bind status c @git commit -m "%(prompt Enter commit message: )"
+bind status C !git commit
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
+bind status Tu @git update-index --assume-unchanged "%(file)"
 
 # stash view
 bind stash D ?git stash drop %(stash)
