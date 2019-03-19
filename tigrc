@@ -7,8 +7,8 @@ bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic g none
 bind generic gg move-first-line
-bind generic gr view-grep
 bind generic G move-last-line
+bind generic gr view-grep
 bind generic w :toggle ignore-case 
 
 set ignore-case = true
@@ -16,54 +16,61 @@ set line-graphics = utf-8
 set refresh-mode = after-command
 
 # main view
-bind main ` :toggle commit-title-graph
-bind main G move-last-line
-bind main c @sh -c "git branch --points-at=%(commit) | \
-                    sed -n '/^*/ {n;p}' | \
-                    (cat -; echo %(commit)) | \
-                    head -1 | \
-                    xargs git checkout"
-bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
-bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
-bind main Td @git tag -d "%(prompt Delete tag: )"
-bind main Tp ?git push --tags
-bind main gdt @git tag -d %(tag)
-bind main <Ctrl-r> !?git rebase -i %(commit)
-bind main m ?git merge %(commit)
-bind main M ?git merge %(commit) --no-ff
-bind main P ?git push
-bind main B !sh scripts/bump_version.sh
-bind main V @git log -S "%(prompt Enter search word: )"
-bind main b none
-bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
-bind main bd @git branch -d "%(prompt Delete branch: )"
-bind main bD ?git branch -D "%(prompt Delete branch anyway: )"
-bind main bv +git branch -vv
-bind main u ?git reset %(commit) --soft
-bind main gu ?git reset %(commit) --hard
-
 set main-view = \
     date:default \
     author:abbreviated \
     id \
     commit-title:graph=v2,refs=true 
 
+bind main ` :toggle commit-title-graph
+
+bind main b none
+bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
+bind main bd @git branch -d "%(prompt Delete branch: )"
+bind main bD ?git branch -D "%(prompt Delete branch anyway: )"
+bind main bv +git branch -vv
+bind main c @sh -c "git branch --points-at=%(commit) | \
+                    sed -n '/^*/ {n;p}' | \
+                    (cat -; echo %(commit)) | \
+                    head -1 | \
+                    xargs git checkout"
+
+bind main m ?git merge %(commit)
+bind main M ?git merge %(commit) --no-ff
+bind main p ?git push
+ 
+bind main u ?git reset %(commit) --soft
+bind main gu ?git reset %(commit) --hard
+bind main <Ctrl-r> !?git rebase -i %(commit)
+
+bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
+bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
+bind main Td @git tag -d "%(prompt Delete tag: )"
+bind main Tp ?git push --tags
+bind main gdt @git tag -d %(tag)
+
+bind main B !sh scripts/bump_version.sh
+bind main V @git log -S "%(prompt Enter search word: )"
+
 # blame view
 set blame-view-file-name = no
 set blame-view-line-number = yes,interval=5
 
 # status view
+bind status j :/^[MADRU?]
+bind status k :?^[MADRU?]
+
 bind status s ?git stash 
 bind status S @git stash save "%(prompt Enter stash name: )"
 bind status gs !git stash save -p "%(prompt Enter stash name: )"
 bind status p !git checkout --patch -- %(file)
-bind status D ?rm %(file)
-bind status a ?git commit --amend
+bind status Tu @git update-index --assume-unchanged %(file)
+
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status C !git commit
-bind status j :/^[MADRU?]
-bind status k :?^[MADRU?]
-bind status Tu @git update-index --assume-unchanged "%(file)"
+bind status a ?git commit --amend
+
+bind status D ?rm %(file)
 
 # stash view
 bind stash D ?git stash drop %(stash)
