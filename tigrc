@@ -53,8 +53,7 @@ bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
 # blame view
-set blame-view-file-name = no
-set blame-view-line-number = yes,interval=5
+set blame-view = author:abbreviated date:default id:yes,color line-number:yes,interval=5 text
 
 # status view
 bind status j :/^[MADRU?]
@@ -73,7 +72,6 @@ bind status a ?git commit --amend
 bind status D ?rm %(file)
 
 # stash view
-bind stash D ?git stash drop %(stash)
 bind stash a ?git stash apply %(stash)
 
 # tree view
