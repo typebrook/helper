@@ -53,7 +53,7 @@ bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
 # blame view
-set blame-view = author:abbreviated date:default id:yes,color line-number:yes,interval=5 text
+set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
 
 # status view
 bind status j :/^[MADRU?]
