@@ -53,6 +53,8 @@ bind main gdt @git tag -d %(tag)
 bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
+bind main S !git format-patch -1 %(commit)
+
 # blame view
 set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
 
