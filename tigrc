@@ -28,7 +28,7 @@ bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
 bind main bD ?git branch -D "%(prompt Delete branch anyway: )"
-bind main bv +git branch -vv
+bind main bv +sh -c "git branch -vv | grep '*'"
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
                     (cat -; echo %(commit)) | \
@@ -36,8 +36,9 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     xargs git checkout"
 
 bind main m ?git merge %(commit)
-bind main M ?git merge %(commit) --no-ff
+bind main M ?git merge %(branch) --no-ff
 bind main p ?git push
+bind main P ?git push %(remote) %(branch):%(branch)
  
 bind main u ?git reset %(commit) --soft
 bind main gu ?git reset %(commit) --hard
@@ -76,6 +77,7 @@ bind stash a ?git stash apply %(stash)
 
 # tree view
 bind tree d ?rm %(file)
+bind tree 3 !@sh -c "echo -n %(file) | xclip -selection c"
 bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 
 # refs view
