@@ -3,6 +3,11 @@
 	name = typebrook
 [alias]
     reorder = "!GIT_SEQUENCE_EDITOR=\"sed -i -n 'h;1n;2p;g;p'\" git rebase -i HEAD~2"
+    stashstaged = !git stash --keep-index && \
+                   git stash && \
+                   git stash apply stash@{1} && \
+                   git stash show -p | git apply -R && \
+                   git stash drop stash@{1}
 [core]
 	pager = 
 [color]

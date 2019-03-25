@@ -62,7 +62,7 @@ bind status k :?^[MADRU?]
 
 bind status s ?git stash 
 bind status S @git stash save "%(prompt Enter stash name: )"
-bind status gs !git stash save -p "%(prompt Enter stash name: )"
+bind status gs !git stashstaged
 bind status p !git checkout --patch -- %(file)
 bind status Tu @git update-index --assume-unchanged %(file)
 
