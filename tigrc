@@ -74,6 +74,10 @@ bind status D ?rm %(file)
 
 # stash view
 bind stash a ?git stash apply %(stash)
+bind stash n @sh -c "git stash drop %(stash) | \
+                     awk '{print $3}' | \
+                     tr -d '()' | \
+                     xargs git stash store -m '%(prompt Enter stash name: )'"
 
 # tree view
 bind tree d ?rm %(file)
