@@ -46,6 +46,7 @@ bind main <Ctrl-r> !?git rebase -i %(commit)
 
 bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
+bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
 bind main gdt @git tag -d %(tag)
