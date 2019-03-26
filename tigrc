@@ -46,6 +46,7 @@ bind main P ?git push %(remote) %(branch):%(branch)
 bind main u ?git reset %(commit) --soft
 bind main gu ?git reset %(commit) --hard
 bind main <Ctrl-r> !?git rebase -i %(commit)
+bind main ! ?git revert %(commit)
 
 bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
@@ -58,6 +59,9 @@ bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
 bind main S !git format-patch -1 %(commit)
+
+bind main . >sh -c "git diff %(commit) | tig"
+bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
 # blame view
 set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
@@ -101,8 +105,12 @@ bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 # refs view
 bind refs C none
 bind refs c @git checkout %(branch)
+
 bind refs bd ?git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
+
+bind refs . >sh -c "git diff %(branch) | tig"
+bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
 
 # log view
 bind log n :/^commit
