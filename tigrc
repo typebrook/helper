@@ -3,13 +3,19 @@
 # https://github.com/jonas/tig/wiki/Bindings
 
 # geineric
-bind generic x :toggle id
-bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
+
+bind generic x :toggle id
+bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+
 bind generic E view-grep
+
 bind generic w :toggle ignore-case 
+
+bind generic 3 >sh -c "vim ~/.tigrc"
+bind generic 4 :source ~/.tigrc
 
 set ignore-case = true
 set line-graphics = utf-8
