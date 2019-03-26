@@ -26,8 +26,8 @@ alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
 alias cds='cd ~/git/settings'
 
-alias r='ranger-cd'
-function ranger-cd {
+alias r='_ranger-cd'
+function _ranger-cd {
     tempfile="$(mktemp -t tmp.XXXXXX)"
     ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
