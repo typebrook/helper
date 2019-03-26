@@ -18,7 +18,7 @@ bind generic 3 >sh -c "vim ~/.tigrc"
 bind generic 4 :source ~/.tigrc
 
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
-bind generic _ ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
 set ignore-case = true
 set line-graphics = utf-8

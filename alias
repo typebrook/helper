@@ -81,7 +81,6 @@ alias ts='tig status'
 alias tg='tig grep'
 alias tl='tig log'
 alias ty='tig stash'
-alias rl='git reflog --pretty=raw | tig --pretty=raw'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
