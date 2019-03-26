@@ -17,12 +17,15 @@ bind generic w :toggle ignore-case
 bind generic 3 >sh -c "vim ~/.tigrc"
 bind generic 4 :source ~/.tigrc
 
+bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
+bind generic _ ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+
 set ignore-case = true
 set line-graphics = utf-8
 set refresh-mode = after-command
 
-bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
-bind generic _ ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+set diff-show-signs = false
+set diff_column_highlight = ALL
 
 # main view
 set main-view = \
