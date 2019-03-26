@@ -8,12 +8,15 @@ bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
-bind generic gr view-grep
+bind generic E view-grep
 bind generic w :toggle ignore-case 
 
 set ignore-case = true
 set line-graphics = utf-8
 set refresh-mode = after-command
+
+bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
+bind generic _ ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
 # main view
 set main-view = \
@@ -84,6 +87,12 @@ bind stash n @sh -c "git stash drop %(stash) | \
                      tr -d '()' | \
                      xargs git stash store -m '%(prompt Enter stash name: )'"
 
+# stage view
+bind stage n :/^@@
+bind stage p :?^@@
+bind stage <Esc>n :/^diff --(git|cc)
+bind stage <Esc>p :?^diff --(git|cc)
+
 # tree view
 bind tree d ?rm %(file)
 bind tree 3 !@sh -c "echo -n %(file) | xclip -selection c"
@@ -94,6 +103,16 @@ bind refs C none
 bind refs c @git checkout %(branch)
 bind refs bd ?git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
+
+# log view
+bind log n :/^commit
+bind log p :?^commit
+
+# diff view
+bind diff n :/^@@
+bind diff p :?^@@
+bind diff <Esc>n :/^diff --(git|cc)
+bind diff <Esc>p :?^diff --(git|cc)
 
 # color
 color diff-header black yellow
