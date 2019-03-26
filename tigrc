@@ -66,13 +66,15 @@ bind status s ?git stash
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
 bind status p !git checkout --patch -- %(file)
-bind status Tu @git update-index --assume-unchanged %(file)
 
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status C !git commit
 bind status a ?git commit --amend
 
 bind status D ?rm %(file)
+
+bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
+bind status Tu @git update-index --assume-unchanged %(file)
 
 # stash view
 bind stash a ?git stash apply %(stash)
@@ -95,4 +97,3 @@ bind refs bD ?git branch -D %(branch)
 # color
 color diff-header black yellow
 color diff-chunk white magenta
-bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
