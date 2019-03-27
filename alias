@@ -98,7 +98,10 @@ _gistRead() {
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
 _gistDelete() { 
-    gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}')
+    deleted=~/gist/deleted/$(date +"%s")
+    _gistRead $1 > $deleted && echo "backup at $deleted"
+    gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
+    gll
 }
 alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/gist/note && \
             vim ~/gist/note && \
