@@ -71,7 +71,7 @@ bind main P ?git push %(remote) %(branch):%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit) --soft
-bind main gu ?git reset %(commit) --hard
+bind main U ?sh -c "git stash push -m 'deprecated from reset' && git reset %(commit) --hard"
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
