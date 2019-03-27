@@ -12,6 +12,7 @@ bind generic G move-last-line
 # toggle/copy commit id
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+bind generic 0 !@sh -c "echo -n %(commit) | xclip -selection c"
 
 bind generic gr view-grep
 
@@ -60,6 +61,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
 
 # commit
 bind main a ?>git commit --amend
+bind main e ?>git commit --allow-empty
 
 # merge
 bind main m ?git merge %(commit)
@@ -149,6 +151,7 @@ bind stage <Esc>p :?^diff --(git|cc)
 bind tree d ?rm %(file)
 bind tree 3 !@sh -c "echo -n %(file) | xclip -selection c"
 bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
+bind tree 0 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 
 #====================
 # refs view
