@@ -61,7 +61,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
 
 # commit
 bind main a ?>git commit --amend
-bind main e ?>git commit --allow-empty
+bind main e >git commit --allow-empty -m "%(prompt Enter commit message: )"
 
 # merge
 bind main m ?git merge %(commit)
