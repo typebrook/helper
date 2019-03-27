@@ -9,7 +9,7 @@ alias zshrc='vim ~/.zshrc'
 # vim
 alias v='vim'
 alias vr='vim -R'
-alias amix-update='cd _/.vim_runtime && git pull --rebase'
+alias amix-update='cd ~/.vim_runtime && git pull --rebase'
 
 # shell
 alias ll='ls -alh'
@@ -78,7 +78,6 @@ alias geothings-test='ssh geothings@test.geothings.tw'
 alias t='tig'
 alias ta='tig --all'
 alias ts='tig status'
-alias tg='tig grep'
 alias tl='tig log'
 alias ty='tig stash'
 
