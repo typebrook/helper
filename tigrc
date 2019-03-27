@@ -168,7 +168,7 @@ bind refs c @git checkout %(branch)
 bind refs bd ?git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
 
-bind refs U ?git fetch -all
+bind refs U ?git fetch --all
 bind refs F ?git fetch %(remote)
 bind refs <C-F> ?git fetch %(remote) %(branch)
 
