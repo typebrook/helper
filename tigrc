@@ -12,6 +12,7 @@ bind generic <Ctrl-h> scroll-left
 bind generic <Ctrl-l> scroll-right
 
 # toggle/copy commit id
+bind generic o none
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic 0 !@sh -c "echo -n %(commit) | xclip -selection c"
