@@ -47,6 +47,8 @@ set main-view = \
 
 bind main ` :toggle commit-title-graph
 
+bind main o :goto %(commit)^2
+
 # branch
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
