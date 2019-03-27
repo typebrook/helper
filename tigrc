@@ -50,7 +50,7 @@ bind main ` :toggle commit-title-graph
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
-bind main bD ?git branch -D "%(prompt Delete branch anyway: )"
+bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
 bind main bv +sh -c "git branch -vv | grep '*'"
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
@@ -103,7 +103,7 @@ set blame-view = author:abbreviated date:default id:yes,color line-number:yes te
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
 
-bind status s ?git stash 
+bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
 bind status p !git checkout --patch -- %(file)
