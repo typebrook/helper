@@ -2,21 +2,27 @@
 # https://qiita.com/sfus/items/063797a1dd8fdc7d032f
 # https://github.com/jonas/tig/wiki/Bindings
 
+#====================
 # geineric
+#====================
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
 
+# toggle/copy commit id
 bind generic x :toggle id
 bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 
-bind generic E view-grep
+bind generic gr view-grep
 
+# toggle case sensitive for search
 bind generic w :toggle ignore-case 
 
+# edit tigrc
 bind generic 3 >sh -c "vim ~/.tigrc"
 bind generic 4 :source ~/.tigrc
 
+# see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
 bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
@@ -24,10 +30,13 @@ set ignore-case = true
 set line-graphics = utf-8
 set refresh-mode = after-command
 
+# highlight diff without +/-
 set diff-show-signs = false
 set diff_column_highlight = ALL
 
+#====================
 # main view
+#====================
 set main-view = \
     date:default \
     author:abbreviated \
@@ -36,6 +45,7 @@ set main-view = \
 
 bind main ` :toggle commit-title-graph
 
+# branch
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
@@ -47,16 +57,21 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     head -1 | \
                     xargs git checkout"
 
+# merge
 bind main m ?git merge %(commit)
 bind main M ?git merge %(branch) --no-ff
+
+# push
 bind main p ?git push
 bind main P ?git push %(remote) %(branch):%(branch)
  
+# reset/rebase/revert
 bind main u ?git reset %(commit) --soft
 bind main gu ?git reset %(commit) --hard
 bind main <Ctrl-r> !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
+# tag
 bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Ts >tig show %(tag)
@@ -64,18 +79,26 @@ bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
 bind main gdt @git tag -d %(tag)
 
+# android
 bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
+# make patches
 bind main S !git format-patch -1 %(commit)
+bind main <Ctrl-s> !git format-patch %(commit)
 
+# show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
+#====================
 # blame view
+#====================
 set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
 
+#====================
 # status view
+#====================
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
 
@@ -93,25 +116,36 @@ bind status D ?rm %(file)
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
 
+# apply patch file
+bind status <Ctrl-o> ?git am %(file)
+
+#====================
 # stash view
+#====================
 bind stash a ?git stash apply %(stash)
 bind stash n @sh -c "git stash drop %(stash) | \
                      awk '{print $3}' | \
                      tr -d '()' | \
                      xargs git stash store -m '%(prompt Enter stash name: )'"
 
+#====================
 # stage view
+#====================
 bind stage n :/^@@
 bind stage p :?^@@
 bind stage <Esc>n :/^diff --(git|cc)
 bind stage <Esc>p :?^diff --(git|cc)
 
+#====================
 # tree view
+#====================
 bind tree d ?rm %(file)
 bind tree 3 !@sh -c "echo -n %(file) | xclip -selection c"
 bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 
+#====================
 # refs view
+#====================
 bind refs C none
 bind refs c @git checkout %(branch)
 
@@ -121,16 +155,22 @@ bind refs bD ?git branch -D %(branch)
 bind refs . >sh -c "git diff %(branch) | tig"
 bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
 
+#====================
 # log view
+#====================
 bind log n :/^commit
 bind log p :?^commit
 
+#====================
 # diff view
+#====================
 bind diff n :/^@@
 bind diff p :?^@@
 bind diff <Esc>n :/^diff --(git|cc)
 bind diff <Esc>p :?^diff --(git|cc)
 
+#====================
 # color
+#====================
 color diff-header black yellow
 color diff-chunk white magenta
