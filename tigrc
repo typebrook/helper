@@ -127,6 +127,7 @@ bind status <Ctrl-o> ?git am %(file)
 # stash view
 #====================
 bind stash a ?git stash apply %(stash)
+bind stash d ?>git stash drop %(stash)
 bind stash n @sh -c "git stash drop %(stash) | \
                      awk '{print $3}' | \
                      tr -d '()' | \
