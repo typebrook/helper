@@ -24,8 +24,8 @@ bind generic gr view-grep
 bind generic w :toggle ignore-case 
 
 # edit tigrc
-bind generic 3 >sh -c "vim ~/.tigrc"
-bind generic 4 :source ~/.tigrc
+bind generic e >sh -c "vim ~/.tigrc"
+bind generic E :source ~/.tigrc
 
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
@@ -67,7 +67,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
 
 # commit
 bind main a ?>git commit --amend
-bind main e >git commit --allow-empty -m "%(prompt Enter commit message: )"
+bind main 3 >git commit --allow-empty -m "%(prompt Enter commit message: )"
 
 # merge
 bind main m ?git merge %(commit)
@@ -167,6 +167,10 @@ bind refs c @git checkout %(branch)
 
 bind refs bd ?git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
+
+bind refs U ?git fetch -all
+bind refs F ?git fetch %(remote)
+bind refs <C-F> ?git fetch %(remote) %(branch)
 
 bind refs . >sh -c "git diff %(branch) | tig"
 bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
