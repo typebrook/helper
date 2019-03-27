@@ -93,8 +93,12 @@ gist_list=~/gist/gist.list
 alias gl='nl $gist_list'
 alias gll='gist -l > $gist_list && nl $gist_list'
 alias gi='_gistRead'
+alias gd='_gistDelete'
 _gistRead() { 
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
+}
+_gistDelete() { 
+    gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}')
 }
 alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/gist/note && \
             vim ~/gist/note && \
