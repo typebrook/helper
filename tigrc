@@ -26,19 +26,20 @@ bind generic 4 :source ~/.tigrc
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
 bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
-set ignore-case = true
-set line-graphics = utf-8
-set refresh-mode = after-command
-
 # highlight diff without +/-
 set diff-show-signs = false
 set diff_column_highlight = ALL
+
+# misc settings
+set ignore-case = true
+set line-graphics = utf-8
+set refresh-mode = auto
 
 #====================
 # main view
 #====================
 set main-view = \
-    date:default \
+    date:relative \
     author:abbreviated \
     id \
     commit-title:graph=v2,refs=true 
@@ -84,8 +85,8 @@ bind main B !sh scripts/bump_version.sh
 bind main V @git log -S "%(prompt Enter search word: )"
 
 # make patches
-bind main S !git format-patch -1 %(commit)
-bind main <Ctrl-s> !git format-patch %(commit)
+bind main S ?>git format-patch -1 %(commit)
+bind main <Ctrl-s> ?>git format-patch %(commit)
 
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
@@ -111,7 +112,7 @@ bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status C !git commit
 bind status a ?git commit --amend
 
-bind status D ?rm %(file)
+bind status D ?>rm %(file)
 
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
