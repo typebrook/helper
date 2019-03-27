@@ -8,6 +8,8 @@
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
+bind generic <Ctrl-h> scroll-left
+bind generic <Ctrl-l> scroll-right
 
 # toggle/copy commit id
 bind generic x :toggle id
