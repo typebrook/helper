@@ -8,8 +8,9 @@
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
-bind generic <Ctrl-h> scroll-left
-bind generic <Ctrl-l> scroll-right
+bind generic <C-h> scroll-left
+bind generic <C-L> none
+bind generic <C-L> scroll-right
 
 # toggle/copy commit id
 bind generic o none
@@ -79,7 +80,7 @@ bind main P ?git push %(remote) %(branch):%(branch)
 # reset/rebase/revert
 bind main u ?git reset %(commit) --soft
 bind main U ?sh -c "git stash push -m 'deprecated from reset' && git reset %(commit) --hard"
-bind main <Ctrl-r> !?git rebase -i %(commit)
+bind main <C-r> !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
 # tag
@@ -96,7 +97,7 @@ bind main V @git log -S "%(prompt Enter search word: )"
 
 # make patches
 bind main S ?>git format-patch -1 %(commit)
-bind main <Ctrl-s> ?>git format-patch %(commit)
+bind main <C-s> ?>git format-patch %(commit)
 
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
@@ -128,7 +129,7 @@ bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(fi
 bind status Tu @git update-index --assume-unchanged %(file)
 
 # apply patch file
-bind status <Ctrl-o> ?git am %(file)
+bind status <C-o> ?git am %(file)
 
 #====================
 # stash view
