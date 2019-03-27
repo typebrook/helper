@@ -13,8 +13,9 @@ alias amix-update='cd ~/.vim_runtime && git pull --rebase'
 
 # shell
 alias ll='ls -alh'
-alias ai='sudo apt-get install'
 alias ag='sudo apt-get'
+alias ai='sudo apt-get install'
+alias ac='apt-cache'
 alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
