@@ -23,10 +23,6 @@ bind generic gr view-grep
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
 
-# edit tigrc
-bind generic e >sh -c "vim ~/.tigrc"
-bind generic E :source ~/.tigrc
-
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
 bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
@@ -195,6 +191,14 @@ bind diff n :/^@@
 bind diff p :?^@@
 bind diff <Esc>n :/^diff --(git|cc)
 bind diff <Esc>p :?^diff --(git|cc)
+
+#====================
+# help view
+#====================
+
+# edit tigrc
+bind help e >sh -c "vim ~/.tigrc"
+bind help E :source ~/.tigrc
 
 #====================
 # color
