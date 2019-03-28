@@ -169,9 +169,9 @@ bind refs C none
 bind refs c @git checkout %(branch)
 
 bind refs b none
-bind refs bdl @git branch -d %(branch)
-bind refs bDl ?git branch -D %(branch)
-bind refs bdr ?git push %(remote) :%(branch)
+bind refs bd @git branch -d %(branch)
+bind refs bD ?git branch -D %(branch)
+bind refs brd ?git push %(remote) :%(branch)
 bind refs bu ?git branch -rd %(remote)/%(branch)
 
 bind refs U ?git fetch --all
