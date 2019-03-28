@@ -67,7 +67,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
 
 # commit
 bind main a ?>git commit --amend
-bind main 3 >git commit --allow-empty -m "%(prompt Enter commit message: )"
+bind main 3 >git commit --allow-empty -m "%(prompt Empty commit, enter message: )"
 
 # merge
 bind main m ?git merge %(commit)
@@ -117,11 +117,13 @@ bind status k :?^[MADRU?]
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
-bind status p !git checkout --patch -- %(file)
+bind status U !git checkout --patch -- %(file)
 
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status C !git commit
 bind status a ?>git commit --amend
+bind status p none
+bind status pp ?>sh -c "git commit -m 'update' && git push"
 
 bind status D ?>rm %(file)
 
