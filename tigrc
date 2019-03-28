@@ -74,6 +74,7 @@ bind main m ?git merge %(commit)
 bind main M ?git merge %(branch) --no-ff
 
 # push
+bind main p none
 bind main pp ?git push
 bind main pP ?git push %(remote) %(branch):%(branch)
  
