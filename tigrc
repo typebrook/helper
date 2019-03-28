@@ -100,6 +100,9 @@ bind main <C-s> ?>git format-patch %(commit)
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
+# misc
+bind generic 4 !@sh -c "echo -n %(branch) | xclip -selection c"
+
 #====================
 # blame view
 #====================
