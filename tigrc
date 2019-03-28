@@ -74,8 +74,8 @@ bind main m ?git merge %(commit)
 bind main M ?git merge %(branch) --no-ff
 
 # push
-bind main p ?git push
-bind main P ?git push %(remote) %(branch):%(branch)
+bind main pp ?git push
+bind main pP ?git push %(remote) %(branch):%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit) --soft
