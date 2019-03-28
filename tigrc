@@ -76,7 +76,7 @@ bind main M ?git merge %(branch) --no-ff
 # push
 bind main p none
 bind main pp ?git push
-bind main pP ?git push %(remote) %(branch):%(branch)
+bind main pP ?git push -u %(remote) %(branch):%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit) --soft
@@ -168,8 +168,11 @@ bind tree 0 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
 bind refs C none
 bind refs c @git checkout %(branch)
 
-bind refs bd ?git branch -d %(branch)
-bind refs bD ?git branch -D %(branch)
+bind refs b none
+bind refs bdl @git branch -d %(branch)
+bind refs bDl ?git branch -D %(branch)
+bind refs bdr ?git push -d %(remote) :%(branch)
+bind refs bu ?git branch -rd %(remote)/%(branch)
 
 bind refs U ?git fetch --all
 bind refs F ?git fetch %(remote)
@@ -194,6 +197,4 @@ bind diff <Esc>p :?^diff --(git|cc)
 
 #====================
 # color
-#====================
-color diff-header black yellow
 color diff-chunk white magenta
