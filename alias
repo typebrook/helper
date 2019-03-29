@@ -10,7 +10,7 @@ alias zshrc='vim ~/.zshrc'
 alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
 alias vr='vim -R'
-alias amix-update='cd ~/.vim_runtime && git pull --rebase'
+alias cdv='cd ~/.vim_runtime'
 
 # shell
 alias ll='ls -alh'
