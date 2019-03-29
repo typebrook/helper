@@ -48,6 +48,7 @@ set main-view = \
     id \
     commit-title:graph=v2,refs=true 
 
+# override graph toggling
 bind main G none
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
