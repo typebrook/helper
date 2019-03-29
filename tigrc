@@ -14,9 +14,8 @@ bind generic <C-L> scroll-right
 
 # toggle/copy commit id
 bind generic o none
-bind generic x :toggle id
-bind generic 9 !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
-bind generic 0 !@sh -c "echo -n %(commit) | xclip -selection c"
+bind generic xx !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
+bind generic xc !@sh -c "echo -n %(commit) | xclip -selection c"
 
 bind generic gr view-grep
 
@@ -162,8 +161,8 @@ bind stage <Esc>p :?^diff --(git|cc)
 #====================
 bind tree d ?rm %(file)
 bind tree 3 !@sh -c "echo -n %(file) | xclip -selection c"
-bind tree 9 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
-bind tree 0 !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
+bind tree xx !@sh -c "echo -n %(blob) | head -c7 | xclip -selection c"
+bind tree xc !@sh -c "echo -n %(blob) | xclip -selection c"
 
 #====================
 # refs view
