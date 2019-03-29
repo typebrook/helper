@@ -75,8 +75,8 @@ bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
  
 # reset/rebase/revert
-bind main u ?git reset %(commit) --soft
-bind main U ?sh -c "git stash push -m 'deprecated from reset' && git reset %(commit) --hard"
+bind main u ?git reset %(commit)
+bind main U ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
 bind main <C-r> !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
@@ -201,7 +201,7 @@ bind diff <Esc>p :?^diff --(git|cc)
 
 # edit tigrc
 bind help e >sh -c "vim ~/.tigrc"
-bind help E :source ~/.tigrc
+bind help R :source ~/.tigrc
 
 #====================
 # color
