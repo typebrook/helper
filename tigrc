@@ -23,6 +23,10 @@ bind generic gr view-grep
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
 
+# override refresh
+bind generic R none
+bind generic <C-R> refresh
+
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
 bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
@@ -54,7 +58,7 @@ bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
 bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
-bind main bv +sh -c "git branch -vv | grep '*'"
+bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
                     (cat -; echo %(commit)) | \
@@ -77,7 +81,7 @@ bind main pP ?git push -u %(remote) %(branch):%(branch)
 # reset/rebase/revert
 bind main u ?git reset %(commit)
 bind main U ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
-bind main <C-r> !?git rebase -i %(commit)
+bind main R !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
 # tag
@@ -201,7 +205,7 @@ bind diff <Esc>p :?^diff --(git|cc)
 
 # edit tigrc
 bind help e >sh -c "vim ~/.tigrc"
-bind help R :source ~/.tigrc
+bind help <C-R> :source ~/.tigrc
 
 #====================
 # color

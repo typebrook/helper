@@ -77,6 +77,7 @@ alias geothings='ssh geothings@geobingan.info'
 alias geothings-test='ssh geothings@test.geothings.tw'
 
 # tig
+alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ta='tig --all'
 alias ts='tig status'
