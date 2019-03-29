@@ -128,7 +128,6 @@ bind status gs !git stashstaged
 bind status U !git checkout --patch -- %(file)
 
 bind status c @git commit -m "%(prompt Enter commit message: )"
-bind status C !git commit
 bind status a ?>git commit --amend
 bind status p none
 bind status pp ?>sh -c "git commit -m 'update' && git push"
@@ -198,8 +197,6 @@ bind log p :?^commit
 #====================
 # diff view
 #====================
-bind diff n :/^@@
-bind diff p :?^@@
 bind diff <Esc>n :/^diff --(git|cc)
 bind diff <Esc>p :?^diff --(git|cc)
 
