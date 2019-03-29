@@ -15,6 +15,7 @@ bind generic <C-L> scroll-right
 # toggle/copy commit id
 bind generic xx !@sh -c "echo -n %(commit) | head -c7 | xclip -selection c"
 bind generic xc !@sh -c "echo -n %(commit) | xclip -selection c"
+bind generic xb !@sh -c "echo -n %(branch) | xclip -selection c"
 
 bind generic gr view-grep
 
@@ -47,6 +48,8 @@ set main-view = \
     id \
     commit-title:graph=v2,refs=true 
 
+bind main G none
+bind main G move-last-line
 bind main ` :toggle commit-title-graph
 
 bind main o :goto %(commit)^2
@@ -103,9 +106,6 @@ bind main <C-s> ?>git format-patch %(commit)
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
-
-# misc
-bind generic 4 !@sh -c "echo -n %(branch) | xclip -selection c"
 
 #====================
 # blame view
