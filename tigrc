@@ -108,6 +108,9 @@ bind main <C-s> ?>git format-patch %(commit)
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
+# note
+bind generic gn !git notes edit %(commit)
+
 #====================
 # blame view
 #====================
