@@ -12,7 +12,7 @@ set siso=999
 let g:vim_markdown_conceal = 0
 
 nmap <c-c> :q<cr>
-nnoremap <leader>t :.w !bash<cr>
+nnoremap <leader>R :.w !bash<cr>
 nnoremap <leader>W :set wrap!<cr>
 nnoremap <leader>tt :TableFormat<cr>
 nnoremap <leader>u :set clipboard=unnamedplus<cr>
