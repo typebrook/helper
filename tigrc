@@ -76,10 +76,12 @@ bind main M ?git merge %(branch) --no-ff
 bind main p none
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
+bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit)
 bind main U ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
+bind main xu ?git reset %(commit) --hard
 bind main R !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
