@@ -114,7 +114,13 @@ bind generic gn !git notes edit %(commit)
 #====================
 # blame view
 #====================
+bind blame m >tig %(file)
 set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
+
+#====================
+# blob view
+#====================
+bind blob m >tig %(file)
 
 #====================
 # status view
