@@ -119,7 +119,7 @@ bind blame m >tig %(file)
 bind blame xx +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && Blob Clipped"
 bind blame xb +sh -c "echo -n %(blob) | xclip -sel c && Full Blob Clipped"
 
-set blame-view = author:abbreviated date:default id:yes,color line-number:yes text
+set blame-view = author:abbreviated date:relative id:yes,color line-number:yes text
 
 #====================
 # blob view
@@ -173,7 +173,7 @@ bind stage <Esc>p :?^diff --(git|cc)
 #====================
 # tree view
 #====================
-set tree-view = mode author:abbreviated date:default file-size:units id:yes file-name
+set tree-view = author:abbreviated date:relative mode file-size:units file-name
 
 bind tree d ?rm %(file)
 
