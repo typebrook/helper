@@ -57,7 +57,7 @@ alias pull='git pull'
 alias fetch='git fetch'
 alias merge='git merge'
 alias push='git push'
-alias remote='git remote'
+alias remote='git remote -v'
 alias rebase='git rebase'
 
 # docker
