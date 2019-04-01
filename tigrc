@@ -176,12 +176,15 @@ bind stage <Esc>p :?^diff --(git|cc)
 #====================
 set tree-view = author:abbreviated date:relative mode file-size:units file-name
 
+bind tree t +git cat-file -p %(commit)
+
 bind tree d ?rm %(file)
 
+bind tree xx +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
+bind tree xb +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
+bind tree xt +sh -c "git cat-file -p %(commit) | head -1 | cut -f 2 -d ' ' | xclip -sel c && echo Tree Clipped"
 bind tree xf +sh -c "echo -n %(file) | xclip -selection c && echo File Clipped"
-bind tree xx +sh -c "echo -n %(blob) | head -c7 | xclip -selection c && echo Blob Clipped"
-bind tree xc +sh -c "echo -n %(commit) | head -c7 | xclip -selection c && echo Commit Clipped"
-bind tree xb +sh -c "echo -n %(blob) | xclip -selection c && echo Full Blob Clipped"
+bind tree xc +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped"
 
 #====================
 # refs view
