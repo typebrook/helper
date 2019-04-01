@@ -225,4 +225,5 @@ bind help <C-R> :source ~/.tigrc
 
 #====================
 # color
+#====================
 color diff-chunk white magenta
