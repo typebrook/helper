@@ -16,6 +16,7 @@ bind generic <C-L> scroll-right
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
 bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
 bind generic xb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
+bind generic xf +sh -c "echo -n %(file) | xclip -sel c && echo File Clipped"
 
 bind generic gr view-grep
 
@@ -183,7 +184,6 @@ bind tree d ?rm %(file)
 bind tree xx +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
 bind tree xb +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
 bind tree xt +sh -c "git cat-file -p %(commit) | head -1 | cut -f 2 -d ' ' | xclip -sel c && echo Tree Clipped"
-bind tree xf +sh -c "echo -n %(file) | xclip -selection c && echo File Clipped"
 bind tree xc +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped"
 
 #====================
