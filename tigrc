@@ -141,7 +141,7 @@ bind status U !git checkout --patch -- %(file)
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a ?>git commit --amend
 bind status p none
-bind status pp ?>sh -c "git commit -m 'update' && git push"
+bind status p ?>sh -c "git commit -m 'update' && git push"
 
 bind status D ?>rm %(file)
 
