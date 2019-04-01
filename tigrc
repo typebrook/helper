@@ -53,6 +53,7 @@ bind main G none
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
 
+bind main gh :goto HEAD
 bind main o :goto %(commit)^2
 
 # branch

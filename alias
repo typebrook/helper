@@ -125,6 +125,7 @@ alias hp='http-prompt'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
+alias cdS='cd ~/git/StreetComplete'
 alias and='cd ~/git/geoBingAn.Android'
 alias gdal='docker-compose run --rm gdal'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
