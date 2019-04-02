@@ -82,6 +82,7 @@ bind main p none
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
+bind main pd ?git push %(remote) :%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit)
@@ -175,11 +176,12 @@ bind stage <Esc>p :?^diff --(git|cc)
 #====================
 # tree view
 #====================
-set tree-view = author:abbreviated date:relative mode file-size:units file-name
+set tree-view = author:abbreviated date:relative mode file-size:units id:no file-name
 
 bind tree t +git cat-file -p %(commit)
 
 bind tree d ?rm %(file)
+bind tree m >tig %(file)
 
 bind tree xx +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
 bind tree xb +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
