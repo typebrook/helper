@@ -20,6 +20,7 @@ alias ac='apt-cache'
 alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
+alias cat='bat' # if you got rust bat
 
 # cd to certain directories
 alias ..='cd ..'
