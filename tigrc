@@ -8,7 +8,7 @@
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
-bind generic <C-h> scroll-left
+bind generic <C-H> scroll-left
 bind generic <C-L> none
 bind generic <C-L> scroll-right
 
@@ -105,7 +105,7 @@ bind main V @git log -S "%(prompt Enter search word: )"
 
 # make patches
 bind main S ?>git format-patch -1 %(commit)
-bind main <C-s> ?>git format-patch %(commit)
+bind main <C-S> ?>git format-patch %(commit)
 
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
@@ -142,7 +142,6 @@ bind status U !git checkout --patch -- %(file)
 
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a ?>git commit --amend
-bind status p none
 bind status p ?>sh -c "git commit -m 'update' && git push"
 
 bind status D ?>rm %(file)
@@ -151,7 +150,7 @@ bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(fi
 bind status Tu @git update-index --assume-unchanged %(file)
 
 # apply patch file
-bind status <C-o> ?git am %(file)
+bind status <C-O> ?git am %(file)
 
 #====================
 # stash view
@@ -197,7 +196,7 @@ bind refs c @git checkout %(branch)
 bind refs b none
 bind refs bd @git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
-bind refs rbd ?git push %(remote) :%(branch)
+bind refs pd ?git push %(remote) :%(branch)
 bind refs r none
 bind refs rbu ?git branch -rd %(remote)/%(branch)
 
