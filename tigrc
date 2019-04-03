@@ -29,7 +29,7 @@ bind generic <C-R> refresh
 
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
-bind generic ; ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+bind generic gl ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
 # highlight diff without +/-
 set diff-show-signs = false
@@ -55,7 +55,7 @@ bind main G move-last-line
 bind main ` :toggle commit-title-graph
 
 bind main gh :goto HEAD
-bind main o :goto %(commit)^2
+bind main ; :goto %(commit)^2
 
 # branch
 bind main b none
