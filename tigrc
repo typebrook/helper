@@ -135,17 +135,22 @@ bind blob m >tig %(file)
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
 
+# stash
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
 bind status U !git checkout --patch -- %(file)
 
+# quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a ?>git commit --amend
 bind status p ?>sh -c "git commit -m 'update' && git push"
 
 bind status D ?>rm %(file)
 
+# solve conflict
+bind status Ra @git rebase --abort
+bind status Rc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
 
@@ -167,8 +172,8 @@ bind stash n @sh -c "git stash drop %(stash) | \
 #====================
 # stage view
 #====================
-bind stage n :/^@@
-bind stage p :?^@@
+bind stage <Ctrl-N> :/^@@
+bind stage <Ctrl-P> :?^@@
 bind stage <Esc>n :/^diff --(git|cc)
 bind stage <Esc>p :?^diff --(git|cc)
 
