@@ -91,6 +91,7 @@ alias adb-default='adb shell dumpsys package domain-preferred-apps'
 alias adb-list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 alias adb-last-screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
+alias adb-push='adb push /sdcard/Download/'
 
 # gist
 gist_list=~/gist/gist.list
@@ -130,3 +131,5 @@ alias cdS='cd ~/git/StreetComplete'
 alias and='cd ~/git/geoBingAn.Android'
 alias gdal='docker-compose run --rm gdal'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
+
+repo='git@github.com'

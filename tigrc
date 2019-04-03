@@ -11,6 +11,7 @@ bind generic G move-last-line
 bind generic <C-H> scroll-left
 bind generic <C-L> none
 bind generic <C-L> scroll-right
+bind generic <Esc>l screen-redraw
 
 # toggle/copy commit id
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
@@ -174,10 +175,10 @@ bind stash n @sh -c "git stash drop %(stash) | \
 #====================
 # stage view
 #====================
-bind stage <Ctrl-N> :/^@@
-bind stage <Ctrl-P> :?^@@
-bind stage <Esc>n :/^diff --(git|cc)
-bind stage <Esc>p :?^diff --(git|cc)
+bind stage <C-J> :/^@@
+bind stage <C-K> :?^@@
+bind stage <Esc>j :/^diff --(git|cc)
+bind stage <Esc>k :?^diff --(git|cc)
 
 #====================
 # tree view
@@ -223,8 +224,10 @@ bind log p :?^commit
 #====================
 # diff view
 #====================
-bind diff <Esc>n :/^diff --(git|cc)
-bind diff <Esc>p :?^diff --(git|cc)
+bind diff <C-J> :/^@@
+bind diff <C-K> :?^@@
+bind diff <Esc>j :/^diff --(git|cc)
+bind diff <Esc>k :?^diff --(git|cc)
 
 #====================
 # help view
