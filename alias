@@ -11,6 +11,7 @@ alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime'
+alias cdw='cd ~/vimwiki'
 
 # shell
 alias ll='ls -alh'

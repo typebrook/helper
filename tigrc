@@ -86,6 +86,8 @@ bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
+bind main pu ?git pull
+bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
 # reset/rebase/revert
 bind main u ?git reset %(commit)

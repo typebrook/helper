@@ -16,6 +16,12 @@ nnoremap <leader>R :.w !bash<cr>
 nnoremap <leader>W :set wrap!<cr>
 nnoremap <leader>tt :TableFormat<cr>
 nnoremap <leader>u :set clipboard=unnamedplus<cr>
+nnoremap <silent> <Leader>s
+             \ : if exists("syntax_on") <BAR>
+             \    syntax off <BAR>
+             \ else <BAR>
+             \    syntax enable <BAR>
+             \ endif<CR>
 
 let g:vim_markdown_folding_disabled = 1
 
