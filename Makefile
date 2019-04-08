@@ -1,10 +1,10 @@
-all: apply-alias apply-vim apply-git apply-tig
+all: alias vim git tig
 
-apply-alias:
+alias:
 	rm -f ~/.bash_aliases
 	ln -s `pwd`/alias ~/.bash_aliases
 
-apply-vim:
+vim:
 	# amix-vimrc
 	if [ ! -d "$(HOME)/.vim_runtime" ]; then \
         git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
@@ -17,11 +17,17 @@ apply-vim:
 	rm -f ~/.vim_runtime/my_configs.vim
 	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
 
-apply-git:
+wiki:
+	# vimwiki
+	if [ ! -d "$(HOME)/.vimwiki" ]; then \
+        git clone --depth=1 https://github.com/typebrook/wiki.git ~/.vimwiki && \
+	fi
+
+git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/gitconfig ~/.gitconfig
 
-apply-tig:
+tig:
 	rm -f ~/.tigrc
 	ln -s `pwd`/tigrc ~/.tigrc
 
