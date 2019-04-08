@@ -15,6 +15,7 @@ nmap <c-c> :q<cr>
 nnoremap <leader>R :.w !bash<cr>
 nnoremap <leader>W :set wrap!<cr>
 nnoremap <leader>tt :TableFormat<cr>
+nnoremap <leader>T :vertical terminal<cr>
 nnoremap <leader>u :set clipboard=unnamedplus<cr>
 nnoremap <silent> <Leader>s
              \ : if exists("syntax_on") <BAR>

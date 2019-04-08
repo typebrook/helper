@@ -133,3 +133,4 @@ alias gdal='docker-compose run --rm gdal'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 
 repo='git@github.com'
+typebrook='git@github.com:typebrook'
