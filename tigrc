@@ -106,7 +106,6 @@ bind main gdt @git tag -d %(tag)
 
 # android
 bind main B !sh scripts/bump_version.sh
-bind main V @git log -S "%(prompt Enter search word: )"
 
 # make patches
 bind main S ?>git format-patch -1 %(commit)
