@@ -167,6 +167,7 @@ bind status <C-O> ?git am %(file)
 #====================
 bind stash a ?git stash apply %(stash)
 bind stash d ?>git stash drop %(stash)
+bind stash p ?>git stash pop %(stash)
 
 # rename a stash
 bind stash n @sh -c "git stash drop %(stash) | \
@@ -220,8 +221,8 @@ bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
 #====================
 # log view
 #====================
-bind log n :/^commit
-bind log p :?^commit
+bind log <C-J> :/^commit
+bind log <C-K> :?^commit
 
 #====================
 # diff view

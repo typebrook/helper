@@ -13,5 +13,8 @@
 [core]
 	pager = 
 
+[merge]
+    tool = vimdiff
+
 [color]
 	ui = off
