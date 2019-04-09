@@ -27,8 +27,11 @@ alias ..='cd ..'
 alias ld='cd -' # last directory
 alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
+
+# about custom settings
 alias cds='cd ~/git/settings'
 alias chs='cd ~/git/settings && tig status' # check setting changes
+alias pus='cd ~/git/settings && git pull'
 
 alias r='_ranger-cd'
 function _ranger-cd {
