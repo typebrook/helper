@@ -58,6 +58,10 @@ bind main ` :toggle commit-title-graph
 bind main gh :goto HEAD
 bind main ; :goto %(commit)^2
 
+# move
+bind main <C-J> :move-next-merge
+bind main <C-K> :move-prev-merge
+
 # branch
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
