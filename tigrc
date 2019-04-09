@@ -55,12 +55,11 @@ bind main G none
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
 
-bind main gh :goto HEAD
-bind main ; :goto %(commit)^2
-
 # move
 bind main <C-J> :move-next-merge
 bind main <C-K> :move-prev-merge
+bind main gh :goto HEAD
+bind main ; :goto %(commit)^2
 
 # branch
 bind main b none
