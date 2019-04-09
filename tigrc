@@ -95,7 +95,7 @@ bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
 # reset/rebase/revert
 bind main u ?git reset %(commit)
 bind main U ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
-bind main xu ?git reset %(commit) --hard
+bind main gu ?git reset %(commit) --hard
 bind main R !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
