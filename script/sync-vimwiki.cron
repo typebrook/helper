@@ -1,0 +1,1 @@
+0 * * * * cd ~/vimwiki && git commit -am "update" && git push

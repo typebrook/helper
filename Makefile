@@ -34,3 +34,6 @@ tig:
 push:
 	git commit -am "update"
 	git push
+
+crontab:
+	(crontab -l 2>/dev/null; cat script/*.cron) | crontab -
