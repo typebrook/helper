@@ -33,7 +33,9 @@ alias cds='cd ~/git/settings'
 alias chs='cd ~/git/settings && tig status' # check setting changes
 alias pus='cd ~/git/settings && git pull'
 
+# ranger
 alias r='_ranger-cd'
+alias ranrc='vim ~/.config/ranger/rc.conf'
 function _ranger-cd {
     tempfile="$(mktemp -t tmp.XXXXXX)"
     ranger --choosedir="$tempfile" "${@:-$(pwd)}"
