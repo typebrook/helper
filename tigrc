@@ -89,6 +89,7 @@ bind main gM ?git merge %(repo:remote) --no-ff
 # push
 bind main p none
 bind main pp ?git push
+bind main pF ?git push -f
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
