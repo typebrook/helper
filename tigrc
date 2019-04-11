@@ -201,7 +201,7 @@ bind tree m >tig %(file)
 
 bind tree xx +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
 bind tree xb +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
-bind tree xt +sh -c "git cat-file -p %(commit) | head -1 | cut -f 2 -d ' ' | xclip -sel c && echo Tree Clipped"
+bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xclip -sel c -o | awk '{print \"Tree Clipped\", $1}'"
 bind tree xc +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped"
 
 #====================
