@@ -18,6 +18,7 @@ bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Comm
 bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
 bind generic xb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
 bind generic xf +sh -c "echo -n %(file) | xclip -sel c && echo File Clipped"
+bind generic xt +sh -c "echo -n %(tag) | xclip -sel c && echo tag Clipped"
 
 bind generic gr view-grep
 
