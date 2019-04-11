@@ -159,7 +159,7 @@ bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a ?>git commit --amend
 bind status p ?>sh -c "git commit -m 'update' && git push"
 
-bind status D ?>rm %(file)
+bind status d ?>rm %(file)
 
 # solve conflict
 bind status Ra @git rebase --abort
