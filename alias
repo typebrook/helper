@@ -89,6 +89,7 @@ alias ta='tig --all'
 alias ts='tig status'
 alias tl='tig log'
 alias ty='tig stash'
+alias tigr='tig refs'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
