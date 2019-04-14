@@ -67,9 +67,9 @@ bind main ; :goto %(commit)^2
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
-bind main btd @git branch -d %(branch)
+bind main bbd @git branch -d %(branch)
 bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
-bind main btD ?>git branch -D %(branch)
+bind main bbD ?>git branch -D %(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
