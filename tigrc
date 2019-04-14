@@ -76,6 +76,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     (cat -; echo %(commit)) | \
                     head -1 | \
                     xargs git checkout"
+bind main B !git checkout -b "%(prompt Enter branch name: )" %(commit)
 
 # commit
 bind main a ?>git commit --amend
@@ -113,7 +114,7 @@ bind main Tp ?git push --tags
 bind main gdt @git tag -d %(tag)
 
 # android
-bind main B !sh scripts/bump_version.sh
+bind main <Esc>b !sh scripts/bump_version.sh
 
 # make patches
 bind main S ?>git format-patch -1 %(commit)
