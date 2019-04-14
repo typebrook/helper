@@ -126,6 +126,7 @@ bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
 # Hub
 bind main i @hub browse -- commit/%(commit)
+bind main I >sh -c "hub issue | tig"
 
 # note
 #bind generic gnn !git notes edit %(commit)

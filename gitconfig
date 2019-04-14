@@ -13,7 +13,7 @@
                    git stash drop stash@{1}
 
 [core]
-	pager = tig
+	pager = 
 
 [merge]
     tool = vimdiff
