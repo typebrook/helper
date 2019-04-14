@@ -123,9 +123,12 @@ bind main <C-S> ?>git format-patch %(commit)
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
+# Hub
+bind main i @hub browse -- commit/%(commit)
+
 # note
-bind generic gnn !git notes edit %(commit)
-bind generic gnr !git notes remove %(commit)
+#bind generic gnn !git notes edit %(commit)
+#bind generic gnr !git notes remove %(commit)
 
 #====================
 # blame view
