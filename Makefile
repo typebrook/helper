@@ -37,3 +37,6 @@ push:
 
 crontab:
 	(crontab -l 2>/dev/null; cat script/*.cron) | crontab -
+
+bashrc:
+	echo "sh ~/settings/script/sync.sh" >> ~/.bashrc
