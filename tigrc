@@ -172,6 +172,7 @@ bind status Ra @git rebase --abort
 bind status Rc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
+bind status gc @git clean -f
 
 # apply patch file
 bind status <C-O> ?git am %(file)
