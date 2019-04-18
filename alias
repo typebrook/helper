@@ -22,6 +22,10 @@ alias ac='apt-cache'
 alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
+alias rr='move_to_tmp'
+move_to_tmp() {
+    mv $1 /tmp
+}
 
 # cd to certain directories
 alias ..='cd ..'
