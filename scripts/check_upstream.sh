@@ -1,3 +1,5 @@
+# check git repo $1 if upstream branch
+# origin/master is ahead of local branch $2(default to dev)
 check_upstream() {
 
     head='dev'
@@ -15,8 +17,3 @@ check_upstream() {
         echo "New commit at" $1
     fi
 }
-
-cd ~/git/settings && git pull --quiet &
-cd ~/vimwiki && git pull --quiet &
-check_upstream git/tig &
-check_upstream .vim_runtime &
