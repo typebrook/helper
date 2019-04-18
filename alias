@@ -122,9 +122,11 @@ alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/gist/todo && \
             vim ~/gist/todo && \
             gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/todo'
 
-# misc
+# curl
 alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
+
+# misc
 alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
