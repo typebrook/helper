@@ -39,4 +39,4 @@ crontab:
 	(crontab -l 2>/dev/null; cat script/*.cron) | crontab -
 
 bashrc:
-	echo "sh ~/settings/script/sync.sh" >> ~/.bashrc
+	echo "~/settings/scripts/sync.sh" >> ~/.bashrc
