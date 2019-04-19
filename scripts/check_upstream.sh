@@ -16,4 +16,7 @@ check_upstream() {
     then
         echo "New commit at" $1
     fi
+
+    cd ~/git/settings
+    echo check $1 at $(date) >> ./log
 }
