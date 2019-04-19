@@ -27,7 +27,7 @@ move_to_tmp() {
     mv $1 /tmp
 }
 
-# cd to certain directories
+# cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
 alias cdd='cd ~/Downloads'
@@ -36,7 +36,9 @@ alias cdg='cd ~/git'
 # about custom settings
 alias cds='cd ~/git/settings'
 alias chs='cd ~/git/settings && tig status' # check setting changes
-alias pus='cd ~/git/settings && git pull'
+
+# crontab
+alias ce='crontab -e'
 
 # ranger
 alias r='_ranger-cd'
