@@ -68,6 +68,7 @@ bind main ; :goto %(commit)^2
 # branch
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
+bind main bN @git branch "%(prompt Enter branch name: )" --track %(repo:remote)
 bind main bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
 bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
