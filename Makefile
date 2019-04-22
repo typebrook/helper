@@ -36,7 +36,7 @@ push:
 	git push
 
 crontab:
-	(crontab -l 2>/dev/null; cat script/*.cron) | crontab -
+	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
 
 bashrc:
 	echo "~/settings/scripts/sync.sh" >> ~/.bashrc
