@@ -114,7 +114,7 @@ bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
-bind main gdt @git tag -d %(tag)
+bind main TTd @git tag -d %(tag)
 
 # android
 bind main <C-B> !sh scripts/bump_version.sh
