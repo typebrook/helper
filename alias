@@ -140,6 +140,7 @@ alias yla='youtube-dl -x --audio-format mp3'
 alias raw='echo "https://raw.githubusercontent.com"'
 alias editor='select-editor'
 alias hp='http-prompt'
+alias clocg='cloc --vcs=git'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
