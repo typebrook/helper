@@ -82,7 +82,7 @@ set timeout ttimeoutlen=50
 " => vim-racer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set hidden
-let g:racer_cmd = "/home/jojo/.cargo/bin/racer"
+let g:racer_cmd = "~/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
 
 au FileType rust nmap gd <Plug>(rust-def)
