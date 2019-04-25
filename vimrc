@@ -19,6 +19,9 @@ nnoremap <leader>T :vertical terminal<cr>
 nnoremap <leader>u :set clipboard=unnamedplus<cr>
 nnoremap <CR> o<Esc>
 
+nnoremap <C-K> ddkP
+nnoremap <C-J> ddp
+
 nnoremap <silent> <Leader>s
              \ : if exists("syntax_on") <BAR>
              \    syntax off <BAR>
