@@ -102,9 +102,9 @@ bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
 # reset/rebase/revert
-bind main u ?git reset %(commit)
-bind main U ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
-bind main gu ?git reset %(commit) --hard
+bind main uu ?git reset %(commit)
+bind main us ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
+bind main uh ?git reset %(commit) --hard
 bind main R !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
@@ -114,6 +114,7 @@ bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
+bind main pt ?git push %(remote) %(tag)
 bind main TTd @git tag -d %(tag)
 
 # android
