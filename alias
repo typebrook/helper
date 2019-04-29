@@ -141,14 +141,13 @@ alias raw='echo "https://raw.githubusercontent.com"'
 alias editor='select-editor'
 alias hp='http-prompt'
 alias clocg='cloc --vcs=git'
+alias tma='tmux a'
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
 alias cdS='cd ~/git/StreetComplete'
 alias and='cd ~/git/geoBingAn.Android'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
-alias cdc='cd ~/git/openmaptiles/layers/transportation'
-alias cdl='cd ~/git/LiveVideoBroadcaster'
 
 repo='git@github.com'
 typebrook='git@github.com:typebrook'
