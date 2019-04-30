@@ -23,7 +23,7 @@ bind generic xrt +sh -c "echo -n %(tag) | xclip -sel c && echo tag Clipped"
 bind generic xb +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
 bind generic xB +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
 
-bind generic gr view-grep
+bind generic gp view-grep
 
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
