@@ -8,6 +8,7 @@
 bind generic g none
 bind generic gg move-first-line
 bind generic G move-last-line
+bind generic S none
 bind generic <C-H> scroll-left
 bind generic <C-L> none
 bind generic <C-L> scroll-right
@@ -126,8 +127,8 @@ bind main Su ?>git submodule update
 bind main Si ?>git submodule init
 
 # make patches
-bind main ZZ ?>git format-patch %(commit)
-bind main Z1 ?>git format-patch -1 %(commit)
+bind main PP ?>git format-patch %(commit)
+bind main P1 ?>git format-patch -1 %(commit)
 
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"

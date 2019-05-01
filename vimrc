@@ -22,12 +22,13 @@ nnoremap <CR> o<Esc>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 
-nnoremap <silent> <Leader>s
+nnoremap <silent> <leader>s
              \ : if exists("syntax_on") <BAR>
              \    syntax off <BAR>
              \ else <BAR>
              \    syntax enable <BAR>
              \ endif<CR>
+nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
 
 nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
