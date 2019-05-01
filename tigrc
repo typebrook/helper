@@ -100,7 +100,7 @@ bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
 
 # fetch
-bind main gf ?git fetch $(remote)
+bind main gf ?git fetch %(remote)
 bind main gF ?git fetch '%(prompt Which remote? )' 
 bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
