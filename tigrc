@@ -121,12 +121,13 @@ bind main Tp ?git push --tags
 bind main pt ?git push %(remote) %(tag)
 bind main TTd @git tag -d %(tag)
 
-# android
-bind main <C-B> !sh scripts/bump_version.sh
+# submodule
+bind main Su ?>git submodule update
+bind main Si ?>git submodule init
 
 # make patches
-bind main S ?>git format-patch -1 %(commit)
-bind main <C-S> ?>git format-patch %(commit)
+bind main ZZ ?>git format-patch %(commit)
+bind main Z1 ?>git format-patch -1 %(commit)
 
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
@@ -135,6 +136,9 @@ bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 # Hub
 bind main i @hub browse -- commit/%(commit)
 bind main I >sh -c "hub issue | tig"
+
+# android
+bind main <C-B> !sh scripts/bump_version.sh
 
 # note
 #bind generic gnn !git notes edit %(commit)
