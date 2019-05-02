@@ -170,7 +170,7 @@ bind status k :?^[MADRU?]
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
-bind status U !git checkout --patch -- %(file)
+bind status U ?>git reset --hard
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
