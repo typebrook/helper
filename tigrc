@@ -92,7 +92,7 @@ bind main gm ?git merge %(remote)/%(branch)         # merge with current remote
 bind main gM ?git merge %(remote)/%(branch) --no-ff # merge-no-ff with current remote
 
 # push
-bind main p none
+bind main p none            # override default pager binding
 bind main pp ?git push
 bind main pF ?git push -f
 bind main pP ?git push -u %(remote) %(branch):%(branch)
@@ -108,7 +108,7 @@ bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
 # reset/rebase/revert
 bind main uu ?git reset %(commit)
-bind main us ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
+bind main us ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'" # reset and stash the changes
 bind main uh ?git reset %(commit) --hard
 bind main B !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
@@ -173,7 +173,7 @@ bind status gs !git stashstaged
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a ?>git commit --amend
-bind status p ?>sh -c "git commit -m 'update' && git push"
+bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
 
 bind status d ?>rm %(file)
 
