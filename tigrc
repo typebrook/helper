@@ -89,8 +89,8 @@ bind main 3 >git commit --allow-empty -m "%(prompt Empty commit, enter message: 
 # merge
 bind main m ?git merge %(commit)
 bind main M ?git merge %(branch) --no-ff
-bind main gm ?git merge %(remote)/%(branch)
-bind main gM ?git merge %(remote)/%(branch) --no-ff
+bind main gm ?git merge %(remote)/%(branch)         # merge with current remote
+bind main gM ?git merge %(remote)/%(branch) --no-ff # merge-no-ff with current remote
 
 # push
 bind main p none
@@ -102,8 +102,8 @@ bind main pd ?git push %(remote) :%(branch)
 bind main pD ?git push '%(prompt Which remote? )' :'%(prompt Which branch? )'
 
 # fetch
-bind main gf ?git fetch %(remote)
-bind main gF ?git fetch '%(prompt Which remote? )' 
+bind main gf ?git fetch %(remote)                   # Go to Fetch
+bind main gF ?git fetch '%(prompt Which remote? )'  # Go to Fetch certain remote 
 bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
@@ -170,7 +170,6 @@ bind status k :?^[MADRU?]
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
-bind status U ?>git reset --hard
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
@@ -180,11 +179,12 @@ bind status p ?>sh -c "git commit -m 'update' && git push"
 bind status d ?>rm %(file)
 
 # solve conflict
+bind status U ?>git reset --hard
+bind status gc @git clean -f
 bind status Ra @git rebase --abort
 bind status Rc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
-bind status gc @git clean -f
 
 # apply patch file
 bind status <C-O> ?git am %(file)
