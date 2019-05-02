@@ -99,6 +99,7 @@ bind main pF ?git push -f
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
+bind main pD ?git push '%(prompt Which remote? )' :'%(prompt Which branch? )'
 
 # fetch
 bind main gf ?git fetch %(remote)
@@ -255,6 +256,8 @@ bind diff <C-J> :/^@@
 bind diff <C-K> :?^@@
 bind diff <Esc>j :/^diff --(git|cc)
 bind diff <Esc>k :?^diff --(git|cc)
+
+bind diff u @git checkout %(commit)^ %(file)
 
 #====================
 # help view
