@@ -29,8 +29,7 @@ bind generic gp view-grep
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
 
-# override refresh
-bind generic R none
+# refresh like modern browser
 bind generic <C-R> refresh
 
 # see reflog, reset refernece
@@ -70,6 +69,7 @@ bind main ; :goto %(commit)^2
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bN @git branch "%(prompt Enter branch name: )" --track %(remote)/%(branch)
+bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
 bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
@@ -80,7 +80,6 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     (cat -; echo %(commit)) | \
                     head -1 | \
                     xargs git checkout"
-bind main B @git checkout -b "%(prompt Enter branch name: )" %(commit)
 
 # commit
 bind main a ?>git commit --amend
@@ -111,7 +110,7 @@ bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
 bind main uu ?git reset %(commit)
 bind main us ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'"
 bind main uh ?git reset %(commit) --hard
-bind main R !?git rebase -i %(commit)
+bind main B !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 
 # tag
@@ -181,8 +180,8 @@ bind status d ?>rm %(file)
 # solve conflict
 bind status U ?>git reset --hard
 bind status gc @git clean -f
-bind status Ra @git rebase --abort
-bind status Rc @git rebase --continue
+bind status Ba @git rebase --abort
+bind status Bc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status Tu @git update-index --assume-unchanged %(file)
 
