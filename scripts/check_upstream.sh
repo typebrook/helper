@@ -2,6 +2,10 @@
 # origin/master is ahead of local branch $2(default to dev)
 check_upstream() {
 
+    if [ ! -d $1 ]; then
+        return 0
+    fi
+
     head='dev'
     if [ $# -eq 2 ]
     then
