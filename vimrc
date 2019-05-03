@@ -21,7 +21,6 @@ nnoremap <CR> o<Esc>
 
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
-
 nnoremap <silent> <leader>s
              \ : if exists("syntax_on") <BAR>
              \    syntax off <BAR>
@@ -35,6 +34,11 @@ nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
 nnoremap <leader>a :VimwikiSearchTags 
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
+
+augroup vimwikiPush
+  autocmd!
+  autocmd BufWritePost ~/vimwiki/* :!(sh -c "git commit -am \"update\" && git push origin" > /dev/null 2>&1 &)
+augroup END
 
 " vim_markdown
 let g:vim_markdown_folding_disabled = 1
