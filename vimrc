@@ -33,7 +33,7 @@ nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDa
 " vimwiki
 nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
-nnoremap <leader>a :VimwikiSearchTags 
+nnoremap <leader>wa :VimwikiSearchTags 
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
 
 " vim_markdown
