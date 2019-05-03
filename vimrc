@@ -9,8 +9,8 @@ set nowrap
 set nosol
 set ss=1
 set siso=999
-let g:vim_markdown_conceal = 0
 
+" general
 nmap <c-c> :q<cr>
 nnoremap <leader>R :.w !bash<cr>
 nnoremap <leader>, :w !bash<cr>
@@ -30,10 +30,15 @@ nnoremap <silent> <leader>s
              \ endif<CR>
 nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
 
+" vimwiki
 nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
+nnoremap <leader>a :VimwikiSearchTags 
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
 
+" vim_markdown
 let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
