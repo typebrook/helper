@@ -11,7 +11,6 @@ alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime'
-alias cdw='cd ~/vimwiki'
 alias cdm='cd ~/Music'
 
 # shell
@@ -36,6 +35,10 @@ alias cdg='cd ~/git'
 # about custom settings
 alias cds='cd ~/git/settings'
 alias chs='cd ~/git/settings && tig status' # check setting changes
+
+# about vimwiki
+alias cdw='cd ~/vimwiki'
+alias chw='cd ~/vimwiki && tig'
 
 # crontab
 alias ce='crontab -e'
