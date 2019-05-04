@@ -111,6 +111,7 @@ bind main uu ?git reset %(commit)
 bind main us ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'" # reset and stash the changes
 bind main uh ?git reset %(commit) --hard
 bind main B !?git rebase -i %(commit)
+bind main gb !?git rebase --onto '%(prompt Rebase onto which branch? )' %(commit) %(repo:head)
 bind main ! ?git revert %(commit)
 
 # tag
