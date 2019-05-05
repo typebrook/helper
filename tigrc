@@ -235,7 +235,7 @@ bind refs bd @git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
 bind refs pd ?git push %(remote) :%(branch)
 bind refs r none
-bind refs rbu ?git branch -rd %(remote)/%(branch)
+bind refs brd ?git branch -rd %(remote)/%(branch)
 
 bind refs U ?git fetch --all
 bind refs F ?git fetch %(remote)
