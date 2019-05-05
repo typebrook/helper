@@ -37,7 +37,7 @@ let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
 
 augroup vimwikiPush
   autocmd!
-  autocmd BufWritePost ~/vimwiki/* :!(sh -c "git commit -am \"update\" && git push origin" > /dev/null 2>&1 &)
+  autocmd BufWritePost ~/vimwiki/* :!(sh -c "git commit -am \"update\" && git push origin")
 augroup END
 
 " vim_markdown
