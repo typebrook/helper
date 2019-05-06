@@ -81,6 +81,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     (cat -; echo %(commit)) | \
                     head -1 | \
                     xargs git checkout"
+bind main - @git checkout -
 
 # commit
 bind main a ?>git commit --amend
