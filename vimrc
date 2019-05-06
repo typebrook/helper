@@ -29,6 +29,8 @@ nnoremap <silent> <leader>s
              \ endif<CR>
 nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
 
+onoremap p i(
+
 " vimwiki
 nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
