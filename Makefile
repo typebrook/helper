@@ -1,3 +1,5 @@
+.PHONY: *
+
 all: alias vim git tig
 
 alias:
@@ -31,12 +33,8 @@ tig:
 	rm -f ~/.tigrc
 	ln -s `pwd`/tigrc ~/.tigrc
 
-push:
-	git commit -am "update"
-	git push
-
 crontab:
 	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
 
 bashrc:
-	echo "~/settings/scripts/sync.sh" >> ~/.bashrc
+	echo "~/git/settings/scripts/sync.sh" >> ~/.bashrc
