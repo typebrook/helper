@@ -120,7 +120,7 @@ bind main ! ?git revert %(commit)
 bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Enter tag name: )" %(commit)'
-bind main TM @sh -c 'git cat-file -p %(tag)  | sed -n \'6,$p\' | git tag -a -F - "%(prompt Enter tag name: )" && git tag -d %(tag)'
+bind main TM @sh -c 'git cat-file -p %(tag) | sed -n \'6,$p\' | git tag -a -F - "%(prompt Enter tag name: )" && git tag -d %(tag)'
 bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main Tp ?git push --tags
