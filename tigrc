@@ -127,9 +127,12 @@ bind main Tp ?git push --tags
 bind main pt ?git push %(remote) %(tag)
 bind main TTd @git tag -d %(tag)
 
+# search in history
+bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=raw'
+
 # submodule
-bind main Su ?>git submodule update
-bind main Si ?>git submodule init
+bind main Zu ?>git submodule update
+bind main Zi ?>git submodule init
 
 # make patches
 bind main PP ?>git format-patch %(commit)
