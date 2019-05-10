@@ -84,7 +84,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     xargs git checkout"
 
 # commit
-bind main a ?>git commit --amend
+bind main a !>git commit --amend
 bind main 3 >git commit --allow-empty -m "%(prompt Empty commit, enter message: )"
 
 # merge
@@ -146,6 +146,9 @@ bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 bind main i @hub browse -- commit/%(commit)
 bind main I >sh -c "hub issue | tig"
 
+# Statistics
+bind main gc !sh -c 'cloc --git %(commit) | tig'
+
 # android
 bind main <C-B> !sh scripts/bump_version.sh
 
@@ -180,7 +183,7 @@ bind status gs !git stashstaged
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
-bind status a ?>git commit --amend
+bind status a !>git commit --amend
 bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
 
 bind status d ?>rm %(file)
