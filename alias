@@ -9,6 +9,7 @@ alias zshrc='vim ~/.zshrc'
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
+alias vt='vim ~/vimwiki/taoyuan.wiki'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime'
 alias cdm='cd ~/Music'
