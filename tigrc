@@ -77,6 +77,7 @@ bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
 bind main bbD ?>git branch -D %(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
+bind main bM @git branch -f  "%(prompt Move which branch to here? )" %(commit)
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
                     (cat -; echo %(commit)) | \
