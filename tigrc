@@ -111,8 +111,8 @@ bind main pd ?git push %(remote) :%(branch)
 bind main pD ?git push '%(prompt Which remote? )' :'%(prompt Which branch? )'
 
 # fetch
-bind main gf ?git fetch %(remote)                   # Go to Fetch
-bind main gF ?git fetch '%(prompt Which remote? )'  # Go to Fetch certain remote 
+bind main F ?git fetch %(remote)                   # Go to Fetch
+bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch certain remote 
 bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
