@@ -159,5 +159,6 @@ alias cdG='cd ~/git/git'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 
 repo='git@github.com'
+hub='https://github.com'
 typebrook='git@github.com:typebrook'
 hub='https://github.com'
