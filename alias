@@ -40,6 +40,7 @@ alias chs='cd ~/git/settings && tig status' # check setting changes
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig'
+alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
 
 # crontab
