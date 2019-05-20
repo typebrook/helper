@@ -96,10 +96,10 @@ bind main a !>git commit --amend
 bind main 3 >git commit --allow-empty -m "%(prompt Empty commit, enter message: )"
 
 # merge
-bind main m ?git merge %(commit)
-bind main M ?git merge %(branch) --no-ff
-bind main gm ?git merge %(remote)/%(branch)         # merge with current remote
-bind main gM ?git merge %(remote)/%(branch) --no-ff # merge-no-ff with current remote
+bind main m ?@git merge %(commit)
+bind main M ?@git merge %(branch) --no-ff
+bind main gm ?@git merge %(remote)/%(branch)         # merge with current remote
+bind main gM ?@git merge %(remote)/%(branch) --no-ff # merge-no-ff with current remote
 
 # push
 bind main p none            # override default pager binding
