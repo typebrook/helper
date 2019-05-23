@@ -6,6 +6,7 @@
 # geineric
 #====================
 bind generic g none
+bind generic gp view-grep
 bind generic gg move-first-line
 bind generic G move-last-line
 bind generic S none
@@ -19,12 +20,10 @@ bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Comm
 bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
 bind generic xrb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
 bind generic xrB +sh -c "echo -n %(remote):%(branch) | xclip -sel c && echo Remote Branch Clipped!"
-bind generic xf +sh -c "echo -n %(file) | xclip -sel c && echo File Clipped"
 bind generic xrt +sh -c "echo -n %(tag) | xclip -sel c && echo tag Clipped"
+bind generic xf +sh -c "echo -n %(file) | xclip -sel c && echo File Clipped"
 bind generic xb +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
 bind generic xB +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
-
-bind generic gp view-grep
 
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
@@ -32,6 +31,7 @@ bind generic w :toggle ignore-case
 # refresh like modern browser
 bind generic <C-R> refresh
 # apply tigrc settings
+
 bind generic R none
 bind generic R :source ~/.tigrc
 
@@ -68,7 +68,7 @@ bind main <C-F> :toggle commit-title-refs
 bind main <C-J> :move-next-merge
 bind main <C-K> :move-prev-merge
 bind main gh :goto HEAD
-bind main ; :goto %(commit)^2
+bind main ; :goto %(commit)^2 # go to second parent
 
 # branch
 bind main b none
@@ -104,15 +104,15 @@ bind main gM ?@git merge %(remote)/%(branch) --no-ff # merge-no-ff with current 
 # push
 bind main p none            # override default pager binding
 bind main pp ?git push
-bind main pF ?git push -f
 bind main pP ?git push -u %(remote) %(branch):%(branch)
+bind main pF ?git push -f
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
 bind main pD ?git push '%(prompt Which remote? )' :'%(prompt Which branch? )'
 
 # fetch
 bind main F ?git fetch %(remote)                   # Go to Fetch
-bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch certain remote 
+bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
 bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
  
@@ -176,7 +176,7 @@ set blame-view = author:abbreviated date:relative id:yes,color line-number:yes t
 #====================
 # blob view
 #====================
-bind blob m >tig %(file)
+bind blob m >tig -- %(file)
 
 #====================
 # status view
@@ -202,7 +202,7 @@ bind status gc @git clean -f
 bind status Ba @git rebase --abort
 bind status Bc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
-bind status Tu @git update-index --assume-unchanged %(file)
+bind status gu @git update-index --assume-unchanged %(file)
 
 # apply patch file
 bind status <C-O> ?git am %(file)
