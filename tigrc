@@ -9,11 +9,10 @@ bind generic g none
 bind generic gp view-grep
 bind generic gg move-first-line
 bind generic G move-last-line
-bind generic S none
 bind generic <C-H> scroll-left
-bind generic <C-L> none
 bind generic <C-L> scroll-right
 bind generic <Esc>l screen-redraw
+bind generic R :source ~/.tigrc
 
 # toggle/copy commit id
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
@@ -32,8 +31,6 @@ bind generic w :toggle ignore-case
 bind generic <C-R> refresh
 # apply tigrc settings
 
-bind generic R none
-bind generic R :source ~/.tigrc
 
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
@@ -80,6 +77,7 @@ bind main bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
 bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
 bind main bbD ?>git branch -D %(branch)
+bind main brd ?git branch -rd %(remote)/%(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
 bind main bM @git branch -f  "%(prompt Move which branch to here? )" %(commit)
