@@ -102,8 +102,8 @@ bind main gM ?@git merge %(remote)/%(branch) --no-ff # merge-no-ff with current 
 
 # push
 bind main p none            # override default pager binding
-bind main pp ?git push
-bind main pP ?git push -u %(remote) %(branch):%(branch)
+bind main pp ?@git push
+bind main pP ?@git push -u %(remote) %(branch):%(branch)
 bind main pF ?git push -f
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pd ?git push %(remote) :%(branch)
