@@ -88,6 +88,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     xargs git checkout"
 bind main bo >tig %(branch)
 bind main bO >tig "%(prompt Enter branchs: )"
+bind main ba >tig --all
 
 # commit
 bind main a !>git commit --amend
