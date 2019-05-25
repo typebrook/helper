@@ -12,7 +12,7 @@ bind generic G move-last-line
 bind generic <C-H> scroll-left
 bind generic <C-L> scroll-right
 bind generic <Esc>l screen-redraw
-bind generic R :source ~/.tigrc
+bind generic R :source ~/.tigrc # apply tigrc settings
 
 # toggle/copy commit id
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
@@ -29,8 +29,6 @@ bind generic w :toggle ignore-case
 
 # refresh like modern browser
 bind generic <C-R> refresh
-# apply tigrc settings
-
 
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
@@ -60,6 +58,9 @@ bind main G move-last-line
 bind main ` :toggle commit-title-graph
 bind main F none
 bind main <C-F> :toggle commit-title-refs
+
+# edit tigrc
+bind main e >sh -c "vim ~/.tigrc"
 
 # move
 bind main <C-J> :move-next-merge
