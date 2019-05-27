@@ -57,7 +57,7 @@ bind main G none
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
 bind main F none
-bind main <C-F> :toggle commit-title-refs
+bind main <C-T> :toggle commit-title-refs
 
 # edit tigrc
 bind main e >sh -c "vim ~/.tigrc"
@@ -111,7 +111,8 @@ bind main pd ?git push %(remote) :%(branch)
 bind main pD ?git push '%(prompt Which remote? )' :'%(prompt Which branch? )'
 
 # fetch
-bind main F ?git fetch %(remote)                   # Go to Fetch
+bind main F ?git fetch %(remote) %(branch)          # Go to Fetch
+bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
 bind main pu ?git pull
 bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
@@ -255,8 +256,8 @@ bind refs r none
 bind refs brd ?git branch -rd %(remote)/%(branch)
 
 bind refs U ?git fetch --all
-bind refs F ?git fetch %(remote)
-bind refs <C-F> ?git fetch %(remote) %(branch)
+bind refs <C-F> ?git fetch %(remote)
+bind refs F ?git fetch %(remote) %(branch)
 
 bind refs . >sh -c "git diff %(branch) | tig"
 bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
