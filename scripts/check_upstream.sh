@@ -22,5 +22,5 @@ check_upstream() {
     fi
 
     cd ~/git/settings
-    echo check $1 at $(date) >> ./log
+    echo $(date) check $1 >> ./log
 }
