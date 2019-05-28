@@ -152,6 +152,7 @@ alias tma='tmux a'
 alias cdo='cd ~/git/openmaptiles'
 alias cdoo='cd ~/git/openmaptiles/styles/outdoor'
 alias cdS='cd ~/git/StreetComplete'
+alias cdW='cd ~/git/geoBingAnWeb'
 alias and='cd ~/git/geoBingAn.Android'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 
