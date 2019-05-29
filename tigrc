@@ -168,7 +168,7 @@ bind main <C-B> !sh scripts/bump_version.sh
 #====================
 # blame view
 #====================
-bind blame m >tig %(file)
+bind blame m >tig -- %(file)
 bind blame . >sh -c "git diff %(ref) -- %(file) | tig"
 bind blame > >sh -c "git diff %(ref)  --no-prefix -U1000i -- %(file) | tig"
 
@@ -237,7 +237,7 @@ set tree-view = author:abbreviated date:relative mode file-size:units id:no file
 bind tree t +git cat-file -p %(commit)
 
 bind tree d ?rm %(file)
-bind tree m >tig %(file)
+bind tree m >tig -- %(file)
 
 bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xclip -sel c -o | awk '{print \"Tree Clipped\", $1}'"
 
@@ -276,7 +276,7 @@ bind diff <C-K> :?^@@
 bind diff <Esc>j :/^diff --(git|cc)
 bind diff <Esc>k :?^diff --(git|cc)
 
-bind diff u @git checkout %(commit)^ %(file)
+bind diff u @git checkout %(commit)^ -- %(file)
 
 #====================
 # help view
