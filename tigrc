@@ -143,22 +143,22 @@ bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=
 bind main Zu ?>git submodule update
 bind main Zi ?>git submodule init
 
-# make patches
-bind main PP ?>git format-patch %(commit)
-bind main P1 ?>git format-patch -1 %(commit)
-
 # show diff based on revision
 bind main . >sh -c "git diff %(commit) | tig"
 bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 
-# Hub
+# make patches
+bind main PP ?>git format-patch %(commit)
+bind main P1 ?>git format-patch -1 %(commit)
+
+# Misc-Hub
 bind main i @hub browse -- commit/%(commit)
 bind main I >sh -c "hub issue | tig"
 
-# Statistics
+# Misc-Statistics
 bind main gc !sh -c 'cloc --git %(commit) | tig'
 
-# android
+# Misc-android
 bind main <C-B> !sh scripts/bump_version.sh
 
 # note
