@@ -5,16 +5,22 @@
 #====================
 # geineric
 #====================
+# vim-like g binding, 'gp' for git grep
 bind generic g none
 bind generic gp view-grep
 bind generic gg move-first-line
 bind generic G move-last-line
+
+# scroll right easily
 bind generic <C-H> scroll-left
 bind generic <C-L> scroll-right
-bind generic <Esc>l screen-redraw
-bind generic R :source ~/.tigrc # apply tigrc settings
 
-# toggle/copy commit id
+# redraw, refresh, source tigrc
+bind generic <C-R> refresh
+bind generic <Esc>l screen-redraw
+bind generic R :source ~/.tigrc
+
+# clipboard
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
 bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
 bind generic xrb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
@@ -26,9 +32,6 @@ bind generic xB +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped
 
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
-
-# refresh like modern browser
-bind generic <C-R> refresh
 
 # see reflog, reset refernece
 bind generic L >sh -c "git reflog --pretty=raw | tig --pretty=raw"
@@ -102,7 +105,7 @@ bind main gm ?@git merge %(remote)/%(branch)         # merge with current remote
 bind main gM ?@git merge %(remote)/%(branch) --no-ff # merge-no-ff with current remote
 
 # push
-bind main p none            # override default pager binding
+bind main p none # override default pager binding
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pF ?git push -f
@@ -194,7 +197,6 @@ bind status gs !git stashstaged
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a !>git commit --amend
 bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
-
 bind status d ?>rm %(file)
 
 # solve conflict
