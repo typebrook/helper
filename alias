@@ -154,6 +154,7 @@ alias cdoo='cd ~/git/openmaptiles/styles/outdoor'
 alias cdS='cd ~/git/StreetComplete'
 alias cdW='cd ~/git/geoBingAnWeb'
 alias and='cd ~/git/geoBingAn.Android'
+alias cdG='cd ~/git/git'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 
 repo='git@github.com'
