@@ -23,6 +23,7 @@ bind generic R :source ~/.tigrc
 # clipboard
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
 bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
+bind generic xt +sh -c "echo -n %(text) | xclip -sel c && echo Text Clipped!"
 bind generic xrb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
 bind generic xrB +sh -c "echo -n %(remote):%(branch) | xclip -sel c && echo Remote Branch Clipped!"
 bind generic xrt +sh -c "echo -n %(tag) | xclip -sel c && echo tag Clipped"
@@ -118,7 +119,7 @@ bind main F ?git fetch %(remote) %(branch)          # Go to Fetch
 bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
 bind main pu ?git pull
-bind main pU ?git pull '%(prompt Which remote? )' %(branch):%(branch)
+bind main pU ?git pull --rebase
  
 # reset/rebase/revert
 bind main uu ?git reset %(commit)
