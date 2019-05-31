@@ -85,7 +85,7 @@ bind main bbD ?>git branch -D %(branch)
 bind main brd ?git branch -rd %(remote)/%(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
-bind main bM @git branch -f  "%(prompt Move which branch to here? )" %(commit)
+bind main bM @git branch -f "%(prompt Move which branch to here? )" %(commit)
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
                     (cat -; echo %(commit)) | \
@@ -174,7 +174,7 @@ bind main <C-B> !sh scripts/bump_version.sh
 #====================
 bind blame m >tig -- %(file)
 bind blame . >sh -c "git diff %(ref) -- %(file) | tig"
-bind blame > >sh -c "git diff %(ref)  --no-prefix -U1000i -- %(file) | tig"
+bind blame > >sh -c "git diff %(ref) --no-prefix -U1000i -- %(file) | tig"
 
 set blame-view = author:abbreviated date:relative id:yes,color line-number:yes text
 
