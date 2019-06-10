@@ -1,5 +1,6 @@
-# check git repo $1 if upstream branch
-# origin/master is ahead of local branch $2(default to dev)
+# This script is for repo forked from others
+# check $1(repo) if upstream branch origin/master is
+# ahead of local branch $2(default to dev)
 check_upstream() {
 
     if [ ! -d $1 ]; then
@@ -21,6 +22,5 @@ check_upstream() {
         echo "New commit at" $1
     fi
 
-    cd ~/git/settings
-    echo $(date) check $1 >> ./log
+    echo $(date) check $1 >> ~/git/settings/log
 }
