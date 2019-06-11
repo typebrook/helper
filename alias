@@ -11,7 +11,6 @@ alias log='cat log | grep "`date +"%b %d"`"'
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
-alias vt='vim ~/vimwiki/taoyuan.wiki'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime'
 
@@ -31,8 +30,9 @@ move_to_tmp() {
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-alias cdd='cd ~/Downloads'
 alias cdg='cd ~/git'
+alias cdd='cd ~/Downloads'
+alias cdV='cd ~/Videos'
 
 # about custom settings
 alias cds='cd ~/git/settings'

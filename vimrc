@@ -18,6 +18,8 @@ nnoremap <leader>W :set wrap!<cr>
 nnoremap <leader>T :vertical terminal<cr>
 nnoremap <leader>u :set clipboard=unnamedplus<cr>
 nnoremap <CR> o<Esc>
+nnoremap <C-L> 60l
+nnoremap <C-H> 60h
 
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
