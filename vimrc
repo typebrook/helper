@@ -36,7 +36,7 @@ onoremap p i(
 " vimwiki
 nnoremap <leader>tt :VimwikiTable<cr>
 nnoremap <leader>wg :VimwikiGoto 
-nnoremap <leader>a :VimwikiSearchTags 
+nnoremap <leader>wa :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
 
