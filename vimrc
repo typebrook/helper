@@ -31,7 +31,11 @@ nnoremap <silent> <leader>s
              \ endif<CR>
 nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<CR>
 
+" Operator pending
 onoremap p i(
+onoremap ap a(
+onoremap np :<c-u>normal! f(vi(<cr>
+onoremap b /return<CR>
 
 " new
 nnoremap H 0
