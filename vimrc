@@ -48,21 +48,25 @@ vnoremap " <ESC>`<i"<ESC>`>la"<ESC>
 " abbrev
 iabbrev @@ typebrook@gmail.com
 
-" vimwiki
+" vim_markdown
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Settings for Vimwiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 nnoremap <leader>tt :VimwikiTable<CR>
 nnoremap <leader>wg :VimwikiGoto 
 nnoremap <leader>wa :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'auto_tags': 1}]
 
+" Git push quietly whenever leaving vim after editing Vimwiki
 augroup vimwikiPush
   autocmd!
   autocmd VimLeave ~/vimwiki/* :!(~/vimwiki/scripts/upload.sh > /dev/null 2>&1 &)
 augroup END
-
-" vim_markdown
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
