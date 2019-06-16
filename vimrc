@@ -11,12 +11,12 @@ set ss=1
 set siso=999
 
 " general
-nmap <c-c> :q<cr>
-nnoremap <leader>R :.w !bash<cr>
-nnoremap <leader>, :w !bash<cr>
-nnoremap <leader>W :set wrap!<cr>
-nnoremap <leader>T :vertical terminal<cr>
-nnoremap <leader>u :set clipboard=unnamedplus<cr>
+nmap <c-c> :q<CR>
+nnoremap <leader>R :.w !bash<CR>
+nnoremap <leader>, :w !bash<CR>
+nnoremap <leader>W :set wrap!<CR>
+nnoremap <leader>T :vertical terminal<CR>
+nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <CR> o<Esc>
 nnoremap <C-L> 60l
 nnoremap <C-H> 60h
@@ -29,12 +29,27 @@ nnoremap <silent> <leader>s
              \ else <BAR>
              \    syntax enable <BAR>
              \ endif<CR>
-nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
+nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<CR>
 
 onoremap p i(
 
+" new
+nnoremap H 0
+nnoremap L $
+inoremap jk <ESC>
+inoremap <ESC> <nop>
+
+" surround with '' or ""
+nnoremap <leader>' ea'<esc>bi'<esc>e
+nnoremap <leader>" ea"<esc>bi"<esc>e
+vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
+vnoremap " <ESC>`<i"<ESC>`>la"<ESC>
+
+" abbrev
+iabbrev @@ typebrook@gmail.com
+
 " vimwiki
-nnoremap <leader>tt :VimwikiTable<cr>
+nnoremap <leader>tt :VimwikiTable<CR>
 nnoremap <leader>wg :VimwikiGoto 
 nnoremap <leader>wa :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
@@ -53,10 +68,11 @@ let g:vim_markdown_conceal = 0
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Copy from : https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
+" 
 " Usage:
 " 	:Redir hi ............. show the full output of command ':hi' in a scratch window
 " 	:Redir !ls -al ........ show the full output of command ':!ls -al' in a scratch window
-"
+
 function! Redir(cmd)
 	for win in range(1, winnr('$'))
 		if getwinvar(win, 'scratch')
@@ -84,6 +100,7 @@ nnoremap <leader>r :Redir
 " => Make Alt key works on Gnome terminal
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Solution is here: https://stackoverflow.com/questions/6778961
+
 let c='a'
 while c <= 'z'
   exec "set <A-".c.">=\e".c
