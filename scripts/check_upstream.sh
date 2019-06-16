@@ -1,6 +1,7 @@
 # This script is for repo forked from others
 # check $1(repo) if upstream branch origin/master is
 # ahead of local branch $2(default to dev)
+
 check_upstream() {
 
     if [ ! -d $1 ]; then
