@@ -12,23 +12,22 @@ set siso=999
 
 " general
 nmap <c-c> :q<CR>
-nnoremap <leader>R :.w !bash<CR>
+nnoremap K :.w !bash<CR>
 nnoremap <leader>, :w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <CR> o<Esc>
-nnoremap <C-L> 60l
-nnoremap <C-H> 60h
-
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
+" disable syntax
 nnoremap <silent> <leader>s
              \ : if exists("syntax_on") <BAR>
              \    syntax off <BAR>
              \ else <BAR>
              \    syntax enable <BAR>
              \ endif<CR>
+" show current syntax
 nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<CR>
 
 " Operator pending
@@ -37,9 +36,11 @@ onoremap ap a(
 onoremap np :<c-u>normal! f(vi(<cr>
 onoremap b /return<CR>
 
-" new
+" 習慣成自然
 nnoremap H 0
 nnoremap L $
+nnoremap <C-L> 60l
+nnoremap <C-H> 60h
 inoremap jk <ESC>
 inoremap <ESC> <nop>
 
