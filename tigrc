@@ -75,7 +75,7 @@ bind main ; :goto %(commit)^2 # go to second parent
 # branch
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
-bind main bN @git branch "%(prompt Enter branch name: )" --track %(remote)/%(branch)
+bind main bN @git branch %(branch) --track %(remote)/%(branch)
 bind main bu @git branch --set-upstream-to="%(prompt Set remote/branch: )"
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind main bd @git branch -d "%(prompt Delete branch: )"
