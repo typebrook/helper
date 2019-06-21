@@ -237,6 +237,8 @@ bind stage <Esc>k :?^diff --(git|cc)
 #====================
 set tree-view = author:abbreviated date:relative mode file-size:units id:no file-name
 
+bind tree l enter
+
 bind tree t +git cat-file -p %(commit)
 
 bind tree d ?rm %(file)
