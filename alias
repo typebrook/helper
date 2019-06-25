@@ -34,6 +34,7 @@ alias cdg='cd ~/git'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdV='cd ~/Videos'
+alias cdP='cd ~/Pictures'
 
 # about custom settings
 alias cds='cd ~/git/settings'
