@@ -12,13 +12,11 @@ alias log='cat log | grep "`date +"%b %d"`"'
 alias v='vim'
 alias vv='vim ~/vimwiki/index.wiki'
 alias vr='vim -R'
-alias cdv='cd ~/.vim_runtime'
+alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # shell
 alias ll='ls -alh'
-alias ag='sudo apt-get'
-alias ai='sudo apt-get install'
-alias ac='apt-cache'
+alias ai='sudo apt install'
 alias si='sudo snap install'
 alias ss='sudo !!'
 alias hg='history|grep'
@@ -51,7 +49,7 @@ alias ce='crontab -e'
 # ranger
 alias r='_ranger-cd'
 alias ranrc='vim ~/.config/ranger/rc.conf'
-function _ranger-cd {
+_ranger-cd() {
     tempfile="$(mktemp -t tmp.XXXXXX)"
     ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
@@ -101,10 +99,6 @@ alias geothings-test='ssh geothings@test.geothings.tw'
 alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ta='tig --all'
-alias ts='tig status'
-alias tl='tig log'
-alias ty='tig stash'
-alias tigr='tig refs'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
 alias upload-tig='upload-github-release-asset.sh github_api_token=$(head -1 $HOME/git/settings/tokens/github-release) owner=typebrook repo=tig tag=tig-2.4.1 filename=$(which tig)'
 
@@ -165,4 +159,3 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 repo='git@github.com'
 hub='https://github.com'
 typebrook='git@github.com:typebrook'
-hub='https://github.com'
