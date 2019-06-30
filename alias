@@ -38,6 +38,7 @@ alias cdP='cd ~/Pictures'
 
 # about custom settings
 alias cds='cd ~/git/settings'
+alias cdss='cd ~/git/settings/scripts'
 alias chs='cd ~/git/settings && tig status' # check setting changes
 
 # about vimwiki
