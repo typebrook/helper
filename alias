@@ -1,10 +1,11 @@
+SETTING_DIR="$HOME/git/settings"
 # settings
 alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
 alias all='source ~/.bash_aliases'
 alias bashrc='vim ~/.bashrc'
 alias zshrc='vim ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
-alias tigrc='vim ~/.tigrc'
+alias tigrc='vim $SETTING_DIR/tigrc'
 alias gitconfig='vim ~/.gitconfig'
 alias log='cat log | grep "`date +"%b %d"`"'
 
