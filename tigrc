@@ -156,15 +156,17 @@ bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
 bind main PP ?>git format-patch %(commit)
 bind main P1 ?>git format-patch -1 %(commit)
 
-# Misc-Hub
+# Hub
 bind main i @hub browse -- commit/%(commit)
 bind main I >sh -c "hub issue | tig"
 
-# Misc-Statistics
+# Misc
+## Statistics
 bind main gc !sh -c 'cloc --git %(commit) | tig'
-
-# Misc-android
+## Misc-android
 bind main <C-B> !sh scripts/bump_version.sh
+## Remote
+bind main U +sh -c "git remote -v | grep %(remote)"
 
 # note
 #bind generic gnn !git notes edit %(commit)
