@@ -93,7 +93,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
                     head -1 | \
                     xargs git checkout"
 bind main bo >tig %(branch)
-bind main bO >tig "%(prompt Enter branchs: )"
+bind main bO >tig "%(prompt Enter branch: )"
 bind main ba >tig --all
 
 # commit
