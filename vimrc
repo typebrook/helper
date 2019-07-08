@@ -41,8 +41,10 @@ nnoremap H 0
 nnoremap L $
 nnoremap <C-L> 60l
 nnoremap <C-H> 60h
-inoremap jk <ESC>
 inoremap <ESC> <nop>
+
+" Fix paste bug triggered by inoremaps
+set t_BE=
 
 " surround with '' or ""
 nnoremap <leader>' ea'<esc>bi'<esc>e
