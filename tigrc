@@ -137,8 +137,8 @@ bind main Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Enter tag name: )" %
 bind main TM @sh -c 'git cat-file -p %(tag) | sed -n \'6,$p\' | git tag -a -F - "%(prompt Enter tag name: )" && git tag -d %(tag)'
 bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
-bind main Tp ?git push --tags
 bind main pt ?git push %(remote) %(tag)
+bind main pT ?git push --tags
 bind main TTd @git tag -d %(tag)
 
 # search in history
