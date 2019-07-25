@@ -21,15 +21,15 @@ bind generic <Esc>l screen-redraw
 bind generic R :source ~/.tigrc
 
 # clipboard
-bind generic xx +sh -c "echo -n %(commit) | head -c7 | xclip -sel c && echo Commit Clipped!"
-bind generic xc +sh -c "echo -n %(commit) | xclip -sel c && echo Full Commit Clipped!"
-bind generic xt +sh -c "echo -n %(text) | xclip -sel c && echo Text Clipped!"
-bind generic xrb +sh -c "echo -n %(branch) | xclip -sel c && echo Branch Clipped!"
-bind generic xrB +sh -c "echo -n %(remote):%(branch) | xclip -sel c && echo Remote Branch Clipped!"
-bind generic xrt +sh -c "echo -n %(tag) | xclip -sel c && echo tag Clipped"
-bind generic xf +sh -c "echo -n %(file) | xclip -sel c && echo File Clipped"
-bind generic xb +sh -c "echo -n %(blob) | head -c7 | xclip -sel c && echo Blob Clipped"
-bind generic xB +sh -c "echo -n %(blob) | xclip -sel c && echo Full Blob Clipped"
+bind generic xx +sh -c "echo -n %(commit) | head -c7 | xsel -ib && echo Commit Clipped!"
+bind generic xc +sh -c "echo -n %(commit) | xsel -ib && echo Full Commit Clipped!"
+bind generic xt +sh -c "echo -n %(text) | xsel -ib && echo Text Clipped!"
+bind generic xrb +sh -c "echo -n %(branch) | xsel -ib && echo Branch Clipped!"
+bind generic xrB +sh -c "echo -n %(remote):%(branch) | xsel -ib && echo Remote Branch Clipped!"
+bind generic xrt +sh -c "echo -n %(tag) | xsel -ib && echo tag Clipped"
+bind generic xf +sh -c "echo -n %(file) | xsel -ib && echo File Clipped"
+bind generic xb +sh -c "echo -n %(blob) | head -c7 | xsel -ib && echo Blob Clipped"
+bind generic xB +sh -c "echo -n %(blob) | xsel -ib && echo Full Blob Clipped"
 
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
@@ -247,7 +247,7 @@ bind tree t +git cat-file -p %(commit)
 bind tree d ?rm %(file)
 bind tree m >tig -- %(file)
 
-bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xclip -sel c -o | awk '{print \"Tree Clipped\", $1}'"
+bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xsel -ib -o | awk '{print \"Tree Clipped\", $1}'"
 
 bind tree . >sh -c "git diff %(ref) -- %(file) | tig"
 #====================
