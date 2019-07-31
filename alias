@@ -139,6 +139,7 @@ alias co='curl -O'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 
 # misc
+alias findn='find . -iname'
 alias wcl='wc -l'
 alias x='xdg-open'
 alias f='free -h'
