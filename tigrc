@@ -17,8 +17,8 @@ bind generic <C-L> scroll-right
 
 # redraw, refresh, source tigrc
 bind generic <C-R> refresh
-bind generic <Esc>l screen-redraw
 bind generic R :source ~/.tigrc
+bind generic <Esc>l screen-redraw
 
 # clipboard
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xsel -ib && echo Commit Clipped!"
