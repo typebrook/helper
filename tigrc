@@ -72,6 +72,7 @@ bind main <C-J> :move-next-merge
 bind main <C-K> :move-prev-merge
 bind main gh :goto HEAD
 bind main ; :goto %(commit)^2 # go to second parent
+bind main 1 :goto $(git rev-list --all --children | grep "^%(commit)" | awk '{print $2}')
 
 # branch
 bind main b none
@@ -135,6 +136,7 @@ bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind main Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Enter tag name: )" %(commit)'
 bind main TM @sh -c 'git cat-file -p %(tag) | sed -n \'6,$p\' | git tag -a -F - "%(prompt Enter tag name: )" && git tag -d %(tag)'
+bind main Tc !git tag %(tag) %(tag)^{} -f -m "%(prompt Enter new content: )" 
 bind main Ts >tig show %(tag)
 bind main Td @git tag -d "%(prompt Delete tag: )"
 bind main pt ?git push %(remote) %(tag)
@@ -220,6 +222,7 @@ bind status <C-O> ?git am %(file)
 bind stash a ?git stash apply %(stash)
 bind stash d ?>git stash drop %(stash)
 bind stash p ?>git stash pop %(stash)
+bind stash i +git rev-parse %(stash)
 
 # rename a stash
 bind stash n @sh -c "git stash drop %(stash) | \

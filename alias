@@ -66,20 +66,10 @@ alias df='df -h'
 
 # git
 alias g='git'
-alias gls='git log -S'
 alias gc='git clone'
 alias gc1='git clone --depth=1'
-alias check='git checkout'
-alias checkout='git checkout'
-alias stash='git stash'
-alias commit='git commit'
-alias ca='git commit --amend'
-alias branch='git branch'
-alias pull='git pull'
-alias merge='git merge'
-alias push='git push'
-alias remote='git remote -v'
-alias rebase='git rebase'
+alias gls='git log -S'
+alias cdgs='cd `git submodule status | cut -d" "  -f3`' # cd to first submodule
 
 # docker
 alias dp='docker ps'
