@@ -69,7 +69,7 @@ alias g='git'
 alias gc='git clone'
 alias gc1='git clone --depth=1'
 alias gls='git log -S'
-alias cdgs='cd `git submodule status | cut -d" "  -f3`' # cd to first submodule
+alias cdgs='cd `git submodule status | sed 's/^.//' | cut -d" "  -f2`' # cd to first submodule
 
 # docker
 alias dp='docker ps'
