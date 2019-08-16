@@ -146,7 +146,10 @@ alias hp='http-prompt'
 alias clocg='cloc --vcs=git'
 alias tma='tmux a'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
-alias mvt_decode='python3 $SETTING_DIR/scripts/mvt_decode.py'
+alias mvt_decode="_mvt_decode"
+_mvt_decode() {
+    python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
+}
 alias big52utf8='_big52utf8'
 _big52utf8() { 
     iconv -f BIG-5 -t UTF-8 $1 > $1.utf8
