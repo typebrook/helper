@@ -5,8 +5,6 @@ import sys
 
 mvt = sys.argv[1]
 
-print(mvt)
-
 with open(mvt, 'rb') as f:
     data = f.read()
     decoded_data = mapbox_vector_tile.decode(data)
