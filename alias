@@ -12,8 +12,7 @@ alias log='cat log | grep "`date +"%b %d"`"'
 
 # vim
 alias v='vim'
-#alias vv='vim ~/vimwiki/index.wiki'
-alias vv='vim ~/vimwiki/speech-coscup-2019.wiki'
+alias vv='vim ~/vimwiki/index.wiki'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
