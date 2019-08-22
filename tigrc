@@ -168,7 +168,7 @@ bind main I >sh -c "hub issue | tig"
 # Misc
 ## Statistics
 bind main gc !sh -c 'cloc --git %(commit) | tig'
-## Misc-android
+## Script to bump Android version
 bind main <C-B> !sh scripts/bump_version.sh
 ## Remote
 bind main gr +sh -c "git remote -v | grep %(remote)"
