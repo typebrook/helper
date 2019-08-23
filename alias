@@ -132,6 +132,10 @@ alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 # python
 alias pip3='python3 -m pip'
 
+# xsel
+alias xo='xsel -ob'
+alias xi='xsel -ib'
+
 # misc
 alias gr='_grepString'
 _grepString() {
