@@ -167,11 +167,15 @@ bind main I >sh -c "hub issue | tig"
 
 # Misc
 ## Statistics
-bind main gc !sh -c 'cloc --git %(commit) | tig'
+bind main gc >sh -c 'cloc --git %(commit) | tig'
 ## Script to bump Android version
 bind main <C-B> !sh scripts/bump_version.sh
 ## Remote
-bind main gr +sh -c "git remote -v | grep %(remote)"
+bind main Uv +sh -c "git remote -v | grep %(remote)"
+bind main UV >sh -c "git remote -vv | tig"
+bind main Ua @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
+bind main U! @git remote remove "%(prompt Remove which remote?: )"
+bind main Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 
 # note
 #bind generic gnn !git notes edit %(commit)
@@ -196,6 +200,10 @@ bind blob m >tig -- %(file)
 #====================
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
+
+# quick stage
+bind status A @git add .
+bind status R @git rm --cached .
 
 # stash
 bind status s ?>git stash 
