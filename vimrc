@@ -11,7 +11,7 @@ set ss=1
 set siso=999
 
 " general
-nmap <c-c> :q<CR>
+nmap <C-C> :q<CR>
 nnoremap K :.w !bash<CR>
 nnoremap <leader>, :w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
