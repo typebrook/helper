@@ -215,6 +215,7 @@ bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a !>git commit --amend
 bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
 bind status d ?>rm %(file)
+bind status D ?>git clean -df
 
 # solve conflict
 bind status U ?>git reset --hard
@@ -277,7 +278,7 @@ bind refs pd ?git push %(remote) :%(branch)
 bind refs r none
 bind refs brd ?git branch -rd %(remote)/%(branch)
 
-bind refs <Esc>F ?git fetch --all
+bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
 bind refs F ?git fetch %(remote) %(branch)
 
