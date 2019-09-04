@@ -204,7 +204,7 @@ bind status k :?^[MADRU?]
 
 # quick stage
 bind status A @git add .
-bind status R @git rm --cached .
+bind status R @git reset
 
 # stash
 bind status s ?>git stash 
