@@ -20,6 +20,9 @@ bind generic <C-R> refresh
 bind generic R :source ~/.tigrc
 bind generic <Esc>l screen-redraw
 
+# override page content view
+bind generic p none
+
 # clipboard
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xsel -ib && echo Commit Clipped!"
 bind generic xc +sh -c "echo -n %(commit) | xsel -ib && echo Full Commit Clipped!"
@@ -276,8 +279,8 @@ bind refs b none
 bind refs bd @git branch -d %(branch)
 bind refs bD ?git branch -D %(branch)
 bind refs pd ?git push %(remote) :%(branch)
-bind refs r none
 bind refs brd ?git branch -rd %(remote)/%(branch)
+bind refs r none
 
 bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
