@@ -59,6 +59,10 @@ iabbrev @@ typebrook@gmail.com
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
 
+" xml fold
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings for Vimwiki
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
