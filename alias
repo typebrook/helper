@@ -139,6 +139,7 @@ alias oo='ogrinfo'
 alias sample-gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
 alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
+alias sample-csv='https://docs.mapbox.com/help/data/airports.csv'
 
 # xsel
 alias xi='xsel -ib'
