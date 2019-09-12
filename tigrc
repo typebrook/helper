@@ -158,8 +158,8 @@ bind main Zu ?>git submodule update
 bind main Zi ?>git submodule init
 
 # show diff based on revision
-bind main . >sh -c "git diff %(commit) | tig"
-bind main > >sh -c "git diff %(commit) --no-prefix -U1000 | tig"
+bind main . >sh -c "git diff --patch-with-stat %(commit) | tig"
+bind main > >sh -c "git diff --patch-with-stat %(commit) --no-prefix -U1000 | tig"
 
 # make patches
 bind main PP ?>git format-patch %(commit)
@@ -189,8 +189,8 @@ bind main Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prom
 # blame view
 #====================
 bind blame m >tig -- %(file)
-bind blame . >sh -c "git diff %(ref) -- %(file) | tig"
-bind blame > >sh -c "git diff %(ref) --no-prefix -U1000i -- %(file) | tig"
+bind blame . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
+bind blame > >sh -c "git diff --patch-with-stat %(ref) --no-prefix -U1000i -- %(file) | tig"
 
 set blame-view = author:abbreviated date:relative id:yes,color line-number:yes text
 
@@ -268,7 +268,7 @@ bind tree m >tig -- %(file)
 
 bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xsel -ib -o | awk '{print \"Tree Clipped\", $1}'"
 
-bind tree . >sh -c "git diff %(ref) -- %(file) | tig"
+bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 #====================
 # refs view
 #====================
@@ -286,8 +286,8 @@ bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
 bind refs F ?git fetch %(remote) %(branch)
 
-bind refs . >sh -c "git diff %(branch) | tig"
-bind refs > >sh -c "git diff %(branch) --prefix -U1000 | tig"
+bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
+bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
 
 #====================
 # log view
