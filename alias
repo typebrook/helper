@@ -133,7 +133,8 @@ alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias pip3='python3 -m pip'
 
 # gdal
-alias oo='ogrinfo'
+alias oo='ogr2ogr'
+alias oi='ogrinfo'
 
 # sample file
 alias sample-gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
