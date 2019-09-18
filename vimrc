@@ -41,7 +41,7 @@ nnoremap H 0
 nnoremap L $
 nnoremap <C-L> 60l
 nnoremap <C-H> 60h
-inoremap <ESC> <nop>
+" inoremap <ESC> <nop>
 
 " Fix paste bug triggered by inoremaps
 set t_BE=
