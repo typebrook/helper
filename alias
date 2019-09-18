@@ -141,9 +141,14 @@ alias sample-gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
 alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
+alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
+
+# data file
+alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 
 # xsel
 alias xi='xsel -ib'
+alias xo='xsel -ob'
 
 # misc
 alias gr='_grepString'
