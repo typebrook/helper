@@ -146,6 +146,7 @@ alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
 
 # data file
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
+alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 
 # xsel
 alias xi='xsel -ib'
