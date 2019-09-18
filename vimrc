@@ -80,6 +80,11 @@ augroup vimwikiPush
   autocmd VimLeave ~/vimwiki/* :!(~/vimwiki/scripts/upload.sh > /dev/null 2>&1 &)
 augroup END
 
+" Configuration fro vim-instant-markdown
+let g:instant_markdown_autostart = 0
+nnoremap <leader>md :InstantMarkdownPreview<CR>    
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -155,6 +160,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'iberianpig/tig-explorer.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 " Initialize plugin system
 call plug#end()
