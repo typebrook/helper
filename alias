@@ -169,6 +169,7 @@ alias hp='http-prompt'
 alias clocg='cloc --vcs=git'
 alias tma='tmux a'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
+alias du='ncdu'
 alias we='weechat'
 mvt_decode() {
     python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
