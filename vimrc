@@ -17,7 +17,6 @@ nnoremap <leader>, :w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
-nnoremap <CR> o<Esc>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 " disable syntax
