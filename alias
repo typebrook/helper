@@ -144,6 +144,7 @@ alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson
 alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
+alias get-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 
 # data file
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
