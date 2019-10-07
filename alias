@@ -18,8 +18,9 @@ alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # shell
 alias ll='ls -alh'
-alias ai='sudo apt install'
-alias si='sudo snap install'
+alias ai='sudo apt install' # apt install
+alias si='sudo snap install' # snap install
+alias ni='sudo npm install -g' # nodejs install
 alias ss='sudo !!'
 alias hg='history|grep'
 alias rr='move_to_tmp'
@@ -154,7 +155,7 @@ alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/S
 alias xi='xsel -ib'
 alias xo='xsel -ob'
 alias xc='xsel -ob | gcc -xc -'
-alias xl='history | tail -2 | head -1 | grep -oP "^\s[0-9]+\s\s\K.*" | xsel -ib && echo Copied the following: && xsel -ob '
+alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied the following: && xsel -ob '
 
 # misc
 alias gr='_grepString'
