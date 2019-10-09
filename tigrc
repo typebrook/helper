@@ -210,7 +210,7 @@ bind status k :?^[MADRU?]
 bind status A @git add .
 bind status R @git reset
 bind status gu @git update-index --assume-unchanged %(file) # ignore file
-bind status gn >sh -c "git ls-files -v | grep '^h ' | cut -d' ' -f2 | \
+bind status gn @sh -c "git ls-files -v | grep '^h ' | cut -d' ' -f2 | \
                        xargs git update-index --no-assume-unchanged" # resume ignored files
 
 # stash
