@@ -145,17 +145,17 @@ alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson
 alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
-alias get-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 
 # data file
+alias data-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 
 # xsel
 alias xi='xsel -ib'
 alias xo='xsel -ob'
-alias xc='xsel -ob | gcc -xc -'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied the following: && xsel -ob '
+alias xc='xsel -ob | gcc -xc -'
 
 # misc
 alias gr='_grepString'
