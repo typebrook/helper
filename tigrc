@@ -214,6 +214,7 @@ bind status R @git reset
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stashstaged
+bind status <C-S> >sh -c 'git stash && git stash apply stash@{0}'
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
