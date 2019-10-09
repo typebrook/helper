@@ -206,9 +206,12 @@ bind blob m >tig -- %(file)
 bind status j :/^[MADRU?]
 bind status k :?^[MADRU?]
 
-# quick stage
+# update index
 bind status A @git add .
 bind status R @git reset
+bind status gu @git update-index --assume-unchanged %(file) # ignore file
+bind status gn >sh -c "git ls-files -v | grep '^h ' | cut -d' ' -f2 | \
+                       xargs git update-index --no-assume-unchanged" # resume ignored files
 
 # stash
 bind status s ?>git stash 
@@ -229,7 +232,6 @@ bind status gc @git clean -f
 bind status Ba @git rebase --abort
 bind status Bc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
-bind status gu @git update-index --assume-unchanged %(file)
 
 # apply patch file
 bind status <C-O> ?git am %(file)
