@@ -44,6 +44,7 @@ bind generic gL ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 # highlight diff without +/-
 set diff-show-signs = false
 set diff_column_highlight = ALL
+set diff-highlight = true
 
 # misc settings
 set ignore-case = true
