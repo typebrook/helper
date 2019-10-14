@@ -5,5 +5,5 @@ source $DIR/check_upstream.sh
 
 cd ~/git/settings && git pull --quiet &
 cd ~/vimwiki && git pull --quiet &
-check_upstream git/tig &
-check_upstream .vim_runtime &
+check_upstream ~/git/tig &
+check_upstream ~/.vim_runtime &

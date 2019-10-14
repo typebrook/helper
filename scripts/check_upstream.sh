@@ -14,7 +14,7 @@ check_upstream() {
         head=$2
     fi
 
-    cd ~/$1
+    cd $1
     git fetch origin && \
     git rev-list $head | grep $(git rev-parse origin/master) > /dev/null
 
