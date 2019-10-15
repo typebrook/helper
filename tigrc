@@ -282,7 +282,7 @@ bind refs C none
 bind refs c @git checkout %(ref)
 
 bind refs r none
-bind refs rd @git branch -d %(ref)
+bind refs rd ?git branch -d %(ref)
 bind refs rD ?git branch -D %(ref)
 bind refs pd ?git push %(remote) :%(ref)
 bind refs brd ?git branch -rd %(remote)/%(branch)
