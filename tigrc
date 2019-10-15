@@ -279,18 +279,17 @@ bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 # refs view
 #====================
 bind refs C none
-bind refs c @git checkout %(branch)
+bind refs c @git checkout %(ref)
 
-bind refs b none
-bind refs bd @git branch -d %(branch)
-bind refs bD ?git branch -D %(branch)
-bind refs pd ?git push %(remote) :%(branch)
-bind refs brd ?git branch -rd %(remote)/%(branch)
 bind refs r none
+bind refs rd @git branch -d %(ref)
+bind refs rD ?git branch -D %(ref)
+bind refs pd ?git push %(remote) :%(ref)
+bind refs brd ?git branch -rd %(remote)/%(branch)
 
 bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
-bind refs F ?git fetch %(remote) %(branch)
+bind refs F ?git fetch %(remote) %(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
 bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
