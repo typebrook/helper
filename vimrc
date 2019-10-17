@@ -37,7 +37,9 @@ onoremap b /return<CR>
 " S&R
 nnoremap <leader>; :%s:::g<Left><Left><Left>
 vnoremap <leader>; :s:::g<Left><Left><Left>
-cmap ;\ \(\)<Left><Left>
+cnoremap ;\ \(\)<Left><Left>
+cnoremap <C-L> <Right>
+cnoremap <C-H> <Left>
 
 " 習慣成自然
 nnoremap H 0
