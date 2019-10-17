@@ -12,7 +12,6 @@ set siso=999
 
 " general
 nmap <C-C> :q<CR>
-nnoremap K :.w !bash<CR>
 nnoremap <leader>, :w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
@@ -34,6 +33,11 @@ onoremap p i(
 onoremap ap a(
 onoremap np :<c-u>normal! f(vi(<cr>
 onoremap b /return<CR>
+
+" S&R
+nnoremap <leader>; :%s:::g<Left><Left><Left>
+vnoremap <leader>; :s:::g<Left><Left><Left>
+cmap ;\ \(\)<Left><Left>
 
 " 習慣成自然
 nnoremap H 0
