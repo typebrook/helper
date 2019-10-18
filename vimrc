@@ -6,9 +6,9 @@ set number
 set relativenumber
 set showcmd
 set nowrap
-set nosol
-set ss=1
-set siso=999
+set nostartofline
+set sidescroll=1
+set sidescrolloff=999
 
 " general
 nmap <C-C> :q<CR>
