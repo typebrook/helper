@@ -182,6 +182,7 @@ bind main UV >sh -c "git remote -vv | tig"
 bind main Ua @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
 bind main U! @git remote remove "%(prompt Remove which remote?: )"
 bind main Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
+bind main Uf ?git fetch "%(prompt Fetch from which remote?: )"
 
 # note
 #bind generic gnn !git notes edit %(commit)
