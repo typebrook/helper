@@ -31,8 +31,13 @@ nnoremap <leader>S :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDa
 " Operator pending
 onoremap p i(
 onoremap ap a(
-onoremap np :<c-u>normal! f(vi(<cr>
-onoremap b /return<CR>
+" next parenthesis
+onoremap fp :<c-u>normal! f(vi(<cr> 
+onoremap b i{
+onoremap fb :<c-u>normal! f{vi{<cr> 
+onoremap ab a{
+" block
+onoremap B /return<CR>
 
 " S&R
 nnoremap <leader>; :%s:::g<Left><Left><Left>
