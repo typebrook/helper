@@ -3,8 +3,8 @@ SETTING_DIR="$HOME/git/settings"
 # settings
 alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
 alias all='source ~/.bash_aliases'
-alias bashrc='vim ~/.bashrc'
-alias zshrc='vim ~/.zshrc'
+alias bashrc='vim ~/.bashrc && source ~/.bashrc'
+alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
 alias tigrc='vim $SETTING_DIR/tigrc'
 alias gitconfig='vim ~/.gitconfig'
