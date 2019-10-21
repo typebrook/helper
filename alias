@@ -13,6 +13,7 @@ alias log='cat log | grep "`date +"%b %d"`"'
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.md'
+alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
@@ -129,7 +130,6 @@ alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/gist/todo && \
 
 # curl
 alias co='curl -O'
-alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 
 # python
 alias pip3='python3 -m pip'
@@ -147,6 +147,7 @@ alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
 
 # data file
+alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias data-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
