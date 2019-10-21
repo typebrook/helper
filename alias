@@ -159,7 +159,7 @@ alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo C
 alias xc='xsel -ob | gcc -xc -'
 
 # image
-alias image-vertical='_convert'
+alias vertical='_convert'
 _convert() {
     convert $@ -append output.png
 }
