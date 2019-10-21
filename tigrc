@@ -179,7 +179,8 @@ bind main <C-B> !sh scripts/bump_version.sh
 ## Remote
 bind main Uv +sh -c "git remote -v | grep %(remote)"
 bind main UV >sh -c "git remote -vv | tig"
-bind main Ua @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
+bind main Ua @git remote add "%(prompt New Github remote name: )" git@github.com:"%(prompt User/Repo: )"
+bind main UA @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
 bind main U! @git remote remove "%(prompt Remove which remote?: )"
 bind main Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 bind main Uf ?git fetch "%(prompt Fetch from which remote?: )"
