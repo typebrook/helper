@@ -68,6 +68,7 @@ iabbrev @@ typebrook@gmail.com
 " vim_markdown
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
+vnoremap <C-K> <ESC>`<i[<ESC>`>la]()<ESC>i
 
 " xml fold
 let g:xml_syntax_folding=1
