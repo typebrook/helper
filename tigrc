@@ -34,6 +34,15 @@ bind generic xf +sh -c "echo -n %(file) | xsel -ib && echo File Clipped"
 bind generic xb +sh -c "echo -n %(blob) | head -c7 | xsel -ib && echo Blob Clipped"
 bind generic xB +sh -c "echo -n %(blob) | xsel -ib && echo Full Blob Clipped"
 
+## Remote
+bind generic Uv +sh -c "git remote -v | grep %(remote)"
+bind generic UV >sh -c "git remote -vv | tig"
+bind generic Ua @git remote add "%(prompt New Github remote name: )" git@github.com:"%(prompt User/Repo: )"
+bind generic UA @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
+bind generic U! @git remote remove "%(prompt Remove which remote?: )"
+bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
+bind generic Uf ?git fetch "%(prompt Fetch from which remote?: )"
+
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
 
@@ -176,14 +185,6 @@ bind main I >sh -c "hub issue | tig"
 bind main gc >sh -c 'cloc --git %(commit) | tig'
 ## Script to bump Android version
 bind main <C-B> !sh scripts/bump_version.sh
-## Remote
-bind main Uv +sh -c "git remote -v | grep %(remote)"
-bind main UV >sh -c "git remote -vv | tig"
-bind main Ua @git remote add "%(prompt New Github remote name: )" git@github.com:"%(prompt User/Repo: )"
-bind main UA @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
-bind main U! @git remote remove "%(prompt Remove which remote?: )"
-bind main Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
-bind main Uf ?git fetch "%(prompt Fetch from which remote?: )"
 
 # note
 #bind generic gnn !git notes edit %(commit)
