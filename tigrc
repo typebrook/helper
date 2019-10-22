@@ -70,7 +70,6 @@ set main-view = \
     commit-title:graph=v2,refs=true 
 
 # override graph toggling
-bind main G none
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
 bind main F none
@@ -87,7 +86,7 @@ bind main ; :goto %(commit)^2 # go to second parent
 bind main 1 +sh -c "git rev-list --all --children | \
                     grep '^%(commit)' | \
                     awk '{print $2}') | \
-                    xsel -ib && echo first children"
+                    xsel -ib && echo first children" # useless now
 
 # branch
 bind main b none
@@ -278,6 +277,7 @@ bind tree m >tig -- %(file)
 bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xsel -ib -o | awk '{print \"Tree Clipped\", $1}'"
 
 bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
+
 #====================
 # refs view
 #====================
