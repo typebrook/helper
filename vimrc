@@ -18,8 +18,17 @@ nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
+
+" move
 nnoremap <Tab> }
 nnoremap <S-Tab> {
+cnoremap <C-L> <Right>
+cnoremap <C-H> <Left>
+nnoremap H 0
+nnoremap L $
+nnoremap <C-L> 60l
+nnoremap <C-H> 60h
+
 " disable syntax
 nnoremap <silent> <leader>s
              \ : if exists("syntax_on") <BAR>
@@ -45,15 +54,6 @@ onoremap B /return<CR>
 nnoremap <leader>; :%s:::g<Left><Left><Left>
 vnoremap <leader>; :s:::g<Left><Left><Left>
 cnoremap ;\ \(\)<Left><Left>
-cnoremap <C-L> <Right>
-cnoremap <C-H> <Left>
-
-" 習慣成自然
-nnoremap H 0
-nnoremap L $
-nnoremap <C-L> 60l
-nnoremap <C-H> 60h
-" inoremap <ESC> <nop>
 
 " Fix paste bug triggered by inoremaps
 set t_BE=
