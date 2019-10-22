@@ -18,6 +18,8 @@ nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
+nnoremap <Tab> }
+nnoremap <S-Tab> {
 " disable syntax
 nnoremap <silent> <leader>s
              \ : if exists("syntax_on") <BAR>

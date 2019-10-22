@@ -155,7 +155,7 @@ alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/S
 # clipboard
 alias xi='xsel -ib'
 alias xo='xsel -ob'
-alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied the following: && xsel -ob '
+alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && xsel -ob '
 alias xc='xsel -ob | gcc -xc -'
 
 # image
