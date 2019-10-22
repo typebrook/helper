@@ -86,6 +86,7 @@ nnoremap <leader>wg :VimwikiGoto
 nnoremap <leader>wa :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
 nnoremap <leader>ii I- [ ] <esc>l
+nmap <leader>d dd,w,wGp
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
 " Git push quietly whenever leaving vim after editing Vimwiki
@@ -175,6 +176,7 @@ Plug 'iberianpig/tig-explorer.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'   }
 
 " Initialize plugin system
 call plug#end()
