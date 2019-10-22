@@ -18,6 +18,7 @@ nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
+nnoremap <leader>R :read !
 
 " move
 nnoremap <Tab> }
