@@ -1,5 +1,13 @@
 #! /bin/bash
 
+echo --------------
+head -1 $1 | sed 's/,/ /g'
+echo --------------
+echo 
+
+read -p "Number of latitude column: " lat_col
+read -p "Number of longitude column: " lon_col
+
 sed 's/[^,]*/"\0"/g' $1 |\
 sed 's/.*/[\0]/g' |\
 sed '1d' |\
