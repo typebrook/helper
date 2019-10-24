@@ -1,16 +1,27 @@
 #! /bin/bash
 
-echo --------------
-head -1 $1 | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}'
-echo --------------
-echo 
+# show each field with index in csv
+echo -------------- > /dev/tty
+head -1 $1 | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
 
+echo -------------- > /dev/tty
+echo > /dev/tty
+
+# get index of lon/lat column
 read -p "Number of latitude column: " lat_col
 read -p "Number of longitude column: " lon_col
 
-sed 's/[^,]*/"\0"/g' $1 |\
-sed 's/.*/[\0]/g' |\
-sed '1d' |\
-jq --arg LAT_INDEX $lat_col LON_INDEX $lon_col '. | {"type": "Feature",  "properties": {},  "geometry":{ "type": "Point",  "coordinates": [(.[LAT_INDEX] | tonumber), (.[LON_INDEX] | tonumber)] } }'|\
+cat $1 |
+# move lon/lat column to the start
+awk -F',' -v lon_th=$lon_col -v lat_th=$lat_col '\
+    BEGIN{OFS=","}\
+    {printf $lon_th "," $lat_th; for (i=1; i<= NF; i++) if (i != lat_th && i != lon_th) printf "," $i; print ""}\
+    ' |\
+# change csv into array format
+sed 's/[^,]*/"\0"/g; s/.*/[\0]/g' |\
+# wrap other fields as a json object, like [lon, lat, {...}]
+jq -s '.[0][2:] as $fields | .[1:][] | [.[0], .[1], ([$fields, .[2:]] | transpose | map({(.[0]): .[1]}) | add)]' |\
+# create array of geojson point features
+jq '{"type": "Feature",  "properties": .[2],  "geometry":{ "type": "Point",  "coordinates": [(.[0] | tonumber), (.[1] | tonumber)] } }' |\
+# wrap features as geojson format
 jq -s '{"type": "FeatureCollection", "features": .}'
-#awk '{for (i=1; i<= NF; i++) if (i != 2 && i != 3) printf $i " "; printf [ " " {; print ""}' test' ]}'
