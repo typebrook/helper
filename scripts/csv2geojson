@@ -1,23 +1,41 @@
 #! /bin/bash
 
-# show each field with index in csv
-echo -------------- > /dev/tty
-head -1 $1 | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
+# -s to skip specify columns of longitude and latitude
+for i in "$@"
+do
+case $i in
+    -s)
+    lon_col=0
+    lat_col=1
+    shift
+    ;;
+    *)
+    csv=$i
+    shift
+    ;;
+esac
+done
 
-echo -------------- > /dev/tty
-echo > /dev/tty
+# if no -s option, just read from input
+if [ "$lon_col" != "0" ]; then
+    # show each field with index in csv
+    echo -------------- > /dev/tty
+    head -1 < $csv | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
+    echo -------------- > /dev/tty
+    echo > /dev/tty
 
-# get index of lon/lat column
-read -p "Number of latitude column: " lat_col
-read -p "Number of longitude column: " lon_col
+    # get index of lon/lat column
+    read -p "Number of latitude column: " lat_col
+    read -p "Number of longitude column: " lon_col
+fi
 
-cat $1 |
-# move lon/lat column to the start
+cat $csv |
+# move lon and lat to the first and second column
 awk -F',' -v lon_th=$lon_col -v lat_th=$lat_col '\
     BEGIN{OFS=","}\
     {printf $lon_th "," $lat_th; for (i=1; i<= NF; i++) if (i != lat_th && i != lon_th) printf "," $i; print ""}\
     ' |\
-# change csv into array format
+# change csv into array format, like [lon, lat, "field1", field2...]
 sed 's/[^,]*/"\0"/g; s/.*/[\0]/g' |\
 # wrap other fields as a json object, like [lon, lat, {...}]
 jq -s '.[0][2:] as $fields | .[1:][] | [.[0], .[1], ([$fields, .[2:]] | transpose | map({(.[0]): .[1]}) | add)]' |\
