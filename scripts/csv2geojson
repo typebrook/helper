@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo --------------
-head -1 $1 | sed 's/,/ /g'
+head -1 $1 | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}'
 echo --------------
 echo 
 
@@ -11,5 +11,6 @@ read -p "Number of longitude column: " lon_col
 sed 's/[^,]*/"\0"/g' $1 |\
 sed 's/.*/[\0]/g' |\
 sed '1d' |\
-jq '. | {"type": "Feature",  "properties": {},  "geometry":{ "type": "Point",  "coordinates": [(.[-1] | tonumber), (.[-2] | tonumber)] } }'|\
+jq --arg LAT_INDEX $lat_col LON_INDEX $lon_col '. | {"type": "Feature",  "properties": {},  "geometry":{ "type": "Point",  "coordinates": [(.[LAT_INDEX] | tonumber), (.[LON_INDEX] | tonumber)] } }'|\
 jq -s '{"type": "FeatureCollection", "features": .}'
+#awk '{for (i=1; i<= NF; i++) if (i != 2 && i != 3) printf $i " "; printf [ " " {; print ""}' test' ]}'
