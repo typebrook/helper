@@ -5,14 +5,12 @@ for i in "$@"
 do
 case $i in
     -s)
-    lon_col=0
-    lat_col=1
-    shift
-    ;;
+    lon_col=0; lat_col=1
+    shift;;
+
     *)
     csv=$i
-    shift
-    ;;
+    shift;;
 esac
 done
 
