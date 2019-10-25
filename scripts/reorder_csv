@@ -1,0 +1,18 @@
+#! /bin/bash
+
+# show each field with index in csv
+echo -------------- > /dev/tty
+head -1 < $1 | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
+echo -------------- > /dev/tty
+echo > /dev/tty
+
+# get index of lon/lat column
+read -p "Move which column? " origin_col
+read -p "To which index? " new_col
+
+cat $1 |
+# move lon and lat to the first and second column
+awk -F',' -v OFS="," -v origin_th=$origin_col -v new_th=$new_col '\
+    {for (i=1; i<= NF; i++) if (i == new_th) printf $origin_th OFS $i OFS; else if (i == origin_th); else printf $i OFS; print ""}\
+    ' |\
+sed 's/,$//g'
