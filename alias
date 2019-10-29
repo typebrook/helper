@@ -154,7 +154,7 @@ alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 alias data-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/state.txt |\
-                     sed -n 2p | cut -d'=' -f2 | sed 's/\(.\{1\}\)\(.\{3\}\)/00\1\/\2\//' |\
+                     sed -n 2p | cut -d'=' -f2 | sed -r 's/(.{1})(.{3})/00\1\/\2\//' |\
                      xargs -I {} echo -e https://planet.openstreetmap.org/replication/minute/'{}'.osc.gz |\
                      xargs curl -O"
 
