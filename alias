@@ -145,6 +145,8 @@ alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson
 alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
+alias sample-mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
+alias sample-kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
 
 # data file
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
@@ -163,8 +165,7 @@ alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && xsel -
 alias xc='xsel -ob | gcc -xc -'
 
 # image
-alias vertical='_convert'
-_convert() {
+vertical() {
     convert $@ -append output.png
 }
 
