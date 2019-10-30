@@ -13,6 +13,7 @@ set sidescrolloff=999
 " general
 nmap <C-C> :q<CR>
 nnoremap <leader>, :w !bash<CR>
+nnoremap <leader>< :.w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
