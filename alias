@@ -197,7 +197,7 @@ alias cdW='cd ~/git/geoBingAnWeb'
 alias and='cd ~/git/geoBingAn.Android'
 alias cdG='cd ~/git/git'
 alias cdp='cd ~/git/parse-style'
-alias sample-android='cd ~/git/sample'
+alias cdand='cd ~/git/sample'
 
 repo='git@github.com'
 hub='https://github.com'
