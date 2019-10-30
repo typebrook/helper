@@ -42,6 +42,7 @@ bind generic UA @git remote add "%(prompt New remote name: )" "%(prompt Remote u
 bind generic U! @git remote remove "%(prompt Remove which remote?: )"
 bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 bind generic Uf ?git fetch "%(prompt Fetch from which remote?: )"
+bind generic Uprf ?git fetch "%(prompt Fetch from which remote?: )" pull/"%(prompt PR number: )"/head:pr
 
 # toggle case sensitive for search
 bind generic w :toggle ignore-case 
