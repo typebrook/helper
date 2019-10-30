@@ -121,12 +121,6 @@ _gistDelete() {
     gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
     gll
 }
-alias note='gist -r 5dd936e91d9ae75ad77084da762f5c11 note > ~/gist/note && \
-            vim ~/gist/note && \
-            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/note'
-alias todo='gist -r 5dd936e91d9ae75ad77084da762f5c11 todo > ~/gist/todo && \
-            vim ~/gist/todo && \
-            gist -u 5dd936e91d9ae75ad77084da762f5c11 ~/gist/todo'
 
 # curl
 alias co='curl -O'
@@ -203,6 +197,7 @@ alias cdW='cd ~/git/geoBingAnWeb'
 alias and='cd ~/git/geoBingAn.Android'
 alias cdG='cd ~/git/git'
 alias cdp='cd ~/git/parse-style'
+alias sample-android='cd ~/git/sample'
 
 repo='git@github.com'
 hub='https://github.com'
