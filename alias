@@ -13,6 +13,9 @@ alias log='cat log | grep "`date +"%b %d"`"'
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.md'
+wiki(){
+    cat ~/vimwiki/$1.md
+}
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
@@ -187,6 +190,9 @@ mvt_decode() {
 }
 big52utf8() { 
     iconv -f BIG-5 -t UTF-8 $1 > $1.utf8
+}
+replace() {
+    rm $1 && mv $2 $1
 }
 
 # tmp
