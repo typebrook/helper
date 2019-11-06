@@ -1,4 +1,5 @@
 SETTING_DIR="$HOME/git/settings"
+OSM_USER_PASSWD=$(cat $HOME/git/settings/token/osm)
 
 # settings
 alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
@@ -161,6 +162,7 @@ alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/st
 alias xi='xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && xsel -ob '
+alias xll='xo >> ~/vimwiki/working.md'
 alias xc='xsel -ob | gcc -xc -'
 
 # image
@@ -193,9 +195,6 @@ mvt_decode() {
 big52utf8() { 
     iconv -f BIG-5 -t UTF-8 $1 > $1.utf8
 }
-replace() {
-    rm $1 && mv $2 $1
-}
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
@@ -210,3 +209,45 @@ alias cdand='cd ~/git/sample'
 repo='git@github.com'
 hub='https://github.com'
 typebrook='git@github.com:typebrook'
+
+
+# osm
+osm='https://api.openstreetmap.org/api/0.6/'
+osm.get() {
+    curl -X GET $osm/$1/$2
+}
+osm.query() {
+    osmium tags-filter $1 $2 --output-format=osm --omit-referenced
+}
+osm.update() {
+    # remove original tag&value
+    sed "/<tag k=\"$1\"/d" - | \
+    # insert new tag&value
+    sed -r "/<(node|way|relation)/a \ \ \ \ <tag k=\"$1\" v=\"$2\"\/>"
+}
+osm.changeset.update() {
+    element=$(cat -)
+    header=$(echo $element | grep -E "<(node|way|relation)\s")
+    ele_type=$(echo $header | sed -r 's/.*<(node|way|relation).*$/\1/')
+    id=$(echo $header | sed -r 's/.* id=\"([^"]+)\".*$/\1/')
+
+    echo $element | \
+    sed -r "s/^( *<(node|way|relation).*version[^ ]+ )(.*)$/\1changeset=\"$1\">/" | \
+    curl -X PUT -u $OSM_USER_PASSWD -i -T - https://api.openstreetmap.org/api/0.6/$ele_type/$id
+}
+osm.changeset.close() {
+    curl -X PUT -u $OSM_USER_PASSWD -i https://api.openstreetmap.org/api/0.6/changeset/$1/close
+}
+osm.pbf.update() {
+    osmium fileinfo $1 | \
+    grep osmosis_replication_sequence_number | \
+    cut -d'=' -f2 | \
+    sed 's/$/+1/' | bc | \
+    sed -r 's/(.{1})(.{3})/00\1\/\2/' | \
+    xargs -I {} curl -O http://download.geofabrik.de/asia/taiwan-updates/000/'{}'.osc.gz
+}
+
+# misc
+length() {
+    ogr2ogr -sql "SELECT geom.length() FROM $1" $1.geojson
+}
