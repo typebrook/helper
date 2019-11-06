@@ -1,6 +1,7 @@
 #! /bin/bash
 
-OSM_USER_PASSWD=$(cat ~/git/settings/token/osm)
+OSM_USER_PASSWD=$(cat ~/git/settings/tokens/osm)
+
 #server=https://master.apis.dev.openstreetmap.org
 server=https://api.openstreetmap.org
 comment="change is_in format"
@@ -26,5 +27,8 @@ info="<osm>
      "
 
 echo $info |\
-curl -u $OSM_USER_PASSWD -i --upload-file - $server/api/0.6/changeset/create
+curl -u $OSM_USER_PASSWD -i --upload-file - $server/api/0.6/changeset/create |\
+tee /dev/tty |\
+tail -1 |\
+xsel -ib
 

@@ -1,5 +1,5 @@
 SETTING_DIR="$HOME/git/settings"
-OSM_USER_PASSWD=$(cat $HOME/git/settings/token/osm)
+OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
 # settings
 alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
@@ -212,12 +212,17 @@ typebrook='git@github.com:typebrook'
 
 
 # osm
-osm='https://api.openstreetmap.org/api/0.6/'
+osm='https://api.openstreetmap.org/api/0.6'
 osm.get() {
     curl -X GET $osm/$1/$2
 }
 osm.query() {
     osmium tags-filter $1 $2 --output-format=osm --omit-referenced
+}
+osm.extract() {
+    echo "<osm version=\"0.6\">"
+    sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p" -
+    echo "</osm>"
 }
 osm.update() {
     # remove original tag&value
@@ -225,7 +230,7 @@ osm.update() {
     # insert new tag&value
     sed -r "/<(node|way|relation)/a \ \ \ \ <tag k=\"$1\" v=\"$2\"\/>"
 }
-osm.changeset.update() {
+osm.changeset.add() {
     element=$(cat -)
     header=$(echo $element | grep -E "<(node|way|relation)\s")
     ele_type=$(echo $header | sed -r 's/.*<(node|way|relation).*$/\1/')
@@ -233,10 +238,14 @@ osm.changeset.update() {
 
     echo $element | \
     sed -r "s/^( *<(node|way|relation).*version[^ ]+ )(.*)$/\1changeset=\"$1\">/" | \
-    curl -X PUT -u $OSM_USER_PASSWD -i -T - https://api.openstreetmap.org/api/0.6/$ele_type/$id
+    curl -X PUT -u $OSM_USER_PASSWD -i -T - $osm/$ele_type/$id
+}
+osm.changeset.update() {
+    echo "<osm><changeset><tag k=\"comment\" v=\"$2\"/></changeset></osm>" | \
+    curl -X PUT -u $OSM_USER_PASSWD -i -T - $osm/changeset/$1
 }
 osm.changeset.close() {
-    curl -X PUT -u $OSM_USER_PASSWD -i https://api.openstreetmap.org/api/0.6/changeset/$1/close
+    curl -X PUT -u $OSM_USER_PASSWD -i $osm/changeset/$1/close
 }
 osm.pbf.update() {
     osmium fileinfo $1 | \
@@ -244,7 +253,8 @@ osm.pbf.update() {
     cut -d'=' -f2 | \
     sed 's/$/+1/' | bc | \
     sed -r 's/(.{1})(.{3})/00\1\/\2/' | \
-    xargs -I {} curl -O http://download.geofabrik.de/asia/taiwan-updates/000/'{}'.osc.gz
+    xargs -I {} curl -o diff.osc.gz http://download.geofabrik.de/asia/taiwan-updates/000/'{}'.osc.gz && \
+    osmium apply-changes $1 diff.osc.gz --output output.osm.pbf --output-header=osmosis_replication_sequence_number=2422 --overwrite
 }
 
 # misc
