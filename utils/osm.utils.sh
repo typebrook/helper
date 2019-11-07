@@ -89,13 +89,13 @@ osm.pbf.update() {
     osmium fileinfo $PBF_FILE | \
     grep osmosis_replication_sequence_number | \
     cut -d'=' -f2 | \
-    sed 's/$/+1/' | bc | \
     read NEW_SEQ
 
-    SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
-    STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
-
-    while [ $(curl.code $STATE_URL) != "404" ]
+    while
+        (( NEW_SEQ++ ))
+        SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
+        STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
+        (( $(curl.code $STATE_URL) != "404" ))
     do
         CHANGE_URL=$SERVER/000/$SEQ_PATH.osc.gz
         echo $CHANGE_URL
@@ -106,8 +106,5 @@ osm.pbf.update() {
             --output $NEW_SEQ.osm.pbf
 
         PBF_FILE=$NEW_SEQ.osm.pbf
-        NEW_SEQ=$((NEW_SEQ+1))
-        SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
-        STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
     done
 }
