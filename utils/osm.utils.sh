@@ -1,6 +1,7 @@
+FILENAME=$0
 
 osm.utils.edit() {
-    vim $HOME/git/settings/scripts/osm.utils.sh
+    vim $FILENAME
 }
 
 OSM_API='https://api.openstreetmap.org/api/0.6'
