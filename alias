@@ -256,8 +256,3 @@ osm.pbf.update() {
     xargs -I {} curl -o diff.osc.gz http://download.geofabrik.de/asia/taiwan-updates/000/'{}'.osc.gz && \
     osmium apply-changes $1 diff.osc.gz --output output.osm.pbf --output-header=osmosis_replication_sequence_number=2422 --overwrite
 }
-
-# misc
-length() {
-    ogr2ogr -sql "SELECT geom.length() FROM $1" $1.geojson
-}
