@@ -14,7 +14,7 @@ alias log='cat log | grep "`date +"%b %d"`"'
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.md'
-wiki(){
+wiki() {
     cat ~/vimwiki/$1.md
 }
 alias ve='vim ~/.vim_runtime/my_configs.vim'
@@ -130,6 +130,7 @@ _gistDelete() {
 
 # curl
 alias co='curl -O'
+alias curl.code='curl -o /dev/null --silent -Iw "%{http_code}"'
 
 # python
 alias pip3='python3 -m pip'
@@ -248,11 +249,31 @@ osm.changeset.close() {
     curl -X PUT -u $OSM_USER_PASSWD -i $osm/changeset/$1/close
 }
 osm.pbf.update() {
-    osmium fileinfo $1 | \
+    PBF_FILE=$1
+    SERVER=http://download.geofabrik.de/asia/taiwan-updates
+
+    osmium fileinfo $PBF_FILE | \
     grep osmosis_replication_sequence_number | \
     cut -d'=' -f2 | \
     sed 's/$/+1/' | bc | \
-    sed -r 's/(.{1})(.{3})/00\1\/\2/' | \
-    xargs -I {} curl -o diff.osc.gz http://download.geofabrik.de/asia/taiwan-updates/000/'{}'.osc.gz && \
-    osmium apply-changes $1 diff.osc.gz --output output.osm.pbf --output-header=osmosis_replication_sequence_number=2422 --overwrite
+    read NEW_SEQ
+
+    SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
+    STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
+
+    while [ $(curl.code $STATE_URL) != "404" ]
+    do
+        CHANGE_URL=$SERVER/000/$SEQ_PATH.osc.gz
+        echo $CHANGE_URL
+        curl -o $NEW_SEQ.osc.gz $CHANGE_URL && \
+        osmium apply-changes $PBF_FILE $NEW_SEQ.osc.gz \
+            --output-header=osmosis_replication_sequence_number=$NEW_SEQ \
+            --overwrite \
+            --output $NEW_SEQ.osm.pbf
+
+        PBF_FILE=$NEW_SEQ.osm.pbf
+        NEW_SEQ=$((NEW_SEQ+1))
+        SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
+        STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
+    done
 }
