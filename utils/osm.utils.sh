@@ -86,16 +86,19 @@ osm.pbf.update() {
     PBF_FILE=$1
     SERVER=http://download.geofabrik.de/asia/taiwan-updates
 
+    # get next sequence number and store it into NEW_SEQ
     osmium fileinfo $PBF_FILE | \
     grep osmosis_replication_sequence_number | \
     cut -d'=' -f2 | \
+    sed 's/$/+1/' | bc | \
     read NEW_SEQ
 
+    # while server has osc file with given sequence number,
+    # get it and do file update
     while
-        (( NEW_SEQ++ ))
         SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
         STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
-        (( $(curl.code $STATE_URL) != "404" ))
+        [ $(curl.code $STATE_URL) != "404" ]
     do
         CHANGE_URL=$SERVER/000/$SEQ_PATH.osc.gz
         echo $CHANGE_URL
@@ -106,5 +109,6 @@ osm.pbf.update() {
             --output $NEW_SEQ.osm.pbf
 
         PBF_FILE=$NEW_SEQ.osm.pbf
+        (( NEW_SEQ++ ))
     done
 }
