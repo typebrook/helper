@@ -25,9 +25,12 @@ osm.get.ids() {
     sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'
 }
 osm.upload() {
-    #source <(cat fetch | sed 's/^/osm.extract /g' | sed 's/$/ <new.osm/g')
-    INPUT=$(cat -)
-    echo $INPUT | osm.get.ids | sed 's/.*/osm.extract \0 <($INPUT)/g' | xargs tee
+    CHANGESET_ID=$(osm.changeset.create)
+
+    cat - > /tmp/osm
+    source <(osm.get.ids < /tmp/osm |\
+             sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
+             sed "s/.*/\0 \| osm.changeset.add $CHANGESET_ID/g")
 }
 # query osm-related file with .osm format output
 osm.file.query() {
@@ -60,8 +63,7 @@ osm.changeset.create() {
     echo $info |\
     curl -u $OSM_USER_PASSWD -i --upload-file - $SERVER/api/0.6/changeset/create |\
     tee /dev/tty |\
-    tail -1 |\
-    xsel -ib
+    tail -1
 }
 # add a new element into changeset
 osm.changeset.add() {
