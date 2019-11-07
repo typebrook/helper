@@ -4,22 +4,38 @@ osm.utils.edit() {
     vim $FILENAME && source $FILENAME
 }
 
-OSM_API='https://api.openstreetmap.org/api/0.6'
+#SERVER=https://master.apis.dev.openstreetmap.org
+SERVER=https://api.openstreetmap.org
+OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
 # get .osm format data
 osm.get() {
-    curl -X GET $OSM_API/$1/$2
-}
-# query osm-related file with .osm format output
-osm.file.query() {
-    osmium tags-filter $1 $2 --output-format=osm --omit-referenced
+    curl -X GET $OSM_API/$1/$2 &&\
+    echo $2 | xsel -ib
 }
 # extract an element from .osm format STDIN
 osm.extract() {
     echo "<osm version=\"0.6\">"
     sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p" -
     echo "</osm>"
+}
+# get ids from .osm format STDIN
+osm.get.ids() {
+    sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'
+}
+osm.upload() {
+    #source <(cat fetch | sed 's/^/osm.extract /g' | sed 's/$/ <new.osm/g')
+    INPUT=$(cat -)
+    echo $INPUT | osm.get.ids | sed 's/.*/osm.extract \0 <($INPUT)/g' | xargs tee
+}
+# query osm-related file with .osm format output
+osm.file.query() {
+    osmium tags-filter $1 $2 --output-format=osm --omit-referenced
+}
+# extract an element from osm file
+osm.file.extract() {
+    osmium getid $1 $2 --output-format=osm
 }
 # update .osm format STDIN with key-value
 osm.update() {
@@ -31,22 +47,8 @@ osm.update() {
 # create a new changeset
 osm.changeset.create() {
 
-    #server=https://master.apis.dev.openstreetmap.org
-    server=https://api.openstreetmap.org
-    comment="change is_in format"
-
-    for i in "$@"
-    do
-    case $i in
-        -s)
-        lon_col=0; lat_col=1
-        shift;;
-
-        *)
-        csv=$i
-        shift;;
-    esac
-    done
+    echo -n "type comment: "
+    read comment
 
     info="<osm>
             <changeset>
@@ -56,7 +58,7 @@ osm.changeset.create() {
          "
 
     echo $info |\
-    curl -u $OSM_USER_PASSWD -i --upload-file - $server/api/0.6/changeset/create |\
+    curl -u $OSM_USER_PASSWD -i --upload-file - $SERVER/api/0.6/changeset/create |\
     tee /dev/tty |\
     tail -1 |\
     xsel -ib
