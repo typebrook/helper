@@ -21,6 +21,7 @@ alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # shell
+alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 alias ai='sudo apt install' # apt install
 alias si='sudo snap install' # snap install

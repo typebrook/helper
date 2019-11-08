@@ -4,8 +4,8 @@ osm.utils.edit() {
     vim $FILENAME && source $FILENAME
 }
 
-SERVER=https://master.apis.dev.openstreetmap.org
-#SERVER=https://api.openstreetmap.org
+#SERVER=https://master.apis.dev.openstreetmap.org
+SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
@@ -24,19 +24,19 @@ osm.extract() {
 osm.get.ids() {
     sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'
 }
-osm.upload() {
+# upload .osm format STDIN to a given changeset
+# allows multiple elements in osm body
+osm.upload.to() {
     cat - > /tmp/osm
-    echo still
-    osm.changeset.create
-    #CHANGESET_ID=$(osm.changeset.create)
 
-    #osm.get.ids < /tmp/osm |\
-    #sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
-    #sed "s/.*/\0 \| osm.changeset.add $CHANGESET_ID/g" |\
-    #while read
-    #do
-    #    echo $CHANGESET
-    #done
+    osm.get.ids < /tmp/osm |\
+    sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
+    sed "s/.*/\0 \| osm.changeset.add $1/g" |\
+    while read -r command
+    do
+        cat <(echo $command "&")
+        #source <(echo $command &)
+    done
 }
 # query osm-related file with .osm format output
 osm.file.query() {
@@ -111,15 +111,16 @@ osm.pbf.update() {
         STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
         [ $(curl.code $STATE_URL) != "404" ]
     do
+        mkdir -p changes
         CHANGE_URL=$SERVER/000/$SEQ_PATH.osc.gz
         echo $CHANGE_URL
-        curl -o $NEW_SEQ.osc.gz $CHANGE_URL && \
-        osmium apply-changes $PBF_FILE $NEW_SEQ.osc.gz \
+        curl -o changes/$NEW_SEQ.osc.gz $CHANGE_URL && \
+        osmium apply-changes $PBF_FILE changes/$NEW_SEQ.osc.gz \
             --output-header=osmosis_replication_sequence_number=$NEW_SEQ \
             --overwrite \
             --output $NEW_SEQ.osm.pbf
 
         PBF_FILE=$NEW_SEQ.osm.pbf
-        (( NEW_SEQ++ ))
+        ((NEW_SEQ++))
     done
 }
