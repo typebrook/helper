@@ -4,8 +4,8 @@ osm.utils.edit() {
     vim $FILENAME && source $FILENAME
 }
 
-#SERVER=https://master.apis.dev.openstreetmap.org
-SERVER=https://api.openstreetmap.org
+SERVER=https://master.apis.dev.openstreetmap.org
+#SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
@@ -25,12 +25,18 @@ osm.get.ids() {
     sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'
 }
 osm.upload() {
-    CHANGESET_ID=$(osm.changeset.create)
-
     cat - > /tmp/osm
-    source <(osm.get.ids < /tmp/osm |\
-             sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
-             sed "s/.*/\0 \| osm.changeset.add $CHANGESET_ID/g")
+    echo still
+    osm.changeset.create
+    #CHANGESET_ID=$(osm.changeset.create)
+
+    #osm.get.ids < /tmp/osm |\
+    #sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
+    #sed "s/.*/\0 \| osm.changeset.add $CHANGESET_ID/g" |\
+    #while read
+    #do
+    #    echo $CHANGESET
+    #done
 }
 # query osm-related file with .osm format output
 osm.file.query() {
@@ -61,9 +67,10 @@ osm.changeset.create() {
          "
 
     echo $info |\
-    curl -u $OSM_USER_PASSWD -i --upload-file - $SERVER/api/0.6/changeset/create |\
+    curl -u $OSM_USER_PASSWD -i --upload-file - $OSM_API/changeset/create |\
     tee /dev/tty |\
-    tail -1
+    tail -1 |\
+    xsel -ib
 }
 # add a new element into changeset
 osm.changeset.add() {
