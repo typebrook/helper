@@ -12,7 +12,7 @@ OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 # get .osm format data
 osm.get() {
     curl -X GET $OSM_API/$1/$2 &&\
-    echo $2 | xsel -ib
+    echo $2 copied | xsel -ib
 }
 # extract an element from .osm format STDIN
 osm.extract() {
@@ -34,7 +34,7 @@ osm.upload.to() {
     sed "s/.*/\0 \| osm.changeset.add $1/g" |\
     while read -r command
     do
-        cat <(echo $command "&")
+        cat <(echo "("$command "&)")
         #source <(echo $command &)
     done
 }
