@@ -11,8 +11,24 @@ OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
 # get .osm format data
 osm.get() {
-    curl -X GET $OSM_API/$1/$2 &&\
-    echo $2 copied | xsel -ib
+    curl -X GET $OSM_API/$1/$2 |\
+    tee /tmp/osm &&\
+    echo content of $1 $2 is copied into /tmp/osm > /dev/tty
+}
+osm.get_full() {
+    curl -X GET $OSM_API/$1/$2/full |\
+    tee /tmp/osm &&\
+    echo content of $1 $2 and its members are copied into /tmp/osm > /dev/tty
+}
+osm.in_relations() {
+    curl -X GET $OSM_API/$1/$2/relations |\
+    tee /tmp/osm &&\
+    echo relations contain $1 $2 are copied into /tmp/osm > /dev/tty
+}
+osm.in_ways() {
+    curl -X GET $OSM_API/node/$1/ways |\
+    tee /tmp/osm &&\
+    echo ways contain $1 are copied into /tmp/osm > /dev/tty
 }
 # extract an element from .osm format STDIN
 osm.extract() {
@@ -34,8 +50,8 @@ osm.upload.to() {
     sed "s/.*/\0 \| osm.changeset.add $1/g" |\
     while read -r command
     do
-        cat <(echo "("$command "&)")
-        #source <(echo $command &)
+        cat <(echo $command)
+        source <(echo "("$command " &)")
     done
 }
 # query osm-related file with .osm format output
@@ -50,8 +66,13 @@ osm.file.extract() {
 osm.update() {
     # remove original tag&value
     sed "/<tag k=\"$1\"/d" - | \
-    # insert new tag&value
-    sed -r "/<(node|way|relation)/a \ \ \ \ <tag k=\"$1\" v=\"$2\"\/>"
+    if [ "$2" != "" ]; then
+        # insert new tag&value
+        sed -r "/<(node|way|relation)/a \ \ \ \ <tag k=\"$1\" v=\"$2\"\/>"
+    else
+        # just print it
+        sed ''
+    fi
 }
 # create a new changeset
 osm.changeset.create() {
