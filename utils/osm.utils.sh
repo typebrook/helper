@@ -33,17 +33,17 @@ OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
 
 # get .osm format data
-osm.get() {
+osm.fetch() {
     curl -X GET $OSM_API/$1/$2 |\
     tee /tmp/osm &&\
     echo content of $1 $2 is copied into /tmp/osm > /dev/tty
 }
-osm.get.full() {
+osm.fetch.full() {
     curl -X GET $OSM_API/$1/$2/full |\
     tee /tmp/osm &&\
     echo content of $1 $2 and its members are copied into /tmp/osm > /dev/tty
 }
-osm.get.history() {
+osm.fetch.history() {
     curl -X GET $OSM_API/$1/$2/history |\
     tee /tmp/osm &&\
     echo history of $1 $2 are copied into /tmp/osm > /dev/tty
@@ -73,13 +73,13 @@ osm.extract.ids() {
 osm.upload.to() {
     cat - > /tmp/osm
 
-    osm.get.ids < /tmp/osm |\
+    osm.extract.ids < /tmp/osm |\
     sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
     sed "s/.*/\0 \| osm.changeset.add $1/g" |\
     while read -r command
     do
-        cat <(echo $command)
-        source <(echo "("$command " &)")
+        echo $command
+        source<(echo "($command &)")
     done
 }
 # query .osm format STDIN
@@ -129,7 +129,7 @@ osm.changeset.create() {
 }
 # add a new element into changeset
 osm.changeset.add() {
-    element=$(cat -)
+    element=$(cat)
     header=$(echo $element | grep -E "<(node|way|relation)\s")
     ele_type=$(echo $header | sed -r 's/.*<(node|way|relation).*$/\1/')
     id=$(echo $header | sed -r 's/.* id=\"([^"]+)\".*$/\1/')
