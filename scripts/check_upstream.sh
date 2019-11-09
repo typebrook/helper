@@ -23,5 +23,5 @@ check_upstream() {
         echo "New commit at" $1
     fi
 
-    echo $(date) check $1 >> ~/git/settings/log
+    echo $(date) check $1 >> $SETTING_DIR/log
 }

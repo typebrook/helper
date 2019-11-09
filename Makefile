@@ -15,11 +15,6 @@ vim:
 	rm -f ~/.vim_runtime/my_configs.vim
 	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
 
-wiki:
-	# vimwiki
-	if [ ! -d "$(HOME)/.vimwiki" ]; then \
-        git clone --depth=1 git@github.com:typebrook/wiki.git ~/vimwiki; \
-	fi
 
 git:
 	rm -f ~/.gitconfig
@@ -28,6 +23,12 @@ git:
 tig:
 	rm -f ~/.tigrc
 	ln -s `pwd`/tigrc ~/.tigrc
+
+wiki:
+	# vimwiki
+	if [ ! -d "$(HOME)/.vimwiki" ]; then \
+        git clone --depth=1 git@github.com:typebrook/wiki.git ~/vimwiki; \
+	fi
 
 crontab:
 	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
