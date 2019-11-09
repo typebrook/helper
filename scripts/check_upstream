@@ -4,7 +4,6 @@
 # check $1(repo) if upstream branch origin/master is
 # ahead of local branch $2(default to dev)
 
-
 if [ ! -d $1 ]; then
     return 0
 fi
