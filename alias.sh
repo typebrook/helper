@@ -1,12 +1,10 @@
-SETTING_DIR="$HOME/git/settings"
-
 # settings
-alias al='vim ~/.bash_aliases && source ~/.bash_aliases'
-alias all='source ~/.bash_aliases'
+alias al="vim $SETTING_DIR/$0 && source ~/$0"
+alias all="source ~/$0"
 alias bashrc='vim ~/.bashrc && source ~/.bashrc'
 alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
-alias tigrc='vim $SETTING_DIR/tigrc'
+alias tigrc="vim $SETTING_DIR/tigrc"
 alias gitconfig='vim ~/.gitconfig'
 alias log='cat log | grep "`date +"%b %d"`"'
 
@@ -102,7 +100,7 @@ alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
-alias upload-tig='$SETTING_DIR/scripts/upload-github-release-asset.sh github_api_token=$(head -1 $SETTING_DIR/tokens/github-release) owner=typebrook repo=tig tag=tig-2.4.1 filename=$(which tig)'
+alias upload-tig="$SETTING_DIR/scripts/upload-github-release-asset.sh github_api_token=$(head -1 $SETTING_DIR/tokens/github-release) owner=typebrook repo=tig tag=tig-2.4.1 filename=$(which tig)"
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
@@ -118,10 +116,10 @@ alias gl='nl $gist_list'
 alias gll='gist -l > $gist_list && nl $gist_list'
 alias gi='_gistRead'
 alias gd='_gistDelete'
-_gistRead() { 
+_gistRead() {
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
-_gistDelete() { 
+_gistDelete() {
     deleted=~/gist/deleted/$(date +"%s")
     _gistRead $1 > $deleted && echo "backup at $deleted"
     gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
@@ -193,7 +191,7 @@ alias we='weechat'
 mvt_decode() {
     python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
-big52utf8() { 
+big52utf8() {
     iconv -f BIG-5 -t UTF-8 $1 > $1.utf8
 }
 
