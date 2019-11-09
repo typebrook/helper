@@ -100,7 +100,7 @@ alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
-alias upload-tig="$SETTING_DIR/scripts/upload-github-release-asset.sh github_api_token=$(head -1 $SETTING_DIR/tokens/github-release) owner=typebrook repo=tig tag=tig-2.4.1 filename=$(which tig)"
+#alias upload-tig="$SETTING_DIR/scripts/upload-github-release-asset.sh github_api_token=$(head -1 $SETTING_DIR/tokens/github-release) owner=typebrook repo=tig tag=tig-2.4.1 filename=$(which tig)"
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
