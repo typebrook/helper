@@ -32,7 +32,3 @@ wiki:
 
 crontab:
 	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
-
-# some fix needed
-bashrc:
-	echo "~/git/settings/scripts/sync.sh" >> ~/.bashrc
