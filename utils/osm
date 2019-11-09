@@ -1,3 +1,5 @@
+#! /bin/sh
+
 FILENAME=$0
 
 osm.help() {
@@ -30,7 +32,7 @@ osm.utils.edit() {
 #SERVER=https://master.apis.dev.openstreetmap.org
 SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
-OSM_USER_PASSWD=$(cat $HOME/git/settings/tokens/osm)
+OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
 # get .osm format data
 osm.fetch() {
@@ -61,7 +63,7 @@ osm.in_ways() {
 # extract an element from .osm format STDIN
 osm.extract() {
     echo "<osm version=\"0.6\">"
-    sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p" -
+    sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p"
     echo "</osm>"
 }
 # get ids from .osm format STDIN
@@ -71,9 +73,9 @@ osm.extract.ids() {
 # upload .osm format STDIN to a given changeset
 # allows multiple elements in osm body
 osm.upload.to() {
-    cat - > /tmp/osm
 
-    osm.extract.ids < /tmp/osm |\
+    tee /tmp/osm |\
+    osm.extract.ids |\
     sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
     sed "s/.*/\0 \| osm.changeset.add $1/g" |\
     while read -r command
