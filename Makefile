@@ -1,10 +1,6 @@
 .PHONY: *
 
-all: alias vim git tig
-
-alias:
-	rm -f ~/.bash_aliases
-	ln -s `pwd`/alias ~/.bash_aliases
+all: vim git tig
 
 vim:
 	# amix-vimrc
@@ -36,5 +32,6 @@ tig:
 crontab:
 	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
 
+# some fix needed
 bashrc:
 	echo "~/git/settings/scripts/sync.sh" >> ~/.bashrc

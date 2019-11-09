@@ -1,6 +1,6 @@
 # settings
-alias al="vim $SETTING_DIR/$0 && source ~/$0"
-alias all="source ~/$0"
+alias al="vim $0 && source $0"
+alias all="source $0"
 alias bashrc='vim ~/.bashrc && source ~/.bashrc'
 alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
