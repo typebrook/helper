@@ -60,8 +60,13 @@ osm.in_ways() {
     tee /tmp/osm &&\
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
 }
-# extract an element from .osm format STDIN
 osm.extract() {
+}
+osm.extract.tags() {
+}
+# extract an element from .osm format STDIN
+# $1 as [node|way|relation], $2 as id
+osm.extract.id() {
     echo "<osm version=\"0.6\">"
     sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p"
     echo "</osm>"
