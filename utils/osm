@@ -8,10 +8,10 @@ COMMANDS:
   osm.help
   util.osm.edit
 
-  osm.api.changeset.add
-  osm.api.changeset.close
   osm.api.changeset.create
   osm.api.changeset.update
+  osm.api.changeset.add
+  osm.api.changeset.close
   osm.api.fetch
   osm.api.fetch.full
   osm.api.fetch.history
@@ -21,14 +21,14 @@ COMMANDS:
   osm.api.upload.to
 
   osm.file.cat
-  osm.file.extract
-  osm.file.extract.full
+  osm.file.get
+  osm.file.get.full
   osm.file.query
   osm.list.ids
   osm.list.tag
   osm.list.tags
 
-  osm.extract.id
+  osm.get.id
   osm.member.relation
   osm.pbf.update
   osm.query
@@ -111,7 +111,7 @@ osm.list.tags() {
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
-osm.extract.id() {
+osm.get.id() {
     echo "<osm version=\"0.6\">"
     sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p"
     echo "</osm>"
@@ -125,7 +125,7 @@ osm.list.ids() {
 osm.api.upload.to() {
 
     tee /tmp/osm |\
-    osm.extract.ids |\
+    osm.list.ids |\
     sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
     sed "s/.*/\0 \| osm.api.changeset.add $1/g" |\
     while read -r command
@@ -144,11 +144,11 @@ osm.file.query() {
     osmium tags-filter $file $@ --output-format=osm --omit-referenced
 }
 # extract an element from osm file
-osm.file.extract() {
+osm.file.get() {
     file=$1; shift
     osmium getid $file $@ --output-format=osm
 }
-osm.file.extract.full() {
+osm.file.get.full() {
     file=$1; shift
     osmium getid $file $@ --output-format=osm --add-referenced
 }
