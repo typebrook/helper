@@ -5,24 +5,34 @@ FILENAME=$0
 osm.help() {
     echo "
 COMMANDS:
-  util.osm.edit 
-  osm.get
-  osm.get.full
-  osm.get.history
-  osm.in_relations
-  osm.in_ways
-  osm.extract
-  osm.extract.ids
-  osm.upload.to
-  osm.query
-  osm.file.query
+  osm.help
+  util.osm.edit
+
+  osm.api.changeset.add
+  osm.api.changeset.close
+  osm.api.changeset.create
+  osm.api.changeset.update
+  osm.api.fetch
+  osm.api.fetch.full
+  osm.api.fetch.history
+  osm.api.member.relation
+  osm.api.referenced.relation
+  osm.api.referenced.way
+  osm.api.upload.to
+
+  osm.file.cat
   osm.file.extract
-  osm.update
-  osm.changeset.create
-  osm.changeset.add
-  osm.changeset.update
-  osm.changeset.close
+  osm.file.extract.full
+  osm.file.query
+  osm.list.ids
+  osm.list.tag
+  osm.list.tags
+
+  osm.extract.id
+  osm.member.relation
   osm.pbf.update
+  osm.query
+  osm.update
     "
 }
 util.osm.edit() {
@@ -50,7 +60,7 @@ osm.api.fetch.history() {
     tee /tmp/osm &&\
     echo history of $1 $2 are copied into /tmp/osm > /dev/tty
 }
-osm.api.in_relations() {
+osm.api.referenced.relation() {
     curl -X GET $OSM_API/$1/$2/relations |\
     tee /tmp/osm &&\
     echo relations contain $1 $2 are copied into /tmp/osm > /dev/tty
@@ -67,10 +77,10 @@ osm.file.cat() {
     osmium cat $1 --output-format=osm -t $2
 }
 osm.api.member.relation() {
-    osm.api.in_relations $1 $2 |\
+    osm.api.referenced.relation $1 $2 |\
     osm.member.relation $1 $2 $3
 }
-osm.api.in_ways() {
+osm.api.referenced.way() {
     curl -X GET $OSM_API/node/$1/ways |\
     tee /tmp/osm &&\
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
