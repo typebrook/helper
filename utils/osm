@@ -35,36 +35,42 @@ OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
 # get .osm format data
-osm.fetch() {
+osm.api.fetch() {
     curl -X GET $OSM_API/$1/$2 |\
     tee /tmp/osm &&\
     echo content of $1 $2 is copied into /tmp/osm > /dev/tty
 }
-osm.fetch.full() {
+osm.api.fetch.full() {
     curl -X GET $OSM_API/$1/$2/full |\
     tee /tmp/osm &&\
     echo content of $1 $2 and its members are copied into /tmp/osm > /dev/tty
 }
-osm.fetch.history() {
+osm.api.fetch.history() {
     curl -X GET $OSM_API/$1/$2/history |\
     tee /tmp/osm &&\
     echo history of $1 $2 are copied into /tmp/osm > /dev/tty
 }
-osm.in_relations() {
+osm.api.in_relations() {
     curl -X GET $OSM_API/$1/$2/relations |\
     tee /tmp/osm &&\
     echo relations contain $1 $2 are copied into /tmp/osm > /dev/tty
 }
-osm.in_relations_as() {
-    ele_pattern="(node|way|relation)"
-
-    osm.in_relations $1 $2 |\
-    sed -nr "/<$ele_pattern/,/<\/$ele_pattern/ {
-        /<$ele_pattern/ {s/.* id=\"([^\"]+)\".*/\1/;h}
-        /<member type=\"$1\" ref=\"$2\" role=\"$3\"/ {g;p}
-    }"
+osm.member.relation() {
+    sed -nr "/<relation/,/<\/relation/ {
+        /<relation/ {s/.* id=\"([^\"]+)\".*/\1/;h}
+        /<member type=\"$1\" ref=\"$2\" role=\"$3\"/ {g;p;q}
+    }
+    $ {s/.*//;P}
+    " | head -1
 }
-osm.in_ways() {
+osm.file.cat() {
+    osmium cat $1 --output-format=osm -t $2
+}
+osm.api.member.relation() {
+    osm.api.in_relations $1 $2 |\
+    osm.member.relation $1 $2 $3
+}
+osm.api.in_ways() {
     curl -X GET $OSM_API/node/$1/ways |\
     tee /tmp/osm &&\
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
@@ -86,11 +92,12 @@ osm.list.tags() {
     for tag in "$@"
     do
         echo $content |\
-        osm.list.tag $tag > /tmp/osm.tag.$tag
+        osm.list.tag $tag |\
+        paste -d',' /tmp/osm - > /tmp/osm.new &&\
+        mv /tmp/osm.new /tmp/osm
     done
-    
-    paste -d',' /tmp/osm /tmp/osm.tag.*
-    rm /tmp/osm.tag.*
+
+    cat /tmp/osm
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
@@ -105,12 +112,12 @@ osm.list.ids() {
 }
 # upload .osm format STDIN to a given changeset
 # allows multiple elements in osm body
-osm.upload.to() {
+osm.api.upload.to() {
 
     tee /tmp/osm |\
     osm.extract.ids |\
     sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
-    sed "s/.*/\0 \| osm.changeset.add $1/g" |\
+    sed "s/.*/\0 \| osm.api.changeset.add $1/g" |\
     while read -r command
     do
         echo $command
@@ -148,7 +155,7 @@ osm.update() {
     fi
 }
 # create a new changeset
-osm.changeset.create() {
+osm.api.changeset.create() {
 
     echo -n "type comment: "
     read comment
@@ -167,7 +174,7 @@ osm.changeset.create() {
     xsel -ib
 }
 # add a new element into changeset
-osm.changeset.add() {
+osm.api.changeset.add() {
     element=$(cat)
     header=$(echo $element | grep -E "<(node|way|relation)\s")
     ele_type=$(echo $header | sed -r 's/.*<(node|way|relation).*$/\1/')
@@ -178,7 +185,7 @@ osm.changeset.add() {
     curl -X PUT -u $OSM_USER_PASSWD -i -T - $OSM_API/$ele_type/$id
 }
 # update changeset with a new comment
-osm.changeset.update() {
+osm.api.changeset.update() {
     echo -n 'type comment: '
     read -r comment
 
@@ -186,7 +193,7 @@ osm.changeset.update() {
     curl -X PUT -u $OSM_USER_PASSWD -i -T - $OSM_API/changeset/$1
 }
 # close a changeset
-osm.changeset.close() {
+osm.api.changeset.close() {
     curl -X PUT -u $OSM_USER_PASSWD -i $OSM_API/changeset/$1/close
 }
 # update an .osm.pbf file
