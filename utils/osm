@@ -61,8 +61,13 @@ osm.in_ways() {
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
 }
 osm.extract() {
+
 }
 osm.extract.tags() {
+    /<(node|way|relation)/,/<\/(node|way|relation)/ {
+        /<tag k="name"/ h
+        /<\/(node|way|relation)/ {x;p;s/.*//;x}
+    }
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
