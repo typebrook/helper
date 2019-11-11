@@ -25,7 +25,7 @@ COMMANDS:
   osm.pbf.update
     "
 }
-osm.utils.edit() {
+util.osm.edit() {
     vim $FILENAME && source $FILENAME
 }
 
@@ -60,14 +60,27 @@ osm.in_ways() {
     tee /tmp/osm &&\
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
 }
-osm.extract() {
-
+osm.extract.tag() {
+    sed -nr "/<(node|way|relation)/,/<\/(node|way|relation)/ {
+        /<tag k=\"$1\"/ {
+            s/.*v=\"([^\"]+)\".*/\1/
+            h
+        }
+        /<\/(node|way|relation)/ {x;p;s/.*//;x}
+    }"
 }
 osm.extract.tags() {
-    /<(node|way|relation)/,/<\/(node|way|relation)/ {
-        /<tag k="name"/ h
-        /<\/(node|way|relation)/ {x;p;s/.*//;x}
-    }
+    content=$(cat)
+    echo $content | osm.extract.ids | tr ' ' ',' > /tmp/osm
+
+    for tag in "$@"
+    do
+        echo $content |\
+        osm.extract.tag $tag > /tmp/osm.tag.$tag
+    done
+    
+    paste -d',' /tmp/osm /tmp/osm.tag.*
+    rm /tmp/osm.tag.*
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
