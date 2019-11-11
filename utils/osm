@@ -5,7 +5,7 @@ FILENAME=$0
 osm.help() {
     echo "
 COMMANDS:
-  osm.utils.edit
+  util.osm.edit 
   osm.get
   osm.get.full
   osm.get.history
@@ -55,28 +55,38 @@ osm.in_relations() {
     tee /tmp/osm &&\
     echo relations contain $1 $2 are copied into /tmp/osm > /dev/tty
 }
+osm.in_relations_as() {
+    ele_pattern="(node|way|relation)"
+
+    osm.in_relations $1 $2 |\
+    sed -nr "/<$ele_pattern/,/<\/$ele_pattern/ {
+        /<$ele_pattern/ {s/.* id=\"([^\"]+)\".*/\1/;h}
+        /<member type=\"$1\" ref=\"$2\" role=\"$3\"/ {g;p}
+    }"
+}
 osm.in_ways() {
     curl -X GET $OSM_API/node/$1/ways |\
     tee /tmp/osm &&\
     echo ways contain node $1 are copied into /tmp/osm > /dev/tty
 }
-osm.extract.tag() {
-    sed -nr "/<(node|way|relation)/,/<\/(node|way|relation)/ {
+osm.list.tag() {
+    ele_pattern="(node|way|relation)"
+    sed -nr "/<$ele_pattern/,/<\/$ele_pattern/ {
         /<tag k=\"$1\"/ {
             s/.*v=\"([^\"]+)\".*/\1/
             h
         }
-        /<\/(node|way|relation)/ {x;p;s/.*//;x}
+        /<\/$ele_pattern/ {x;p;s/.*//;x}
     }"
 }
-osm.extract.tags() {
+osm.list.tags() {
     content=$(cat)
-    echo $content | osm.extract.ids | tr ' ' ',' > /tmp/osm
+    echo $content | osm.list.ids | tr ' ' ',' > /tmp/osm
 
     for tag in "$@"
     do
         echo $content |\
-        osm.extract.tag $tag > /tmp/osm.tag.$tag
+        osm.list.tag $tag > /tmp/osm.tag.$tag
     done
     
     paste -d',' /tmp/osm /tmp/osm.tag.*
@@ -90,7 +100,7 @@ osm.extract.id() {
     echo "</osm>"
 }
 # get ids from .osm format STDIN
-osm.extract.ids() {
+osm.list.ids() {
     sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'
 }
 # upload .osm format STDIN to a given changeset
@@ -120,6 +130,10 @@ osm.file.query() {
 osm.file.extract() {
     file=$1; shift
     osmium getid $file $@ --output-format=osm
+}
+osm.file.extract.full() {
+    file=$1; shift
+    osmium getid $file $@ --output-format=osm --add-referenced
 }
 # update .osm format STDIN with key-value
 osm.update() {
