@@ -3,7 +3,7 @@ if [[ -z "$SETTING_DIR" ]]; then
 fi
 
 # load custom aliases
-source $SETTING_DIR/alias.sh
+source $SETTING_DIR/alias
 
 # Add custom scripts into PATH
 PATH=$PATH:$SETTING_DIR/scripts
