@@ -178,12 +178,13 @@ osm.api.changeset.create() {
     info="<osm>
             <changeset>
               <tag k='comment' v='$comment'/>
+              <tag k='bot' v='yes'/>
             </changeset>
           </osm>
          "
 
     echo $info |\
-    curl -u $OSM_USER_PASSWD -i --upload-file - $OSM_API/changeset/create |\
+    curl -u $OSM_USER_PASSWD --upload-file - $OSM_API/changeset/create |\
     tee /dev/tty |\
     tail -1 | read changeset_id
 
