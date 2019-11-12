@@ -103,7 +103,7 @@ osm.list.tags() {
     content=$(cat)
     echo $content | osm.list.ids | tr ' ' ',' > /tmp/osm
 
-    for tag in "$@"
+    for tag in $@
     do
         echo $content |\
         osm.list.tag $tag |\
