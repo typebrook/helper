@@ -3,8 +3,8 @@
 # settings
 alias al="vim $0 && source $0"
 alias all="source $0"
-alias bashrc='vim ~/.bashrc && source ~/.bashrc'
-alias zshrc='vim ~/.zshrc && source ~/.zshrc'
+alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
+alias zshrc="vim ~/.zshrc && source ~/.$(basename $SHELL)rc"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim $SETTING_DIR/tigrc"
 alias gitconfig='vim ~/.gitconfig'
@@ -13,9 +13,6 @@ alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.md'
-wiki() {
-    cat ~/vimwiki/$1.md
-}
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
@@ -51,6 +48,9 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
+wiki() {
+    cat ~/vimwiki/$1.md
+}
 
 # crontab
 alias ce='crontab -e'
