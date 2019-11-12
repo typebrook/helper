@@ -18,7 +18,7 @@ done
 if [ "$lon_col" != "0" ]; then
     # show each field with index in csv
     echo -------------- > /dev/tty
-    head -1 < $csv | sed 's/,/ /g' | awk '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
+    head -1 < $csv | awk -F',' '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}' > /dev/tty
     echo -------------- > /dev/tty
     echo > /dev/tty
 
