@@ -8,7 +8,7 @@ alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim $SETTING_DIR/tigrc"
 alias gitconfig='vim ~/.gitconfig'
-alias log='cat log | grep "`date +"%b %d"`"'
+alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 
 # vim
 alias v='vim'
