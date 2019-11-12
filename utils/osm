@@ -39,6 +39,10 @@ util.osm.edit() {
     vim $FILENAME && source $FILENAME
 }
 
+osm.goto() {
+    xdg-open https://www.openstreetmap.org/$1/$2
+}
+
 #SERVER=https://master.apis.dev.openstreetmap.org
 SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
