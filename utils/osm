@@ -3,19 +3,19 @@
 FILENAME=$0
 
 osm.help() {
-    echo "
+    echo '
 COMMANDS:
   osm.help
   util.osm.edit
 
-  osm.api.changeset.create
-  osm.api.changeset.update
-  osm.api.changeset.add
-  osm.api.changeset.close
-  osm.api.fetch
-  osm.api.fetch.full
-  osm.api.fetch.history
-  osm.api.member.relation
+  osm.api.changeset.create     create a new changeset and return its ID
+  osm.api.changeset.update     [changeset ID], update changeset with new comment
+  osm.api.changeset.add        [changeset ID], STDIN=osm element, add it into changeset
+  osm.api.changeset.close      [changeset ID], close the given changeset
+  osm.api.fetch                [element type] [element ID]
+  osm.api.fetch.full           like .fetch, but return with all referenced elements
+  osm.api.fetch.history        [element type] [element ID]
+  osm.api.member.relation      [element type] [element ID] [member type] get first relations reference it as member type
   osm.api.referenced.relation
   osm.api.referenced.way
   osm.api.upload.to
@@ -33,7 +33,7 @@ COMMANDS:
   osm.pbf.update
   osm.query
   osm.update
-    "
+    '
 }
 util.osm.edit() {
     vim $FILENAME && source $FILENAME
@@ -43,8 +43,8 @@ osm.goto() {
     xdg-open https://www.openstreetmap.org/$1/$2
 }
 
-#SERVER=https://master.apis.dev.openstreetmap.org
-SERVER=https://api.openstreetmap.org
+SERVER=https://master.apis.dev.openstreetmap.org
+#SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
@@ -112,6 +112,7 @@ osm.list.tags() {
     done
 
     cat /tmp/osm
+    echo tag list is also copied into /tmp/osm > /dev/tty
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
@@ -184,8 +185,10 @@ osm.api.changeset.create() {
     echo $info |\
     curl -u $OSM_USER_PASSWD -i --upload-file - $OSM_API/changeset/create |\
     tee /dev/tty |\
-    tail -1 |\
-    xsel -ib
+    tail -1 | read changeset_id
+
+    echo " copied into clipboard"
+    echo "changeset created, check $SERVER/changeset/$changeset_id"
 }
 # add a new element into changeset
 osm.api.changeset.add() {
