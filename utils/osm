@@ -169,6 +169,11 @@ osm.update() {
         sed ''
     fi
 }
+# $1 as .osm file $2 as list of change content
+# use Diff upload: POST /api/0.6/changeset/#id/upload maybe?
+osm.osm.update() {
+    
+}
 # create a new changeset
 osm.api.changeset.create() {
 
