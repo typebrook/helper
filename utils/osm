@@ -171,9 +171,9 @@ osm.update() {
 }
 # $1 as .osm file $2 as list of change content
 # use Diff upload: POST /api/0.6/changeset/#id/upload maybe?
-osm.osm.update() {
+osm.osc.create() {
     echo "<modify>"
-        awk '{print "<" $1 " id=\"" $2 "\""}' $1
+        awk '{print "<" $1 " id=\"" $2 "\" version=\"NONE\""}' $1
     echo "</modify>"
 }
 # create a new changeset
