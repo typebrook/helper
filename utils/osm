@@ -43,8 +43,8 @@ osm.goto() {
     xdg-open https://www.openstreetmap.org/$1/$2
 }
 
-SERVER=https://master.apis.dev.openstreetmap.org
-#SERVER=https://api.openstreetmap.org
+#SERVER=https://master.apis.dev.openstreetmap.org
+SERVER=https://api.openstreetmap.org
 OSM_API=$SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
@@ -57,17 +57,19 @@ osm.api.fetch() {
 osm.api.fetch.full() {
     curl -X GET $OSM_API/$1/$2/full |\
     tee /tmp/osm &&\
-    echo content of $1 $2 and its members are copied into /tmp/osm > /dev/tty
+    echo "\n" content of $1 $2 and its members are copied into /tmp/osm > /dev/tty
 }
 osm.api.fetch.history() {
     curl -X GET $OSM_API/$1/$2/history |\
     tee /tmp/osm &&\
-    echo history of $1 $2 are copied into /tmp/osm > /dev/tty
+    echo &&\
+    echo "\n" history of $1 $2 are copied into /tmp/osm > /dev/tty
 }
 osm.api.referenced.relation() {
     curl -X GET $OSM_API/$1/$2/relations |\
     tee /tmp/osm &&\
-    echo relations contain $1 $2 are copied into /tmp/osm > /dev/tty
+    echo &&\
+    echo "\n" relations contain $1 $2 are copied into /tmp/osm > /dev/tty
 }
 osm.member.relation() {
     sed -nr "/<relation/,/<\/relation/ {
@@ -112,7 +114,7 @@ osm.list.tags() {
     done
 
     cat /tmp/osm
-    echo tag list is also copied into /tmp/osm > /dev/tty
+    echo "\ntag list is also copied into /tmp/osm" > /dev/tty
 }
 # extract an element from .osm format STDIN
 # $1 as [node|way|relation], $2 as id
@@ -197,6 +199,7 @@ osm.api.changeset.create() {
 
     echo " copied into clipboard"
     echo "changeset created, check $SERVER/changeset/$changeset_id"
+    echo $changeset_id | xsel -ib 
 }
 # add a new element into changeset
 osm.api.changeset.add() {
