@@ -174,7 +174,9 @@ osm.osm.update() {
         awk -F"\"" '
             BEGIN{OFS="\""}
             {if(NR==1) print $1,$2,$3,$4+1,">"; else print $0}
-        ' >> $1.updated
+        ' |\
+        sed -r '1 i <osm version="0.6" generator="bash script">
+                $ a </osm>' >> $1.updated
     done
 }
 # create a new changeset
@@ -213,9 +215,21 @@ osm.api.changeset.add() {
 }
 osm.api.changeset.upload() {
     cat $2 |\
-    sed -r "/<(node|way|relation)/ s/>/ changeset=\"$1\">/
-            /<(node|way|relation)/,/<\/(node|way|relation)/
-    "
+    sed -nr "1 i <modify>
+        /<(node|way|relation)/ s/>/ changeset=\"$1\">/
+        /<(node|way|relation).*version=\"1\"/,/<\/(node|way|relation)/ {!p;H}
+        $ a <\/modify>
+        $ a <create>
+        $ {g;p} #|\
+        $ a <\/create>" |\
+    sed -r "1 {
+            N; /<\/modify>/ b delete_empty_body
+        }
+        /<create>/ { 
+            N; /<\/create>/ b delete_empty_body
+        }
+        :delete_empty_body { d }
+    " 
     #curl -X POST -u $OSM_USER_PASSWD -T - $OSM_API/changeset/$id/upload
 }
 # update changeset with a new comment
@@ -261,4 +275,12 @@ osm.pbf.update() {
         PBF_FILE=$NEW_SEQ.osm.pbf
         ((NEW_SEQ++))
     done
+}
+osm.osm.remove() {
+    while read -r line
+    do
+        array=( $(echo $line) )
+        cat $1 |\
+        sed -i "/<$array[1] id=\"$array[2]\"/,/<\/$array[1]>/ d"
+    done 
 }
