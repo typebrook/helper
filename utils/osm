@@ -159,20 +159,8 @@ osm.file.get.full() {
     file=$1; shift
     osmium getid $file $@ --output-format=osm --add-referenced
 }
-# update .osm format STDIN with key-value
-osm.update() {
-    # remove original tag&value
-    sed "/<tag k=\"$1\"/d" - | \
-    if [ "$2" != "" ]; then
-        # insert new tag&value
-        sed -r "/<(node|way|relation)/a \ \ \ \ <tag k=\"$1\" v=\"$2\"\/>"
-    else
-        # just print it
-        sed ''
-    fi
-}
 # $1 as osm file, $2 as diff file
-osm.update2() {
+osm.update() {
     while read -r line
     do
         array=( $(echo $line) )
@@ -183,10 +171,11 @@ osm.update2() {
             /<tag k=$array[3]/ !p
             /<\/$array[1]/ q
         }" |\
+        tee |\
         awk -F"\"" '
             BEGIN{OFS="\""}
             {if(NR==1) print $1,$2,$3,$4+1,">"; else print $0}
-        ' > $1.updated
+        ' >> $1.updated
     done
 }
 # $1 as .osm file $2 as list of change content
