@@ -29,10 +29,10 @@ COMMANDS:
   osm.list.tags
 
   osm.get.id
+  osm.query
   osm.member.relation
   osm.pbf.update
-  osm.query
-  osm.update
+  osm.osm.update
     '
 }
 util.osm.edit() {
@@ -160,7 +160,7 @@ osm.file.get.full() {
     osmium getid $file $@ --output-format=osm --add-referenced
 }
 # $1 as osm file, $2 as diff file
-osm.update() {
+osm.osm.update() {
     while read -r line
     do
         array=( $(echo $line) )
@@ -171,19 +171,11 @@ osm.update() {
             /<tag k=$array[3]/ !p
             /<\/$array[1]/ q
         }" |\
-        tee |\
         awk -F"\"" '
             BEGIN{OFS="\""}
             {if(NR==1) print $1,$2,$3,$4+1,">"; else print $0}
         ' >> $1.updated
     done
-}
-# $1 as .osm file $2 as list of change content
-# use Diff upload: POST /api/0.6/changeset/#id/upload maybe?
-osm.osc.create() {
-    echo "<modify>"
-        awk '{print "<" $1 " id=\"" $2 "\" version=\"NONE\""}' $1
-    echo "</modify>"
 }
 # create a new changeset
 osm.api.changeset.create() {
@@ -218,6 +210,11 @@ osm.api.changeset.add() {
     echo $element | \
     sed -r "s/^( *<(node|way|relation).*version[^ ]+ )(.*)$/\1changeset=\"$1\">/" | \
     curl -X PUT -u $OSM_USER_PASSWD -i -T - $OSM_API/$ele_type/$id
+}
+osm.api.changeset.upload() {
+    cat $2 |\
+    sed -r "/<(node|way|relation)/ s/>/ changeset=\"$1\">/"
+    #curl -X POST -u $OSM_USER_PASSWD -T - $OSM_API/changeset/$id/upload
 }
 # update changeset with a new comment
 osm.api.changeset.update() {
