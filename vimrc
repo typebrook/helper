@@ -51,6 +51,9 @@ onoremap ab a{
 " block
 onoremap B /return<CR>
 
+" Search
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>'")
+
 " S&R
 nnoremap <leader>; :%s:::g<Left><Left><Left>
 vnoremap <leader>; :s:::g<Left><Left><Left>

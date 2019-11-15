@@ -9,15 +9,16 @@ COMMANDS:
   util.osm.edit
 
   osm.api.changeset.create     create a new changeset and return its ID
-  osm.api.changeset.update     [changeset ID], update changeset with new comment
-  osm.api.changeset.add        [changeset ID], STDIN=osm element, add it into changeset
-  osm.api.changeset.close      [changeset ID], close the given changeset
+  osm.api.changeset.update     [changeset ID] update changeset with new comment
+  osm.api.changeset.upload     [changeset ID] [osc file] upload osc file to the given changeset
+  osm.api.changeset.add        [changeset ID] STDIN=osm element, add it into changeset
+  osm.api.changeset.close      [changeset ID] close the given changeset
   osm.api.fetch                [element type] [element ID]
   osm.api.fetch.full           like .fetch, but return with all referenced elements
   osm.api.fetch.history        [element type] [element ID]
   osm.api.member.relation      [element type] [element ID] [member type] get first relations reference it as member type
-  osm.api.referenced.relation
-  osm.api.referenced.way
+  osm.api.referenced.relation  [element type] [element ID] get all relations reference this element
+  osm.api.referenced.way       [element type] [element ID] get all ways reference this element
   osm.api.upload.to
 
   osm.file.cat
