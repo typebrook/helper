@@ -160,8 +160,7 @@ osm.file.get.full() {
     osmium getid $file $@ --output-format=osm --add-referenced
 }
 # $1 as osm file
-osm.osm.update() {
-    (tee; cat > $1.osc) |\
+osm.osc.create() {
     while read -r line
     do
         array=( $(echo $line) )
