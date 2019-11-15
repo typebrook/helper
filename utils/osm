@@ -44,9 +44,9 @@ osm.goto() {
     xdg-open https://www.openstreetmap.org/$1/$2
 }
 
-#SERVER=https://master.apis.dev.openstreetmap.org
-SERVER=https://api.openstreetmap.org
-OSM_API=$SERVER/api/0.6
+#OSM_SERVER=https://master.apis.dev.openstreetmap.org
+OSM_SERVER=https://api.openstreetmap.org
+OSM_API=$OSM_SERVER/api/0.6
 OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
 # get .osm format data
@@ -200,7 +200,7 @@ osm.api.changeset.create() {
     tail -1 | read changeset_id
 
     echo " copied into clipboard"
-    echo "changeset created, check $SERVER/changeset/$changeset_id"
+    echo "changeset created, check $OSM_SERVER/changeset/$changeset_id"
     echo $changeset_id | xsel -ib 
 }
 # add a new element into changeset
@@ -234,7 +234,7 @@ osm.api.changeset.close() {
 # update an .osm.pbf file
 osm.pbf.update() {
     PBF_FILE=$1
-    SERVER=http://download.geofabrik.de/asia/taiwan-updates
+    GEOFABRICK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
 
     # get next sequence number and store it into NEW_SEQ
     osmium fileinfo $PBF_FILE | \
@@ -247,11 +247,12 @@ osm.pbf.update() {
     # get it and do file update
     while
         SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
-        STATE_URL=$SERVER/000/$SEQ_PATH.state.txt
+        STATE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.state.txt
+        echo $STATE_URL
         [ $(curl.code $STATE_URL) != "404" ]
     do
         mkdir -p changes
-        CHANGE_URL=$SERVER/000/$SEQ_PATH.osc.gz
+        CHANGE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.osc.gz
         echo $CHANGE_URL
         curl -o changes/$NEW_SEQ.osc.gz $CHANGE_URL && \
         osmium apply-changes $PBF_FILE changes/$NEW_SEQ.osc.gz \
