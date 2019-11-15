@@ -161,23 +161,24 @@ osm.file.get.full() {
 }
 # $1 as osm file
 osm.osm.update() {
+    (tee; cat > $1.osc) |\
     while read -r line
     do
         array=( $(echo $line) )
 
         cat $1 |\
-        sed -nr "/<$array[1] id=$array[2]/,/<\/$array[1]/ {
+        sed -nr "
+            /<$array[1] id=$array[2]/,/<\/$array[1]/ {
             /<$array[1] id=$array[2]/ a \ \ \ \ <tag k=\"$array[3]\" v=$array[4]\/>
             /<tag k=$array[3]/ !p
             /<\/$array[1]/ q
-        }" >> updated.$1
-    done
+         }" >> $1.osc
+     done
 
-    sed -ir '1 i <osm version="0.6" generator="bash script">
-             $ a </osm>' updated.$1
-
-    osmium derive-changes $1 updated.$1 --output=$1.osc --overwrite &&\
-    rm updated.$1
+    sed -ir '1 i <osmChange version="0.6" generator="bash script">
+             1 i <modify>
+             $ a </modify>
+             $ a </osmChange>' $1.osc
 }
 # create a new changeset
 osm.api.changeset.create() {
