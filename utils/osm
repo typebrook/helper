@@ -159,7 +159,7 @@ osm.file.get.full() {
     file=$1; shift
     osmium getid $file $@ --output-format=osm --add-referenced
 }
-# $1 as osm file, $2 as diff file
+# $1 as osm file
 osm.osm.update() {
     while read -r line
     do
@@ -167,17 +167,17 @@ osm.osm.update() {
 
         cat $1 |\
         sed -nr "/<$array[1] id=$array[2]/,/<\/$array[1]/ {
-            /<$array[1] id=$array[2]/ a \ \ \ \ <tag k=$array[3] v=$array[4]\/>
+            /<$array[1] id=$array[2]/ a \ \ \ \ <tag k=\"$array[3]\" v=$array[4]\/>
             /<tag k=$array[3]/ !p
             /<\/$array[1]/ q
-        }" |\
-        awk -F"\"" '
-            BEGIN{OFS="\""}
-            {if(NR==1) print $1,$2,$3,$4+1,">"; else print $0}
-        ' |\
-        sed -r '1 i <osm version="0.6" generator="bash script">
-                $ a </osm>' >> $1.updated
+        }" >> updated.$1
     done
+
+    sed -ir '1 i <osm version="0.6" generator="bash script">
+             $ a </osm>' updated.$1
+
+    osmium derive-changes $1 updated.$1 --output=$1.osc --overwrite &&\
+    rm updated.$1
 }
 # create a new changeset
 osm.api.changeset.create() {
@@ -215,22 +215,8 @@ osm.api.changeset.add() {
 }
 osm.api.changeset.upload() {
     cat $2 |\
-    sed -nr "1 i <modify>
-        /<(node|way|relation)/ s/>/ changeset=\"$1\">/
-        /<(node|way|relation).*version=\"1\"/,/<\/(node|way|relation)/ {!p;H}
-        $ a <\/modify>
-        $ a <create>
-        $ {g;p} #|\
-        $ a <\/create>" |\
-    sed -r "1 {
-            N; /<\/modify>/ b delete_empty_body
-        }
-        /<create>/ { 
-            N; /<\/create>/ b delete_empty_body
-        }
-        :delete_empty_body { d }
-    " 
-    #curl -X POST -u $OSM_USER_PASSWD -T - $OSM_API/changeset/$id/upload
+    sed -r "/<(node|way|relation)/ s/>/ changeset=\"$1\">/" |\
+    curl -X POST -u $OSM_USER_PASSWD -i -T - $OSM_API/changeset/$1/upload
 }
 # update changeset with a new comment
 osm.api.changeset.update() {
@@ -279,6 +265,7 @@ osm.pbf.update() {
 osm.osm.remove() {
     while read -r line
     do
+        # put element type and element ID into array
         array=( $(echo $line) )
         cat $1 |\
         sed -i "/<$array[1] id=\"$array[2]\"/,/<\/$array[1]>/ d"
