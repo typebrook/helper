@@ -20,6 +20,11 @@ village.csv: data/taiwan-latest.osm.pbf
 village.no_nat_ref.csv: village.csv
 	grep -v nat_ref $< > $@
 
+village.with_nat_ref.csv: village.csv
+	(head -1 $<; grep nat_ref $<) |\
+	sed -r "s/\"\"\".*nat_ref\"\"=>\"\"([^\"]+).*\"\"\"/\1/g" |\
+	sed '1s/other_tags/nat_ref/'> $@
+
 matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 	ogr2ogr $@ $(word 2,$^) \
 		-oo X_POSSIBLE_NAMES=X -oo Y_POSSIBLE_NAMES=Y \
@@ -27,6 +32,14 @@ matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 		-sql "SELECT osm.osm_id, gov.* \
 		      FROM 'village.no_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
 		      WHERE osm.name = gov.VILLNAME AND Intersects(gov.geometry, osm.geometry)"
+
+matched.by_ref.csv: data/VILLAGE_MOI_1081007.shp village.with_nat_ref.csv
+	ogr2ogr $@ $(word 2,$^) \
+		-oo X_POSSIBLE_NAMES=X -oo Y_POSSIBLE_NAMES=Y \
+		-dialect sqlite \
+		-sql "SELECT osm.osm_id, gov.* \
+		      FROM 'village.with_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
+		      WHERE osm.nat_ref = gov.VILLCODE"
 
 confilct.list: matched.csv
 	cat $< | cut -d',' -f2 | sort | uniq -d | xargs -I {} grep {} $<
