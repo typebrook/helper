@@ -55,3 +55,5 @@ change.list: matched.csv
 	cat $< |\
 	sed 1d |\
 	awk -F',' '{print "relation", $$1, "nat_ref", $$2}' > $@
+
+# sed -i -r 's/([0-9]+ +)(.+)$/\1"name:en" "\2"/' diff.eng
