@@ -1,0 +1,4 @@
+#! /bin/sh
+
+file=$1; shift
+osmium tags-filter $file $@ --output-format=osm --omit-referenced

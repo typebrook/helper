@@ -1,0 +1,17 @@
+    while read -r line
+    do
+        array=( $(echo $line) )
+
+        cat $1 |\
+        sed -nr "
+            /<$array[1] id=$array[2]/,/<\/$array[1]/ {
+            /<$array[1] id=$array[2]/ a \ \ \ \ <tag k=\"$array[3]\" v=$array[4]\/>
+            /<tag k=$array[3]/ !p
+            /<\/$array[1]/ q
+         }" >> $1.osc
+     done
+
+    sed -ir '1 i <osmChange version="0.6" generator="bash script">
+             1 i <modify>
+             $ a </modify>
+             $ a </osmChange>' $1.osc

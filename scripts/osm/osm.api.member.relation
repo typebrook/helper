@@ -1,0 +1,4 @@
+#! /bin/sh
+
+osm.api.referenced.relation $1 $2 |\
+osm.member.relation $1 $2 $3

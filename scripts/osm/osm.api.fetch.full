@@ -1,0 +1,5 @@
+#! /bin/sh
+
+curl -X GET $OSM_API/$1/$2/full |\
+tee /tmp/osm &&\
+echo "\n" content of $1 $2 and its members are copied into /tmp/osm > /dev/tty

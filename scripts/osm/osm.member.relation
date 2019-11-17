@@ -1,0 +1,8 @@
+#! /bin/sh
+
+sed -nr "/<relation/,/<\/relation/ {
+    /<relation/ {s/.* id=\"([^\"]+)\".*/\1/;h}
+    /<member type=\"$1\" ref=\"$2\" role=\"$3\"/ {g;p;q}
+}
+$ {s/.*//;P}
+" | head -1

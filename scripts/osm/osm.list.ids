@@ -1,0 +1,3 @@
+#! /bin/sh
+
+sed -nr 's/.*<(node|way|relation) id=\"([^"]+)\".*/\1 \2/p'

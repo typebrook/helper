@@ -1,0 +1,12 @@
+#! /bin/sh
+
+# allows multiple elements in osm body
+tee /tmp/osm |\
+osm.list.ids |\
+sed 's#.*#osm.extract \0 < /tmp/osm#g' |\
+sed "s/.*/\0 \| osm.api.changeset.add $1/g" |\
+while read -r command
+do
+    echo $command
+    source<(echo "($command &)")
+done

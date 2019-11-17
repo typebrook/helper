@@ -1,0 +1,13 @@
+    content=$(cat)
+    echo $content | osm.list.ids | tr ' ' ',' > /tmp/osm
+
+    for tag in $@
+    do
+        echo $content |\
+        osm.list.tag $tag |\
+        paste -d',' /tmp/osm - > /tmp/osm.new &&\
+        mv /tmp/osm.new /tmp/osm
+    done
+
+    cat /tmp/osm
+    echo "\ntag list is also copied into /tmp/osm" > /dev/tty

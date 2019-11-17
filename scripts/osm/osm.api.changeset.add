@@ -1,0 +1,10 @@
+#!/bin/sh
+
+element=$(cat)
+header=$(echo $element | grep -E "<(node|way|relation)\s")
+ele_type=$(echo $header | sed -r 's/.*<(node|way|relation).*$/\1/')
+id=$(echo $header | sed -r 's/.* id=\"([^"]+)\".*$/\1/')
+
+echo $element | \
+sed -r "s/^( *<(node|way|relation).*version[^ ]+ )(.*)$/\1changeset=\"$1\">/" | \
+curl -X PUT -u $OSM_USER_PASSWD -i -T - $OSM_API/$ele_type/$id

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo -n "type comment: "
+read comment
+
+info="<osm>
+        <changeset>
+          <tag k='comment' v='$comment'/>
+          <tag k='bot' v='yes'/>
+        </changeset>
+      </osm>
+     "
+
+echo $info |\
+curl -u $OSM_USER_PASSWD --upload-file - $OSM_API/changeset/create |\
+tee /dev/tty |\
+tail -1 | read changeset_id
+
+echo " copied into clipboard"
+echo "changeset created, check $OSM_SERVER/changeset/$changeset_id"
+echo $changeset_id | xsel -ib 

@@ -1,0 +1,6 @@
+#! /bin/sh
+
+# get .osm format data
+curl -X GET $OSM_API/$1/$2 |\
+tee /tmp/osm &&\
+echo content of $1 $2 is copied into /tmp/osm > /dev/tty

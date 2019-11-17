@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cat $2 |\
+sed -r "/<(node|way|relation)/ s/>/ changeset=\"$1\">/" |\
+curl -X POST -u $OSM_USER_PASSWD -i -T - $OSM_API/changeset/$1/upload

@@ -1,0 +1,6 @@
+#! /bin/sh
+
+curl -X GET $OSM_API/$1/$2/relations |\
+tee /tmp/osm &&\
+echo &&\
+echo "\n" relations contain $1 $2 are copied into /tmp/osm > /dev/tty
