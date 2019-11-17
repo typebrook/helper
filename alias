@@ -16,6 +16,9 @@ alias vv='vim ~/vimwiki/index.md'
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
+vs() {
+    vim $(which $1)
+}
 
 # shell
 alias src="source $HOME/.$(basename $SHELL)rc"
