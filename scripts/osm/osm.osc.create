@@ -4,16 +4,21 @@ while read -r line
 do
     TYPE=$(echo $line | cut -d ' ' -f1)
     ID=$(echo $line | cut -d ' ' -f2)
+
+    # create new tags from input line, for example: 
+    # key1_added "value1" key2_added "value2" key3_removed key4_removed
+
+    # key should not quoted, value must be quoted
+    # And keys which need to be removed must be placed at the end
     NEW_TAGS=$(echo $line |\
-               cut -d' ' -f3- | xargs -n2 echo |\
-               sed -r 's/^([^ ]+) (.+)/<tag k=\"\1\" v=\"\2\"\/>/' |\
-               paste -s)
+               cut -d' ' -f3- |\
+               sed -r 's/([^ "]+) (\"[^"]+\")/<tag k=\"\1\" v=\2\/>/g; s/>[^"]*$/>/')
 
     TAG_PATTERN=$(echo $line |\
                   cut -d' ' -f3- | xargs -n2 echo |\
                   cut -d' ' -f1 | paste -s -d'|')
 
-    echo $TAG_PATTERN > /dev/tty
+    echo $NEW_TAGS > /dev/tty
 
     cat $1 |\
     sed -nr "/<$TYPE id=\"$ID\"/,/<\/$TYPE/ {
