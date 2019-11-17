@@ -33,13 +33,18 @@ matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 		      FROM 'village.no_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
 		      WHERE osm.name = gov.VILLNAME AND Intersects(gov.geometry, osm.geometry)"
 
-matched.by_ref.csv: data/VILLAGE_MOI_1081007.shp village.with_nat_ref.csv
+village.gov.csv: data/VILLAGE_MOI_1081007.shp
+	ogr2ogr $@ $<
+
+matched.by_ref.csv: village.gov.csv village.with_nat_ref.csv
 	ogr2ogr $@ $(word 2,$^) \
-		-oo X_POSSIBLE_NAMES=X -oo Y_POSSIBLE_NAMES=Y \
 		-dialect sqlite \
 		-sql "SELECT osm.osm_id, gov.* \
-		      FROM 'village.with_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
+		      FROM 'village.with_nat_ref' osm, '$<'.'village.gov' gov \
 		      WHERE osm.nat_ref = gov.VILLCODE"
+
+diff: matched.by_ref.csv
+	awk -F',' -v q='"' '{print (, "is_in:county", q{q, "is_in:town", q{})}" q, "name:en", q$6q }' $<
 
 confilct.list: matched.csv
 	cat $< | cut -d',' -f2 | sort | uniq -d | xargs -I {} grep {} $<
