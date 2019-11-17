@@ -1,0 +1,13 @@
+#! /bin/sh
+
+#OSM_SERVER=https://master.apis.dev.openstreetmap.org
+OSM_SERVER=https://api.openstreetmap.org
+
+OSM_API=$OSM_SERVER/api/0.6
+OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
+
+FILENAME=$0
+
+util.osm.edit() {
+    vim $FILENAME && source $FILENAME
+}

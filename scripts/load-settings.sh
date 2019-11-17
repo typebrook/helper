@@ -12,4 +12,5 @@ PATH=$PATH:$SETTING_DIR/scripts
 $SETTING_DIR/scripts/sync.sh
 
 # load custom functions
-source $SETTING_DIR/utils/osm
+OSM_UTIL_DIR=$SETTING_DIR/scripts/osm
+source $OSM_UTIL_DIR/osm && PATH=$PATH:$OSM_UTIL_DIR
