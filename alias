@@ -158,6 +158,7 @@ alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
 alias sample-mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
 alias sample-kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
+alias sample-osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 
 # data file
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'

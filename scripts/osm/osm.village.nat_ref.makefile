@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 data/taiwan-latest.osm.pbf:
 	mkdir -p data
 	curl -o $@ http://download.geofabrik.de/asia/taiwan-latest.osm.pbf
@@ -23,7 +25,13 @@ village.no_nat_ref.csv: village.csv
 village.with_nat_ref.csv: village.csv
 	(head -1 $<; grep nat_ref $<) |\
 	sed -r "s/\"\"\".*nat_ref\"\"=>\"\"([^\"]+).*\"\"\"/\1/g" |\
-	sed '1s/other_tags/nat_ref/'> $@
+	sed '1s/other_tags/nat_ref/;s/"//g' |\
+	(sed -u 1q; sort -t',' -k5)> $@
+
+village.gov.csv: data/VILLAGE_MOI_1081007.shp
+	ogr2ogr -f CSV /vsistdout/ $< |\
+	(sed -u 1q; sort -t',' -k1) |\
+	sed 's/"//g'> $@
 
 matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 	ogr2ogr $@ $(word 2,$^) \
@@ -33,18 +41,12 @@ matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 		      FROM 'village.no_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
 		      WHERE osm.name = gov.VILLNAME AND Intersects(gov.geometry, osm.geometry)"
 
-village.gov.csv: data/VILLAGE_MOI_1081007.shp
-	ogr2ogr $@ $<
+matched.by_nat_ref.list: village.with_nat_ref.csv village.gov.csv 
+	join -t',' -1 5 -2 1 <(sed 1d $<) <(sed 1d $(word 2,$^)) > $@
 
-matched.by_ref.csv: village.gov.csv village.with_nat_ref.csv
-	ogr2ogr $@ $(word 2,$^) \
-		-dialect sqlite \
-		-sql "SELECT osm.osm_id, gov.* \
-		      FROM 'village.with_nat_ref' osm, '$<'.'village.gov' gov \
-		      WHERE osm.nat_ref = gov.VILLCODE"
-
-diff: matched.by_ref.csv
-	awk -F',' -v q='"' '{print (, "is_in:county", q{q, "is_in:town", q{})}" q, "name:en", q$6q }' $<
+change.county_town_en.list: matched.by_nat_ref.list
+	awk -F',' -v q=\" '{print $$4, "is_in:county", q$$6q, "is_in:town", q$$7q, "name:en", q$$9q }' $< |\
+	sed 's/^/relation /' > $@
 
 confilct.list: matched.csv
 	cat $< | cut -d',' -f2 | sort | uniq -d | xargs -I {} grep {} $<
@@ -60,5 +62,3 @@ change.list: matched.csv
 	cat $< |\
 	sed 1d |\
 	awk -F',' '{print "relation", $$1, "nat_ref", $$2}' > $@
-
-# sed -i -r 's/([0-9]+ +)(.+)$/\1"name:en" "\2"/' diff.eng
