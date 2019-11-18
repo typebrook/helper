@@ -6,6 +6,7 @@ read comment
 info="<osm>
         <changeset>
           <tag k='comment' v='$comment'/>
+          <tag k='created_by' v='bash scripts'/>
           <tag k='bot' v='yes'/>
         </changeset>
       </osm>
