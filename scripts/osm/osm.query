@@ -1,1 +1,3 @@
-    osmium tags-filter - $@ --input-format=osm --output-format=osm --omit-referenced
+#!/bin/bash
+
+osmium tags-filter - $@ --input-format=osm --output-format=osm --omit-referenced

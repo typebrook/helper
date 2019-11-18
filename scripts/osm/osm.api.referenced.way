@@ -1,3 +1,5 @@
-    curl -X GET $OSM_API/node/$1/ways |\
-    tee /tmp/osm &&\
-    echo ways contain node $1 are copied into /tmp/osm > /dev/tty
+#!/bin/bash
+
+curl -X GET $OSM_API/node/$1/ways |\
+tee /tmp/osm &&\
+echo ways contain node $1 are copied into /tmp/osm > /dev/tty

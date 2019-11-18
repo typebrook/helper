@@ -1,7 +1,9 @@
-    while read -r line
-    do
-        # put element type and element ID into array
-        array=( $(echo $line) )
-        cat $1 |\
-        sed -i "/<$array[1] id=\"$array[2]\"/,/<\/$array[1]>/ d"
-    done 
+#!/bin/bash
+
+while read -r line
+do
+    # put element type and element ID into array
+    array=( $(echo $line) )
+    cat $1 |\
+    sed -i "/<$array[1] id=\"$array[2]\"/,/<\/$array[1]>/ d"
+done 

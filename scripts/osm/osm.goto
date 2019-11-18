@@ -1,1 +1,3 @@
-    xdg-open https://www.openstreetmap.org/$1/$2
+#!/bin/sh
+
+xdg-open https://www.openstreetmap.org/$1/$2
