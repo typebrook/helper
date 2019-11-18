@@ -1,25 +1,32 @@
 #!/bin/bash
 
 # create new tags from input line, for example: 
-# [element type] [element ID] key1_added "value1" key2_added "value2" key3_removed key4_removed
+# field1         field2       field3     field4   field5     field6   field7       field8...
+# [element type] [element ID] key1_added "value1" key2_added "value2" key3_removed key4_removed...
 
 # key should not quoted, value must be quoted
 # And keys which need to be removed must be placed at the end
 while read -r line
 do
-    TYPE=$(echo $line | cut -d ' ' -f1)
-    ID=$(echo $line | cut -d ' ' -f2)
+    TYPE=$(echo $line | cut -d ' ' -f1) # field1 is type
+    ID=$(echo $line | cut -d ' ' -f2)   # field2 is ID
 
+    # transform key-value pair into tag format:
+    # <tag k="[key]" v="[value]"/>
+    # keys without values are omitted
     NEW_TAGS=$(echo $line |\
                cut -d' ' -f3- |\
                sed -r 's/([^ "]+) (\"[^"]+\")/<tag k=\"\1\" v=\2\/>/g; s/>[^"]*$/>/')
 
+    # get regex pattern need to removed from original osm element:
+    # key1|key2|key3|key4
     TAG_PATTERN=$(echo $line |\
                   cut -d' ' -f3- | xargs -n2 echo |\
                   cut -d' ' -f1 | paste -s -d'|')
 
     echo $NEW_TAGS > /dev/tty
 
+    # print matched element with new tags to .osc file
     cat $1 |\
     sed -nr "/<$TYPE id=\"$ID\"/,/<\/$TYPE/ {
                  /<$TYPE id=\"$ID\"/ {
@@ -31,6 +38,7 @@ do
             }" >> $1.osc
 done
 
+# Add .osc structure for output
 sed -ir '1 i <osmChange version="0.6" generator="bash script">
          1 i <modify>
          $ a </modify>
