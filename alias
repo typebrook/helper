@@ -169,6 +169,7 @@ alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/st
                      xargs curl -O"
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
+alias data-taiwan-poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
 data-taiwan-county-code() {
     curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt |\
     iconv -f BIG-5 -t UTF-8 -
