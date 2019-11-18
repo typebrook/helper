@@ -8,6 +8,6 @@ export OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
 
 FILENAME=$0
 
-util.osm.edit() {
+util.osm() {
     vim $FILENAME && source $FILENAME
 }
