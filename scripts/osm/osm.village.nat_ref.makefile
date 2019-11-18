@@ -37,9 +37,9 @@ matched.csv: data/VILLAGE_MOI_1081007.shp village.no_nat_ref.csv
 	ogr2ogr $@ $(word 2,$^) \
 		-oo X_POSSIBLE_NAMES=X -oo Y_POSSIBLE_NAMES=Y \
 		-dialect sqlite \
-		-sql "SELECT osm.osm_id, gov.* \
+		-sql "SELECT osm.osm_id, osm.name, gov.* \
 		      FROM 'village.no_nat_ref' osm, '$<'.VILLAGE_MOI_1081007 gov \
-		      WHERE osm.name = gov.VILLNAME AND Intersects(gov.geometry, osm.geometry)"
+		      WHERE Intersects(gov.geometry, osm.geometry)"
 
 matched.by_nat_ref.list: village.with_nat_ref.csv village.gov.csv 
 	join -t',' -1 5 -2 1 <(sed 1d $<) <(sed 1d $(word 2,$^)) > $@
