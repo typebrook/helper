@@ -1,6 +1,5 @@
 #!/bin/sh
 
-PBF_FILE=$1
 GEOFABRICK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
 
 # get next sequence number and store it into NEW_SEQ
@@ -27,6 +26,7 @@ do
         --overwrite \
         --output $NEW_SEQ.osm.pbf
 
-    PBF_FILE=$NEW_SEQ.osm.pbf
+    mv $1 $((NEW_SEQ-1)).osm.pbf
+    mv $NEW_SEQ.osm.pbf $1
     ((NEW_SEQ++))
 done
