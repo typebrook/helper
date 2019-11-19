@@ -1,0 +1,2 @@
+# update Taiwan OSM replication
+0 7 * * * osm.pbf.update ~/data/taiwan-latest.osm.pbf
