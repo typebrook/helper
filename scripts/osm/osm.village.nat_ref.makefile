@@ -19,6 +19,13 @@ village.csv: data/taiwan-latest.osm.pbf
               FROM multipolygons \
               WHERE admin_level = '9'"
 
+town.csv: data/taiwan-latest.osm.pbf
+	ogr2ogr $@ $< \
+		-dialect sqlite \
+		-sql "SELECT osm_id, name, other_tags \
+              FROM multipolygons \
+              WHERE admin_level = '5' OR admin_level = '7' OR admin_level = '8'"
+
 village.no_nat_ref.csv: village.csv
 	grep -v nat_ref $< > $@
 

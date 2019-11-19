@@ -1,0 +1,31 @@
+#!/bin/bash
+
+while read -r line
+do
+
+    TYPE=$(echo $line | cut -d ' ' -f1) # field1 is type
+    ID=$(echo $line | cut -d ' ' -f2)   # field2 is ID
+
+    NEW_MEMBERS=$(echo $line |\
+               cut -d' ' -f3- |\
+               sed -r 's/([0-9]+)/<member type=\"relation\" ref=\"\1\" role=\"subarea\"\/>/g')
+
+    echo $NEW_MEMBERS
+
+    # print matched element with new tags to .osc file
+    cat $1 |\
+    sed -nr "/<$TYPE id=\"$ID\"/,/<\/$TYPE/ {
+                 /<$TYPE id=\"$ID\"/ {
+                     s/(version=\"[0-9]+\")(.*)/\1>/
+                     a \ \ \ \ $NEW_MEMBERS
+                 }
+                 p
+                 /<\/$TYPE/ q
+            }" >> $1.osc
+done
+
+# Add .osc structure for output
+sed -ir '1 i <osmChange version="0.6" generator="bash script">
+         1 i <modify>
+         $ a </modify>
+         $ a </osmChange>' $1.osc
