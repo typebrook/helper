@@ -107,11 +107,11 @@ alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
 upload-tig() {
-    $SETTING_DIR/scripts/upload-github-release-asset.sh \
-        github_api_token=$(cat $HOME/.ssh/github) \
+    upload-github-release-asset.sh \
+        github_api_token=$(cat ~/settings/tokens/github-release) \
         owner=typebrook \
         repo=tig \
-        tag=tig-2.4.1 \
+        tag=tig-2.5.0 \
         filename=$(which tig)
 }
 
