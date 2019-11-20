@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 GEOFABRICK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
+PBF_FILE=$1
 
 # get next sequence number and store it into NEW_SEQ
-osmium fileinfo $PBF_FILE | \
-grep osmosis_replication_sequence_number | \
-cut -d'=' -f2 | \
-sed 's/$/+1/' | bc | \
-read NEW_SEQ
+NEW_SEQ=$(osmium fileinfo $PBF_FILE |\
+grep osmosis_replication_sequence_number |\
+cut -d'=' -f2 |\
+sed 's/$/+1/' | bc)
 
 # while server has osc file with given sequence number,
 # get it and do file update
@@ -15,7 +15,7 @@ while
     SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
     STATE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.state.txt
     echo $STATE_URL
-    [ $(curl.code $STATE_URL) != "404" ]
+    [ $(curl -o /dev/null --silent -Iw "%{http_code}" $STATE_URL) != "404" ]
 do
     mkdir -p changes
     CHANGE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.osc.gz
@@ -26,7 +26,7 @@ do
         --overwrite \
         --output $NEW_SEQ.osm.pbf
 
-    mv $1 $((NEW_SEQ-1)).osm.pbf
-    mv $NEW_SEQ.osm.pbf $1
-    ((NEW_SEQ++))
+    mv $PBF_FILE $((NEW_SEQ-1)).osm.pbf
+    mv $NEW_SEQ.osm.pbf $PBF_FILE
+    (( NEW_SEQ++ ))
 done
