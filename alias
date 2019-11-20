@@ -105,7 +105,7 @@ alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
-alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.4.1/tig'
+alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
 upload-tig() {
     upload-github-release-asset.sh \
         github_api_token=$(cat ~/settings/tokens/github-release) \
