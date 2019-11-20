@@ -12,11 +12,10 @@ info="<osm>
       </osm>
      "
 
-echo $info |\
-curl -u $OSM_USER_PASSWD --upload-file - $OSM_API/changeset/create |\
-tee /dev/tty |\
-tail -1 | read changeset_id
+changeset_id=$(echo $info |\
+               curl -u $OSM_USER_PASSWD --upload-file - $OSM_API/changeset/create |\
+               tail -1)
 
-echo " copied into clipboard"
+echo
 echo "changeset created, check $OSM_SERVER/changeset/$changeset_id"
-echo $changeset_id | xsel -ib 
+echo "$changeset_id is copied into clipboard"
