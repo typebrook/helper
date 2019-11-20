@@ -37,6 +37,7 @@ move_to_tmp() {
 alias ..='cd ..'
 alias ld='cd -' # last directory
 alias cdg='cd ~/git'
+alias data='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdV='cd ~/Videos'
