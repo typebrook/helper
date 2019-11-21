@@ -14,6 +14,7 @@ sed 's/$/+1/' | bc)
 while
     SEQ_PATH=$(echo $NEW_SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
     STATE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.state.txt
+    echo check state file exists:
     echo $STATE_URL
     [ $(curl -o /dev/null --silent -Iw "%{http_code}" $STATE_URL) != "404" ]
 do
@@ -30,3 +31,6 @@ do
     mv $NEW_SEQ.osm.pbf $PBF_FILE
     (( NEW_SEQ++ ))
 done
+
+echo
+echo File sequence number is $((NEW_SEQ-1)), already the latest one on Geofrbrik
