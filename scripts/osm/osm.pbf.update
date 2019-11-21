@@ -5,9 +5,9 @@ PBF_FILE=$1
 
 # get next sequence number and store it into NEW_SEQ
 NEW_SEQ=$(osmium fileinfo $PBF_FILE |\
-grep osmosis_replication_sequence_number |\
-cut -d'=' -f2 |\
-sed 's/$/+1/' | bc)
+          grep osmosis_replication_sequence_number |\
+          cut -d'=' -f2 |\
+          sed 's/$/+1/' | bc)
 
 # while server has osc file with given sequence number,
 # get it and do file update
