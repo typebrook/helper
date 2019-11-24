@@ -52,7 +52,10 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
-wiki() {
+wg() {
+    vim ~/vimwiki/$1.md
+}
+wi() {
     cat ~/vimwiki/$1.md
 }
 
