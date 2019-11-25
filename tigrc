@@ -148,18 +148,18 @@ bind main gb !?git rebase --onto '%(prompt Rebase onto which branch? )' %(commit
 bind main ! ?git revert %(commit)
 
 # tag
-bind main Tn @git tag "%(prompt Enter tag name: )" %(commit)
-bind main TN !git tag "%(prompt Enter tag name: )" %(commit) -a
-bind main Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Move which tag to here? )" %(commit)'
-bind main TM @sh -c 'git cat-file -p %(tag) | \
+bind generic Tn @git tag "%(prompt Enter tag name: )" %(commit)
+bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
+bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Move which tag to here? )" %(commit)'
+bind generic TM @sh -c 'git cat-file -p %(tag) | \
                      sed -n \'6,$p\' | \
                      git tag -a -F - "%(prompt Rename tag into: )" && git tag -d %(tag)'
-bind main Tc !git tag %(tag) %(tag)^{} -f -m "%(prompt Enter new content: )" 
-bind main Ts >tig show %(tag)
-bind main Td @git tag -d "%(prompt Delete tag: )"
-bind main TTd @git tag -d %(tag)
-bind main pt ?git push %(remote) %(tag)
-bind main pT ?git push --tags
+bind generic Tc !git tag %(tag) %(tag)^{} -f -m "%(prompt Enter new content: )" 
+bind generic Ts >tig show %(tag)
+bind generic Td @git tag -d "%(prompt Delete tag: )"
+bind generic TTd @git tag -d %(tag)
+bind generic pt ?git push --tags
+bind generic pT ?git push %(remote) %(tag)
 
 # search in history
 bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=raw'
