@@ -4,7 +4,7 @@ GEOFABRICK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
 PBF_FILE=$1
 
 # get latest sequence number
-echo Fetching latest sequence number
+echo Fetching the latest sequence number
 LATEST_SEQ=$(curl --silent http://download.geofabrik.de/asia/taiwan-updates/state.txt |\
              tail -1 | cut -d'=' -f2)
 
