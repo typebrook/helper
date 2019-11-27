@@ -1,2 +1,2 @@
 # update Taiwan OSM replication
-* 7 * * * cd data && $HOME/settings/scripts/osm/osm.pbf.update taiwan.osm.pbf >> log
+0 7 * * * cd data && $HOME/settings/scripts/osm/osm.pbf.update taiwan-latest.osm.pbf >> log
