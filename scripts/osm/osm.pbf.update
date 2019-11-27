@@ -7,11 +7,13 @@ PBF_FILE=$1
 echo Fetching the latest sequence number
 LATEST_SEQ=$(curl --silent http://download.geofabrik.de/asia/taiwan-updates/state.txt |\
              tail -1 | cut -d'=' -f2)
+echo Latest sequence number is $LATEST_SEQ
 
 # get current sequence number
 SEQ=$(osmium fileinfo $PBF_FILE |\
       grep osmosis_replication_sequence_number |\
       cut -d'=' -f2)
+echo File sequence number is $SEQ
 
 # while server has osc file with given sequence number,
 # get it and do file update
@@ -20,6 +22,7 @@ while
     [ $SEQ -le $LATEST_SEQ ]
 do
     mkdir -p changes
+    SEQ_PATH=$(echo $SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
     CHANGE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.osc.gz
     echo $CHANGE_URL
     curl -o changes/$SEQ.osc.gz $CHANGE_URL && \
