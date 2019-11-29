@@ -19,6 +19,7 @@ nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 nnoremap <leader>R :read !
+nnoremap <leader>< :w !bash<CR>
 
 " move
 nnoremap <Tab> }
