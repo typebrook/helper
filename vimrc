@@ -81,6 +81,10 @@ vnoremap <C-K> <ESC>`<i[<ESC>`>la]()<ESC>i
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
 
+" xml fold
+let g:json_syntax_folding=1
+au FileType json setlocal foldmethod=syntax
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings for Vimwiki
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
