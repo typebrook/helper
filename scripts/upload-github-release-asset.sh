@@ -51,14 +51,24 @@ curl -o /dev/null -sH "$AUTH" $GH_REPO || { echo "Error: Invalid repo, token or 
 # Read asset tags.
 response=$(curl -sH "$AUTH" $GH_TAGS)
 
+# Get ID of the release.
+eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/release_id/')
+[ "$release_id"  ] || { echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2; exit 1; }
+
 # Get ID of the asset based on given filename.
-eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=')
-[ "$id" ] || { echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2; exit 1; }
+# If exists, delete it.
+eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
+if [ "$asset_id" = ""  ]; then
+    echo "No need to overwrite asset"
+else
+    echo "Deleting asset($asset_id)... "
+    curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+fi
 
 # Upload asset
 echo "Uploading asset... "
 
 # Construct url
-GH_ASSET="https://uploads.github.com/repos/$owner/$repo/releases/$id/assets?name=$(basename $filename)"
+GH_ASSET="https://uploads.github.com/repos/$owner/$repo/releases/$release_id/assets?name=$(basename $filename)"
 
-curl "$GITHUB_OAUTH_BASIC" --data-binary @"$filename" -H "Authorization: token $github_api_token" -H "Content-Type: application/octet-stream" $GH_ASSET
+curl --data-binary @"$filename" -H "Authorization: token $github_api_token" -H "Content-Type: application/octet-stream" $GH_ASSET
