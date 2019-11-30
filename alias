@@ -115,7 +115,7 @@ upload-tig() {
         github_api_token=$(cat ~/settings/tokens/github-release) \
         owner=typebrook \
         repo=tig \
-        tag=tig-2.5.0 \
+        tag=LATEST \
         filename=$(which tig)
 }
 
