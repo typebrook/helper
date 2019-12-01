@@ -80,7 +80,7 @@ _ranger-cd() {
 alias df='df -h'
 
 # git
-alias gc > /dev/null && unalias gc
+alias gc > /dev/null && unalias gc # overwrite alias in on-my-zsh plugins
 gc() { git clone $1 && cd $(basename $1) }
 gc1() { git clone --depth=1 $1 && cd $(basename $1) }
 gcg() { git clone git@github.com:$1/$2.git && cd $(basename $1) }
