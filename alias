@@ -80,11 +80,10 @@ _ranger-cd() {
 alias df='df -h'
 
 # git
-alias gc='git clone'
-alias gc1='git clone --depth=1'
-gcg() {
-    git clone git@github.com:$1/$2.git
-}
+alias gc > /dev/null && unalias gc
+gc() { git clone $1 && cd $(basename $1) }
+gc1() { git clone --depth=1 $1 && cd $(basename $1) }
+gcg() { git clone git@github.com:$1/$2.git && cd $(basename $1) }
 alias gls='git log -S'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 
