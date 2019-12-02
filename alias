@@ -28,7 +28,7 @@ alias si='sudo snap install' # snap install
 alias ni='sudo npm install -g' # nodejs install
 alias ss='sudo !!'
 alias hg='history|grep'
-alias rmrf='rm -rf'
+alias rmf='rm -rf'
 alias rr='move_to_tmp'
 move_to_tmp() {
     mv $1 /tmp
