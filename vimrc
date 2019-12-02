@@ -64,11 +64,10 @@ cnoremap ;\ \(\)<Left><Left>
 set t_BE=
 
 " surround with '' or ""
-nnoremap <leader>' ea'<esc>bi'<esc>e
-nnoremap <leader>" ea"<esc>bi"<esc>e
-nnoremap <leader>( ea)<esc>bi(<esc>e
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
 vnoremap " <ESC>`<i"<ESC>`>la"<ESC>
+vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
+vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 
 " abbrev
 iabbrev @@ typebrook@gmail.com
