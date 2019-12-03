@@ -1,10 +1,11 @@
 #! /bin/bash
 
 #set -x
+set -e
 
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 #export MAPBOX_ACCESS_TOKEN=$ACCESS_TOKEN
-LIMIT=100
+LIMIT=10
 TRK_NAME=$(sed -nr 's/.*<name>(.*)<\/name>.*/\1/p; /<name>/q' $1)
 
 # Need to add pre-process for duplicated gpx trkpts
@@ -21,7 +22,6 @@ do
     jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
         <(head -$LIMIT origin | cut -d' ' -f2 | jq -n '[inputs]') \
         <(head -$LIMIT origin | cut -d' ' -f1 | jq -nR '[inputs]') |\
-    tee input.geojson |\
     curl -X POST -s --header "Content-Type:application/json" --data @- https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > response
 
     jq -c '.features[0].geometry.coordinates[]' response |\
