@@ -8,7 +8,7 @@
 #
 # Example:
 #
-# match.sh raw.gpx > new.gpx
+# match-road.sh raw.gpx > new.gpx
 #
 # Hint:
 #
