@@ -22,7 +22,6 @@ LIMIT=10 # number of coordinates for each Mapbox Map Matching API request, Maxim
 
 ORIGIN_DATA=/tmp/origin
 RESPONSE=/tmp/response
-MATCHED=/tmp/matched
 
 # store data of time and location into tmp file with 2 columns, format is like:
 # 1970-01-01T08:00:46 [121.0179739,14.5515336]
@@ -40,31 +39,21 @@ do
     jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
         <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f2 | jq -n '[inputs]') \
         <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f1 | jq -nR '[inputs]') |\
-    # Mapbox Map Matching API
+    # Mapbox Map Matching API, store response into tmp file
     curl -X POST -s  --data @- --header "Content-Type:application/json" https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > $RESPONSE
 
-    # Put matched points and indices into tmp file
-    paste -d' ' \
-        <(jq -c '.features[0].properties.matchedPoints[]' $RESPONSE) \
-        <(jq -c '.features[0].properties.indices[]' $RESPONSE | xargs -I{} echo {}+1 | bc | xargs -I{} sed -n {}p $ORIGIN_DATA | cut -d' ' -f1) \
-    > $MATCHED
-
-    # FIXME temporary solution for timestamp to unmatched points
-    DURATION=$(jq '.features[0].properties.duration' $RESPONSE)
-    INTERVAL=$(echo "scale=2;" $DURATION / $LIMIT | tee >(cat >> log) | bc -l)
-
-    # For each coodinates from Map Matching API, add timestamp at the end and print it out to tty
-    jq -c '.features[0].geometry.coordinates[]' $RESPONSE |\
-    while read line
+    # Put existing timestamp to matched points, and interpolate new timestamp into new points
+    join -a1 \
+        <(jq -c  '.features[0].geometry.coordinates[]' $RESPONSE) \
+        <(jq -cr '.features[0].properties | [.matchedPoints, .indices] | transpose[] | "\(.[0]) \(.[1])"' $RESPONSE) |\
+    awk '{COOR[NR][0]=$1; N++; if(NF>1) COOR[NR][1]=$2; else COOR[NR][1]=-1} END{for (i=1; i<=N; i++) {printf COOR[i][0]; if (COOR[i][1] != -1) {print " "COOR[i][1]; LAST=i} else {while(COOR[i+n][1] == -1) n++; print " "COOR[LAST][1]+(COOR[i+n][1]-COOR[LAST][1])*(i-LAST)/(i+n-LAST)}}}' |\
+    while read coor unix_time
     do
-        if head -1 $MATCHED | grep -F $line; then
-            TIMESTAMP=$(head -1 $MATCHED | cut -d' ' -f2)
-            sed -i 1d $MATCHED
-        else
-            echo $line "$TIMESTAMP.5"
-        fi
-    done |\
-    tee /dev/tty && rm $MATCHED
+        # Trasform unix timestamp into human readable time format, like following:
+        # Transform [121.018088,14.5516] 18.50
+        # Into      [121.018088,14.5516] 1970-01-01T08:00:18.50Z
+        echo $coor $(date -d @$unix_time +'%Y-%m-%dT%H:%M:%S.%2NZ')
+    done | tee /dev/tty
 
     # Remove processed raw data
     sed -i "1,$LIMIT d" $ORIGIN_DATA
