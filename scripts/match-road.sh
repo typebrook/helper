@@ -38,6 +38,7 @@ while [ -s $ORIGIN_DATA ]; do
     jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
         <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f2 | jq -n '[inputs]') \
         <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f1 | jq -nR '[inputs]') |\
+    tee tmp_$(head -1 $ORIGIN_DATA | cut -d ' ' -f1 | date -f - +%s).geojson |\
     # Mapbox Map Matching API, store response into tmp file
     curl -X POST -s  --data @- --header "Content-Type:application/json" https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > $RESPONSE
 
