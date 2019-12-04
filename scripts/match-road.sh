@@ -49,12 +49,20 @@ do
         <(jq -c '.features[0].properties.indices[]' $RESPONSE | xargs -I{} echo {}+1 | bc | xargs -I{} sed -n {}p $ORIGIN_DATA | cut -d' ' -f1 | date -f - +%s) \
     > $MATCHED
 
+    # FIXME temporary solution for timestamp to unmatched points
+    DURATION=$(jq '.features[0].properties.duration' $RESPONSE)
+    INTERVAL=$(echo "scale=2;" $DURATION / $LIMIT | bc -l)
+
     # For each coodinates from Map Matching API, add timestamp at the end and print it out to tty
     jq -c '.features[0].geometry.coordinates[]' $RESPONSE |\
     while read line
     do
-        TIMESTAMP=$(head -1 $MATCHED | cut -d' ' -f2)
-        (head -1 $MATCHED | grep -F $line && sed -i 1d $MATCHED) || echo $line $TIMESTAMP jojo
+        if head -1 $MATCHED | grep -F $line; then
+            TIMESTAMP=$(head -1 $MATCHED | cut -d' ' -f2)
+            sed -i 1d $MATCHED
+        else
+            echo $line $(echo $TIMESTAMP + $INTERVAL | bc -l)
+        fi
     done |\
     tee /dev/tty && rm $MATCHED
 
