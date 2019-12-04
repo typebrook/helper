@@ -26,9 +26,9 @@ RESPONSE=/tmp/response
 # store data of time and location into tmp file with 2 columns, format is like:
 # 1970-01-01T08:00:46 [121.0179739,14.5515336]
 paste -d' ' \
-    <(sed -nE '/<trk>/,/<\/trk>/ { s/.*<time>(.*)<\/time>/\1/p }' $1 | cut -d'.' -f1) \
-    <(sed -nE 's/.*lon=\"([^\"]+)\".*/\1/p' $1) \
-    <(sed -nE 's/.*lat=\"([^\"]+)\".*/\1/p' $1) |\
+    <(sed -nE '/<trk>/,/<\/trk>/ s/.*<time>(.*)<\/time>/\1/p' $1 | cut -d'.' -f1) \
+    <(sed -nE '/<trk>/,/<\/trk>/ s/.*lon=\"([^\"]+)\".*/\1/p' $1) \
+    <(sed -nE '/<trk>/,/<\/trk>/ s/.*lat=\"([^\"]+)\".*/\1/p' $1) |\
 sed -E 's/ ([^ ]+) ([^ ]+)/ [\1,\2]/' |\
 awk '!_[$1]++' > $ORIGIN_DATA
 
