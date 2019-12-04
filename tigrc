@@ -208,8 +208,8 @@ bind blob m >tig -- %(file)
 #====================
 # status view
 #====================
-bind status j :/^[MADRU?]
-bind status k :?^[MADRU?]
+bind status j :/^[MADRUT?]
+bind status k :?^[MADRUT?]
 
 # update index
 bind status A @git add .
