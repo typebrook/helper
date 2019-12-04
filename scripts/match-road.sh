@@ -23,14 +23,19 @@ LIMIT=10 # number of coordinates for each Mapbox Map Matching API request, Maxim
 ORIGIN_DATA=/tmp/origin
 RESPONSE=/tmp/response
 
-# store data of time and location into tmp file with 2 columns, format is like:
-# 1970-01-01T08:00:46 [121.0179739,14.5515336]
-paste -d' ' \
-    <(sed -nE '/<trk>/,/<\/trk>/ s/.*<time>(.*)<\/time>/\1/p' $1 | cut -d'.' -f1) \
-    <(sed -nE '/<trk>/,/<\/trk>/ s/.*lon=\"([^\"]+)\".*/\1/p' $1) \
-    <(sed -nE '/<trk>/,/<\/trk>/ s/.*lat=\"([^\"]+)\".*/\1/p' $1) |\
-sed -E 's/ ([^ ]+) ([^ ]+)/ [\1,\2]/' |\
-awk '!_[$1]++' > $ORIGIN_DATA
+# extract data from the given gpx file, dump coordindate and time with the following format:
+# [121.0179739,14.5515336] 1984-01-01T08:00:46.234
+function get_data() {
+    paste -d' ' \
+        <(sed -nE '/<trkpt /,/<\/trkpt>/ s/.*lon=\"([^\"]+).*/\1/p' $1) \
+        <(sed -nE '/<trkpt /,/<\/trkpt>/ s/.*lat=\"([^\"]+).*/\1/p' $1) \
+        <(sed -nE '/<trkpt /,/<\/trkpt>/ s/.*<time>([^\.]+).*/\1/p' $1) |\
+    sed -nE 's/^([^ ]+) ([^ ]+)/\[\1,\2\] /' |\
+    awk '!_[$2]++'
+}
+
+get_data $1 # > $ORIGIN_DATA
+exit 0
 
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
@@ -81,3 +86,4 @@ sed "1i \
   <\/trk>\n\
 <\/gpx>\n\
     "
+
