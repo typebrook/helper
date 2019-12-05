@@ -43,13 +43,12 @@ function get_data() {
 
 # Read date Make GeoJSON object for Map Matching API
 function make_geojson() {
-    jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
-        <(cut -d' ' -f1 | jq -n '[inputs]') \
-        <(cut -d' ' -f2 | jq -nR '[inputs]') |\
-    tee tmp_$(head -1 $ORIGIN_DATA | cut -d ' ' -f2 | date -f - +%s).geojson
+    #jq -nR '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}'
+    awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\
+        jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
 }
 
-get_data $1 | tee /dev/tty > $ORIGIN_DATA
+get_data $1 > $ORIGIN_DATA
 
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
