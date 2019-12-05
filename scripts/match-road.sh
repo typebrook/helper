@@ -31,24 +31,31 @@ function get_data() {
     sed -nr '/<trkpt /, /<\/trkpt>/ {H; /<\/trkpt>/ {x; s/\n/ /g; p; s/.*//; x}}' $1 |\
     sed -nr 'h; s/.*lon="([^"]+).*/\1/; H; g
                 s/.*lat="([^"]+).*/\1/; H; g
+                # If trkpt has no time, leave it blank
                 /time/ {
                     s/.*<time>([^.]+).*<\/time>.*/\1/
                     H; g
                 }
                 s/^[^\n]+\n//; s/\n/ /g; p' |\
+    sed -r 's/^([^ ]+) ([^ ]+)/[\1,\2]/' |\
     awk '!_[$2]++'
 }
 
-get_data $1 # > $ORIGIN_DATA
-exit 0
+# Read date Make GeoJSON object for Map Matching API
+function make_geojson() {
+    jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
+        <(cut -d' ' -f1 | jq -n '[inputs]') \
+        <(cut -d' ' -f2 | jq -nR '[inputs]') |\
+    tee tmp_$(head -1 $ORIGIN_DATA | cut -d ' ' -f2 | date -f - +%s).geojson
+}
+
+get_data $1 | tee /dev/tty > $ORIGIN_DATA
 
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
-    # Make GeoJSON object for request
-    jq --slurp '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}' \
-        <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f2 | jq -n '[inputs]') \
-        <(head -$LIMIT $ORIGIN_DATA | cut -d' ' -f1 | jq -nR '[inputs]') |\
-    tee tmp_$(head -1 $ORIGIN_DATA | cut -d ' ' -f1 | date -f - +%s).geojson |\
+    head -$LIMIT $ORIGIN_DATA |\
+    make_geojson
+    exit 0
     # Mapbox Map Matching API, store response into tmp file
     curl -X POST -s  --data @- --header "Content-Type:application/json" https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > $RESPONSE
 
@@ -74,7 +81,7 @@ while [ -s $ORIGIN_DATA ]; do
 
     # Remove processed raw data
     sed -i "1,$LIMIT d" $ORIGIN_DATA
-done |\
+done #|\
 # Make GPX format for output
 sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
 sed "1i \
