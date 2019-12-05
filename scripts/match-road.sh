@@ -41,11 +41,11 @@ function get_data() {
     awk '!_[$2]++'
 }
 
-# Read date Make GeoJSON object for Map Matching API
+# Read data like the following to make GeoJSON object for Map Matching API:
+# [121.0179739,14.5515336] 1984-01-01T08:00:46.234
 function make_geojson() {
-    #jq -nR '{type: "Feature", properties: {coordTimes: .[1]}, geometry: {type: "LineString", coordinates: .[0]}}'
-    awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\
-        jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
+    awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\ # change input to format like: [[lon, lat], time]
+    jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
 }
 
 get_data $1 > $ORIGIN_DATA
@@ -53,8 +53,7 @@ get_data $1 > $ORIGIN_DATA
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
     head -$LIMIT $ORIGIN_DATA |\
-    make_geojson
-    exit 0
+    make_geojson |\
     # Mapbox Map Matching API, store response into tmp file
     curl -X POST -s  --data @- --header "Content-Type:application/json" https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > $RESPONSE
 
