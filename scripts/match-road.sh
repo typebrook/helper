@@ -20,15 +20,15 @@ set -e
 # put yout Mapbox token here
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
-LIMIT=10
+LIMIT=50
 # define the lowest confidence of accepted matched points
-THRESHOLD=0.9
+THRESHOLD=0.7
 
 ORIGIN_DATA=/tmp/$(basename $1).origin
-RESPONSE=$(basename $1).response
+MATCHED=/tmp/$(basename $1).matched
 
-# extract data from the given gpx file, dump coordindate and time with the following format:
-# [121.0179739,14.5515336] 1984-01-01T08:00:46.234
+# extract data from the given gpx file, dump data with format [coordindate] [time_to_second], like:
+# [121.0179739,14.5515336] 1984-01-01T08:00:46
 function get_data() {
     sed -nr '/<trkpt /, /<\/trkpt>/ {H; /<\/trkpt>/ {x; s/\n/ /g; p; s/.*//; x}}' $1 |\
     sed -nr 'h; s/.*lon="([^"]+).*/\1/; H; g
@@ -43,23 +43,40 @@ function get_data() {
     awk '!_[$2]++'
 }
 
-# Read data like the following to make GeoJSON object for Map Matching API:
-# [121.0179739,14.5515336] 1984-01-01T08:00:46.234
+# Output GeoJSON object for Map Matching API from STDIN with format [coordinate] [time], like:
+# [121.0179739,14.5515336] 1984-01-01T08:00:46
 function make_geojson() {
     # change input to format like: [[lon, lat], time]
     awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\
     jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
 }
 
-# Read GeoJSON body from input, and return result from Mapbox Map Matching API
+# Read GeoJSON body from STDIN, and return result from Mapbox Map Matching API
 function query_matched_road() {
     curl -X POST -s --data @- \
         --header "Content-Type:application/json" \
         https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN
 }
 
+# Get valid data from Map Matching API response
+# output format is [coordinates] [index-of-original-data], like:
+# [121.0179739,14.5515336] 35
+# If the point is newly added, the index would be -1, like
+# [121.0189339,14.5525931] -1
 function get_valid_data() {
-    jq ".features[] | select(.properties.confidence >= $THRESHOLD)"
+    VALID_DATA=$(jq ".features[] | select(.properties.confidence >= $THRESHOLD)")
+
+    echo $VALID_DATA |\
+    jq -cr '.properties | [.matchedPoints, (.indices | map(.+1))] | transpose[] | "\(.[0]) \(.[1])"' > $MATCHED
+
+    echo $VALID_DATA | jq -c '.geometry.coordinates[]' |\
+    while read point; do
+        if head -1 $MATCHED| grep -F $point; then
+            sed -i 1d $MATCHED
+        else
+            echo $point
+        fi
+    done
 }
 
 get_data $1 > $ORIGIN_DATA
@@ -67,29 +84,25 @@ get_data $1 > $ORIGIN_DATA
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
 
-    head -$LIMIT $ORIGIN_DATA | make_geojson | query_matched_road > $RESPONSE
-    cat $RESPONSE | get_valid_data
+    head -$LIMIT $ORIGIN_DATA | make_geojson | query_matched_road | get_valid_data
     exit 0
-
     # Put existing timestamps to matched points, and interpolate new timestamps into new points
-    join -a1 \
-        <(jq -c  '.features[0].geometry.coordinates[]' $RESPONSE) \
-        <(jq -cr '.features[0].properties | [.matchedPoints, (.indices | map(.+1))] | transpose[] | "\(.[0]) \(.[1])"' $RESPONSE) |\
-    sed '/ / !s/$/ -1/' |\
     while read coor index; do
         if [ $index -gt -1 ]; then
-            echo $coor $(sed -n "$index p" $ORIGIN_DATA | cut -d' ' -f1 | date -f - +%s)
+            echo $coor $(sed -n "$index p" $ORIGIN_DATA | cut -d' ' -f2 | date -f - +%s)
         else
             echo $coor $index
         fi
-    done |\
+    done
+    exit 0
+    # interpolate timestamps to newly added points
     awk '{COOR[NR][0]=$1; N++; COOR[NR][1]=$2} END{for (i=1; i<=N; i++) {printf COOR[i][0]; if (COOR[i][1] != -1) {print " "COOR[i][1]; LAST=i} else {while(COOR[i+n][1] == -1) n++; print " "COOR[LAST][1]+(COOR[i+n][1]-COOR[LAST][1])*(i-LAST)/(i+n-LAST)}}}' |\
     while read coor unix_time; do
         # Transform unix timestamp into human readable time format, like following:
         # Transform [121.018088,14.5516] 18.50
         # Into      [121.018088,14.5516] 1970-01-01T08:00:18.50Z
         echo $coor $(date -d @$unix_time +'%Y-%m-%dT%H:%M:%S.%2NZ')
-    done | tee /dev/tty
+    done
 
     # Remove processed raw data
     sed -i "1,$LIMIT d" $ORIGIN_DATA
