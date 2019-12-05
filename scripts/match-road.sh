@@ -17,8 +17,10 @@
 #set -x
 set -e
 
-ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox) # put yout Mapbox token here
-LIMIT=10 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
+# put yout Mapbox token here
+ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
+ # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
+LIMIT=10
 
 ORIGIN_DATA=/tmp/origin
 RESPONSE=/tmp/response
