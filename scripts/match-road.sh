@@ -21,9 +21,11 @@ set -e
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
 LIMIT=10
+# define the lowest confidence of accepted matched points
+THRESHOLD=0.9
 
 ORIGIN_DATA=/tmp/$(basename $1).origin
-RESPONSE=/tmp/$(basename $1).response
+RESPONSE=$(basename $1).response
 
 # extract data from the given gpx file, dump coordindate and time with the following format:
 # [121.0179739,14.5515336] 1984-01-01T08:00:46.234
@@ -44,18 +46,30 @@ function get_data() {
 # Read data like the following to make GeoJSON object for Map Matching API:
 # [121.0179739,14.5515336] 1984-01-01T08:00:46.234
 function make_geojson() {
-    awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\ # change input to format like: [[lon, lat], time]
+    # change input to format like: [[lon, lat], time]
+    awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |\
     jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
+}
+
+# Read GeoJSON body from input, and return result from Mapbox Map Matching API
+function query_matched_road() {
+    curl -X POST -s --data @- \
+        --header "Content-Type:application/json" \
+        https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN
+}
+
+function get_valid_data() {
+    jq ".features[] | select(.properties.confidence >= $THRESHOLD)"
 }
 
 get_data $1 > $ORIGIN_DATA
 
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
-    head -$LIMIT $ORIGIN_DATA |\
-    make_geojson |\
-    # Mapbox Map Matching API, store response into tmp file
-    curl -X POST -s  --data @- --header "Content-Type:application/json" https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN > $RESPONSE
+
+    head -$LIMIT $ORIGIN_DATA | make_geojson | query_matched_road > $RESPONSE
+    cat $RESPONSE | get_valid_data
+    exit 0
 
     # Put existing timestamps to matched points, and interpolate new timestamps into new points
     join -a1 \
@@ -96,4 +110,3 @@ sed "1i \
   <\/trk>\n\
 <\/gpx>\n\
     "
-
