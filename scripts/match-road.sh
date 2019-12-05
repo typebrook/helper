@@ -22,18 +22,20 @@ ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
 LIMIT=10
 
-ORIGIN_DATA=/tmp/origin
-RESPONSE=/tmp/response
+ORIGIN_DATA=/tmp/$(basename $1).origin
+RESPONSE=/tmp/$(basename $1).response
 
 # extract data from the given gpx file, dump coordindate and time with the following format:
 # [121.0179739,14.5515336] 1984-01-01T08:00:46.234
 function get_data() {
-    # FIXME sometimes trkpt doesn't contains time, need to return empty line
-    paste -d' ' \
-        <(sed -nE '/<trkpt /,/<\/trkpt>/ s/.*lon="([^"]+).*/\1/p' $1) \
-        <(sed -nE '/<trkpt /,/<\/trkpt>/ s/.*lat="([^"]+).*/\1/p' $1) \
-        <(sed -nE '/<trkpt /,/<\/trkpt>/ {}' $1) |\
-    sed -nE 's/^([^ ]+) ([^ ]+)/[\1,\2\]/p' |\
+    sed -nr '/<trkpt /, /<\/trkpt>/ {H; /<\/trkpt>/ {x; s/\n/ /g; p; s/.*//; x}}' $1 |\
+    sed -nr 'h; s/.*lon="([^"]+).*/\1/; H; g
+                s/.*lat="([^"]+).*/\1/; H; g
+                /time/ {
+                    s/.*<time>([^.]+).*<\/time>.*/\1/
+                    H; g
+                }
+                s/^[^\n]+\n//; s/\n/ /g; p' |\
     awk '!_[$2]++'
 }
 
