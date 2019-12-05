@@ -74,27 +74,20 @@ function get_valid_data() {
         if head -1 $MATCHED| grep -F $point; then
             sed -i 1d $MATCHED
         else
-            echo $point
+            echo $point -1
         fi
     done
 }
 
-get_data $1 > $ORIGIN_DATA
-
-# Consume raw data with serveral request
-while [ -s $ORIGIN_DATA ]; do
-
-    head -$LIMIT $ORIGIN_DATA | make_geojson | query_matched_road | get_valid_data
-    exit 0
-    # Put existing timestamps to matched points, and interpolate new timestamps into new points
+# Put existing timestamps to matched points, and interpolate new timestamps into new points
+function complete_data() {
     while read coor index; do
         if [ $index -gt -1 ]; then
             echo $coor $(sed -n "$index p" $ORIGIN_DATA | cut -d' ' -f2 | date -f - +%s)
         else
             echo $coor $index
         fi
-    done
-    exit 0
+    done|\
     # interpolate timestamps to newly added points
     awk '{COOR[NR][0]=$1; N++; COOR[NR][1]=$2} END{for (i=1; i<=N; i++) {printf COOR[i][0]; if (COOR[i][1] != -1) {print " "COOR[i][1]; LAST=i} else {while(COOR[i+n][1] == -1) n++; print " "COOR[LAST][1]+(COOR[i+n][1]-COOR[LAST][1])*(i-LAST)/(i+n-LAST)}}}' |\
     while read coor unix_time; do
@@ -103,13 +96,13 @@ while [ -s $ORIGIN_DATA ]; do
         # Into      [121.018088,14.5516] 1970-01-01T08:00:18.50Z
         echo $coor $(date -d @$unix_time +'%Y-%m-%dT%H:%M:%S.%2NZ')
     done
+}
 
-    # Remove processed raw data
-    sed -i "1,$LIMIT d" $ORIGIN_DATA
-done #|\
 # Make GPX format for output
-sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
-sed "1i \
+# Take input with format: [lon,lat] [time]
+function make_gpx() {
+    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
+    sed "1i \
 <gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
   xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
   xmlns=\"http://www.topografix.com/GPX/1/1\"\n\
@@ -118,8 +111,24 @@ sed "1i \
   <trk>\n\
     <name>$(sed -nE 's/.*<name>(.*)<\/name>.*/\1/p; /<name>/q' $1)<\/name>\n\
     <trkseg>
-\$a \
+    \$a \
 \ \ \ \ <\/trkseg>\n\
   <\/trk>\n\
 <\/gpx>\n\
     "
+}
+
+get_data $1 > $ORIGIN_DATA
+
+# Consume raw data with serveral request
+while [ -s $ORIGIN_DATA ]; do
+
+    head -$LIMIT $ORIGIN_DATA |\ # Take original data by limited points at a time: [121.0179739,14.5515336] 1984-01-01T08:00:46
+    make_geojson |\              # Make geojson body: {type: "Feature", properties: {coordTimes: [...]}, geometry: {type: "LineString", coordinates: [...]}}
+    query_matched_road |\        # Call Mapbox Map Matching API: {geometry: {coordinates: [...]}, properties: {confidence: 0.9, matching: [...], indices: [...]}}
+    get_valid_data |\            # Get valid point and index by confidence value: [121.0179739,14.5515336] 5
+    complete_data
+
+    # Remove processed raw data
+    sed -i "1,$LIMIT d" $ORIGIN_DATA
+done
