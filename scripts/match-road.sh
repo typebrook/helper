@@ -24,7 +24,9 @@ LIMIT=10
 # define the lowest confidence of accepted matched points
 THRESHOLD=0.3
 
+if [[ -z $1  ]]; then echo "You need to give a gpx file!"; exit 1; fi
 ORIGIN_DATA=/tmp/$(basename $1).origin
+RESPONSES=/tmp/$(basename $1).responses && true > $RESPONSES
 MATCHED=/tmp/$(basename $1).matched
 
 # extract data from the given gpx file, dump data with format [coordindate] [time_to_second], like:
@@ -130,9 +132,17 @@ while [ -s $ORIGIN_DATA ]; do
     head -$LIMIT $ORIGIN_DATA |
     make_geojson |
     query_matched_points |
+    tee -a $RESPONSES |
+    tee /dev/tty |
     validate_matched_points
 
     # Remove processed raw data
+    echo $LIMIT of $(wc -l $ORIGIN_DATA) > /dev/tty
     sed -i "1,$LIMIT d" $ORIGIN_DATA
 done |
 make_geojson > test.geojson
+
+RAW_RESPONSE=$(basename $1 | tr '.' '_')_response.geojson
+MATCHED_POINTS=$(basename $1 | tr '.' '_')_matched.geojson
+jq . $RESPONSES | jq -s '.[0].features=[.[]|.features[]] | .[0] | del(.code)' > $RAW_RESPONSE
+jq '.features=(.features|map(.geometry.coordinates=.properties.matchedPoints))' $RAW_RESPONSE > $MATCHED_POINTS
