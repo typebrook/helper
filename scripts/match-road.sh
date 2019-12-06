@@ -108,7 +108,9 @@ function make_gpx() {
     sed "1i \
 <gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
   xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
-  xmlns=\"http://www.topografix.com/GPX/1/1\">\n\
+  xmlns=\"http://www.topografix.com/GPX/1/1\"\n\
+  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n\
+  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
   <trk>\n    <trkseg>" |
     sed "\$a \ \ \ \ <\/trkseg>\n  <\/trk>\n<\/gpx>"
 }
