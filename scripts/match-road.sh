@@ -20,16 +20,17 @@ set -e
 # put yout Mapbox token here
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
-LIMIT=80
+LIMIT=50
 # define the lowest confidence of accepted matched points
-THRESHOLD=0.3
+THRESHOLD=0.6
 
 if [[ -z $1  ]]; then echo "You need to give a gpx file!"; exit 1; fi
 ORIGIN_DATA=/tmp/$(basename $1).origin
 RESPONSES=/tmp/$(basename $1).responses && true > $RESPONSES
-MATCHED=/tmp/$(basename $1).matched
 
+MATCHED=/tmp/$(basename $1).matched
 # extract data from the given gpx file
+# only keep first point and remove the rest which in the same "seconds"
 # input:  [gpx format]
 # output: [121.0179739,14.5515336] 1984-01-01T08:00:46
 function get_data() {
@@ -52,7 +53,7 @@ function get_data() {
 function make_geojson() {
     # change input to format like: [[lon, lat], time]
     awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |
-    jq '[inputs] | {type: "Feature", properties: {coordTimes: (map(.[1]))}, geometry: {type: "LineString", coordinates: map(.[0])}}'
+    jq '[inputs] | {type: "Feature", geometry: {type: "LineString", coordinates: map(.[0])}, properties: {coordTimes: (map(.[1]))}}'
 }
 
 # Read GeoJSON body from STDIN, and return result from Mapbox Map Matching API
@@ -68,14 +69,20 @@ function query_matched_points() {
 # If the point is newly added, the index would be -1, like
 # [121.0189339,14.5525931] -1
 function validate_matched_points() {
-    VALID_DATA=$(jq ".features[] | select(.properties.confidence >= $THRESHOLD)")
+    VALID_DATA=$(jq ".features[] | if(.properties.confidence < $THRESHOLD) then .geometry.coordinates=(.properties.indices|map(.+1)) else . end")
+    #VALID_DATA=$(jq ".features[] | select(.properties.confidence >= $THRESHOLD)")
 
     echo $VALID_DATA |
     jq -cr '.properties | [.matchedPoints, (.indices | map(.+1))] | transpose[] | "\(.[0]) \(.[1])"' > $MATCHED
 
     echo $VALID_DATA | jq -c '.geometry.coordinates[]' |
     while read point; do
-        if head -1 $MATCHED | grep -F $point; then
+        if [[ ${point:0:1} != '[' ]]; then
+            echo $(sed -n "$point p" $ORIGIN_DATA)
+            sed -i 1d $MATCHED
+        elif head -1 $MATCHED | grep -F $point > /dev/null; then
+            index=$(head -1 $MATCHED | cut -d' ' -f2)
+            echo $point $(sed -n "$index p" $ORIGIN_DATA | cut -d' ' -f2 | date -f - +%s)
             sed -i 1d $MATCHED
         else
             echo $point -1
@@ -85,13 +92,6 @@ function validate_matched_points() {
 
 # Put existing timestamps to matched points, and interpolate new timestamps into new points
 function complete_data() {
-    while read coor index; do
-        if [ $index -gt -1 ]; then
-            echo $coor $(sed -n "$index p" $ORIGIN_DATA | cut -d' ' -f2 | date -f - +%s)
-        else
-            echo $coor $index
-        fi
-    done|
     # interpolate timestamps to newly added points
     awk '{COOR[NR][0]=$1; N++; COOR[NR][1]=$2} END{for (i=1; i<=N; i++) {printf COOR[i][0]; if (COOR[i][1] != -1) {print " "COOR[i][1]; LAST=i} else {while(COOR[i+n][1] == -1) n++; print " "COOR[LAST][1]+(COOR[i+n][1]-COOR[LAST][1])*(i-LAST)/(i+n-LAST)}}}' |
     while read coor unix_time; do
@@ -124,6 +124,9 @@ function make_gpx() {
 
 get_data $1 > $ORIGIN_DATA
 
+RAW_REQUEST=$(basename $1 | tr '.' '_')_request.geojson
+cat $ORIGIN_DATA | make_geojson | jq '.properties.stroke="#ff0000"' > $RAW_REQUEST
+
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
     # Take original data by limited points for each time: [121.0179739,14.5515336] 1984-01-01T08:00:46
@@ -135,16 +138,17 @@ while [ -s $ORIGIN_DATA ]; do
     make_geojson |
     query_matched_points |
     tee -a $RESPONSES |
-    tee /dev/tty |
     validate_matched_points
 
     # Remove processed raw data
-    echo $LIMIT of $(wc -l $ORIGIN_DATA) > /dev/tty
     sed -i "1,$LIMIT d" $ORIGIN_DATA
 done |
 make_geojson > test.geojson
 
 RAW_RESPONSE=$(basename $1 | tr '.' '_')_response.geojson
 MATCHED_POINTS=$(basename $1 | tr '.' '_')_matched.geojson
-jq . $RESPONSES | jq -s '.[0].features=[.[]|.features[]] | .[0] | del(.code)' > $RAW_RESPONSE
-jq '.features=(.features|map(.geometry.coordinates=.properties.matchedPoints))' $RAW_RESPONSE > $MATCHED_POINTS
+jq . $RESPONSES | jq -s '.[0].features=[.[]|.features[]] | .[0] | del(.code) | .features=(.features|map(.properties.stroke="#00ff00"))' > $RAW_RESPONSE
+jq ".features=(.features|map(select(.properties.confidence>=$THRESHOLD).geometry.coordinates=.properties.matchedPoints)|map(.properties.stroke=\"#0000ff\"))" $RAW_RESPONSE > $MATCHED_POINTS
+
+DEBUG=$(basename $1 | tr '.' '_')_total.geojson
+cat $RAW_REQUEST $RAW_RESPONSE $MATCHED_POINTS | jq -s '{type: "FeatureCollection", features: ([.[0]] + .[1].features + .[2].features)}' > $DEBUG
