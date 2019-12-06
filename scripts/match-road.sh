@@ -77,8 +77,7 @@ function validate_matched_points() {
     echo $VALID_DATA | jq -c '.geometry.coordinates[]' |
     while read point; do
         if [[ ${point:0:1} != '[' ]]; then
-            echo -n abandoned data: > /dev/tty
-            echo $(sed -n "$point p" $ORIGIN_DATA) | tee /dev/tty
+            echo $(sed -n "$point p" $ORIGIN_DATA) | while read coor time; do echo $coor $(date -d $time +%s); done
             sed -i 1d $MATCHED
         elif head -1 $MATCHED | grep -F $point > /dev/null; then
             index=$(head -1 $MATCHED | cut -d' ' -f2)
@@ -105,7 +104,7 @@ function complete_data() {
 # Make GPX format for output
 # Take input with format: [lon,lat] [time]
 function make_gpx() {
-    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |
+    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
     sed "1i \
 <gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
   xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
@@ -124,8 +123,8 @@ function make_gpx() {
 
 get_data $1 > $ORIGIN_DATA
 
-RAW_REQUEST=$(basename $1 | tr '.' '_')_request.geojson
-cat $ORIGIN_DATA | make_geojson | jq '.properties.stroke="#ff0000"' > $RAW_REQUEST
+#RAW_REQUEST=$(basename $1 | tr '.' '_')_request.geojson
+#cat $ORIGIN_DATA | make_geojson | jq '.properties.stroke="#ff0000"' > $RAW_REQUEST
 
 # Consume raw data with serveral request
 while [ -s $ORIGIN_DATA ]; do
@@ -138,17 +137,33 @@ while [ -s $ORIGIN_DATA ]; do
     make_geojson |
     query_matched_points |
     tee -a $RESPONSES |
-    validate_matched_points
+    validate_matched_points |
+    complete_data
 
     # Remove processed raw data
     sed -i "1,$LIMIT d" $ORIGIN_DATA
-done |
-make_geojson > test.geojson
+done |\
+    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
+    sed "1i \
+<gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
+  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
+  xmlns=\"http://www.topografix.com/GPX/1/1\"\n\
+  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n\
+  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
+  <trk>\n\
+    <name>$(sed -nE 's/.*<name>(.*)<\/name>.*/\1/p; /<name>/q' $1)<\/name>\n\
+    <trkseg>
+    \$a \
+\ \ \ \ <\/trkseg>\n\
+  <\/trk>\n\
+<\/gpx>\n\
+    "
+#make_geojson > test.geojson
 
-RAW_RESPONSE=$(basename $1 | tr '.' '_')_response.geojson
-MATCHED_POINTS=$(basename $1 | tr '.' '_')_matched.geojson
-jq . $RESPONSES | jq -s '.[0].features=[.[]|.features[]] | .[0] | del(.code) | .features=(.features|map(.properties.stroke="#00ff00"))' > $RAW_RESPONSE
-jq ".features=(.features|map(select(.properties.confidence>=$THRESHOLD).geometry.coordinates=.properties.matchedPoints)|map(.properties.stroke=\"#0000ff\"))" $RAW_RESPONSE > $MATCHED_POINTS
-
-DEBUG=$(basename $1 | tr '.' '_')_total.geojson
-cat $RAW_REQUEST $RAW_RESPONSE $MATCHED_POINTS | jq -s '{type: "FeatureCollection", features: ([.[0]] + .[1].features + .[2].features)}' > $DEBUG
+#RAW_RESPONSE=$(basename $1 | tr '.' '_')_response.geojson
+#MATCHED_POINTS=$(basename $1 | tr '.' '_')_matched.geojson
+#jq . $RESPONSES | jq -s '.[0].features=[.[]|.features[]] | .[0] | del(.code) | .features=(.features|map(.properties.stroke="#00ff00"))' > $RAW_RESPONSE
+#jq ".features=(.features|map(select(.properties.confidence>=$THRESHOLD).geometry.coordinates=.properties.matchedPoints)|map(.properties.stroke=\"#0000ff\"))" $RAW_RESPONSE > $MATCHED_POINTS
+#
+#DEBUG=$(basename $1 | tr '.' '_')_total.geojson
+#cat $RAW_REQUEST $RAW_RESPONSE $MATCHED_POINTS | jq -s '{type: "FeatureCollection", features: ([.[0]] + .[1].features + .[2].features)}' > $DEBUG
