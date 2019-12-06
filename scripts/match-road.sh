@@ -20,17 +20,17 @@ set -e
 # put yout Mapbox token here
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
-LIMIT=50
+LIMIT=100
 # define the lowest confidence of accepted matched points
-THRESHOLD=0.6
+THRESHOLD=0.0001
 
-if [[ -z $1  ]]; then echo "You need to give a gpx file!"; exit 1; fi
+if [[ -z $1 ]]; then echo "You need to give a gpx file!"; exit 1; fi
 ORIGIN_DATA=/tmp/$(basename $1).origin
 RESPONSES=/tmp/$(basename $1).responses && true > $RESPONSES
-
 MATCHED=/tmp/$(basename $1).matched
+
 # extract data from the given gpx file
-# only keep first point and remove the rest which in the same "seconds"
+# only keep first point and remove the rest which in the same "second"
 # input:  [gpx format]
 # output: [121.0179739,14.5515336] 1984-01-01T08:00:46
 function get_data() {
@@ -70,7 +70,6 @@ function query_matched_points() {
 # [121.0189339,14.5525931] -1
 function validate_matched_points() {
     VALID_DATA=$(jq ".features[] | if(.properties.confidence < $THRESHOLD) then .geometry.coordinates=(.properties.indices|map(.+1)) else . end")
-    #VALID_DATA=$(jq ".features[] | select(.properties.confidence >= $THRESHOLD)")
 
     echo $VALID_DATA |
     jq -cr '.properties | [.matchedPoints, (.indices | map(.+1))] | transpose[] | "\(.[0]) \(.[1])"' > $MATCHED
@@ -78,7 +77,8 @@ function validate_matched_points() {
     echo $VALID_DATA | jq -c '.geometry.coordinates[]' |
     while read point; do
         if [[ ${point:0:1} != '[' ]]; then
-            echo $(sed -n "$point p" $ORIGIN_DATA)
+            echo -n abandoned data: > /dev/tty
+            echo $(sed -n "$point p" $ORIGIN_DATA) | tee /dev/tty
             sed -i 1d $MATCHED
         elif head -1 $MATCHED | grep -F $point > /dev/null; then
             index=$(head -1 $MATCHED | cut -d' ' -f2)
