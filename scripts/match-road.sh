@@ -104,21 +104,13 @@ function complete_data() {
 # Make GPX format for output
 # Take input with format: [lon,lat] [time]
 function make_gpx() {
-    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
+    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |
     sed "1i \
 <gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
   xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
-  xmlns=\"http://www.topografix.com/GPX/1/1\"\n\
-  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n\
-  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
-  <trk>\n\
-    <name>$(sed -nE 's/.*<name>(.*)<\/name>.*/\1/p; /<name>/q' $1)<\/name>\n\
-    <trkseg>
-    \$a \
-\ \ \ \ <\/trkseg>\n\
-  <\/trk>\n\
-<\/gpx>\n\
-    "
+  xmlns=\"http://www.topografix.com/GPX/1/1\">\n\
+  <trk>\n    <trkseg>" |
+    sed "\$a \ \ \ \ <\/trkseg>\n  <\/trk>\n<\/gpx>"
 }
 
 get_data $1 > $ORIGIN_DATA
@@ -142,22 +134,7 @@ while [ -s $ORIGIN_DATA ]; do
 
     # Remove processed raw data
     sed -i "1,$LIMIT d" $ORIGIN_DATA
-done |\
-    sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |\
-    sed "1i \
-<gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
-  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd\"\n\
-  xmlns=\"http://www.topografix.com/GPX/1/1\"\n\
-  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n\
-  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
-  <trk>\n\
-    <name>$(sed -nE 's/.*<name>(.*)<\/name>.*/\1/p; /<name>/q' $1)<\/name>\n\
-    <trkseg>
-    \$a \
-\ \ \ \ <\/trkseg>\n\
-  <\/trk>\n\
-<\/gpx>\n\
-    "
+done | make_gpx
 #make_geojson > test.geojson
 
 #RAW_RESPONSE=$(basename $1 | tr '.' '_')_response.geojson
