@@ -20,7 +20,7 @@ set -e
 # put yout Mapbox token here
 ACCESS_TOKEN=$(cat ~/settings/tokens/mapbox)
 # number of coordinates for each Mapbox Map Matching API request, Maximum value is 100
-LIMIT=10
+LIMIT=80
 # define the lowest confidence of accepted matched points
 THRESHOLD=0.3
 
@@ -29,8 +29,9 @@ ORIGIN_DATA=/tmp/$(basename $1).origin
 RESPONSES=/tmp/$(basename $1).responses && true > $RESPONSES
 MATCHED=/tmp/$(basename $1).matched
 
-# extract data from the given gpx file, dump data with format [coordindate] [time_to_second], like:
-# [121.0179739,14.5515336] 1984-01-01T08:00:46
+# extract data from the given gpx file
+# input:  [gpx format]
+# output: [121.0179739,14.5515336] 1984-01-01T08:00:46
 function get_data() {
     sed -nr '/<trkpt /, /<\/trkpt>/ {H; /<\/trkpt>/ {x; s/\n/ /g; p; s/.*//; x}}' $1 |
     sed -nr 'h; s/.*lon="([^"]+).*/\1/; H; g
@@ -45,8 +46,9 @@ function get_data() {
     awk '!_[$2]++'
 }
 
-# Output GeoJSON object for Map Matching API from STDIN with format [coordinate] [time], like:
-# [121.0179739,14.5515336] 1984-01-01T08:00:46
+# Output GeoJSON object for Map Matching API
+# input:  [121.0179739,14.5515336] 1984-01-01T08:00:46
+# output: {type: "Feature", properties: {coordTimes: [...]}, geometry: {type: "LineString", coordinates: [...]}}
 function make_geojson() {
     # change input to format like: [[lon, lat], time]
     awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |
