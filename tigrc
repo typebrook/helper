@@ -152,9 +152,9 @@ bind main ! ?git revert %(commit)
 bind generic Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Move which tag to here? )" %(commit)'
-bind generic TM @sh -c 'git cat-file -p %(tag) | \
-                     sed -n \'6,$p\' | \
-                     git tag -a -F - "%(prompt Rename tag into: )" && git tag -d %(tag)'
+bind generic TM @sh -c 'git cat-file -p %(tag) |\
+                    sed -n \'6,$p\' |\
+                    (git tag -d %(tag) && git tag "%(prompt Rename into? )" -a -F -) > /dev/null'
 bind generic Tc !git tag %(tag) %(tag)^{} -f -m "%(prompt Enter new content: )" 
 bind generic Ts >tig show %(tag)
 bind generic Td @git tag -d "%(prompt Delete tag: )"
@@ -291,7 +291,8 @@ bind refs brd ?git branch -rd %(remote)/%(branch)
 bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
 bind refs F ?git fetch %(remote) %(ref)
-bind refs pd ?git push %(remote) :%(ref)
+bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs pd ?git push '%(prompt Delete from which remote? )' :%(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
 bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
