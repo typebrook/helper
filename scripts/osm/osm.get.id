@@ -1,6 +1,0 @@
-#! /bin/sh
-
-# $1 as [node|way|relation], $2 as id
-echo "<osm version=\"0.6\">"
-sed -nr "/^ *<$1 id=\"$2\".*/,/^ *<\/$1>/p"
-echo "</osm>"
