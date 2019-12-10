@@ -24,6 +24,7 @@ nnoremap <leader>< :w !bash<CR>
 " move
 nnoremap <Tab> }
 nnoremap <S-Tab> {
+inoremap <C-L> <Esc>2li
 cnoremap <C-L> <Right>
 cnoremap <C-H> <Left>
 nnoremap H 0
