@@ -11,3 +11,7 @@ FILENAME=$0
 utils.osm() {
     vim $FILENAME && source $FILENAME
 }
+
+osm.api() {
+    curl -X GET $OSM_API/$1/$2
+}
