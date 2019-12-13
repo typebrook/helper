@@ -111,6 +111,7 @@ upload-tig() {
         repo=tig \
         tag=LATEST \
         filename=$(which tig)
+        overwrite=false
 }
 
 # Android

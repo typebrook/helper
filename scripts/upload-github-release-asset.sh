@@ -12,12 +12,13 @@
 # * tag
 # * filename
 # * github_api_token
+# * overwrite (optional, default to be false)
 #
 # Script to upload a release asset using the GitHub API v3.
 #
 # Example:
 #
-# upload-github-release-asset.sh github_api_token=TOKEN owner=stefanbuck repo=playground tag=v0.1.0 filename=./build.zip
+# upload-github-release-asset.sh github_api_token=TOKEN owner=stefanbuck repo=playground tag=v0.1.0 filename=./build.zip overwrite=true
 #
 
 # Check dependencies.
@@ -61,8 +62,14 @@ eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m
 if [ "$asset_id" = ""  ]; then
     echo "No need to overwrite asset"
 else
-    echo "Deleting asset($asset_id)... "
-    curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+    if [ "$overwrite" ]; then
+        echo "Deleting asset($asset_id)... "
+        curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+    else
+        echo "File already exists on tag $tag"
+        echo "If you want to overwrite it, set overwrite=true"
+        exit 0
+    fi
 fi
 
 # Upload asset
