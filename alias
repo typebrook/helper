@@ -27,7 +27,7 @@ alias ss='sudo !!'
 alias hg='history|grep'
 alias rmrf='rm -rf'
 alias rr='move_to_tmp'
-move_to_tmp() { mv $1 /tmp }
+move_to_tmp() { mv $@ /tmp }
 
 # package
 alias ai='sudo apt install' # apt install
