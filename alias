@@ -182,7 +182,7 @@ alias xll='xo >> ~/vimwiki/working.md'
 alias xc='xsel -ob | gcc -xc -'
 
 # image
-vertical() { convert $@ -append output.png }
+image_vertical() { convert $@ -append output.png }
 
 # misc
 alias gr='_grepString'
