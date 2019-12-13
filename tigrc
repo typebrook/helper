@@ -151,13 +151,13 @@ bind main ! ?git revert %(commit)
 # tag
 bind generic Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
-bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(prompt Move which tag to here? )" %(commit)'
+bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(Rename tag to? )" %(commit)'
 bind generic TM @sh -c 'git cat-file -p %(tag) |\
                     sed -n \'6,$p\' |\
-                    (git tag -d %(tag) && git tag "%(prompt Rename into? )" -a -F -) > /dev/null'
+                    (git tag -d %(tag) && git tag "%(prompt Rename tag into? )" -a -F -) > /dev/null'
 bind generic Tc !git tag %(tag) %(tag)^{} -f -m "%(prompt Enter new content: )" 
 bind generic Ts >tig show %(tag)
-bind generic Td @git tag -d "%(prompt Delete tag: )"
+bind generic Td @git tag -d "%(prompt Delete which tag? )"
 bind generic TTd @git tag -d %(tag)
 bind generic pt ?git push --tags
 bind generic pT ?git push %(remote) %(tag)
