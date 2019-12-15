@@ -59,7 +59,7 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>'")
 " S&R
 nnoremap <leader>; :%s:::g<Left><Left><Left>
 vnoremap <leader>; :s:::g<Left><Left><Left>
-cnoremap ;\ \(\)<Left><Left>
+cnoremap \\ \(\)<Left><Left>
 
 " Fix paste bug triggered by inoremaps
 set t_BE=
