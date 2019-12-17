@@ -194,7 +194,7 @@ bind main <C-B> !sh scripts/bump_version.sh
 #====================
 # blame view
 #====================
-bind blame m >tig -- %(file)
+bind blame m >tig --follow -- %(file)
 bind blame . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 bind blame > >sh -c "git diff --patch-with-stat %(ref) --no-prefix -U1000i -- %(file) | tig"
 
@@ -203,7 +203,7 @@ set blame-view = author:abbreviated date:relative id:yes,color line-number:yes t
 #====================
 # blob view
 #====================
-bind blob m >tig -- %(file)
+bind blob m >tig --follow -- %(file) 
 
 #====================
 # status view
@@ -274,7 +274,7 @@ bind tree h back
 bind tree t +git cat-file -p %(commit)
 
 bind tree d ?rm %(file)
-bind tree m >tig -- %(file)
+bind tree m >tig --follow -- %(file)
 
 bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xsel -ib -o | awk '{print \"Tree Clipped\", $1}'"
 
