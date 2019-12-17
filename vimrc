@@ -93,7 +93,7 @@ au FileType json setlocal foldmethod=syntax
 
 nnoremap <leader>tt :VimwikiTable<CR>
 nnoremap <leader>wg :VimwikiGoto 
-nnoremap <leader>wa :VimwikiSearchTags 
+nnoremap <leader>wT :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
 nnoremap <leader>ii I- [ ] <esc>l
 nmap <leader>D dd:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
