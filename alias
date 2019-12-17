@@ -187,7 +187,7 @@ alias xc='xsel -ob | gcc -xc -'
 image_vertical() { convert $@ -append output.png }
 
 # misc
-alias token="cd $SETTING_DIR && vim $SETTING_DIR/tokens"
+alias token="cd $SETTING_DIR/tokens && vim $SETTING_DIR/tokens"
 alias gr='_grepString'
 _grepString() { grep -R $1 .  }
 alias findn='find . -iname'
