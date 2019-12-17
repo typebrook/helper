@@ -106,7 +106,7 @@ alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
 upload-tig() {
     upload-github-release-asset.sh \
-        github_api_token=$(cat ~/settings/tokens/github-release) \
+        github_api_token=$(cat ~/settings/tokens/github) \
         owner=typebrook \
         repo=tig \
         tag=LATEST \
@@ -187,6 +187,7 @@ alias xc='xsel -ob | gcc -xc -'
 image_vertical() { convert $@ -append output.png }
 
 # misc
+alias token="cd $SETTING_DIR && vim $SETTING_DIR/tokens"
 alias gr='_grepString'
 _grepString() { grep -R $1 .  }
 alias findn='find . -iname'
@@ -210,7 +211,6 @@ big52utf8() { iconv -f BIG-5 -t UTF-8 }
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
-alias cdoo='cd ~/git/openmaptiles/styles/outdoor'
 alias cdS='cd ~/git/StreetComplete'
 alias cdW='cd ~/git/geoBingAnWeb'
 alias and='cd ~/git/geoBingAn.Android'
