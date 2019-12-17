@@ -52,7 +52,7 @@ def check_valid(filename, threshold, add_prefix):
             geom2.Transform(to4326)
             if distance >= threshold:
                 if not flag:
-                    print(f'{filename} has problem, check with the folling urls:')
+                    print(f'{filename} has problem, the following urls shows the points with distance far from {threshold}m:')
                     print()
                     flag = True
                     if add_prefix:
@@ -80,8 +80,6 @@ def main(argv):
     args = parser.parse_args()
     for file in args.file:
         check_valid(file, args.distance, args.i)
-
-    print(args.distance)
 
 if __name__ == '__main__':
     main(sys.argv)
