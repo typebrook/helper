@@ -36,7 +36,9 @@ alias aptu='sudo apt update && sudo apt upgrade'
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-alias cdg='cd ~/git'
+cdg(){
+    cd ~/git/$1
+}
 alias cdata='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
