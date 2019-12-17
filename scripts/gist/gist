@@ -1,0 +1,10 @@
+#!/bin/bash
+
+github_api_token=$(cat $SETTING_DIR/tokens/github)
+
+curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/typebrook/gists |\
+jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
+tr -d '"' | tac | nl |\
+while read line_num link file_num description; do
+    echo $line_num $link $file_num $(echo $description | cut -c -70)
+done
