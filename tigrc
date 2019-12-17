@@ -96,9 +96,9 @@ bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bN @git branch %(branch) --track %(remote)/%(branch)
 bind main bu @git branch --set-upstream-to="%(prompt Set remote/branch: )"
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
-bind main bd @git branch -d "%(prompt Delete branch: )"
+bind generic bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
-bind main bD ?>git branch -D "%(prompt Delete branch anyway: )"
+bind generic bD ?>git branch -D "%(prompt Delete branch anyway: )"
 bind main bbD ?>git branch -D %(branch)
 bind main brd ?git branch -rd %(remote)/%(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
@@ -283,15 +283,15 @@ bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 #====================
 # refs view
 #====================
+bind refs b none
 bind refs C none
 bind refs c @git checkout %(ref)
-
-bind refs brd ?git branch -rd %(remote)/%(branch)
 
 bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
 bind refs F ?git fetch %(remote) %(ref)
 bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs pd ?git push '%(prompt Delete from which remote? )' :%(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
 bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
