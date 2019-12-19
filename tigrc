@@ -311,6 +311,7 @@ bind diff <C-K> :?^@@
 bind diff <Esc>j :/^diff --(git|cc)
 bind diff <Esc>k :?^diff --(git|cc)
 
+bind diff m >tig -- %(file)
 bind diff u @git checkout %(commit)^ -- %(file)
 
 #====================
