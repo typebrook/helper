@@ -12,7 +12,7 @@
 # * tag
 # * filename
 # * github_api_token
-# * overwrite (optional, default to be false)
+# * overwrite (optional, could be ture, false, delete, default to be false)
 #
 # Script to upload a release asset using the GitHub API v3.
 #
@@ -68,6 +68,9 @@ else
     else
         echo "File already exists on tag $tag"
         echo "If you want to overwrite it, set overwrite=true"
+        exit 1
+    fi
+    if [ "$overwrite" == "delete" ]; then
         exit 0
     fi
 fi
