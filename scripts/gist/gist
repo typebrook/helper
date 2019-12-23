@@ -2,7 +2,7 @@
 
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 
-function _update(){
+function _update() {
     curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/typebrook/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
     tr -d '"' | tac | nl |\
@@ -11,12 +11,24 @@ function _update(){
     done | tee ~/.gist
 }
 
+function _get_gist() {
+    GIST_ID=$(cat ~/.gist | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/([^/]+)$#\1#')
+
+    curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/gists/$GIST_ID |\
+    jq .files
+}
+
+if [[ $# -eq 0 ]]; then
+    cat ~/.gist
+    exit 0
+fi
+
 case "$1" in
   update | u)
     _update
     ;;
 
   *)
-    cat ~/.gist
+    _get_gist $1
     ;;
 esac
