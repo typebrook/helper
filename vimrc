@@ -20,6 +20,7 @@ nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 nnoremap <leader>R :read !
 nnoremap <leader>< :w !bash<CR>
+nnoremap <leader>P :r !xsel -ob<CR>
 
 " move
 nnoremap <Tab> }
