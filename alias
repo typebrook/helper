@@ -1,10 +1,10 @@
 #! /bin/sh
 
 # settings
-alias al="vim $0 && source $0"
-alias all="source $0"
-alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
+alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
+alias all="source $SETTING_DIR/alias"
 alias zshrc="vim ~/.zshrc && source ~/.$(basename $SHELL)rc"
+alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim $SETTING_DIR/tigrc"
 alias gitconfig='vim ~/.gitconfig'
