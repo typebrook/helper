@@ -7,4 +7,4 @@ jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
 tr -d '"' | tac | nl |\
 while read line_num link file_num description; do
     echo $line_num $link $file_num $(echo $description | cut -c -70)
-done
+done | tee ~/.gist
