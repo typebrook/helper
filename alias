@@ -16,7 +16,9 @@ alias vv='vim ~/vimwiki/index.md'
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
-vs() { vim $(which $1) }
+function vs() { 
+    vim $(which $1) 
+}
 
 # shell
 alias src="source $HOME/.$(basename $SHELL)rc"
@@ -27,7 +29,9 @@ alias ss='sudo !!'
 alias hg='history|grep'
 alias rmrf='rm -rf'
 alias rr='move_to_tmp'
-move_to_tmp() { mv $@ /tmp }
+function move_to_tmp() { 
+    mv $@ /tmp 
+}
 
 # package
 alias ai='sudo apt install' # apt install
@@ -36,7 +40,9 @@ alias aptu='sudo apt update && sudo apt upgrade'
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-cdg(){ cd ~/git/$1 }
+function cdg(){ 
+    cd ~/git/$1 
+}
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
@@ -52,8 +58,12 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
-wg() { vim ~/vimwiki/$1.md }
-wi() { cat ~/vimwiki/$1.md }
+function wg() { 
+    vim ~/vimwiki/$1.md 
+}
+function wi() { 
+    cat ~/vimwiki/$1.md 
+}
 
 # crontab
 alias ce='crontab -e'
@@ -61,7 +71,7 @@ alias ce='crontab -e'
 # ranger
 alias r='_ranger-cd'
 alias ranrc='vim ~/.config/ranger/rc.conf'
-_ranger-cd() {
+function ranger-cd() {
     tempfile="$(mktemp -t tmp.XXXXXX)"
     ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
@@ -75,10 +85,16 @@ _ranger-cd() {
 alias df='df -h'
 
 # git
-alias gc > /dev/null && unalias gc # overwrite alias in on-my-zsh plugins
-gc() { git clone $1 && cd $(basename $1) }
-gc1() { git clone --depth=1 $1 && cd $(basename $1) }
-gcg() { git clone git@github.com:$1/$2.git && cd $(basename $2) }
+unalias gc &> /dev/null # override zsh plugin alias
+function gc() {
+    git clone $1 && cd $(basename $1) 
+}
+function gc1() {
+    git clone --depth=1 $1 && cd $(basename $1) 
+}
+function gcg() {
+    git clone git@github.com:$1/$2.git && cd $(basename $2) 
+}
 alias gls='git log -S'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 
@@ -104,7 +120,7 @@ alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
-upload-tig() {
+function upload-tig() {
     upload-github-release-asset.sh \
         github_api_token=$(cat ~/settings/tokens/github) \
         owner=typebrook \
@@ -120,7 +136,9 @@ alias adb-default='adb shell dumpsys package domain-preferred-apps'
 alias adb-list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 alias adb-last-screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
-adb-push() { adb push $1 /sdcard/Download }
+function adb-push() { 
+    adb push $1 /sdcard/Download 
+}
 
 # gist
 gist_list=~/gist/gist.list
@@ -128,10 +146,10 @@ alias gl='nl $gist_list'
 alias gll='gist -l > $gist_list && nl $gist_list'
 alias gi='_gistRead'
 alias gd='_gistDelete'
-_gistRead() {
+function _gistRead() {
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
-_gistDelete() {
+function _gistDelete() {
     deleted=~/gist/deleted/$(date +"%s")
     _gistRead $1 > $deleted && echo "backup at $deleted"
     gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
@@ -171,7 +189,7 @@ alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/st
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 alias data-taiwan-poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
-data-taiwan-county-code() {
+function data-taiwan-county-code() {
     curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt |\
     iconv -f BIG-5 -t UTF-8 -
 }
@@ -184,12 +202,16 @@ alias xll='xo >> ~/vimwiki/working.md'
 alias xc='xsel -ob | gcc -xc -'
 
 # image
-image_vertical() { convert $@ -append output.png }
+function image_vertical() { 
+    convert $@ -append output.png 
+}
 
 # misc
 alias token="cd $SETTING_DIR/tokens && vim $SETTING_DIR/tokens"
 alias gr='_grepString'
-_grepString() { grep -R $1 .  }
+function _grepString() { 
+    grep -R $1 .  
+}
 alias findn='find . -iname'
 alias wcl='wc -l'
 alias x='xdg-open'
@@ -204,10 +226,12 @@ alias tma='tmux a'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias du='ncdu'
 alias we='weechat'
-mvt_decode() {
+function mvt_decode() {
     python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
-big52utf8() { iconv -f BIG-5 -t UTF-8 }
+function big52utf8() { 
+    iconv -f BIG-5 -t UTF-8 
+}
 
 # tmp
 alias cdo='cd ~/git/openmaptiles'
