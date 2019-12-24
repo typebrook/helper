@@ -39,11 +39,17 @@ _show_detail() {
     curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
 }
 
-# FIXME cannot upload a file
 _create() {
-    jq '. as $file | {public: true, files: {content: $file}, description: "no desc"}' -R -s $1 |\
-    tee /dev/tty |\
-    curl -v -H "Authorization: token $github_api_token" \
+    FILE=$(basename $1)
+
+    jq --arg FILE "$FILE" --arg DESC ""$2"" '. as $content | {
+        public: true, 
+        files: {
+            ($FILE): {content: $content}
+        },
+        description: ($DESC)
+    }' -R -s $1 |\
+    curl -s -H "Authorization: token $github_api_token" \
         --data @- \
         https://api.github.com/gists
 }
@@ -54,23 +60,19 @@ if [[ $# -eq 0 ]]; then
 fi
 
 case "$1" in
+  create | c)
+    _create $2 $3
+    ;;
   update | u)
     _update
     ;;
-
   detail | d)
     _show_detail $2
     ;;
-
   delete | D)
     _delete_gist $2
     ;;
-
-  create | c)
-    _create $2
-    ;;
-
   *)
-    _go_to_gist $1
+    _go_to_gist $2
     ;;
 esac
