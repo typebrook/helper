@@ -41,21 +41,12 @@ _show_detail() {
 
 # FIXME cannot upload a file
 _create() {
+    jq '. as $file | {public: true, files: {content: $file}, description: "no desc"}' -R -s $1 |\
+    tee /dev/tty |\
     curl -v -H "Authorization: token $github_api_token" \
-        --data "$(generate_post_data $1 | tee json)" \
+        --data @- \
         https://api.github.com/gists
 }
-
-generate_post_data() {
-cat <<EOF 
-{
-    "public": true,
-    "files": { "$1": {"content": "$(cat $1 | sed 's/"/\\\"/g' | tr '\n' ',')"}},
-    "description": $2
-}
-EOF
-}
-
 
 if [[ $# -eq 0 ]]; then
     cat $index 
