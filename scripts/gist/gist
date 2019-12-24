@@ -1,14 +1,17 @@
 #!/bin/bash
 
 github_api_token=$(cat $SETTING_DIR/tokens/github)
-
+user=typebrook
 folder=~/git/gist
+
 mkdir -p $folder
 index=$folder/index
 
+custom_action='tig --all'
+
 function _update() {
     # get the list of gists
-    curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/typebrook/gists |\
+    curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/$user/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
     tr -d '"' | tac | nl |\
     while read line_num link file_num description; do
@@ -21,9 +24,10 @@ function _update() {
     xargs -I{} git clone git@github.com:{}.git $folder/{}
 }
 
-function _get_gist() {
+function _go_to_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    cd $folder/$GIST_ID && tig --all
+    cd $folder/$GIST_ID
+    eval $custom_action
 }
 
 if [[ $# -eq 0 ]]; then
@@ -37,6 +41,6 @@ case "$1" in
     ;;
 
   *)
-    _get_gist $1
+    _go_to_gist $1
     ;;
 esac
