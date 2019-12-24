@@ -28,6 +28,12 @@ _go_to_gist() {
     cd $folder/$GIST_ID && tig --all 2> /dev/null
 }
 
+_delete_gist() {
+    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    curl -X DELETE -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
+    _update
+}
+
 _show_detail() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
@@ -63,6 +69,10 @@ case "$1" in
 
   detail | d)
     _show_detail $2
+    ;;
+
+  delete | D)
+    _delete_gist $2
     ;;
 
   create | c)
