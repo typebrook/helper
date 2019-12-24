@@ -7,7 +7,7 @@ folder=~/git/gist
 mkdir -p $folder
 index=$folder/index
 
-function _update() {
+_update() {
     # get the list of gists
     curl -s -H "Authorization: token $github_api_token" https://api.github.com/users/$user/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
@@ -22,21 +22,32 @@ function _update() {
     xargs -I{} git clone git@github.com:{}.git $folder/{}
 }
 
-function _go_to_gist() {
+_go_to_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     echo this gist is at $folder/$GIST_ID
     cd $folder/$GIST_ID && tig --all 2> /dev/null
 }
 
-function _show_detail() {
+_show_detail() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
 }
 
-function _create() {
+# FIXME cannot upload a file
+_create() {
     curl -v -H "Authorization: token $github_api_token" \
-        --data '{"public":true,"files":{"foo.gpx":{"content":"$2"}}}' \
+        --data "$(generate_post_data $1 | tee json)" \
         https://api.github.com/gists
+}
+
+generate_post_data() {
+cat <<EOF 
+{
+    "public": true,
+    "files": { "$1": {"content": "$(cat $1 | sed 's/"/\\\"/g' | tr '\n' ',')"}},
+    "description": $2
+}
+EOF
 }
 
 
