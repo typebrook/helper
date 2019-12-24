@@ -292,7 +292,8 @@ bind refs <Esc>f ?git fetch --all
 bind refs <C-F> ?git fetch %(remote)
 bind refs F ?git fetch %(remote) %(ref)
 bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
-bind refs pd ?git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs pd ?git push %(remote) :%(ref)
+bind refs pD ?git push '%(prompt Delete from which remote? )' :%(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
 bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
