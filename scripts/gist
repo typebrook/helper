@@ -3,14 +3,13 @@
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
 folder=~/git/gist
-custom_action='cd $folder/$GIST_ID && tig --all'
 
 mkdir -p $folder
 index=$folder/index
 
 function _update() {
     # get the list of gists
-    curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/$user/gists |\
+    curl -s -H "Authorization: token $github_api_token" https://api.github.com/users/$user/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
     tr -d '"' | tac | nl |\
     while read line_num link file_num description; do
@@ -25,8 +24,21 @@ function _update() {
 
 function _go_to_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    eval $custom_action &> /dev/null || echo this gist is at $folder/$GIST_ID
+    echo this gist is at $folder/$GIST_ID
+    cd $folder/$GIST_ID && tig --all 2> /dev/null
 }
+
+function _show_detail() {
+    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
+}
+
+function _create() {
+    curl -v -H "Authorization: token $github_api_token" \
+        --data '{"public":true,"files":{"foo.gpx":{"content":"$2"}}}' \
+        https://api.github.com/gists
+}
+
 
 if [[ $# -eq 0 ]]; then
     cat $index 
@@ -36,6 +48,14 @@ fi
 case "$1" in
   update | u)
     _update
+    ;;
+
+  detail | d)
+    _show_detail $2
+    ;;
+
+  create | c)
+    _create $2
     ;;
 
   *)
