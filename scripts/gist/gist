@@ -2,24 +2,32 @@
 
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 
+folder=~/git/gist
+mkdir -p $folder
+index=$folder/index
+
 function _update() {
+    # get the list of gists
     curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/users/typebrook/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
     tr -d '"' | tac | nl |\
     while read line_num link file_num description; do
         echo $line_num $link $file_num $(echo $description | cut -c -70)
-    done | tee ~/.gist
+    done | tee $index
+
+    # clone repos which are not in the local
+    comm -13 <(find . -maxdepth 1 -type d | sed '1d; s#\./##' | sort) \
+             <(cat index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
+    xargs -I{} git clone git@github.com:{}.git $folder/{}
 }
 
 function _get_gist() {
-    GIST_ID=$(cat ~/.gist | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/([^/]+)$#\1#')
-
-    curl -s -H "Authorization: OAuth $github_api_token" https://api.github.com/gists/$GIST_ID |\
-    jq .files
+    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    cd $folder/$GIST_ID && tig --all
 }
 
 if [[ $# -eq 0 ]]; then
-    cat ~/.gist
+    cat $index 
     exit 0
 fi
 

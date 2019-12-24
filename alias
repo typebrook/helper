@@ -43,6 +43,7 @@ alias ld='cd -' # last directory
 function cdg(){ 
     cd ~/git/$1 
 }
+alias cdgg='cd ~/git/gist'
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
