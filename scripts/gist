@@ -15,14 +15,16 @@ _update() {
     while read line_num link file_num description; do
         echo $line_num $link $file_num $(echo $description | cut -c -70)
     done | tee $index
+}
 
+_sync_repos() {
     # clone repos which are not in the local machine
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
     xargs -I{} git clone git@github.com:{}.git $folder/{}
 }
 
-_go_to_gist() {
+_goto_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     echo this gist is at $folder/$GIST_ID
     cd $folder/$GIST_ID && tig --all 2> /dev/null
@@ -34,15 +36,21 @@ _delete_gist() {
     _update
 }
 
+_clean_repos() {
+    comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
+             <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
+    xargs -I{} rm -rf $folder/{}
+}
+
 _show_detail() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
 }
 
-_create() {
+_create_gist() {
     FILE=$(basename $1)
 
-    jq --arg FILE "$FILE" --arg DESC ""$2"" '. as $content | {
+    jq --arg FILE "$FILE" --arg DESC "$2" '. as $content | {
         public: true, 
         files: {
             ($FILE): {content: $content}
@@ -61,10 +69,13 @@ fi
 
 case "$1" in
   create | c)
-    _create $2 $3
+    _create_gist $2 "$3"
     ;;
   update | u)
     _update
+    ;;
+  sync | s)
+    _sync_repos
     ;;
   detail | d)
     _show_detail $2
@@ -72,7 +83,10 @@ case "$1" in
   delete | D)
     _delete_gist $2
     ;;
+  clean | C)
+    _clean_repos
+    ;;
   *)
-    _go_to_gist $2
+    _goto_gist $1
     ;;
 esac
