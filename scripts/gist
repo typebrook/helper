@@ -27,6 +27,15 @@ _sync_repos() {
 }
 
 _goto_gist() {
+    gist_num=$(wc -l $index | cut -d' ' -f1)
+    if [[ ! "$1" =~ [0-9]+ ]] || (( $1 > $gist_num )); then
+        echo Not a valid gist number: $1
+        echo Use the number in the first column instead:
+        echo
+        cat $index
+        return 0
+    fi
+
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
     echo this gist is at $folder/$GIST_ID
     cd $folder/$GIST_ID && tig --all 2> /dev/null
