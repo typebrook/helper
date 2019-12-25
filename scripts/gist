@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# define your environmemnts here
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
 folder=~/git/gist
@@ -20,6 +21,7 @@ _update() {
 }
 
 # clone repos which are not in the local
+# TODO pull if repo is outdated
 _sync_repos() {
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
@@ -37,13 +39,13 @@ _goto_gist() {
     fi
 
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    echo this gist is at $folder/$GIST_ID
+    echo This gist is at $folder/$GIST_ID
     cd $folder/$GIST_ID && tig --all 2> /dev/null
 }
 
 _delete_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID
+    curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
     _update
 }
 
@@ -71,23 +73,23 @@ _create_gist() {
         },
         description: ($DESC)
     }' -R -s $1 |\
-    curl -s -H "$auth_header" --data @- $github_api/gists
+    curl -s -H "$auth_header" --data @- $github_api/gists > /dev/null && \
+    _update
 }
 
+# update description of a gist
 _edit_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
 
     jq -n --arg DESC "$2" '{ description: ($DESC) }' |\
-    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null
+    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
     _update
 }
 
-if [[ $# -eq 0 ]]; then
-    cat $index 
-    exit 0
-fi
-
 case "$1" in
+  "")
+    cat $index
+    ;;
   create | c)
     _create_gist "$2" "$3"
     ;;
