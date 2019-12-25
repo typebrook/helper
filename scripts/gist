@@ -4,12 +4,14 @@ github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
 folder=~/git/gist
 
+github_api=https://api.github.com
+auth_header="Authorization: token $github_api_token"
 mkdir -p $folder
 index=$folder/index
 
+# get the list of gists
 _update() {
-    # get the list of gists
-    curl -s -H "Authorization: token $github_api_token" https://api.github.com/users/$user/gists |\
+    curl -s -H "$auth_header" $github_api/users/$user/gists |\
     jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
     tr -d '"' | tac | nl |\
     while read line_num link file_num description; do
@@ -17,8 +19,8 @@ _update() {
     done | tee $index
 }
 
+# clone repos which are not in the local
 _sync_repos() {
-    # clone repos which are not in the local machine
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
     xargs -I{} git clone git@github.com:{}.git $folder/{}
@@ -32,10 +34,11 @@ _goto_gist() {
 
 _delete_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    curl -X DELETE -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
+    curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID
     _update
 }
 
+# remove repos which are not in user gists anymore
 _clean_repos() {
     comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
@@ -44,9 +47,10 @@ _clean_repos() {
 
 _show_detail() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    curl -s -H "Authorization: token $github_api_token" https://api.github.com/gists/$GIST_ID
+    curl -s -H "$auth_header" $github_api/gists/$GIST_ID
 }
 
+# create a new gist with a file and description
 _create_gist() {
     FILE=$(basename $1)
 
@@ -57,9 +61,14 @@ _create_gist() {
         },
         description: ($DESC)
     }' -R -s $1 |\
-    curl -s -H "Authorization: token $github_api_token" \
-        --data @- \
-        https://api.github.com/gists
+    curl -s -H "$auth_header" --data @- $github_api/gists
+}
+
+_edit_gist() {
+    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+
+    jq -n --arg DESC "$2" '{ description: ($DESC) }' |\
+    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID
 }
 
 if [[ $# -eq 0 ]]; then
@@ -69,7 +78,10 @@ fi
 
 case "$1" in
   create | c)
-    _create_gist $2 "$3"
+    _create_gist "$2" "$3"
+    ;;
+  edit | e)
+    _edit_gist "$2" "$3"
     ;;
   update | u)
     _update
@@ -78,15 +90,15 @@ case "$1" in
     _sync_repos
     ;;
   detail | d)
-    _show_detail $2
+    _show_detail "$2"
     ;;
   delete | D)
-    _delete_gist $2
+    _delete_gist "$2"
     ;;
   clean | C)
     _clean_repos
     ;;
   *)
-    _goto_gist $1
+    _goto_gist "$1"
     ;;
 esac
