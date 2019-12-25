@@ -68,7 +68,8 @@ _edit_gist() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
 
     jq -n --arg DESC "$2" '{ description: ($DESC) }' |\
-    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID
+    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null
+    _update
 }
 
 if [[ $# -eq 0 ]]; then
