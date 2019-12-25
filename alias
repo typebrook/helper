@@ -208,7 +208,7 @@ function image_vertical() {
 }
 
 # misc
-alias token="cd $SETTING_DIR/tokens && vim $SETTING_DIR/tokens"
+alias token="cd $SETTING_DIR/tokens && ls -lh"
 alias gr='_grepString'
 function _grepString() { 
     grep -R $1 .  
