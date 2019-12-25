@@ -47,7 +47,8 @@ _clean_repos() {
 
 _show_detail() {
     GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
-    curl -s -H "$auth_header" $github_api/gists/$GIST_ID
+    curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
+    jq '{site: .html_url, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 }
 
 # create a new gist with a file and description
