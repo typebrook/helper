@@ -13,10 +13,11 @@ index=$folder/index
 # get the list of gists
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
-    jq '.[] | "\( .html_url ) \(.files | keys | length) \( .description )"' |\
+    tee keep |\
+    jq '.[] | "\( .html_url ) \(.files | keys | length) \(.comments) \( .description )"' |\
     tr -d '"' | tac | nl |\
-    while read line_num link file_num description; do
-        echo $line_num $link $file_num $(echo $description | cut -c -70)
+    while read line_num link file_num comment_num description; do
+        echo $line_num $link $file_num $comment_num $(echo $description | cut -c -70)
     done | tee $index
 }
 
