@@ -103,7 +103,7 @@ bind main bbD ?>git branch -D %(branch)
 bind main brd ?git branch -rd %(remote)/%(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
 bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
-bind main bM @git branch -f "%(prompt Move which branch to here? )" %(commit)
+bind main bM @git branch --force "%(prompt Move which branch to here? )" %(commit)
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
                     (cat -; echo %(commit)) | \
@@ -129,7 +129,7 @@ bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pR ?git push -u '%(prompt Which remote? )' %(branch):'%(prompt Which branch? )'
-bind main pF ?git push -f
+bind main pF ?git push --force
 bind main pd ?git push %(remote) :%(branch)
 bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Which reference? )'
 
@@ -234,7 +234,7 @@ bind status D ?>git clean -dfx
 
 # solve conflict
 bind status U ?>git reset --hard
-bind status gc @git clean -f
+bind status gc @git clean --force
 bind status Ba @git rebase --abort
 bind status Bc @git rebase --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
