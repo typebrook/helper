@@ -1,9 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Author: Hsieh Chin Fan
+# License: MIT
+# https://gist.github.com/typebrook/b0d2e7e67aa50298fdf8111ae7466b56
+#
+#
+# This script host your gists as local Github repo
+# Use the following commands to manage your gists
+# 
+# * update your gists list with Github API
+# gist [update | u] 
+# 
+# * list your gists with format: [number] [url] [file_num] [comment_num] [short description]
+# gist  
+# 
+# * clone gist repos which are not in local
+# gist [sync | s] 
+#
+# * Go to local gist repo
+# gist <number_of_gist_in_list> 
+#
+# * create a new gist with a file and description
+# gist [create | c] <filename> "<description>"
+#
+# * show the detail of a gist
+# gist [detail | d] <number_of_gist_in_list>
+#
+# * edit a gist description
+# gist [edit | e] <number_of_gist_in_list>
+#
+# * delete a gist
+# gist [delete | D] <number_of_gist_in_list>
+#
+# * clean removed gists in local
+# gist [clean | C]
 
 # define your environmemnts here
+#-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
 folder=~/git/gist
+#-------------------
 
 github_api=https://api.github.com
 auth_header="Authorization: token $github_api_token"
