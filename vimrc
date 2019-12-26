@@ -98,6 +98,7 @@ nnoremap <leader>wT :VimwikiSearchTags
 nnoremap <leader>i I- <esc>l
 nnoremap <leader>ii I- [ ] <esc>l
 nmap <leader>D dd:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
+vnoremap <leader>D d:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
 " Git push quietly whenever leaving vim with VimWiki files
