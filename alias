@@ -17,7 +17,7 @@ alias vv='vim ~/vimwiki/index.md'
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
-function vs() { 
+vs() { 
     vim $(which $1) 
 }
 
@@ -30,7 +30,7 @@ alias ss='sudo !!'
 alias hg='history|grep'
 alias rmrf='rm -rf'
 alias rr='move_to_tmp'
-function move_to_tmp() { 
+move_to_tmp() { 
     mv $@ /tmp 
 }
 
@@ -41,7 +41,7 @@ alias aptu='sudo apt update && sudo apt upgrade'
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-function cdg(){ 
+cdg(){ 
     cd ~/git/$1 
 }
 alias cdgg='cd ~/git/gist'
@@ -60,10 +60,10 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
-function wg() { 
+wg() { 
     vim ~/vimwiki/$1.md 
 }
-function wi() { 
+wi() { 
     cat ~/vimwiki/$1.md 
 }
 
@@ -88,13 +88,13 @@ alias df='df -h'
 
 # git
 unalias gc &> /dev/null # override zsh plugin alias
-function gc() {
+gc() {
     git clone $1 && cd $(basename $1) 
 }
-function gc1() {
+gc1() {
     git clone --depth=1 $1 && cd $(basename $1) 
 }
-function gcg() {
+gcg() {
     git clone git@github.com:$1/$2.git && cd $(basename $2) 
 }
 alias gls='git log -S'
@@ -122,7 +122,7 @@ alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
-function upload-tig() {
+upload-tig() {
     upload-github-release-asset.sh \
         github_api_token=$(cat ~/settings/tokens/github) \
         owner=typebrook \
@@ -138,7 +138,7 @@ alias adb-default='adb shell dumpsys package domain-preferred-apps'
 alias adb-list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 alias adb-last-screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
-function adb-push() { 
+adb-push() { 
     adb push $1 /sdcard/Download 
 }
 
@@ -148,10 +148,10 @@ alias gl='nl $gist_list'
 alias gll='gist -l > $gist_list && nl $gist_list'
 alias gi='_gistRead'
 alias gd='_gistDelete'
-function _gistRead() {
+_gistRead() {
     gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
 }
-function _gistDelete() {
+_gistDelete() {
     deleted=~/gist/deleted/$(date +"%s")
     _gistRead $1 > $deleted && echo "backup at $deleted"
     gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
@@ -191,7 +191,7 @@ alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/st
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 alias data-taiwan-poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
-function data-taiwan-county-code() {
+data-taiwan-county-code() {
     curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt |\
     iconv -f BIG-5 -t UTF-8 -
 }
@@ -204,7 +204,7 @@ alias xll='xo >> ~/vimwiki/working.md'
 alias xc='xsel -ob | gcc -xc -'
 
 # image
-function image_vertical() { 
+image_vertical() { 
     convert $@ -append output.png 
 }
 
@@ -215,7 +215,7 @@ alias m='mutt'
 alias foo="echo bar > foo && echo File foo is created && ls -lh foo"
 alias token="cd $SETTING_DIR/tokens && ls -lh"
 alias gr='_grepString'
-function _grepString() { 
+_grepString() { 
     grep -R $1 .  
 }
 alias findn='find . -iname'
@@ -232,10 +232,10 @@ alias tma='tmux a'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias du='ncdu'
 alias we='weechat'
-function mvt_decode() {
+mvt_decode() {
     python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
-function big52utf8() { 
+big52utf8() { 
     iconv -f BIG-5 -t UTF-8 
 }
 
