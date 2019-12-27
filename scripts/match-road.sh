@@ -33,7 +33,7 @@ MATCHED=/tmp/$(basename $1).matched
 # only keep first point and remove the rest which in the same "second"
 # input:  [gpx format]
 # output: [121.0179739,14.5515336] 1984-01-01T08:00:46
-function get_data() {
+get_data() {
     sed -nr '/<trkpt /, /<\/trkpt>/ {H; /<\/trkpt>/ {x; s/\n/ /g; p; s/.*//; x}}' $1 |
     sed -nr 'h; s/.*lon="([^"]+).*/\1/; H; g
                 s/.*lat="([^"]+).*/\1/; H; g
@@ -50,14 +50,14 @@ function get_data() {
 # Output GeoJSON object for Map Matching API
 # input:  [121.0179739,14.5515336] 1984-01-01T08:00:46
 # output: {type: "Feature", properties: {coordTimes: [...]}, geometry: {type: "LineString", coordinates: [...]}}
-function make_geojson() {
+make_geojson() {
     # change input to format like: [[lon, lat], time]
     awk '{printf("[%s,\"%s\"]\n", $1, $2)}' |
     jq '[inputs] | {type: "Feature", geometry: {type: "LineString", coordinates: map(.[0])}, properties: {coordTimes: (map(.[1]))}}'
 }
 
 # Read GeoJSON body from STDIN, and return result from Mapbox Map Matching API
-function query_matched_points() {
+query_matched_points() {
     curl -X POST -s --data @- \
         --header "Content-Type:application/json" \
         https://api.mapbox.com/matching/v4/mapbox.driving.json?access_token=$ACCESS_TOKEN
@@ -68,7 +68,7 @@ function query_matched_points() {
 # [121.0179739,14.5515336] 35
 # If the point is newly added, the index would be -1, like
 # [121.0189339,14.5525931] -1
-function validate_matched_points() {
+validate_matched_points() {
     VALID_DATA=$(jq ".features[] | if(.properties.confidence < $THRESHOLD) then .geometry.coordinates=(.properties.indices|map(.+1)) else . end")
 
     echo $VALID_DATA |
@@ -90,7 +90,7 @@ function validate_matched_points() {
 }
 
 # Put existing timestamps to matched points, and interpolate new timestamps into new points
-function complete_data() {
+complete_data() {
     # interpolate timestamps to newly added points
     awk '{COOR[NR][0]=$1; N++; COOR[NR][1]=$2} END{for (i=1; i<=N; i++) {printf COOR[i][0]; if (COOR[i][1] != -1) {print " "COOR[i][1]; LAST=i} else {while(COOR[i+n][1] == -1) n++; print " "COOR[LAST][1]+(COOR[i+n][1]-COOR[LAST][1])*(i-LAST)/(i+n-LAST)}}}' |
     while read coor unix_time; do
@@ -103,7 +103,7 @@ function complete_data() {
 
 # Make GPX format for output
 # Take input with format: [lon,lat] [time]
-function make_gpx() {
+make_gpx() {
     sed -E 's/\[([^,]+),([^,]+)\] (.*)/      <trkpt lon="\1" lat="\2"><time>\3<\/time><\/trkpt>/' |
     sed "1i \
 <gpx version=\"1.1\" creator=\"Garmin Connect\"\n\
