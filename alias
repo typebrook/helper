@@ -31,7 +31,7 @@ move_to_tmp() {
     mv $@ /tmp 
 }
 prompt() {
-    TMPFILE=$(mktemp); echo $1 > $TMPFILE && \
+    TMPFILE=$(mktemp); echo -e $1 > $TMPFILE && \
     vim $TMPFILE && \
     sed -i '$ q; s/$/ \\/' $TMPFILE && \
     eval $(cat $TMPFILE | tee /dev/tty)
@@ -104,8 +104,8 @@ gcg() {
 }
 alias gls='git log -S'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
-gh_release_asset() {
-    command="upload-github-release-asset.sh\n    github_api_token=$(cat ~/settings/tokens/github)\n    owner=typebrook\n    repo=tig\n    tag=LATEST\n    filename=$(which tig)\n    overwrite=false"
+github_release_asset() {
+    command="upload-github-release-asset.sh\n github_api_token=$(cat ~/settings/tokens/github)\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
     prompt "$command"
 }
 
