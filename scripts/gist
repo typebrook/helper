@@ -110,15 +110,19 @@ _show_detail() {
 # create a new gist with a file and description
 # TODO support folder of files
 _create_gist() {
-    FILE=$(basename $1)
+    echo -n 'description: '
+    read DESC
 
-    jq --arg FILE "$FILE" --arg DESC "$2" '. as $content | {
-        public: true, 
-        files: {
-            ($FILE): {content: $content}
-        },
+    echo $@ | tr " " "\n" |\
+    while read file; do
+        FILE=$(basename $file)
+        jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
+    done |\
+    jq -s --arg DESC "$DESC" '{
+        public: true,
+        files: add,
         description: ($DESC)
-    }' -R -s $1 |\
+    }' |\
     curl -s -H "$auth_header" --data @- $github_api/gists > /dev/null && \
     _update
 }
@@ -137,7 +141,8 @@ case "$1" in
     cat $index
     ;;
   create | c)
-    _create_gist "$2" "$3"
+    shift;
+    _create_gist $@
     ;;
   edit | e)
     _edit_gist "$2" "$3"
