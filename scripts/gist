@@ -49,6 +49,9 @@ auth_header="Authorization: token $github_api_token"
 mkdir -p $folder
 index=$folder/index
 
+# Validate settings.
+[ "$TRACE" ] && set -x && echo foo
+
 # get the list of gists
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
