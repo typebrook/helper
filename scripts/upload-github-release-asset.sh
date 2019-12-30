@@ -62,16 +62,16 @@ eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m
 if [ "$asset_id" = ""  ]; then
     echo "No need to overwrite asset"
 else
-    if [ "$overwrite" ]; then
+    if [[ "$overwrite" == "true" ]] || [[ "$overwrite" == "delete" ]]; then
         echo "Deleting asset($asset_id)... "
         curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+        if [[ "$overwrite" == "delete" ]]; then
+            exit 0
+        fi
     else
         echo "File already exists on tag $tag"
         echo "If you want to overwrite it, set overwrite=true"
         exit 1
-    fi
-    if [ "$overwrite" == "delete" ]; then
-        exit 0
     fi
 fi
 

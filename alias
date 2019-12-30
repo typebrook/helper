@@ -26,12 +26,18 @@ alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 alias si='sudo snap install' # snap install
 alias ni='sudo npm install -g' # nodejs install
-alias ss='sudo !!'
 alias hg='history|grep'
 alias rmrf='rm -rf'
 alias rr='move_to_tmp'
 move_to_tmp() { 
     mv $@ /tmp 
+}
+prompt() {
+    TMPFILE=$(mktemp) echo $1 > $TMPFILE && \
+    vim $TMPFILE && \
+    sed -i '$ q; s/$/ \\/' $TMPFILE && \
+    cat $TMPFILE && \
+    source $TMPFILE
 }
 
 # package
@@ -99,6 +105,10 @@ gcg() {
 }
 alias gls='git log -S'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
+upload() {
+    command="upload-github-release-asset.sh\n    github_api_token=$(cat ~/settings/tokens/github)\n    owner=typebrook\n    repo=tig\n    tag=LATEST\n    filename=$(which tig)\n    overwrite=false"
+    prompt "$command"
+}
 
 # docker
 alias dp='docker ps'
