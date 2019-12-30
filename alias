@@ -36,8 +36,7 @@ prompt() {
     TMPFILE=$(mktemp); echo $1 > $TMPFILE && \
     vim $TMPFILE && \
     sed -i '$ q; s/$/ \\/' $TMPFILE && \
-    cat $TMPFILE && \
-    eval $(cat $TMPFILE)
+    eval $(cat $TMPFILE | tee /dev/tty)
 }
 
 # package
@@ -259,7 +258,4 @@ alias cdT='cd ~/git/taiwan-topo'
 alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/sharkbig.github.io'
 
-repo='git@github.com'
-hub='https://github.com'
-typebrook='git@github.com:typebrook'
 GITHUB_API='https://api.github.com'
