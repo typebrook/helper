@@ -219,6 +219,7 @@ alias m='mutt'
 
 # misc
 alias foo="echo bar > foo && echo File foo is created && ls -lh foo"
+alias bar="echo foo > bar && echo File bar is created && ls -lh bar"
 alias token="cd $SETTING_DIR/tokens && ls -lh"
 alias gr='_grepString'
 _grepString() { 

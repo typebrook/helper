@@ -107,7 +107,7 @@ _show_detail() {
     jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
-# create a new gist with a file and description
+# create a new gist with files
 # TODO support folder of files
 _create_gist() {
     echo -n 'description: '
@@ -124,7 +124,7 @@ _create_gist() {
         description: ($DESC)
     }' |\
     curl -s -H "$auth_header" --data @- $github_api/gists > /dev/null && \
-    _update
+    _update && _sync_repos
 }
 
 # update description of a gist
