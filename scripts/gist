@@ -39,6 +39,7 @@
 # gist [clean | C]
 
 # define your environmemnts here
+# TODO support auth prompt
 #-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
@@ -133,7 +134,6 @@ _show_detail() {
 }
 
 # create a new gist with files
-# TODO support folder of files
 _create_gist() {
     echo -n 'description: '
     read DESC
