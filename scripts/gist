@@ -17,6 +17,7 @@
 # gist  
 # 
 # * clone gist repos which are not in local
+# * pull master branch if a local repo is behind its remote
 # gist [sync | s] 
 #
 # * Go to local gist repo
@@ -54,26 +55,39 @@ index=$folder/index
 
 # Show the list of gist, but not updated time
 _show_list() {
-   cat $index | cut -d' ' -f1-2,4-
+    cat $index | cut -d' ' -f1-2,4-
 }
 
 # get the list of gists
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
-    jq '.[] | "\(.html_url) \(.updated_at) \(.files | keys | length) \(.comments) \(.description)"' |\
-    tr -d '"' | tac | nl |\
-    while read line_num link file_num comment_num description; do
-        echo $line_num $link $file_num $comment_num $(echo $description | cut -c -80)
+    tee jojo |\
+    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
+    tac | nl |\
+    while read line_num link blobs file_num comment_num description; do
+        blob_code=$(echo $blobs | jq -r '.[]' | sed -r 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+        echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -80) | tr -d '"'
     done > $index && \
     _show_list
 }
 
-# clone repos which are not in the local
-# TODO pull if repo is outdated
 _sync_repos() {
+    # clone repos which are not in the local
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
     xargs -I{} git clone git@github.com:{}.git $folder/{}
+
+    # pull if remote repo has different blob objects
+    cat $index | cut -d' ' -f2,3 |\
+    while read url blob_code_remote; do
+        repo=$folder/$(echo $url | sed 's#.*/##')
+        blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
+
+        cd $repo && \
+        [[ $blob_code_local != $blob_code_remote ]] && \
+        [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] && \
+        git pull
+    done
 }
 
 _gist_id() {
