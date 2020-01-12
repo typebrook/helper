@@ -50,16 +50,22 @@ mkdir -p $folder
 index=$folder/index
 
 # Validate settings.
-[ "$TRACE" ] && set -x && echo foo
+[ "$TRACE" ] && set -x
+
+# Show the list of gist, but not updated time
+_show_list() {
+   cat $index | cut -d' ' -f1-2,4-
+}
 
 # get the list of gists
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
-    jq '.[] | "\( .html_url ) \(.files | keys | length) \(.comments) \( .description )"' |\
+    jq '.[] | "\(.html_url) \(.updated_at) \(.files | keys | length) \(.comments) \(.description)"' |\
     tr -d '"' | tac | nl |\
     while read line_num link file_num comment_num description; do
-        echo $line_num $link $file_num $comment_num $(echo $description | cut -c -70)
-    done | tee $index
+        echo $line_num $link $file_num $comment_num $(echo $description | cut -c -80)
+    done > $index && \
+    _show_list
 }
 
 # clone repos which are not in the local
@@ -70,23 +76,27 @@ _sync_repos() {
     xargs -I{} git clone git@github.com:{}.git $folder/{}
 }
 
+_gist_id() {
+    cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##'
+}
+
 _goto_gist() {
     gist_num=$(wc -l $index | cut -d' ' -f1)
     if [[ ! "$1" =~ [0-9]+ ]] || (( $1 > $gist_num )); then
         echo Not a valid gist number: $1
         echo Use the number in the first column instead:
         echo
-        cat $index
+        show_list
         return 0
     fi
 
-    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    GIST_ID=$(_gist_id $1)
     echo This gist is at $folder/$GIST_ID
     cd $folder/$GIST_ID && tig --all 2> /dev/null
 }
 
 _delete_gist() {
-    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    GIST_ID=$(_gist_id $1)
     curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
     _update
 }
@@ -99,9 +109,9 @@ _clean_repos() {
 }
 
 _show_detail() {
-    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    GIST_ID=$(_gist_id $1)
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
-    jq '{site: .html_url, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
+    jq '{site: .html_url, description: .description, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID/comments |\
     jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
@@ -129,7 +139,7 @@ _create_gist() {
 
 # update description of a gist
 _edit_gist() {
-    GIST_ID=$(cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##')
+    GIST_ID=$(_gist_id $1)
 
     jq -n --arg DESC "$2" '{ description: ($DESC) }' |\
     curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
@@ -138,7 +148,7 @@ _edit_gist() {
 
 case "$1" in
   "")
-    cat $index
+    _show_list
     ;;
   create | c)
     shift;
