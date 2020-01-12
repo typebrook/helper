@@ -66,7 +66,7 @@ _update() {
     tac | nl |\
     while read line_num link blobs file_num comment_num description; do
         blob_code=$(echo $blobs | jq -r '.[]' | sed -r 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-        echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -80) | tr -d '"'
+        echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -70) | tr -d '"'
     done > $index && \
     _show_list
 }
@@ -88,6 +88,7 @@ _sync_repos() {
         [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] && \
         git pull
     done
+    echo Everything is fine!
 }
 
 _gist_id() {
