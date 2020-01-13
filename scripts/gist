@@ -60,6 +60,7 @@ _show_list() {
 }
 
 # get the list of gists
+# TODO support secret gist
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
     tee jojo |\
@@ -126,6 +127,7 @@ _clean_repos() {
     done
 }
 
+# TODO star count
 _show_detail() {
     GIST_ID=$(_gist_id $1)
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
