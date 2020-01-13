@@ -165,6 +165,10 @@ _edit_gist() {
     _update
 }
 
+_help_message() {
+    sed -r -n ' /^$/ q; 8,$ s/^#//p' $0
+}
+
 case "$1" in
   "")
     _show_list
@@ -190,6 +194,9 @@ case "$1" in
     ;;
   clean | C)
     _clean_repos
+    ;;
+  help | h)
+    _help_message
     ;;
   *)
     _goto_gist "$1"
