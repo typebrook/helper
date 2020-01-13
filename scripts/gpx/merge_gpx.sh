@@ -2,4 +2,4 @@
 
 GPX_DIR=$(dirname $0)
 
-sed '/<trk/,/<\/trk>/ p' -nr | cat $GPX_DIR/header - | cat - $GPX_DIR/footer
+sed '/<trk/,/<\/trk>/ p' -nr | cat $GPX_DIR/header - $GPX_DIR/footer
