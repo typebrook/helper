@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# Author: Hsieh Chin Fan
+# Author: Hsieh Chin Fan (typebrook)
 # License: MIT
 # https://gist.github.com/typebrook/b0d2e7e67aa50298fdf8111ae7466b56
 #
 #
 # This script host your gists as local Github repo
-# It works with jq and curl, which are easy to get in most cases
+# It works under GNU with jq and curl, which are easy to get in most cases
 #
 # Use the following commands to manage your gists:
 # 
@@ -37,6 +37,9 @@
 #
 # * clean removed gists in local
 # gist [clean | C]
+
+# * show this help message
+# gist [help | h]
 
 # define your environmemnts here
 # TODO support auth prompt
