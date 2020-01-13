@@ -6,7 +6,7 @@
 #
 #
 # This script host your gists as local Github repo
-# It works under GNU with jq and curl, which are easy to get in most cases
+# It works under GNU with jq and curl, both are easy to get in most cases
 #
 # Use the following commands to manage your gists:
 # 
