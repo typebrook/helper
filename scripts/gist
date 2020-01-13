@@ -105,7 +105,7 @@ _goto_gist() {
         echo Not a valid gist number: $1
         echo Use the number in the first column instead:
         echo
-        show_list
+        _show_list
         return 0
     fi
 
