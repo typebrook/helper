@@ -6,14 +6,12 @@ head -1 < $1 | awk -F',' '{for (i=1; i<=NF; i++) printf $i "_" i " "; print ""}'
 echo -------------- > /dev/tty
 echo > /dev/tty
 
-# get index of lon/lat column
 read -p "type column numbers by new order, like 3 2 1: " order
 
 arrange=$(echo $order | sed -r 's/([^ ]+)/$\1/g' | tr ' ' ',')
 
 cat $1 |\
 awk -F',' "BEGIN{OFS=\",\"}{print $arrange}" |\
-tee /tmp/csv |\
+tee /tmp/csv
+
 echo "Also copied to /tmp/csv" > /dev/tty
-
-
