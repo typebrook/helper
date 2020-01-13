@@ -151,22 +151,6 @@ adb_push() {
     adb push $1 /sdcard/Download 
 }
 
-# gist
-gist_list=~/gist/gist.list
-alias gl='nl $gist_list'
-alias gll='gist -l > $gist_list && nl $gist_list'
-alias gi='_gistRead'
-alias gd='_gistDelete'
-_gistRead() {
-    gist -r $(awk '{print $1}' $gist_list  | awk -v row="$1" -F '/' 'FNR==row {print $NF}') $2
-}
-_gistDelete() {
-    deleted=~/gist/deleted/$(date +"%s")
-    _gistRead $1 > $deleted && echo "backup at $deleted"
-    gist --delete $(awk '{print $1}' $gist_list | awk -v row="$1" -F '/' 'FNR==row {print $NF}') && \
-    gll
-}
-
 # curl
 alias co='curl -O'
 alias curl.code='curl -o /dev/null --silent -Iw "%{http_code}"'
