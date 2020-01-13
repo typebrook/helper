@@ -63,7 +63,6 @@ _show_list() {
 # TODO support secret gist
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
-    tee jojo |\
     jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
     tac | nl |\
     while read line_num link file_url_array file_num comment_num description; do
