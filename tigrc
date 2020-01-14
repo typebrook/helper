@@ -141,9 +141,8 @@ bind main pu !git pull
 bind main pU ?git pull --rebase
  
 # reset/rebase/revert
-bind main uu ?git reset %(commit)
+bind main uu ?git reset %(commit) --soft
 bind main uh ?git reset %(commit) --hard
-bind main us ?git reset %(commit) --soft
 bind main uS ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'" # reset and stash the changes
 bind main B !?git rebase -i %(commit)
 bind main gb !?git rebase --onto '%(prompt Rebase onto which branch? )' %(commit) %(repo:head)
