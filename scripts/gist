@@ -149,7 +149,7 @@ _create_gist() {
         FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
     done |\
-    jq -s --arg DESC "$DESC" '{
+    jq --slurp --arg DESC "$DESC" '{
         public: true,
         files: add,
         description: ($DESC)
