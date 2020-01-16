@@ -58,18 +58,20 @@ index=$folder/index
 [ "$TRACE" ] && set -x
 
 # Show the list of gist, but not updated time
+# TODO show git status outdated
 _show_list() {
     cat $index |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
+        cd $repo 2>/dev/null || extra="\e[32m[syncing]\e[0m"
         # if there is something need to commit
-        cd $repo && [[ -n $(git status --short)  ]] && extra="\e[36m[working]\e[0m"
+        [[ -n $(git status --short) ]] && extra="\e[36m[working]\e[0m" 2>/dev/null
+        [[ -n $(git cherry) ]] && extra="\e[31m[ahead]\e[0m" 2>/dev/null
         echo -e $line_num $link $file_num $extra $description
     done
 }
 
 # get the list of gists
-# TODO show git status outdated/ahead/working
 # TODO support secret gist
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
@@ -163,7 +165,7 @@ _create_gist() {
         description: ($DESC)
     }' |\
     curl -s -H "$auth_header" --data @- $github_api/gists > /dev/null && \
-    _update && _sync_repos
+    _update
 }
 
 # update description of a gist
