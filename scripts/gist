@@ -63,6 +63,7 @@ _show_list() {
 }
 
 # get the list of gists
+# TODO show git status outdated/ahead/working
 # TODO support secret gist
 _update() {
     curl -s -H "$auth_header" $github_api/users/$user/gists |\
