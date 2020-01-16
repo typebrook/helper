@@ -59,7 +59,13 @@ index=$folder/index
 
 # Show the list of gist, but not updated time
 _show_list() {
-    cat $index | cut -d' ' -f1-2,4-
+    cat $index |\
+    while read line_num link file_url_array file_num extra description; do
+        repo=$folder/$(echo $link | sed 's#.*/##')
+        # if there is something need to commit
+        cd $repo && [[ -n $(git status --short)  ]] && extra="\e[36m[working]\e[0m"
+        echo -e $line_num $link $file_num $extra $description
+    done
 }
 
 # get the list of gists
