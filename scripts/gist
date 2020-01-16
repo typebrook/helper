@@ -43,6 +43,7 @@
 
 # define your environmemnts here
 # TODO support auth prompt
+# TODO add starred repos
 #-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
@@ -53,6 +54,7 @@ github_api=https://api.github.com
 auth_header="Authorization: token $github_api_token"
 mkdir -p $folder
 index=$folder/index
+starred=$folder/starred
 
 # Validate settings.
 [ "$TRACE" ] && set -x
@@ -63,11 +65,11 @@ _show_list() {
     cat $index |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
-        # if repo is not yet cloned, show green message "syncing"
+        # if repo is not yet cloned, show green message "Sync Now"
         cd $repo 2>/dev/null || extra="\e[32m[Sync Now]\e[0m"
         # if there is something need to commit, show blue message "working"
         [[ -n $(git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" 
-        # if there is commit need to push, show red message "head"
+        # if there is a commit not yet push, show red message "ahead"
         [[ -n $(git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" 
 
         echo -e $line_num $link $file_num $extra $description
@@ -195,7 +197,10 @@ case "$1" in
   update | u)
     _update
     ;;
-  sync | s)
+  star | s)
+    _starred
+    ;;
+  sync | S)
     _sync_repos
     ;;
   detail | d)
