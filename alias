@@ -18,7 +18,7 @@ alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 vs() { 
-    vim $(which $1) 
+    if ( which $1 ); then vim $(which $1); fi
 }
 
 # shell

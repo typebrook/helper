@@ -74,6 +74,7 @@ _update() {
         echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -70) | tr -d '"'
     done > $index && \
     _show_list
+    (_sync_repos > /dev/null 2>&1 &)
 }
 
 _sync_repos() {
