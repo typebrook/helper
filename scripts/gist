@@ -63,10 +63,13 @@ _show_list() {
     cat $index |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
+        # if repo is not yet cloned, show green message "syncing"
         cd $repo 2>/dev/null || extra="\e[32m[syncing]\e[0m"
-        # if there is something need to commit
+        # if there is something need to commit, show blue message "working"
         [[ -n $(git status --short) ]] && extra="\e[36m[working]\e[0m" 2>/dev/null
+        # if there is commit need to push, show red message "head"
         [[ -n $(git cherry) ]] && extra="\e[31m[ahead]\e[0m" 2>/dev/null
+
         echo -e $line_num $link $file_num $extra $description
     done
 }
