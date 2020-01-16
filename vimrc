@@ -11,7 +11,14 @@ set sidescroll=1
 set sidescrolloff=999
 
 " general
-nmap <C-C> :q<CR>
+function! Bye()
+    if len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
+        :quit
+    else
+        :bdelete
+    endif
+endfunction
+nnoremap <silent> <C-C> :call Bye()<CR>
 nnoremap <leader>, :.w !bash<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
