@@ -5,7 +5,7 @@
 # https://gist.github.com/typebrook/b0d2e7e67aa50298fdf8111ae7466b56
 #
 #
-# This script host your gists as local Github repo
+# This script host your gists as local cloned git repo
 # It works under GNU with jq and curl, both are easy to get in most cases
 #
 # Use the following commands to manage your gists:
@@ -127,6 +127,7 @@ _sync_repos() {
     echo Everything is fine!
 }
 
+# TODO simplify
 _gist_id() {
     list_file=$index
     row_num=$1
@@ -175,6 +176,7 @@ _show_detail() {
 }
 
 # create a new gist with files
+# FIXME consider file not exist -> let user type? return 1?
 _create_gist() {
     echo -n 'description: '
     read DESC
@@ -213,7 +215,7 @@ case "$1" in
   "")
     _show_list
     ;;
-  create | c)
+  new | n)
     shift;
     _create_gist $@
     ;;
