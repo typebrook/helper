@@ -86,6 +86,7 @@ _show_list() {
 # get the list of gists
 # TODO support secret gist
 _update() {
+    echo "fetching from api.gist.com" > /dev/tty
     list_file=$index
     route="users/$user/gists"
     mark=""
@@ -225,7 +226,7 @@ case "$1" in
     _update "$2"
     ;;
   star | s)
-    _show_list $starred
+      [[ $2 =~ ^(update|u) ]] && _update --star || _show_list $starred
     ;;
   sync | S)
     _sync_repos
