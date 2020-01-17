@@ -24,7 +24,7 @@
 # . gist <number_of_gist_in_list> 
 #
 # * create a new gist with a file and description
-# gist [create | c] <filename> "<description>"
+# gist [new | n] <filename> "<description>"
 #
 # * show the detail of a gist
 # gist [detail | d] <number_of_gist_in_list>
@@ -37,7 +37,11 @@
 #
 # * clean removed gists in local
 # gist [clean | C]
-
+# 
+# * update a gist 
+# Since now a gist is a local cloned repo
+# It is your business to do git commit and git push
+#
 # * show this help message
 # gist [help | h]
 
