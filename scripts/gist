@@ -94,6 +94,7 @@ _update() {
 }
 
 _starred() {
+    return 0
 }
 
 _sync_repos() {
