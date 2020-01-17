@@ -21,7 +21,7 @@
 # gist [sync | s] 
 #
 # * Go to local gist repo
-# gist <number_of_gist_in_list> 
+# . gist <number_of_gist_in_list> 
 #
 # * create a new gist with a file and description
 # gist [create | c] <filename> "<description>"
@@ -44,6 +44,8 @@
 # define your environmemnts here
 # TODO support auth prompt
 # TODO add starred repos
+# TODO error handling
+# completion
 #-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
@@ -65,9 +67,10 @@ _show_list() {
     cat $index |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
+
         # if repo is not yet cloned, show green message "Sync Now"
         cd $repo 2>/dev/null || extra="\e[32m[Sync Now]\e[0m"
-        # if there is something need to commit, show blue message "working"
+        # if there are some changes in git index or working directory, show blue message "working"
         [[ -n $(git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" 
         # if there is a commit not yet push, show red message "ahead"
         [[ -n $(git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" 
@@ -88,6 +91,9 @@ _update() {
     done > $index && \
     _show_list
     (_sync_repos > /dev/null 2>&1 &)
+}
+
+_starred() {
 }
 
 _sync_repos() {
