@@ -46,8 +46,10 @@
 # gist [help | h]
 
 # define your environmemnts here
-# TODO support auth prompt
+# TODO support auth prompt, remove personal info here
 # TODO error handling, unit test
+# TODO parallel branch works with json parsing on python
+# TODO parallel branch works with wget and other stuff
 # completion
 #-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
@@ -95,7 +97,7 @@ _update() {
     list_file=$index
     route="users/$user/gists"
     mark=""
-    [[ "$1" == "--star" ]] && list_file=$starred && route="gists/starred" && mark="s"
+    [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
     curl -s -H "$auth_header" $github_api/$route |\
     jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
@@ -227,7 +229,7 @@ case "$1" in
     _update "$2"
     ;;
   star | s)
-      [[ $2 =~ ^(update|u) ]] && _update --star || _show_list $starred
+      _show_list $starred
     ;;
   sync | S)
     _sync_repos
