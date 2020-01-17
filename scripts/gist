@@ -195,9 +195,12 @@ _create_gist() {
 
 # update description of a gist
 _edit_gist() {
+    [[ ! $1 =~ ^[0-9]+$ ]] && echo not a valid index number && return 1
     GIST_ID=$(_gist_id $1)
 
-    jq -n --arg DESC "$2" '{ description: ($DESC) }' |\
+    echo -n 'Type new description: '
+    read DESC
+    jq -n --arg DESC "$DESC" '{ description: ($DESC) }' |\
     curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
     _update
 }
@@ -215,7 +218,7 @@ case "$1" in
     _create_gist $@
     ;;
   edit | e)
-    _edit_gist "$2" "$3"
+    _edit_gist "$2"
     ;;
   update | u)
     _update "$2"
