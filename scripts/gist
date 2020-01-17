@@ -68,6 +68,12 @@ starred=$folder/starred
 # TODO show git status outdated
 # TODO unit test
 _show_list() {
+    if [[ ! -e $1 ]]; then 
+        echo No local file found for last update
+        echo Please run command: 
+        echo "    gist update"
+        exit 0
+    fi
     cat $1 |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
@@ -97,7 +103,7 @@ _update() {
     tac | nl |\
     while read line_num link file_url_array file_num comment_num description; do
         blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-        echo $mark$line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -65) | tr -d '"'
+        echo $mark$line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -60) | tr -d '"'
     done > $list_file && \
     _show_list $list_file
     (_sync_repos $1 > /dev/null 2>&1 &)
