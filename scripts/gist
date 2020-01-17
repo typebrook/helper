@@ -62,12 +62,9 @@ starred=$folder/starred
 
 # Show the list of gist, but not updated time
 # TODO show git status outdated
+# TODO unit test
 _show_list() {
-    list_files=$index
-    [[ "$1" == "--star" ]] && list_files=$starred
-    [[ "$1" == "--all" ]] && list_files="$index $starred"
-
-    cat $list_files |\
+    cat $1 |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
 
@@ -97,7 +94,7 @@ _update() {
         blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         echo $mark$line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -65) | tr -d '"'
     done > $list_file && \
-    _show_list $1
+    _show_list $list_file
     (_sync_repos $1 > /dev/null 2>&1 &)
 }
 
@@ -128,21 +125,21 @@ _sync_repos() {
     echo Everything is fine!
 }
 
-# TODO simplify
 _gist_id() {
-    cat $index $starred | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##'
-}
-
-_goto_gist() {
-    GIST_ID=$(_gist_id $1)
+    GIST_ID=$(cat $index $starred | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
     if [[ -z $GIST_ID ]]; then
         echo Not a valid index: $1                                                                                           
         echo Use the index number in the first column instead:
         echo
-        _show_list --all
-        return 0
+        _show_list "$index $starred"
+        return 1
+    else
+        echo $GIST_ID
     fi
+}
 
+_goto_gist() {
+    GIST_ID=$(_gist_id $1 || return 0)
     echo This gist is at $folder/$GIST_ID
     echo -e "You can use the following command to jump to this directory: \n"
     echo -e "    \e[31m. gist $1\e[0m"
@@ -151,7 +148,7 @@ _goto_gist() {
 }
 
 _delete_gist() {
-    GIST_ID=$(_gist_id $1)
+    GIST_ID=$(_gist_id $1 || return 0)
     curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
     _update
 }
@@ -167,7 +164,7 @@ _clean_repos() {
 
 # TODO format with simple text
 _show_detail() {
-    GIST_ID=$(_gist_id $1)
+    GIST_ID=$(_gist_id $1 || return 0)
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
     jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 
@@ -197,8 +194,7 @@ _create_gist() {
 
 # update description of a gist
 _edit_gist() {
-    [[ ! $1 =~ ^[0-9]+$ ]] && echo not a valid index number && return 1
-    GIST_ID=$(_gist_id $1)
+    GIST_ID=$(_gist_id $1 || return 0)
 
     echo -n 'Type new description: '
     read DESC
@@ -213,7 +209,7 @@ _help_message() {
 
 case "$1" in
   "")
-    _show_list
+    _show_list $index
     ;;
   new | n)
     shift;
@@ -226,7 +222,7 @@ case "$1" in
     _update "$2"
     ;;
   star | s)
-    _show_list --star
+    _show_list $starred
     ;;
   sync | S)
     _sync_repos
