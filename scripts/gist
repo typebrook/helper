@@ -43,7 +43,6 @@
 
 # define your environmemnts here
 # TODO support auth prompt
-# TODO add starred repos
 # TODO error handling
 # completion
 #-------------------
@@ -64,7 +63,11 @@ starred=$folder/starred
 # Show the list of gist, but not updated time
 # TODO show git status outdated
 _show_list() {
-    cat $index |\
+    list_file=$index
+    mark=""
+    [[ "$1" == "--star" ]] && list_file=$starred && mark="s"
+
+    cat $list_file |\
     while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
 
@@ -75,22 +78,26 @@ _show_list() {
         # if there is a commit not yet push, show red message "ahead"
         [[ -n $(git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" 
 
-        echo -e $line_num $link $file_num $extra $description
+        echo -e $mark$line_num $link $file_num $extra $description
     done
 }
 
 # get the list of gists
 # TODO support secret gist
 _update() {
-    curl -s -H "$auth_header" $github_api/users/$user/gists |\
+    list_file=$index
+    route="users/$user/gists"
+    [[ "$1" == "--star" ]] && list_file=$starred && route="gists/starred"
+
+    curl -s -H "$auth_header" $github_api/$route |\
     jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
     tac | nl |\
     while read line_num link file_url_array file_num comment_num description; do
-        blob_code=$(echo $file_url_array | jq -r '.[]' | sed -r 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-        echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -70) | tr -d '"'
-    done > $index && \
-    _show_list
-    (_sync_repos > /dev/null 2>&1 &)
+        blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+        echo $line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -65) | tr -d '"'
+    done > $list_file && \
+    _show_list $1
+    (_sync_repos $1 > /dev/null 2>&1 &)
 }
 
 _starred() {
@@ -98,9 +105,12 @@ _starred() {
 }
 
 _sync_repos() {
+    list_file=$index
+    [[ "$1" == "--star" ]] && list_file=$starred && route="gists/starred"
+
     # clone repos which are not in the local
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-             <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
+             <(cat $list_file | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
     xargs -I{} git clone git@github.com:{}.git $folder/{}
 
     # pull if remote repo has different blob objects
@@ -118,18 +128,24 @@ _sync_repos() {
 }
 
 _gist_id() {
-    cat $index | sed -n "$1"p | cut -d' ' -f2 | sed -r 's#.*/##'
+    list_file=$index
+    row_num=$1
+    [[ "$1" =~ ^s ]] && list_file=$starred && row_num=$(echo $1 | tr -d 's')
+    cat $list_file | sed -n "$row_num"p | cut -d' ' -f2 | sed -E 's#.*/##'
 }
 
 _goto_gist() {
     gist_num=$(wc -l $index | cut -d' ' -f1)
-    if [[ ! "$1" =~ ^[0-9]+$ ]] || (( $1 > $gist_num )); then
+    if [[ ! "$1" =~ ^s?[0-9]+$ ]] || (( $1 > $gist_num )); then
         _show_list | grep "$1" || echo Nothing Found
         return 0
     fi
 
     GIST_ID=$(_gist_id $1)
     echo This gist is at $folder/$GIST_ID
+    echo You can use the following command to jump to this directory:
+    echo -e "    \e[31m. gist $1\e[0m"
+    echo 
     cd $folder/$GIST_ID && ls && tig --all 2> /dev/null
 }
 
@@ -148,11 +164,11 @@ _clean_repos() {
     done
 }
 
-# TODO star count
+# TODO format with simple text
 _show_detail() {
     GIST_ID=$(_gist_id $1)
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
-    jq '{site: .html_url, description: .description, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
+    jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 
     curl -s -H "$auth_header" $github_api/gists/$GIST_ID/comments |\
     jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
@@ -187,7 +203,7 @@ _edit_gist() {
 }
 
 _help_message() {
-    sed -r -n ' /^$/ q; 8,$ s/^#//p' $0
+    sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
 case "$1" in
@@ -202,10 +218,10 @@ case "$1" in
     _edit_gist "$2" "$3"
     ;;
   update | u)
-    _update
+    _update "$2"
     ;;
   star | s)
-    _starred
+    _show_list --star
     ;;
   sync | S)
     _sync_repos
