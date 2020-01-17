@@ -218,18 +218,18 @@ case "$1" in
   "")
     _show_list $index
     ;;
+  star | s)
+      _show_list $starred
+    ;;
+  update | u)
+    _update "$2"
+    ;;
   new | n)
     shift;
     _create_gist $@
     ;;
   edit | e)
     _edit_gist "$2"
-    ;;
-  update | u)
-    _update "$2"
-    ;;
-  star | s)
-      _show_list $starred
     ;;
   sync | S)
     _sync_repos
