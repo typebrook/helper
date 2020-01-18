@@ -195,7 +195,7 @@ _new_file() {
 }
 
 # create a new gist with files
-# FIXME consider file not exist -> let user type? return 1?
+# TODO let user specify filename
 _create_gist() {
     files="$@"
     [[ -z "$files" ]] && files=$(_new_file)
