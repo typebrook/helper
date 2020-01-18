@@ -179,14 +179,22 @@ _show_detail() {
     jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
+_new_file() {
+    tmp_file=$(mktemp)
+    [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done"
+    cat > $tmp_file
+    echo $tmp_file
+}
+
 # create a new gist with files
 # FIXME consider file not exist -> let user type? return 1?
 _create_gist() {
+    files="$@"
+    [[ -z "$files" ]] && _new_file | read files
+    echo files: $files
     echo -n 'description: '
     read DESC
-
-    echo $@ | tr " " "\n" |\
-    while read file; do
+    for file in $files; do
         FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
     done |\
