@@ -93,21 +93,27 @@ _show_list() {
 # get the list of gists
 # TODO support secret gist
 _update() {
-    echo "fetching from api.gist.com" > /dev/tty
+    echo "fetching from api.github.com..." > /dev/tty
     list_file=$index
     route="users/$user/gists"
     mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
     curl -s -H "$auth_header" $github_api/$route |\
-    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
-    tac | nl |\
-    while read line_num link file_url_array file_num comment_num description; do
-        blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-        echo $mark$line_num $link $blob_code $file_num $comment_num $(echo $description | cut -c -60) | tr -d '"'
-    done > $list_file && \
+    _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
     _show_list $list_file
-    (_sync_repos $1 > /dev/null 2>&1 &)
+    #(_sync_repos $1 > /dev/null 2>&1 &)
+    _sync_repos $1
+}
+
+# TODO check if a user create a very first gist
+_parse_response() {
+    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
+    tac |\
+    while read link file_url_array file_num comment_num description; do
+        blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+        echo $link $blob_code $file_num $comment_num $(echo $description | cut -c -60) | tr -d '"'
+    done
 }
 
 _sync_repos() {
@@ -181,18 +187,19 @@ _show_detail() {
 
 _new_file() {
     tmp_file=$(mktemp)
-    [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done"
+    [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
     cat > $tmp_file
-    echo $tmp_file
+    echo -n 'Type file name: ' > /dev/tty
+    read filename && mv $tmp_file $filename
+    echo $filename
 }
 
 # create a new gist with files
 # FIXME consider file not exist -> let user type? return 1?
 _create_gist() {
     files="$@"
-    [[ -z "$files" ]] && _new_file | read files
-    echo files: $files
-    echo -n 'description: '
+    [[ -z "$files" ]] && files=$(_new_file)
+    echo -n 'Description: '
     read DESC
     for file in $files; do
         FILE=$(basename $file)
@@ -203,8 +210,10 @@ _create_gist() {
         files: add,
         description: ($DESC)
     }' |\
-    curl -s -H "$auth_header" --data @- $github_api/gists > /dev/null && \
-    _update
+    curl -s -H "$auth_header" --data @- $github_api/gists |\
+    sed '1 s/^/[/; $ s/$/]/' |\
+    _parse_response | > $index
+    echo "Gist created"
 }
 
 # update description of a gist
