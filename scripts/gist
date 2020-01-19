@@ -86,14 +86,15 @@ _show_list() {
         # if there is a commit not yet push, show red message "ahead"
         [[ -n $(git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" 
 
-        echo -e $line_num $link $file_num $extra $description
+        echo -e $line_num $link $file_num $extra $(echo $description | cut -c -60)
     done
 }
 
 # get the list of gists
 # TODO support secret gist
 _update() {
-    echo "fetching from api.github.com..." > /dev/tty
+    echo "fetching from api.github.com..."
+    echo
     list_file=$index
     route="users/$user/gists"
     mark=""
@@ -112,7 +113,7 @@ _parse_response() {
     tac |\
     while read link file_url_array file_num comment_num description; do
         blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-        echo $link $blob_code $file_num $comment_num $(echo $description | cut -c -60) | tr -d '"'
+        echo $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
 }
 
@@ -186,34 +187,54 @@ _show_detail() {
 }
 
 _new_file() {
-    tmp_file=$(mktemp)
     [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
+    tmp_file=$(mktemp)
     cat > $tmp_file
-    echo -n 'Type file name: ' > /dev/tty
-    read filename && mv $tmp_file $filename
-    echo $filename
+    echo
+    filename=$1
+    [[ -z $filename ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    mv $tmp_file /tmp/$filename
+    echo /tmp/$filename
 }
 
 # create a new gist with files
-# TODO let user specify filename
 _create_gist() {
-    files="$@"
-    [[ -z "$files" ]] && files=$(_new_file)
-    echo -n 'Description: '
-    read DESC
+    for i in "$@"
+    do
+    case $i in 
+      -d)
+        echo $@
+        description=$2
+        shift; shift
+        echo desc $description ;;
+      -f)
+        echo $@
+        filename=$2
+        shift; shift
+        echo filename $filename ;;
+    esac
+    done
+    exit 0
+
+    files=$@ && [[ -z "$files" ]] && files=$(_new_file $filename)
+    [[ -z $description ]] && echo -n 'Description: ' && read description
+
     for file in $files; do
         FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
     done |\
-    jq --slurp --arg DESC "$DESC" '{
+    jq --slurp --arg DESC "$description" '{
         public: true,
         files: add,
         description: ($DESC)
     }' |\
     curl -s -H "$auth_header" --data @- $github_api/gists |\
     sed '1 s/^/[/; $ s/$/]/' |\
-    _parse_response | > $index
-    echo "Gist created"
+    _parse_response |\
+    sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
+    echo Gist created
+    echo
+    _show_list $index | tail -1
 }
 
 # update description of a gist
@@ -233,37 +254,26 @@ _help_message() {
 
 case "$1" in
   "")
-    _show_list $index
-    ;;
+    _show_list $index ;;
   star | s)
-      _show_list $starred
-    ;;
+      _show_list $starred ;;
   update | u)
-    _update "$2"
-    ;;
+    _update "$2" ;;
   new | n)
-    shift;
-    _create_gist $@
-    ;;
+    shift
+    _create_gist $@ ;;
   edit | e)
-    _edit_gist "$2"
-    ;;
+    _edit_gist "$2" ;;
   sync | S)
-    _sync_repos
-    ;;
+    _sync_repos ;;
   detail | d)
-    _show_detail "$2"
-    ;;
+    _show_detail "$2" ;;
   delete | D)
-    _delete_gist "$2"
-    ;;
+    _delete_gist "$2" ;;
   clean | C)
-    _clean_repos
-    ;;
+    _clean_repos ;;
   help | h)
-    _help_message
-    ;;
+    _help_message ;;
   *)
-    _goto_gist "$1"
-    ;;
+    _goto_gist "$1" ;;
 esac
