@@ -196,7 +196,7 @@ _new_file() {
     tmp_file=$(mktemp)
     cat > $tmp_file
     echo
-    [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    [[ -z "$1" ]] && echo -en '\nType file name: ' > /dev/tty && read filename
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
@@ -220,7 +220,7 @@ _set_gist() {
 _create_gist() {
     _set_gist "$@"
     [[ -z $files ]] && files=$(_new_file $filename)
-    [[ -z $description ]] && echo -n 'Description: ' && read description
+    [[ -z $description ]] && echo -en '\nDescription: ' && read description
 
     for file in $files; do
         FILE=$(basename $file)
@@ -231,7 +231,7 @@ _create_gist() {
         files: add,
         description: ($DESC)
     }' |\
-    curl -s -H "$auth_header" --data @- $github_api/gists |\
+    curl -H "$auth_header" --data @- $github_api/gists |\
     sed '1 s/^/[/; $ s/$/]/' |\
     _parse_response |\
     sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
