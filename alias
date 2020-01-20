@@ -17,8 +17,17 @@ alias vv='vim ~/vimwiki/index.md'
 alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
+
+# script
 vs() { 
-    if ( which $1 ); then vim $(which $1); fi
+    ( which $1 ) && vim $(which $1)
+}
+todo() {
+    ( which $1 ) && grep -Po 'TODO.*' $(which $1)
+}
+
+fix() {
+    ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
 
 # shell
