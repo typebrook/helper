@@ -18,32 +18,35 @@
 # 
 # * clone gist repos which are not in local
 # * pull master branch if a local repo is behind its remote
-# gist [sync | s] 
+# gist (sync | s) 
 #
 # * Go to local gist repo
 # . gist <number_of_gist_in_list> 
 #
-# * create a new gist with a file and description
-# gist [new | n] <filename> "<description>"
+# * create a new gist with files
+# gist (new | n) [-d | --desc "<gist-description>"] <files>...
+#
+# * create a new gist with STDIN
+# gist (new | n) [-d | --desc "<gist-description>"] [-f | --file <file>] < <file-with-content>
 #
 # * show the detail of a gist
-# gist [detail | d] <number_of_gist_in_list>
+# gist (detail | d) <gist_index>
 #
 # * edit a gist description
-# gist [edit | e] <number_of_gist_in_list>
+# gist (edit | e) <gist_index>
 #
 # * delete a gist
-# gist [delete | D] <number_of_gist_in_list>
+# gist (delete | D) <gist_index>...
 #
 # * clean removed gists in local
-# gist [clean | C]
+# gist (clean | C)
 # 
 # * update a gist 
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
 #
 # * show this help message
-# gist [help | h]
+# gist (help | h)
 
 # define your environmemnts here
 # TODO support auth prompt, remove personal info here
@@ -201,14 +204,15 @@ _new_file() {
 
 _set_gist() {
     while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
-        -d)
+        -d | --desc)
           description="$2"
           shift; shift;;
-        -f)
+        -f | --file)
           filename="$2"
           shift; shift;;
       esac
     done
+    if [[ "$1" == '--' ]]; then shift; fi
     files=$@
 }
 
