@@ -55,7 +55,7 @@
 # TODO completion
 # define your environmemnts here
 #-------------------
-github_api_token=$(cat $SETTING_DIR/tokens/github)
+github_api_token=$(cat $SETTING_DIR/tokens/gist)
 user=typebrook
 folder=~/git/gist
 #-------------------
