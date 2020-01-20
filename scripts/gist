@@ -216,7 +216,7 @@ _new_file() {
 }
 
 # create a new gist with files
-# FIXME error handling if gist is not created
+# FIXME error handling if gist is not created, file doesn't exist
 _create_gist() {
     _set_gist "$@"
     [[ -z $files ]] && files=$(_new_file $filename)
