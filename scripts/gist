@@ -258,7 +258,7 @@ case "$1" in
   "")
     _show_list $index ;;
   star | s)
-      _show_list $starred ;;
+    _show_list $starred ;;
   update | u)
     _update "$2" ;;
   new | n)
