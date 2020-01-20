@@ -103,7 +103,6 @@ nnoremap <leader>tt :VimwikiTable<CR>
 nnoremap <leader>wg :VimwikiGoto 
 nnoremap <leader>wT :VimwikiSearchTags 
 nnoremap <leader>i I- <esc>l
-nnoremap <leader>ii I- [ ] <esc>l
 nnoremap <leader>I :s/^[ ]*- \(\[.\] \)*//<CR>
 nmap <leader>D dd:VimwikiMakeDiaryNote<CR>Gp:w!<CR>:Bclose<CR>
 vnoremap <leader>D d:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
