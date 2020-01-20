@@ -191,16 +191,6 @@ _show_detail() {
     jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
-_new_file() {
-    [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
-    tmp_file=$(mktemp)
-    cat > $tmp_file
-    echo
-    [[ -z "$1" ]] && echo -en '\nType file name: ' > /dev/tty && read filename
-    mv $tmp_file /tmp/$filename
-    echo /tmp/$filename
-}
-
 _set_gist() {
     while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
         -d | --desc)
@@ -215,12 +205,22 @@ _set_gist() {
     files=$@
 }
 
+_new_file() {
+    [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
+    tmp_file=$(mktemp)
+    cat > $tmp_file
+    echo -e '\n' > /dev/tty
+    [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    mv $tmp_file /tmp/$filename
+    echo /tmp/$filename
+}
+
 # create a new gist with files
 # FIXME error handling if gist is not created
 _create_gist() {
     _set_gist "$@"
     [[ -z $files ]] && files=$(_new_file $filename)
-    [[ -z $description ]] && echo -en '\nDescription: ' && read description
+    [[ -z $description ]] && echo -n 'Type description: ' && read description
 
     for file in $files; do
         FILE=$(basename $file)
@@ -235,8 +235,7 @@ _create_gist() {
     sed '1 s/^/[/; $ s/$/]/' |\
     _parse_response |\
     sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
-    echo Gist created
-    echo
+    echo -e '\nGist created'
     _show_list $index | tail -1
 }
 
