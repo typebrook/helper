@@ -162,8 +162,11 @@ _goto_gist() {
 
 # TODO delete multiple gists at the same time
 _delete_gist() {
-    _gist_id $1
-    curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
+    for i in "$@"; do
+        _gist_id "$i"
+        curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
+        echo "$i" deleted
+    done
     _update
 }
 
@@ -191,22 +194,20 @@ _new_file() {
     tmp_file=$(mktemp)
     cat > $tmp_file
     echo
-    filename=$1
-    [[ -z $filename ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
 
 _set_gist() {
-    for i in "$@"; do
-        case "$i" in 
-          -d)
-            description="$2"
-            shift; shift;;
-          -f)
-            filename="$2"
-            shift; shift;;
-        esac
+    while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+        -d)
+          description="$2"
+          shift; shift;;
+        -f)
+          filename="$2"
+          shift; shift;;
+      esac
     done
     files=$@
 }
@@ -215,9 +216,8 @@ _set_gist() {
 # FIXME error handling if gist is not created
 _create_gist() {
     _set_gist "$@"
-
-   [[ -z "$files" ]] && files=$(_new_file $filename)
-   [[ -z $description ]] && echo -n 'Description: ' && read description
+    [[ -z $files ]] && files=$(_new_file $filename)
+    [[ -z $description ]] && echo -n 'Description: ' && read description
 
     for file in $files; do
         FILE=$(basename $file)
@@ -269,7 +269,8 @@ case "$1" in
   detail | d)
     _show_detail "$2" ;;
   delete | D)
-    _delete_gist "$2" ;;
+    shift
+    _delete_gist "$@" ;;
   clean | C)
     _clean_repos ;;
   help | h)
