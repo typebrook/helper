@@ -14,7 +14,7 @@
 # gist (update | u) [star | s] 
 # 
 # * list your gists with format: [number] [url] [file_num] [comment_num] [short description]
-# gist  
+# gist [star | s]
 # 
 # * clone gist repos which are not in local
 # * pull master branch if a local repo is behind its remote
@@ -153,7 +153,7 @@ _gist_id() {
     fi
 }
 
-# FIXME error handling
+# FIXME error handling, if repo not cloned yet
 _goto_gist() {
     _gist_id $1
     echo This gist is at $folder/$GIST_ID
