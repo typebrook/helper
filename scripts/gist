@@ -269,7 +269,8 @@ case "$1" in
   sync | S)
     _sync_repos ;;
   detail | d)
-    _show_detail "$2" ;;
+    shift
+    _show_detail "$@" ;;
   delete | D)
     shift
     _delete_gist "$@" ;;
