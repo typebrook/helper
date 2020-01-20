@@ -48,12 +48,12 @@
 # * show this help message
 # gist (help | h)
 
-# define your environmemnts here
 # TODO support auth prompt, remove personal info here
 # TODO error handling, unit test
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
-# completion
+# TODO completion
+# define your environmemnts here
 #-------------------
 github_api_token=$(cat $SETTING_DIR/tokens/github)
 user=typebrook
