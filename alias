@@ -49,12 +49,15 @@ alias ld='cd -' # last directory
 cdg(){ 
     cd ~/git/$1 
 }
-alias cdgg='cd ~/git/gist'
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdV='cd ~/Videos'
 alias cdP='cd ~/Pictures'
+
+# gist
+alias gn='gist new'
+alias cdgg='cd ~/git/gist'
 
 # about custom settings
 alias cds='cd $SETTING_DIR'

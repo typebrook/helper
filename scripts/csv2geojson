@@ -40,4 +40,6 @@ jq -s '.[0][2:] as $fields | .[1:][] | [.[0], .[1], ([$fields, .[2:]] | transpos
 # create array of geojson point features
 jq '{"type": "Feature",  "properties": .[2],  "geometry":{ "type": "Point",  "coordinates": [(.[0] | tonumber), (.[1] | tonumber)] } }' |\
 # wrap features as geojson format
-jq -s '{"type": "FeatureCollection", "features": .}'
+jq -s '{"type": "FeatureCollection", "features": .}' |\
+tee /tmp/geojson
+echo stored into /tmp/geojson
