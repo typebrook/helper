@@ -10,7 +10,7 @@
 #
 # Use the following commands to manage your gists:
 # 
-# * update your gists list with Github API, star for starred gists
+# * update the local list of your gists, star for your starred gists
 # gist (update | u) [star | s] 
 # 
 # * list your gists with format: [number] [url] [file_num] [comment_num] [short description]
