@@ -48,7 +48,6 @@
 # * show this help message
 # gist (help | h)
 
-# TODO support auth prompt, remove personal info here
 # TODO error handling, unit test
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
@@ -59,13 +58,13 @@ folder=~/git/gist
 config=~/.config/gist
 #-------------------
 
-# while password is not true
+# TODO error handling while password is not true
 _auth() {
     data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
     read -p "Github username: " user
     read -sp "Github password: " password
     mkdir -p ~/.config
-    echo user=$user > $config
+    umask 0077 && echo user=$user > $config
 
     curl -s https://api.github.com/authorizations \
         --user "$user:$password" \
@@ -79,7 +78,7 @@ _auth() {
     sed 's/^/github_api_token=/' >> $config
 }
 
-while ! source $config || [[ -z "$user" ]]; do
+while ! source $config 2> /dev/tty || [[ -z "$user" ]] || [[ -z "$github_api_token" ]]; do
     _auth
 done
 
@@ -301,8 +300,6 @@ case "$1" in
     _clean_repos ;;
   help | h)
     _help_message ;;
-  auth | a)
-    _auth ;;
   *)
     _goto_gist "$1" ;;
 esac
