@@ -55,7 +55,7 @@
 # define your environmemnts here
 #-------------------
 folder=~/git/gist
-config=~/.config/gist
+config=~/.config/gistrc
 #-------------------
 
 # TODO error handling while password is not true
