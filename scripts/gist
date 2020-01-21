@@ -276,11 +276,11 @@ _help_message() {
 }
 
 _configure() {
-    case $i in
-        auto_sync)
-            ;;
-        folder)
-            ;;
+    case "$1" in
+        auto_sync) echo -n $1=; shift ;;&
+            true) echo true; shift ;;
+            false) echo false; shift ;;
+        folder) shift
     esac
 }
 
