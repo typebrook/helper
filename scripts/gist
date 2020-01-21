@@ -281,10 +281,8 @@ _configure() {
             *true) echo =$2;;
             *false) echo =$2;;
         folder) echo -n $1=$2 ;;
-    esac
-    echo target $target
-    [[ $target =~ = ]] && sed -i -E "/^$1/ d" $config
-    echo $target >> $config
+    esac >> $config
+    sed -i "$ q; /^$1=/ d" $config
 }
 
 case "$1" in
