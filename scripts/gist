@@ -128,7 +128,7 @@ _update() {
     curl -s -H "$auth_header" $github_api/$route |\
     _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
     _show_list $list_file
-    (_sync_repos $1 > /dev/null 2>&1 &)
+    [[ $auto_sync ]] && (_sync_repos $1 > /dev/null 2>&1 &)
 }
 
 # TODO check if a user create a very first gist
