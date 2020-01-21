@@ -254,6 +254,20 @@ _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
+_auth() {
+    data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
+    read -p "Github username: " user
+    read -sp "Github password: " password
+    curl https://api.github.com/authorizations \
+        --user "$user:$password" \
+        --data "$data"
+
+    read -sp "2-factor code: " OTP
+    curl https://api.github.com/authorizations \
+        --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
+        --data "$data"
+}
+
 case "$1" in
   "")
     _show_list $index ;;
@@ -278,6 +292,8 @@ case "$1" in
     _clean_repos ;;
   help | h)
     _help_message ;;
+  auth | a)
+    _auth ;;
   *)
     _goto_gist "$1" ;;
 esac
