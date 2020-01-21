@@ -55,10 +55,33 @@
 # TODO completion
 # define your environmemnts here
 #-------------------
-github_api_token=$(cat $SETTING_DIR/tokens/gist)
-user=typebrook
 folder=~/git/gist
+config=~/.config/gist
 #-------------------
+
+# while password is not true
+_auth() {
+    data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
+    read -p "Github username: " user
+    read -sp "Github password: " password
+    mkdir -p ~/.config
+    echo user=$user > $config
+
+    curl -s https://api.github.com/authorizations \
+        --user "$user:$password" \
+        --data "$data" > /dev/null
+
+    read -p "2-factor code: " OTP
+    curl -s https://api.github.com/authorizations \
+        --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
+        --data "$data" |\
+    sed '1 s/[^{]//g' | jq -r .token |\
+    sed 's/^/github_api_token=/' >> $config
+}
+
+while ! source $config || [[ -z "$user" ]]; do
+    _auth
+done
 
 github_api=https://api.github.com
 auth_header="Authorization: token $github_api_token"
@@ -252,20 +275,6 @@ _edit_gist() {
 
 _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
-}
-
-_auth() {
-    data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
-    read -p "Github username: " user
-    read -sp "Github password: " password
-    curl https://api.github.com/authorizations \
-        --user "$user:$password" \
-        --data "$data"
-
-    read -sp "2-factor code: " OTP
-    curl https://api.github.com/authorizations \
-        --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
-        --data "$data"
 }
 
 case "$1" in
