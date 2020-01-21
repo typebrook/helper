@@ -95,7 +95,7 @@ starred=$folder/starred
 # Show the list of gist, but not updated time
 # TODO show git status outdated
 _show_list() {
-    if [[ ! -e $1 ]]; then 
+    if [[ ! -e "$1" ]]; then 
         echo No local file found for last update
         echo Please run command: 
         echo "    gist update"
@@ -167,7 +167,7 @@ _sync_repos() {
 
 _gist_id() {
     GIST_ID=$(cat $index $starred | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
-    if [[ -z $GIST_ID ]]; then
+    if [[ -z "$GIST_ID" ]]; then
         echo -e "Not a valid index: \e[31m$1\e[0m"
         echo Use the index number in the first column instead:
         echo
@@ -242,8 +242,8 @@ _new_file() {
 # FIXME error handling if gist is not created, file doesn't exist
 _create_gist() {
     _set_gist "$@"
-    [[ -z $files ]] && files=$(_new_file $filename)
-    [[ -z $description ]] && echo -n 'Type description: ' && read description
+    [[ -z "$files" ]] && files=$(_new_file $filename)
+    [[ -z "$description" ]] && echo -n 'Type description: ' && read description
 
     for file in $files; do
         FILE=$(basename $file)
