@@ -63,22 +63,21 @@ _auth() {
     data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
     read -p "Github username: " user
     read -sp "Github password: " password
-    mkdir -p ~/.config
-    umask 0077 && echo user=$user > $config
+    mkdir -p ~/.config && umask 0077 && echo user=$user > $config
 
-    curl -s https://api.github.com/authorizations \
+    curl https://api.github.com/authorizations \
         --user "$user:$password" \
         --data "$data" > /dev/null
 
     read -p "2-factor code: " OTP
-    curl -s https://api.github.com/authorizations \
+    curl https://api.github.com/authorizations \
         --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
         --data "$data" |\
     sed '1 s/[^{]//g' | jq -r .token |\
     sed 's/^/github_api_token=/' >> $config
 }
 
-while ! source $config 2> /dev/tty || [[ -z "$user" ]] || [[ -z "$github_api_token" ]]; do
+while ! source $config &> /dev/null || [[ -z "$user" ]] || [[ -z "$github_api_token" ]]; do
     _auth
 done
 
@@ -128,7 +127,7 @@ _update() {
     curl -s -H "$auth_header" $github_api/$route |\
     _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
     _show_list $list_file
-    [[ $auto_sync ]] && (_sync_repos $1 > /dev/null 2>&1 &)
+    if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
 # TODO check if a user create a very first gist
@@ -276,6 +275,15 @@ _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
+_configure() {
+    case $i in
+        auto_sync)
+            ;;
+        folder)
+            ;;
+    esac
+}
+
 case "$1" in
   "")
     _show_list $index ;;
@@ -298,6 +306,9 @@ case "$1" in
     _delete_gist "$@" ;;
   clean | C)
     _clean_repos ;;
+  config | c)
+    shift
+    _configure "$@" ;;
   help | h)
     _help_message ;;
   *)
