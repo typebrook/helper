@@ -192,7 +192,7 @@ _show_detail() {
 }
 
 _set_gist() {
-    while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+    while [[ "$1" =~ ^- && "$1" != "--" ]]; do case $1 in
         -d | --desc)
           description="$2"
           shift; shift;;
