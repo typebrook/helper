@@ -19,14 +19,14 @@ function! Bye()
     endif
 endfunction
 nnoremap <silent> <C-C> :call Bye()<CR>
-nnoremap <leader>, :.w !bash<CR>
+nnoremap <leader>, :.terminal<CR>
+nnoremap <leader>< :%terminal<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 nnoremap <leader>R :read !
-nnoremap <leader>< :w !bash<CR>
 nnoremap <leader>P :r !xsel -ob<CR>
 
 " move
