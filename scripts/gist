@@ -202,7 +202,7 @@ _set_gist() {
       esac
     done
     if [[ "$1" == '--' ]]; then shift; fi
-    files=$@
+    files="$@" && echo $files | xargs ls > /dev/null || exit 1
 }
 
 _new_file() {
