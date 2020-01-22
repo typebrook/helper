@@ -280,13 +280,12 @@ _cases() {
         [[ ${#2} -eq 40 ]] && echo token=$2 ||\
         echo Invalid token format, it is not 40 chars '\n' > /dev/tty
     elif [[ $1 == 'auto_sync' ]]; then
+        [[ $2 == 'false' ]] && echo $1=$2 ||\
         echo $1=true
     elif [[ $1 == 'folder' ]]; then
         echo $1=$2 
     elif [[ $1 == 'user' ]]; then
         echo $1=$2
-    else
-        echo $1=
     fi
 }
 
