@@ -48,7 +48,6 @@
 # * show this help message
 # gist (help | h)
 
-# TODO pipe syntax fix
 # TODO error handling, unit test
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
@@ -60,7 +59,7 @@ config=~/.config/gistrc
 
 # TODO error handling while password is not true
 _auth() {
-    data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
+    local data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
     read -p "Github username: " user
     read -sp "Github password: " password
     mkdir -p ~/.config && umask 0077 && echo user=$user > $config
@@ -101,7 +100,7 @@ _show_list() {
     fi
     cat $1 \
     | while read line_num link file_url_array file_num extra description; do
-        repo=$folder/$(echo $link | sed 's#.*/##')
+        local repo=$folder/$(echo $link | sed 's#.*/##')
 
         # if repo is not yet cloned, show green message "Sync Now"
         cd $repo 2>/dev/null || extra="\e[32m[Sync Now]\e[0m"
@@ -119,9 +118,9 @@ _show_list() {
 _update() {
     echo "fetching from api.github.com..."
     echo
-    list_file=$index
-    route="users/$user/gists"
-    mark=""
+    local list_file=$index
+    local route="users/$user/gists"
+    local mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
     curl -s -H "$auth_header" $github_api/$route \
@@ -135,13 +134,13 @@ _parse_response() {
     jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' \
     | tac \
     | while read link file_url_array file_num comment_num description; do
-        blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+        local blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         echo $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
 }
 
 _sync_repos() {
-    list_file=$index
+    local list_file=$index
     [[ "$1" == "--star" ]] && list_file=$starred && route="gists/starred"
 
     # clone repos which are not in the local
@@ -152,9 +151,8 @@ _sync_repos() {
     # pull if remote repo has different blob objects
     cat $index | cut -d' ' -f2,3 \
     | while read url blob_code_remote; do
-        repo=$folder/$(echo $url | sed 's#.*/##')
-        blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
-
+        local repo=$folder/$(echo $url | sed 's#.*/##')
+        local blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
         cd $repo && \
         [[ $blob_code_local != $blob_code_remote ]] && \
         [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] && \
@@ -223,16 +221,17 @@ _set_gist() {
       esac
     done
     if [[ "$1" == '--' ]]; then shift; fi
+    # TODO could be simplified?
     files="$@" && echo $files | xargs ls > /dev/null || exit 1
 }
 
 _new_file() {
     [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
-    tmp_file=$(mktemp)
+    local tmp_file=$(mktemp)
     cat > $tmp_file
     echo -e '\n' > /dev/tty
+    # FIXME when file content is from STDIN, read fails
     [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
-    # FIXME filename is invalid
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
@@ -242,10 +241,11 @@ _new_file() {
 _create_gist() {
     _set_gist "$@"
     [[ -z "$files" ]] && files=$(_new_file $filename)
+    # FIXME when file content is from STDIN, read fails
     [[ -z "$description" ]] && echo -n 'Type description: ' && read description
 
     for file in $files; do
-        FILE=$(basename $file)
+        local FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
     done \
     | jq --slurp --arg DESC "$description" '{
@@ -278,7 +278,7 @@ _help_message() {
 
 _cases() {
     if [[ $1 == 'token' ]]; then
-        [[ ${#2} -eq 40 ]] && echo token=$2 ||\
+        [[ ${#2} -eq 40 ]] && echo $1=$2 ||\
         echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
     elif [[ $1 == 'auto_sync' ]]; then
         [[ $2 == 'false' ]] && echo $1=$2 ||\
@@ -293,7 +293,7 @@ _cases() {
 
 _configure() {
     [[ -z "$@" ]] && (vim $config) && exit 0
-    target=$(_cases "$@")
+    local target=$(_cases "$@")
 
     [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
     cat $config
