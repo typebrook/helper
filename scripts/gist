@@ -283,7 +283,8 @@ _cases() {
         [[ $2 == 'false' ]] && echo $1=$2 ||\
         echo $1=true
     elif [[ $1 == 'folder' ]]; then
-        echo $1=$2 
+        [[ -n "$2" ]] && echo $1=$2 ||\
+        echo $1=~/gist
     elif [[ $1 == 'user' ]]; then
         echo $1=$2
     fi
