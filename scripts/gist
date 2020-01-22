@@ -74,15 +74,15 @@ _auth() {
         --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
         --data "$data" |\
     sed '1 s/[^{]//g' | jq -r .token |\
-    sed 's/^/github_api_token=/' >> $config
+    sed 's/^/token=/' >> $config
 }
 
-while ! source $config &> /dev/null || [[ -z "$user" ]] || [[ -z "$github_api_token" ]]; do
+while ! source $config; do
     _auth
 done
 
 github_api=https://api.github.com
-auth_header="Authorization: token $github_api_token"
+auth_header="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/git/gist
 mkdir -p $folder
@@ -275,21 +275,29 @@ _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
+_cases() {
+    case "$1 $2" in
+        token[[:space:]]*) 
+            [[ ${#2} -eq 40 ]] && echo token=$2 ||\
+            echo Invalid token format, it is not 40 chars > /dev/tty;;
+        auto_sync[[:space:]]*) ;&
+            *false$) echo $1=$2 ;;
+            *) ;;
+        folder[[:space:]]*) echo $1=$2 ;;
+        user[[:space:]]*) echo $1=$2 ;;
+        *) echo Not well formated > /dev/tty;;
+    esac
+}
+
 # TODO consider the case that $2 is empty -> remove original setting
 _configure() {
-    [[ -z "$@" ]] && vim $config && exit 0 &> /dev/null ||\
-    echo edit file $config directly && exit 0
+    [[ -z "$@" ]] && (vim $config) && exit 0
+    target=$(_cases "$@")
 
-    case "$1 $2" in
-        token) echo github_api_token=$2 ;;
-        auto_sync[[:space:]]false) echo $1=$2 ;;
-        folder[[:space:]]*) echo $1=$2 ;;
-        *) echo Not well formated;  exit 0;;
-    esac >> $config
-    sed -i "$ q; /^$1=/ d" $config
-
+    [[ -n $target ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
     cat $config
 }
+
 
 case "$1" in
   "")
