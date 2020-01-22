@@ -232,6 +232,7 @@ _new_file() {
     cat > $tmp_file
     echo -e '\n' > /dev/tty
     [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    # FIXME filename is invalid
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
