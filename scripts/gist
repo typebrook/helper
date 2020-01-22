@@ -276,17 +276,18 @@ _help_message() {
 }
 
 _cases() {
-    case "$1 $2" in
-        token[[:space:]]*) 
-            [[ ${#2} -eq 40 ]] && echo token=$2 ||\
-            echo Invalid token format, it is not 40 chars > /dev/tty;;
-        auto_sync[[:space:]]*) ;&
-            *false$) echo $1=$2 ;;
-            *) echo $1=true ;;
-        folder[[:space:]]*) echo $1=$2 ;;
-        user[[:space:]]*) echo $1=$2 ;;
-        *) echo Not well formated > /dev/tty;;
-    esac
+    if [[ $1 == 'token' ]]; then
+        [[ ${#2} -eq 40 ]] && echo token=$2 ||\
+        echo Invalid token format, it is not 40 chars '\n' > /dev/tty
+    elif [[ $1 == 'auto_sync' ]]; then
+        echo $1=true
+    elif [[ $1 == 'folder' ]]; then
+        echo $1=$2 
+    elif [[ $1 == 'user' ]]; then
+        echo $1=$2
+    else
+        echo $1=
+    fi
 }
 
 # TODO consider the case that $2 is empty -> remove original setting
