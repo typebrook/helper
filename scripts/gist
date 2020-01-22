@@ -48,6 +48,7 @@
 # * show this help message
 # gist (help | h)
 
+# TODO pipe syntax fix
 # TODO error handling, unit test
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
@@ -82,12 +83,14 @@ done
 
 github_api=https://api.github.com
 auth_header="Authorization: token $github_api_token"
-[[ -z $folder ]] && folder=~/git/gist
+
+[[ -z "$folder" ]] && folder=~/git/gist
 mkdir -p $folder
 index=$folder/index
 starred=$folder/starred
 
 # Show the list of gist, but not updated time
+# TODO a way to show files
 # TODO show git status outdated
 _show_list() {
     if [[ ! -e "$1" ]]; then 
@@ -274,14 +277,14 @@ _help_message() {
 
 # TODO consider the case that $2 is empty -> remove original setting
 _configure() {
-    [[ -z "$@" ]] && vim $config && exit 0 &> /dev/null
+    [[ -z "$@" ]] && vim $config && exit 0 &> /dev/null ||\
+    echo edit file $config directly && exit 0
+
     case "$1 $2" in
-        token[[:space:]]????????????????????????????????????????) 
-            echo $1=$2 ;;
-        auto_sync[[:space:]]true) echo $1=$2 ;;
+        token) echo github_api_token=$2 ;;
         auto_sync[[:space:]]false) echo $1=$2 ;;
         folder[[:space:]]*) echo $1=$2 ;;
-        *) echo Not well formated && exit 0;;
+        *) echo Not well formated;  exit 0;;
     esac >> $config
     sed -i "$ q; /^$1=/ d" $config
 
@@ -290,7 +293,7 @@ _configure() {
 
 case "$1" in
   "")
-    _show_list $index ;;
+    show_list $index ;;
   star | s)
     _show_list $starred ;;
   update | u)
