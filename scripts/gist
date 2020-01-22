@@ -48,6 +48,7 @@
 # * show this help message
 # gist (help | h)
 
+# TODO add config to help message
 # TODO error handling, unit test
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
@@ -227,7 +228,7 @@ _set_gist() {
 
 _new_file() {
     [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
-    local tmp_file=$(mktemp)
+    tmp_file=$(mktemp)
     cat > $tmp_file
     echo -e '\n' > /dev/tty
     # FIXME when file content is from STDIN, read fails
@@ -245,7 +246,7 @@ _create_gist() {
     [[ -z "$description" ]] && echo -n 'Type description: ' && read description
 
     for file in $files; do
-        local FILE=$(basename $file)
+        FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
     done \
     | jq --slurp --arg DESC "$description" '{
@@ -293,7 +294,7 @@ _cases() {
 
 _configure() {
     [[ -z "$@" ]] && (vim $config) && exit 0
-    local target=$(_cases "$@")
+    target=$(_cases "$@")
 
     [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
     cat $config
