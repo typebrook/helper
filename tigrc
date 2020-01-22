@@ -78,7 +78,7 @@ bind main F none
 bind main <C-T> :toggle commit-title-refs
 
 # edit tigrc
-bind main e >sh -c "vim ~/git/settings/tigrc"
+bind main e >sh -c "vim ~/.tigrc"
 
 # move
 bind main <C-J> :move-next-merge
