@@ -158,7 +158,7 @@ bind generic TM @sh -c 'git cat-file -p %(tag) |\
 bind generic Tc !git tag %(tag) %(tag)^{} -f -m "New tag content" -e
 bind generic Ts >tig show %(tag)
 bind generic Td @git tag -d "%(prompt Delete which tag? )"
-bind generic Tpd @git push :%(tag)
+bind generic Tpd ?git push %(remote) :%(tag)
 bind generic TTd @git tag -d %(tag)
 bind generic pt ?git push --tags
 bind generic pT ?git push %(remote) %(tag)
