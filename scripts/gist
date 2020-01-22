@@ -294,7 +294,7 @@ _configure() {
     [[ -z "$@" ]] && (vim $config) && exit 0
     target=$(_cases "$@")
 
-    [[ -n $target ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
+    [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
     cat $config
 }
 
