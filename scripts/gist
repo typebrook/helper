@@ -169,7 +169,7 @@ _gist_id() {
         echo -e "Not a valid index: \e[31m$1\e[0m"
         echo Use the index number in the first column instead:
         echo
-        _show_list "$index $starred"
+        _show_list "$index"
         exit 1
     fi
 }
