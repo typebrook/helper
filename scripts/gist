@@ -282,7 +282,7 @@ _cases() {
             echo Invalid token format, it is not 40 chars > /dev/tty;;
         auto_sync[[:space:]]*) ;&
             *false$) echo $1=$2 ;;
-            *) ;;
+            *) echo $1=true ;;
         folder[[:space:]]*) echo $1=$2 ;;
         user[[:space:]]*) echo $1=$2 ;;
         *) echo Not well formated > /dev/tty;;
