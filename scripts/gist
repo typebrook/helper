@@ -73,8 +73,8 @@ _auth() {
     curl https://api.github.com/authorizations \
         --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
         --data "$data" |\
-    sed '1 s/[^{]//g' | jq -r .token |\
-    sed 's/^/token=/' >> $config
+    sed '1 s/[^{]//g' | jq -r .token \
+    | sed 's/^/token=/' >> $config
 }
 
 while ! source $config; do
@@ -99,8 +99,8 @@ _show_list() {
         echo "    gist update"
         exit 0
     fi
-    cat $1 |\
-    while read line_num link file_url_array file_num extra description; do
+    cat $1 \
+    | while read line_num link file_url_array file_num extra description; do
         repo=$folder/$(echo $link | sed 's#.*/##')
 
         # if repo is not yet cloned, show green message "Sync Now"
@@ -124,17 +124,17 @@ _update() {
     mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
-    curl -s -H "$auth_header" $github_api/$route |\
-    _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
+    curl -s -H "$auth_header" $github_api/$route \
+    | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
     _show_list $list_file
     if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
 # TODO check if a user create a very first gist
 _parse_response() {
-    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' |\
-    tac |\
-    while read link file_url_array file_num comment_num description; do
+    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' \
+    | tac \
+    | while read link file_url_array file_num comment_num description; do
         blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         echo $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
@@ -146,12 +146,12 @@ _sync_repos() {
 
     # clone repos which are not in the local
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-             <(cat $list_file | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
-    xargs -I{} git clone git@github.com:{}.git $folder/{}
+             <(cat $list_file | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+    | xargs -I{} git clone git@github.com:{}.git $folder/{}
 
     # pull if remote repo has different blob objects
-    cat $index | cut -d' ' -f2,3 |\
-    while read url blob_code_remote; do
+    cat $index | cut -d' ' -f2,3 \
+    | while read url blob_code_remote; do
         repo=$folder/$(echo $url | sed 's#.*/##')
         blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
 
@@ -196,8 +196,8 @@ _delete_gist() {
 # remove repos which are not in user gists anymore
 _clean_repos() {
     comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-             <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) |\
-    while read dir; do
+             <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+    | while read dir; do
         mv $folder/$dir /tmp && echo move $folder/$dir to /tmp
     done
 }
@@ -205,11 +205,11 @@ _clean_repos() {
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
-    curl -s -H "$auth_header" $github_api/gists/$GIST_ID |\
-    jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
+    curl -s -H "$auth_header" $github_api/gists/$GIST_ID \
+    | jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 
-    curl -s -H "$auth_header" $github_api/gists/$GIST_ID/comments |\
-    jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
+    curl -s -H "$auth_header" $github_api/gists/$GIST_ID/comments \
+    | jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
 _set_gist() {
@@ -246,16 +246,16 @@ _create_gist() {
     for file in $files; do
         FILE=$(basename $file)
         jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
-    done |\
-    jq --slurp --arg DESC "$description" '{
+    done \
+    | jq --slurp --arg DESC "$description" '{
         public: true,
         files: add,
         description: ($DESC)
-    }' |\
-    curl -H "$auth_header" --data @- $github_api/gists |\
-    sed '1 s/^/[/; $ s/$/]/' |\
-    _parse_response |\
-    sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
+    }' \
+    | curl -H "$auth_header" --data @- $github_api/gists \
+    | sed '1 s/^/[/; $ s/$/]/' \
+    | _parse_response \
+    | sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
     echo -e '\nGist created'
     _show_list $index | tail -1
 }
@@ -266,8 +266,8 @@ _edit_gist() {
 
     echo -n 'Type new description: '
     read DESC
-    jq -n --arg DESC "$DESC" '{ description: ($DESC) }' |\
-    curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
+    jq -n --arg DESC "$DESC" '{ description: ($DESC) }' \
+    | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
     _update
 }
 
@@ -278,7 +278,7 @@ _help_message() {
 _cases() {
     if [[ $1 == 'token' ]]; then
         [[ ${#2} -eq 40 ]] && echo token=$2 ||\
-        echo Invalid token format, it is not 40 chars '\n' > /dev/tty
+        echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
     elif [[ $1 == 'auto_sync' ]]; then
         [[ $2 == 'false' ]] && echo $1=$2 ||\
         echo $1=true
@@ -290,7 +290,6 @@ _cases() {
     fi
 }
 
-# TODO consider the case that $2 is empty -> remove original setting
 _configure() {
     [[ -z "$@" ]] && (vim $config) && exit 0
     target=$(_cases "$@")
