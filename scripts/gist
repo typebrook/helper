@@ -293,7 +293,7 @@ _configure() {
 
 case "$1" in
   "")
-    show_list $index ;;
+    _show_list $index ;;
   star | s)
     _show_list $starred ;;
   update | u)
