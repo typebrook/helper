@@ -52,11 +52,10 @@
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
 # TODO completion
-# define your environmemnts here
-#-------------------
-folder=~/git/gist
+
+# Validate settings.
 config=~/.config/gistrc
-#-------------------
+[ "$TRACE" ] && set -x
 
 # TODO error handling while password is not true
 _auth() {
@@ -83,12 +82,10 @@ done
 
 github_api=https://api.github.com
 auth_header="Authorization: token $github_api_token"
+[[ -z $folder ]] && folder=~/git/gist
 mkdir -p $folder
 index=$folder/index
 starred=$folder/starred
-
-# Validate settings.
-[ "$TRACE" ] && set -x
 
 # Show the list of gist, but not updated time
 # TODO show git status outdated
@@ -275,14 +272,20 @@ _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
+# TODO consider the case that $2 is empty -> remove original setting
 _configure() {
+    [[ -z "$@" ]] && vim $config && exit 0 &> /dev/null
     case "$1 $2" in
-        auto_sync[[:space:]]*) echo -n $1 ;;&
-            *true) echo =$2;;
-            *false) echo =$2;;
-        folder) echo -n $1=$2 ;;
+        token[[:space:]]????????????????????????????????????????) 
+            echo $1=$2 ;;
+        auto_sync[[:space:]]true) echo $1=$2 ;;
+        auto_sync[[:space:]]false) echo $1=$2 ;;
+        folder[[:space:]]*) echo $1=$2 ;;
+        *) echo Not well formated && exit 0;;
     esac >> $config
     sed -i "$ q; /^$1=/ d" $config
+
+    cat $config
 }
 
 case "$1" in
