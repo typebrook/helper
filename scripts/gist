@@ -89,7 +89,7 @@ esac
 github_api=https://api.github.com
 auth_header="Authorization: token $token"
 
-[[ -z "$folder" ]] && folder=~/git/gist
+[[ -z "$folder" ]] && folder=~/gist
 mkdir -p $folder
 index=$folder/index
 starred=$folder/starred
@@ -169,7 +169,7 @@ _sync_repos() {
 }
 
 _gist_id() {
-    GIST_ID=$(cat $index $starred | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
+    GIST_ID=$(cat $index $starred 2> /dev/null | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
     if [[ -z "$GIST_ID" ]]; then
         echo -e "Not a valid index: \e[31m$1\e[0m"
         echo Use the index number in the first column instead:
