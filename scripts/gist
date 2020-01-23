@@ -238,7 +238,7 @@ _new_file() {
     cat > $tmp_file
     echo -e '\n' > /dev/tty
     # FIXME when file content is from STDIN, read fails
-    [[ -z "$1" ]] && echo -n 'Type file name: ' > /dev/tty && read filename
+    [[ -z "$1" ]] && read -p 'Type file name: ' filename 
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
@@ -249,7 +249,7 @@ _create_gist() {
     _set_gist "$@"
     [[ -z "$files" ]] && files=$(_new_file $filename)
     # FIXME when file content is from STDIN, read fails
-    [[ -z "$description" ]] && echo -n 'Type description: ' && read description
+    [[ -z "$description" ]] && read -p 'Type description: ' description
 
     for file in $files; do
         FILE=$(basename $file)
@@ -305,7 +305,6 @@ _configure() {
     [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
     cat $config
 }
-
 
 case "$1" in
   "")
