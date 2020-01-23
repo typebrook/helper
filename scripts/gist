@@ -77,7 +77,7 @@ _auth() {
     | sed 's/^/token=/' >> $config
 }
 
-while ! source $config; do
+while ! source $config || [[ -z "$token" ]] || [[ -z "$user" ]]; do
     _auth
 done
 
