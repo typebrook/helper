@@ -59,6 +59,7 @@ config=~/.config/gistrc
 [ "$TRACE" ] && set -x
 
 # TODO error handling while password is not true
+# TODO support access token from input or web
 _auth() {
     local data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
     read -p "Github username: " user
@@ -77,9 +78,13 @@ _auth() {
     | sed 's/^/token=/' >> $config
 }
 
-while ! source $config || [[ -z "$token" ]] || [[ -z "$user" ]]; do
-    _auth
-done
+case "$1" in
+  config | c) ;;
+  *)
+    while ! source $config 2> /dev/null || [[ -z "$token" ]] || [[ -z "$user" ]]; do
+        _auth
+    done;;
+esac
 
 github_api=https://api.github.com
 auth_header="Authorization: token $token"
@@ -205,10 +210,10 @@ _clean_repos() {
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
-    curl -s -H "$auth_header" $github_api/gists/$GIST_ID \
+    curl -s $github_api/gists/$GIST_ID \
     | jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
 
-    curl -s -H "$auth_header" $github_api/gists/$GIST_ID/comments \
+    curl -s $github_api/gists/$GIST_ID/comments \
     | jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
