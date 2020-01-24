@@ -62,15 +62,15 @@ config=~/.config/gistrc
 # TODO support access token from input or web
 _auth() {
     local data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
-    read -p "Github username: " user
-    read -sp "Github password: " password
+    read -p "Github username: " user < /dev/tty
+    read -sp "Github password: " password < /dev/tty
     mkdir -p ~/.config && umask 0077 && echo user=$user > $config
 
     curl https://api.github.com/authorizations \
         --user "$user:$password" \
         --data "$data" > /dev/null
 
-    read -p "2-factor code: " OTP
+    read -p "2-factor code: " OTP < /dev/tty
     curl https://api.github.com/authorizations \
         --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
         --data "$data" |\
@@ -237,8 +237,7 @@ _new_file() {
     tmp_file=$(mktemp)
     cat > $tmp_file
     echo -e '\n' > /dev/tty
-    # FIXME when file content is from STDIN, read fails
-    [[ -z "$1" ]] && read -p 'Type file name: ' filename 
+    [[ -z "$1" ]] && read -p 'Type file name: ' filename < /dev/tty
     mv $tmp_file /tmp/$filename
     echo /tmp/$filename
 }
@@ -248,8 +247,7 @@ _new_file() {
 _create_gist() {
     _set_gist "$@"
     [[ -z "$files" ]] && files=$(_new_file $filename)
-    # FIXME when file content is from STDIN, read fails
-    [[ -z "$description" ]] && read -p 'Type description: ' description
+    [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
     for file in $files; do
         FILE=$(basename $file)
@@ -273,7 +271,7 @@ _edit_gist() {
     _gist_id $1
 
     echo -n 'Type new description: '
-    read DESC
+    read DESC < /dev/tty
     jq -n --arg DESC "$DESC" '{ description: ($DESC) }' \
     | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
     _update
