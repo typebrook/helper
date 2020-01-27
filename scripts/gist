@@ -230,8 +230,8 @@ _set_gist() {
       esac
     done
     if [[ "$1" == '--' ]]; then shift; fi
-    # TODO could be simplified?
-    files="$@" && echo $files | xargs ls > /dev/null || exit 1
+    ls "$@" || exit 1
+    files="$@"
 }
 
 _new_file() {
