@@ -61,24 +61,14 @@ config=~/.config/gistrc
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
-# TODO error handling while password is not true
-# TODO support access token from input or web
 _auth() {
-    local data="{\"scopes\":[\"gist\"], \"note\": \"gist-$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}"
     read -p "Github username: " user < /dev/tty
-    read -sp "Github password: " password < /dev/tty
     mkdir -p ~/.config && umask 0077 && echo user=$user > $config
+    echo "Create a new token from web browser"
+    python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist
 
-    curl -i https://api.github.com/authorizations \
-        --user "$user:$password" \
-        --data "$data"
-
-    read -p "2-factor code: " OTP < /dev/tty
-    curl https://api.github.com/authorizations \
-        --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
-        --data "$data" \
-    | sed '1 s/[^{]//g' | jq -r .token \
-    | sed 's/^/token=/' >> $config
+    read -p "Paste your token here: " new_token < /dev/tty
+    echo token=$new_token >> $config
 }
 
 case "$1" in
