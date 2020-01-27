@@ -165,10 +165,10 @@ _sync_repos() {
     | while read url blob_code_remote; do
         local repo=$folder/$(echo $url | sed 's#.*/##')
         local blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
-        cd $repo && \
-        [[ $blob_code_local != $blob_code_remote ]] && \
-        [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] && \
-        git pull
+        cd $repo \
+        && [[ $blob_code_local != $blob_code_remote ]] \
+        &&[[ $(git rev-parse origin/master) == $(git rev-parse master) ]] \
+        && git pull
     done
     echo Everything is fine!
 }
@@ -189,8 +189,8 @@ _goto_gist() {
 
     if [[ ! -d $folder/$GIST_ID  ]]; then
         echo 'Cloning gist as repo...'
-        git clone git@github.com:$GIST_ID.git $folder/$GIST_ID && \
-        echo 'Repo is cloned' || \
+        git clone git@github.com:$GIST_ID.git $folder/$GIST_ID \
+        && echo 'Repo is cloned' || \
         echo 'Failed to clone the gist'
     fi
 
@@ -203,8 +203,8 @@ _goto_gist() {
 _delete_gist() {
     for i in "$@"; do
         _gist_id "$i"
-        curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID && \
-        echo "$i" deleted
+        curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID \
+        && echo "$i" deleted
     done
     _update
 }
@@ -254,7 +254,6 @@ _new_file() {
 }
 
 # create a new gist with files
-# FIXME error handling if gist is not created, file doesn't exist
 # TODO support secret gist
 _create_gist() {
     _set_gist "$@"
@@ -287,8 +286,8 @@ _edit_gist() {
     echo -n 'Type new description: '
     read DESC < /dev/tty
     jq -n --arg DESC "$DESC" '{ description: ($DESC) }' \
-    | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null && \
-    _update
+    | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null \
+    && _update
 }
 
 _help_message() {
