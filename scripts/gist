@@ -58,6 +58,7 @@
 
 # Validate settings.
 config=~/.config/gistrc
+set -eo pipefail
 [ "$TRACE" ] && set -x
 
 # TODO error handling while password is not true
@@ -133,8 +134,10 @@ _update() {
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
     curl -s -H "$auth_header" $github_api/$route \
-    | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file && \
-    _show_list $list_file
+    | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
+    && show_list $list_file \
+    || echo Fail to update gists && exit 1
+
     if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
@@ -267,11 +270,13 @@ _create_gist() {
         files: add,
         description: ($DESC)
     }' \
-    | curl -H "$auth_header" --data @- $github_api/gists \
+    | curl -s -H "$auth_header" --data @- $github_api/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
     | _parse_response \
-    | sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index && \
-    echo -e '\nGist created'
+    | sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index \
+    && echo -e '\nGist created' \
+    || echo 'Fail to create gist'
+
     _show_list $index | tail -1
 }
 
