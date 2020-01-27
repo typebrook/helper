@@ -55,6 +55,7 @@
 # TODO parallel branch works with json parsing on python
 # TODO parallel branch works with wget and other stuff
 # TODO completion
+# TODO grep mode for description, file content
 
 # Validate settings.
 config=~/.config/gistrc
