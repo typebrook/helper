@@ -71,7 +71,7 @@ _auth() {
 
     curl -i https://api.github.com/authorizations \
         --user "$user:$password" \
-        --data "$data" \
+        --data "$data"
 
     read -p "2-factor code: " OTP < /dev/tty
     curl https://api.github.com/authorizations \
