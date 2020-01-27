@@ -112,6 +112,8 @@ _show_list() {
 
         # if repo is not yet cloned, show green message "Not cloned yet"
         [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m"
+
+        cd $repo
         # if there are some changes in git index or working directory, show blue message "working"
         [[ -n $(git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" 
         # if there is a commit not yet push, show red message "ahead"
