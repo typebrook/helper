@@ -110,9 +110,8 @@ _show_list() {
     | while read line_num link file_url_array file_num extra description; do
         local repo=$folder/$(echo $link | sed 's#.*/##')
 
-        # if repo is not yet cloned, show green message "Sync Now"
-        # FIXME
-        [[ ! -d $repo ]] && extra="\e[32m[Sync Now]\e[0m"
+        # if repo is not yet cloned, show green message "Not cloned yet"
+        [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m"
         # if there are some changes in git index or working directory, show blue message "working"
         [[ -n $(git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" 
         # if there is a commit not yet push, show red message "ahead"
@@ -123,7 +122,6 @@ _show_list() {
 }
 
 # get the list of gists
-# TODO support secret gist
 _update() {
     echo "fetching from api.github.com..."
     echo
@@ -252,6 +250,7 @@ _new_file() {
 
 # create a new gist with files
 # FIXME error handling if gist is not created, file doesn't exist
+# TODO support secret gist
 _create_gist() {
     _set_gist "$@"
     [[ -z "$files" ]] && files=$(_new_file $filename)
