@@ -76,8 +76,8 @@ _auth() {
     read -p "2-factor code: " OTP < /dev/tty
     curl https://api.github.com/authorizations \
         --user "$user:$password" -H "X-GitHub-OTP: $OTP" \
-        --data "$data" |\
-    sed '1 s/[^{]//g' | jq -r .token \
+        --data "$data" \
+    | sed '1 s/[^{]//g' | jq -r .token \
     | sed 's/^/token=/' >> $config
 }
 
@@ -190,8 +190,8 @@ _goto_gist() {
     if [[ ! -d $folder/$GIST_ID  ]]; then
         echo 'Cloning gist as repo...'
         git clone git@github.com:$GIST_ID.git $folder/$GIST_ID \
-        && echo 'Repo is cloned' || \
-        echo 'Failed to clone the gist'
+        && echo 'Repo is cloned' \
+        || echo 'Failed to clone the gist'
     fi
 
     echo This gist is at $folder/$GIST_ID
@@ -296,14 +296,14 @@ _help_message() {
 
 _cases() {
     if [[ $1 == 'token' ]]; then
-        [[ ${#2} -eq 40 ]] && echo $1=$2 ||\
-        echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
+        [[ ${#2} -eq 40 ]] && echo $1=$2 \
+        || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
     elif [[ $1 == 'auto_sync' ]]; then
-        [[ $2 == 'false' ]] && echo $1=$2 ||\
-        echo $1=true
+        [[ $2 == 'false' ]] && echo $1=$2 \
+        || echo $1=true
     elif [[ $1 == 'folder' ]]; then
-        [[ -n "$2" ]] && echo $1=$2 ||\
-        echo $1=~/gist
+        [[ -n "$2" ]] && echo $1=$2 \
+        || echo $1=~/gist
     elif [[ $1 == 'user' ]]; then
         echo $1=$2
     fi
