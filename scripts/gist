@@ -69,9 +69,9 @@ _auth() {
     read -sp "Github password: " password < /dev/tty
     mkdir -p ~/.config && umask 0077 && echo user=$user > $config
 
-    curl https://api.github.com/authorizations \
+    curl -i https://api.github.com/authorizations \
         --user "$user:$password" \
-        --data "$data" > /dev/null
+        --data "$data" \
 
     read -p "2-factor code: " OTP < /dev/tty
     curl https://api.github.com/authorizations \
@@ -110,17 +110,17 @@ _show_list() {
     cat $1 \
     | while read line_num link file_url_array file_num extra description; do
         local repo=$folder/$(echo $link | sed 's#.*/##')
+        local occupy=0
 
         # if repo is not yet cloned, show green message "Not cloned yet"
-        [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m"
+        [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=17
 
-        cd $repo
         # if there are some changes in git index or working directory, show blue message "working"
-        [[ -n $(git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" 
+        [[ -n $(cd $repo && git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" && occupy=10
         # if there is a commit not yet push, show red message "ahead"
-        [[ -n $(git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" 
+        [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=8
 
-        echo -e $line_num $link $file_num $extra $(echo $description | cut -c -60)
+        echo -e $line_num $link $file_num $extra $(echo $description | cut -c -$(( 60 - $occupy )) )
     done
 }
 
@@ -135,8 +135,8 @@ _update() {
 
     curl -s -H "$auth_header" $github_api/$route \
     | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
-    && show_list $list_file \
-    || echo Fail to update gists && exit 1
+    && _show_list $list_file \
+    || echo Fail to update gists
 
     if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
