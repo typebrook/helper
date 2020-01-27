@@ -200,6 +200,7 @@ _goto_gist() {
     cd $folder/$GIST_ID && ls && tig --all 2> /dev/null
 }
 
+# TODO only remove deleted line
 _delete_gist() {
     for i in "$@"; do
         _gist_id "$i"
@@ -212,7 +213,7 @@ _delete_gist() {
 # remove repos which are not in user gists anymore
 _clean_repos() {
     comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-             <(cat $index | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+             <(cat $index $starred 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
     | while read dir; do
         mv $folder/$dir /tmp && echo move $folder/$dir to /tmp
     done
