@@ -63,13 +63,27 @@ set -eo pipefail
 [ "$TRACE" ] && set -x
 
 _auth() {
+    echo 'Hi fellow! To access your gists, I need your Github username and a personal token with scope which allows "gist"!'
     read -p "Github username: " user < /dev/tty
-    mkdir -p ~/.config && umask 0077 && echo user=$user > $config
-    echo "Create a new token from web browser"
-    python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist
+    if [[ $new_token =~ ^[[:alnum:]]+$ ]]; then
+        mkdir -p ~/.config
+        umask 0077
+        echo user=$user > $config
+    else
+        echo "Not a valid username"
+        return 0
+    fi 
+
+    echo -n "Create a new token from web browser? [Y/n] "
+    read answer < /dev/tty
+    if [[ ! $answer =~ ^(N|n|No|NO|no)$ ]]; then
+        python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist; 
+    fi
 
     read -p "Paste your token here: " new_token < /dev/tty
-    echo token=$new_token >> $config
+    [[ $new_token =~ ^[[:alnum:]]{40}$ ]] \
+    && echo token=$new_token >> $config \
+    || echo "Not a valid token"
 }
 
 case "$1" in
