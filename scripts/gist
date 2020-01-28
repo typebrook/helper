@@ -65,7 +65,7 @@ set -eo pipefail
 _auth() {
     echo 'Hi fellow! To access your gists, I need your Github username and a personal token with scope which allows "gist"!'
     read -p "Github username: " user < /dev/tty
-    if [[ $new_token =~ ^[[:alnum:]]+$ ]]; then
+    if [[ $user =~ ^[[:alnum:]]+$ ]]; then
         mkdir -p ~/.config
         umask 0077
         echo user=$user > $config
@@ -290,7 +290,7 @@ _edit_gist() {
 
     echo -n 'Type new description: '
     read DESC < /dev/tty
-    jq -n --arg DESC "$DESC" '{ description: ($DESC) }' \
+    echo "{ \"description\": \"$DESC\" }" \
     | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null \
     && _update
 }
