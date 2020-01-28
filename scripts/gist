@@ -250,6 +250,7 @@ _show_detail() {
     | jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
 }
 
+# FIXME put file before parameters
 _set_gist() {
     while [[ "$1" =~ ^- && "$1" != "--" ]]; do case $1 in
         -d | --desc)
@@ -283,14 +284,10 @@ _create_gist() {
     [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
     for file in $files; do
-        FILE=$(basename $file)
-        jq --arg FILE "$FILE" '. as $content | { ($FILE): {content: $content} }' -Rs $file
-    done \
-    | jq --slurp --arg DESC "$description" '{
-        public: true,
-        files: add,
-        description: ($DESC)
-    }' \
+        filename=$(basename $file)
+        echo "\"$filename\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
+    done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
+    | echo "{ \"public\": true, \"files\": $(cat -), \"description\": \"$description\"}" \
     | curl -s -H "$auth_header" --data @- $github_api/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
     | _parse_response \
