@@ -284,8 +284,7 @@ _create_gist() {
     [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
     for file in $files; do
-        filename=$(basename $file)
-        echo "\"$filename\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
+        echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
     done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
     | echo "{ \"public\": true, \"files\": $(cat -), \"description\": \"$description\"}" \
     | curl -s -H "$auth_header" --data @- $github_api/gists \
