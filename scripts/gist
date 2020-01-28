@@ -62,6 +62,12 @@ config=~/.config/gistrc
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
+## Grabs an element from a a json string and then echoes it to stdout
+AccessJsonElement() {
+    PYTHONIOENCODING=utf-8 python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
+    return "$?"
+}
+
 _auth() {
     echo 'Hi fellow! To access your gists, I need your Github username and a personal token with scope which allows "gist"!'
     read -p "Github username: " user < /dev/tty
@@ -146,12 +152,24 @@ _update() {
     if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
+# equal to: jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"'
+handle_gists() {
+    echo '
+for gist in raw:
+    print(gist["html_url"], end=" ")
+    print([file["raw_url"] for file in gist["files"].values()], end=" ")
+    print(len(gist["files"]), end=" ")
+    print(gist["comments"], end=" ")
+    print(gist["description"])
+    ' 
+}
+
 # TODO check if a user create a very first gist
 _parse_response() {
-    jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"' \
-    | tac \
+    AccessJsonElement "$(handle_gists)" \
+    | tac | sed 's/, /,/g'\
     | while read link file_url_array file_num comment_num description; do
-        local blob_code=$(echo $file_url_array | jq -r '.[]' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+        local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         echo $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
 }
