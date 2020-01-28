@@ -35,7 +35,7 @@ nnoremap <S-Tab> {
 inoremap <C-L> <Esc>2li
 cnoremap <C-L> <Right>
 cnoremap <C-H> <Left>
-nnoremap H 0
+nmap H 0
 nnoremap L $
 nnoremap <C-L> 60l
 nnoremap <C-H> 60h
