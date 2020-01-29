@@ -195,8 +195,9 @@ _sync_repos() {
     echo Everything is fine!
 }
 
+# get gist id from index files
 _gist_id() {
-    GIST_ID=$(cat $index $starred 2> /dev/null | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
+    GIST_ID=$( (grep -hs '' $index $starred || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
     if [[ -z "$GIST_ID" ]]; then
         echo -e "Not a valid index: \e[31m$1\e[0m"
         echo Use the index number in the first column instead:
