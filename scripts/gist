@@ -46,7 +46,7 @@
 # It is your business to do git commit and git push
 #
 # * configuration
-# gist (config | c) [token <value>] [user <value>] [folder <value>]
+# gist (config | c) [token <value>] [user <value>] [folder <value>] [auto-sync false]
 #
 # * show this help message
 # gist (help | h)
@@ -61,7 +61,7 @@ config=~/.config/gistrc
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
-## Grabs an element from a a json string and then echoes it to stdout
+## parse JSON from STDIN with string of commands
 AccessJsonElement() {
     PYTHONIOENCODING=utf-8 python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
     return "$?"
@@ -152,7 +152,7 @@ _update() {
 }
 
 # equal to: jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"'
-handle_gists() {
+_handle_gists() {
     echo '
 for gist in raw:
     print(gist["html_url"], end=" ")
@@ -165,7 +165,7 @@ for gist in raw:
 
 # TODO check if a user create a very first gist
 _parse_response() {
-    AccessJsonElement "$(handle_gists)" \
+    AccessJsonElement "$(_handle_gists)" \
     | tac | sed 's/, /,/g'\
     | while read link file_url_array file_num comment_num description; do
         local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
@@ -241,11 +241,25 @@ _clean_repos() {
     done
 }
 
+_handle_gist() {
+    echo '
+print("site:", raw["html_url"])
+print("description:", raw["description"])
+print("public:", raw["public"])
+print("API:", raw["url"])
+print("created_at:", raw["created_at"])
+print("updated_at:", raw["updated_at"])
+print("files:")
+for file in raw["files"].keys():
+    print("   ", file)
+    ' 
+}
+
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
     curl -s $github_api/gists/$GIST_ID \
-    | jq '{site: .html_url, description: .description, public: .public, API: .url, created_at: .created_at, updated_at: .updated_at, files: (.files | keys)}'
+    | AccessJsonElement "$(_handle_gist)"
 
     curl -s $github_api/gists/$GIST_ID/comments \
     | jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
