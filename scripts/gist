@@ -6,7 +6,7 @@
 #
 #
 # This script host your gists as local cloned git repo
-# It works under GNU with jq and curl, both are easy to get in most cases
+# It works under GNU curl, which is easy to get in most cases
 #
 # Use the following commands to manage your gists:
 # 
@@ -255,6 +255,18 @@ for file in raw["files"].keys():
     ' 
 }
 
+# equal to jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
+_handle_comment() {
+    echo '
+for comment in raw:
+    print()
+    print("|", "user:", comment["user"]["login"])
+    print("|", "created_at:", comment["created_at"])
+    print("|", "updated_at:", comment["updated_at"])
+    print("|", comment["body"])
+    ' 
+}
+
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
@@ -262,7 +274,7 @@ _show_detail() {
     | AccessJsonElement "$(_handle_gist)"
 
     curl -s $github_api/gists/$GIST_ID/comments \
-    | jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
+    | AccessJsonElement "$(_handle_comment)"
 }
 
 # FIXME put file before parameters
