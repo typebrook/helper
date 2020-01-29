@@ -180,7 +180,7 @@ _sync_repos() {
     # clone repos which are not in the local
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
              <(cat $list_file | cut -d' ' -f2 | sed 's#.*/##' | sort) \
-    | xargs -I{} git clone git@github.com:{}.git $folder/{}
+    | xargs -I{} --max-procs 8 git clone git@github.com:{}.git $folder/{}
 
     # pull if remote repo has different blob objects
     cat $index | cut -d' ' -f2,3 \
