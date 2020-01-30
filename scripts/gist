@@ -111,18 +111,19 @@ _ask_token() {
 }
 
 _apply_config() {
+    source $config
     if [[ ! -e $config ]] || [[ -z $user ]]; then
         echo 'Hi fellow! To access your gists, I need your Github username, also a personal token with scope which allows "gist"!'
         _ask_username
         _ask_token
-    elif [[ -z $token ]] && [[ $2 =~ ^(n|new|e|edit|D|delete)$ ]]; then
+    elif [[ -z $token ]] && [[ $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
         _ask_token
     fi
 
     source $config
 }
 
-_apply_config
+_apply_config "$@"
 
 auth_header="Authorization: token $token"
 
