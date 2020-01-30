@@ -55,6 +55,7 @@
 # TODO parallel branch works with wget and other stuff
 # TODO completion
 # TODO grep mode for description, file content
+# TODO unify indent
 
 # Validate configuration
 set -eo pipefail
@@ -335,6 +336,7 @@ _new_file() {
 
 # create a new gist with files
 # TODO support secret gist
+# FIXME catch status code from curl if it fails
 _create_gist() {
     _set_gist "$@"
     [[ -z "$files" ]] && files=$(_new_file $filename)
