@@ -189,10 +189,10 @@ alias sample-osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias data-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data-rudymap-ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
-alias data-osm-diff='curl https://planet.openstreetmap.org/replication/minute/state.txt |\
+alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/state.txt |\
                      sed -n 2p | cut -d'=' -f2 | sed -r 's/(.{1})(.{3})/00\1\/\2\//' |\
                      xargs -I {} echo -e https://planet.openstreetmap.org/replication/minute/'{}'.osc.gz |\
-                     xargs curl -O'
+                     xargs curl -O"
 alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
 alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 alias data-taiwan-poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
