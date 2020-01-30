@@ -56,50 +56,74 @@
 # TODO completion
 # TODO grep mode for description, file content
 
-# Validate settings.
-config=~/.config/gistrc
+# Validate configuration
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
-## parse JSON from STDIN with string of commands
-AccessJsonElement() {
-    PYTHONIOENCODING=utf-8 python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
-    return "$?"
+github_api=https://api.github.com
+config=~/.config/gistrc
+mkdir -p ~/.config && umask 0077
+
+_config_cases() {
+    if [[ $1 == 'token' ]]; then
+        [[ ${#2} -eq 40 ]] && echo $1=$2 \
+        || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
+    elif [[ $1 == 'auto_sync' ]]; then
+        [[ $2 == 'false' ]] && echo $1=$2 \
+        || echo $1=true
+    elif [[ $1 == 'folder' ]]; then
+        [[ -n "$2" ]] && echo $1=$2 \
+        || echo $1=~/gist
+    elif [[ $1 == 'user' ]]; then
+        echo $1=$2
+    fi
 }
 
-_auth() {
-    echo 'Hi fellow! To access your gists, I need your Github username and a personal token with scope which allows "gist"!'
-    read -p "Github username: " user < /dev/tty
-    if [[ $user =~ ^[[:alnum:]]+$ ]]; then
-        mkdir -p ~/.config
-        umask 0077
-        echo user=$user > $config
-    else
-        echo "Not a valid username"
-        return 0
-    fi 
+_configure() {
+    [[ -z "$@" ]] && (vim $config) && exit 0
+    target=$(_config_cases "$@")
 
+    touch $config
+    [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
+    cat $config
+}
+
+_ask_username() {
+    while [[ ! $user =~ ^[[:alnum:]]+$ ]]; do
+      [[ ! -z $user ]] && echo "Not a valid username"
+      read -p "Github username: " user < /dev/tty
+    done
+    _configure user $user
+}
+
+_ask_token() {
     echo -n "Create a new token from web browser? [Y/n] "
     read answer < /dev/tty
     if [[ ! $answer =~ ^(N|n|No|NO|no)$ ]]; then
         python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist; 
     fi
 
-    read -p "Paste your token here: " new_token < /dev/tty
-    [[ $new_token =~ ^[[:alnum:]]{40}$ ]] \
-    && echo token=$new_token >> $config \
-    || echo "Not a valid token"
+    while [[ ! $token =~ ^[[:alnum:]]{40}$ ]]; do
+        [[ ! -z $token ]] && echo "Not a valid token"
+        read -p "Paste your token here (Ctrl-C to skip): " token < /dev/tty
+    done
+    _configure token $token
 }
 
-case "$1" in
-  config | c) ;;
-  *)
-    while ! source $config 2> /dev/null || [[ -z "$token" ]] || [[ -z "$user" ]]; do
-        _auth
-    done;;
-esac
+_apply_config() {
+    if [[ ! -e $config ]] || [[ -z $user ]]; then
+        echo 'Hi fellow! To access your gists, I need your Github username, also a personal token with scope which allows "gist"!'
+        _ask_username
+        _ask_token
+    elif [[ -z $token ]] && [[ $2 =~ ^(n|new|e|edit|D|delete)$ ]]; then
+        _ask_token
+    fi
 
-github_api=https://api.github.com
+    source $config
+}
+
+_apply_config
+
 auth_header="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist
@@ -112,8 +136,7 @@ starred=$folder/starred
 # TODO show git status outdated
 _show_list() {
     if [[ ! -e "$1" ]]; then 
-        echo No local file found for last update
-        echo Please run command: 
+        echo 'No local file found for last update, please run command:'
         echo "    gist update"
         exit 0
     fi
@@ -143,12 +166,18 @@ _update() {
     local mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
-    curl -s -H "$auth_header" $github_api/$route \
+    curl -s $github_api/$route \
     | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
     && _show_list $list_file \
     || echo Fail to update gists
 
     if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
+}
+
+## parse JSON from STDIN with string of commands
+AccessJsonElement() {
+    PYTHONIOENCODING=utf-8 python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
+    return "$?"
 }
 
 # equal to: jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"'
@@ -337,29 +366,6 @@ _edit_gist() {
 
 _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
-}
-
-_cases() {
-    if [[ $1 == 'token' ]]; then
-        [[ ${#2} -eq 40 ]] && echo $1=$2 \
-        || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
-    elif [[ $1 == 'auto_sync' ]]; then
-        [[ $2 == 'false' ]] && echo $1=$2 \
-        || echo $1=true
-    elif [[ $1 == 'folder' ]]; then
-        [[ -n "$2" ]] && echo $1=$2 \
-        || echo $1=~/gist
-    elif [[ $1 == 'user' ]]; then
-        echo $1=$2
-    fi
-}
-
-_configure() {
-    [[ -z "$@" ]] && (vim $config) && exit 0
-    target=$(_cases "$@")
-
-    [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
-    cat $config
 }
 
 case "$1" in
