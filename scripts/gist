@@ -92,7 +92,7 @@ _configure() {
 
 _ask_username() {
     while [[ ! $user =~ ^[[:alnum:]]+$ ]]; do
-      [[ ! -z $user ]] && echo "Not a valid username"
+      [[ -n $user ]] && echo "Not a valid username"
       read -p "Github username: " user < /dev/tty
     done
     _configure user $user
@@ -106,7 +106,7 @@ _ask_token() {
     fi
 
     while [[ ! $token =~ ^[[:alnum:]]{40}$ ]]; do
-        [[ ! -z $token ]] && echo "Not a valid token"
+        [[ -n $token ]] && echo "Not a valid token"
         trap 'echo; return 1' INT
         read -p "Paste your token here (Ctrl-C to skip): " token < /dev/tty
     done
@@ -282,7 +282,8 @@ _goto_gist() {
 
     if [[ ! -d $folder/$GIST_ID  ]]; then
         echo 'Cloning gist as repo...'
-        if (git clone git@github.com:$GIST_ID.git $folder/$GIST_ID); then
+        git clone git@github.com:$GIST_ID.git $folder/$GIST_ID
+        if [[ "$?" -ne 0 ]]; then
             echo 'Repo is cloned'
             return 0
         else
