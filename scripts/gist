@@ -220,6 +220,7 @@ _parse_response() {
     | while read index link file_url_array public file_num comment_num description; do
         local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         [[ $public == 'False' ]] && mark=p
+        [[ -n $1 ]] && index=$1
         echo $mark$index $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
 }
@@ -382,7 +383,6 @@ _new_file() {
 }
 
 # create a new gist with files
-# FIXME incorrect index
 # FIXME catch status code from curl if it fails
 _create_gist() {
     _set_gist "$@" || return 1
@@ -395,7 +395,7 @@ _create_gist() {
     | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
     | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
-    | _parse_response >> $INDEX \
+    | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) >> $INDEX \
     && echo -e '\nGist created' \
     || echo 'Fail to create gist'
 
