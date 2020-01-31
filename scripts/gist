@@ -82,7 +82,7 @@ _config_cases() {
 }
 
 _configure() {
-    [[ -z "$@" ]] && (vim $config) && exit 0
+    [[ -z "$@" ]] && (vim $config) && return 0
     target=$(_config_cases "$@")
 
     touch $config
@@ -141,7 +141,7 @@ _show_list() {
     if [[ ! -e "$1" ]]; then 
         echo 'No local file found for last update, please run command:'
         echo "    gist update"
-        exit 0
+        return 0
     fi
     cat $1 \
     | while read line_num link file_url_array file_num extra description; do
@@ -232,10 +232,10 @@ _gist_id() {
     GIST_ID=$( (grep -hs '' $index $starred || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
     if [[ -z "$GIST_ID" ]]; then
         echo -e "Not a valid index: \e[31m$1\e[0m"
-        echo Use the index number in the first column instead:
+        echo Use the index in the first column instead:
         echo
         _show_list "$index"
-        exit 1
+        return 1
     fi
 }
 
@@ -322,7 +322,7 @@ _set_gist() {
     done
     if [[ "$1" == '--' ]]; then shift; fi
     files="$@"
-    ls $files > /dev/null || exit 1
+    ls $files > /dev/null || return 1
 }
 
 _new_file() {
@@ -339,7 +339,7 @@ _new_file() {
 # TODO support secret gist
 # FIXME catch status code from curl if it fails
 _create_gist() {
-    _set_gist "$@"
+    _set_gist "$@" || return 1
     [[ -z "$files" ]] && files=$(_new_file $filename)
     [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
