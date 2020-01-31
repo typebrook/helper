@@ -28,6 +28,10 @@ todo() {
 fix() {
     ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
+gicd() {
+  dir=$(gist $1 | tee /dev/tty | head -1)
+  [[ -d $dir ]] && cd $dir
+}
 
 # shell
 alias src="source $HOME/.$(basename $SHELL)rc"
