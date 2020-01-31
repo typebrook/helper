@@ -66,30 +66,28 @@ GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
 configuredClient=""
 
-_config_cases() {
-  if [[ $1 == 'token' ]]; then
-    [[ ${#2} -eq 40 ]] && echo $1=$2 \
-    || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
-  elif [[ $1 == 'auto_sync' ]]; then
-    [[ $2 == 'false' ]] && echo $1=$2 \
-    || echo $1=true
-  elif [[ $1 == 'folder' ]]; then
-    [[ -n "$2" ]] && echo $1=$2 \
-    || echo $1=~/gist
-  elif [[ $1 == 'user' ]]; then
-    echo $1=$2
-  fi
-}
-
+# handle configuration cases
 _configure() {
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
-  target=$(_config_cases "$@")
+  if [[ $1 == 'token' ]]; then
+    [[ ${#2} -eq 40 ]] && target=$1=$2 \
+    || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
+  elif [[ $1 == 'auto_sync' ]]; then
+    [[ $2 == 'false' ]] && target=$1=$2 \
+    || target=$1=true
+  elif [[ $1 == 'folder' ]]; then
+    [[ -n "$2" ]] && target=$1=$2 \
+    || target=$1=~/gist
+  elif [[ $1 == 'user' ]]; then
+    target=$1=$2
+  fi
 
   umask 0077 && touch $CONFIG
   [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $CONFIG && echo $target >> $CONFIG
   cat $CONFIG
 }
 
+# prompt for username
 _ask_username() {
   while [[ ! $user =~ ^[[:alnum:]]+$ ]]; do
     [[ -n $user ]] && echo "Not a valid username"
@@ -98,6 +96,7 @@ _ask_username() {
   _configure user $user
 }
 
+# prompt for toekn
 # TODO token check, ref: https://developer.github.com/v3/apps/oauth_applications/#check-a-token
 _ask_token() {
   echo -n "Create a new token from web browser? [Y/n] "
@@ -114,6 +113,7 @@ _ask_token() {
   _configure token $token
 }
 
+# load configuration
 _apply_config() {
   source $CONFIG 2> /dev/null || true
   if [[ ! -e $CONFIG || -z $user ]]; then
@@ -224,6 +224,7 @@ for gist in raw:
 }
 
 # TODO check if a user create a very first gist
+# parse response from gists require
 _parse_response() {
   AccessJsonElement "$(_handle_gists)" \
   | tac | sed 's/, /,/g' | nl -s' ' \
@@ -257,6 +258,7 @@ _update() {
   if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
+# update local git repos
 _sync_repos() {
   # clone repos which are not in the local
   comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
@@ -328,6 +330,7 @@ _clean_repos() {
   done
 }
 
+# parse JSON from gist detail
 _handle_gist() {
     echo '
 print("site:", raw["html_url"])
@@ -364,6 +367,7 @@ _show_detail() {
   | AccessJsonElement "$(_handle_comment)"
 }
 
+# set filename/description/permission for a new gist
 _set_gist() {
   public=true
   while [[ -n "$@" ]]; do case $1 in
@@ -384,6 +388,7 @@ _set_gist() {
   ls $files > /dev/null || return 1
 }
 
+# Let user type the content of gist before setting filename
 _new_file() {
   [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
   tmp_file=$(mktemp)
