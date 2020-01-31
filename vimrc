@@ -87,13 +87,16 @@ let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
 vnoremap <C-K> <ESC>`<i[<ESC>`>la]()<ESC>i
 
-" xml fold
-let g:xml_syntax_folding=1
-au FileType xml setlocal foldmethod=syntax
+" shell script
+autocmd FileType sh set shiftwidth=2
 
-" xml fold
+" XML fold
+let g:xml_syntax_folding=1
+autocmd FileType xml setlocal foldmethod=syntax
+
+" JSON fold
 let g:json_syntax_folding=1
-au FileType json setlocal foldmethod=syntax
+autocmd FileType json setlocal foldmethod=syntax
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings for Vimwiki
@@ -172,10 +175,10 @@ set hidden
 let g:racer_cmd = "~/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
 
-au FileType rust nmap gd <Plug>(rust-def)
-au FileType rust nmap gs <Plug>(rust-def-split)
-au FileType rust nmap gx <Plug>(rust-def-vertical)
-au FileType rust nmap <leader>gd <Plug>(rust-doc)
+autocmd FileType rust nmap gd <Plug>(rust-def)
+autocmd FileType rust nmap gs <Plug>(rust-def-split)
+autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
+autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
 
  
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
