@@ -82,7 +82,7 @@ _config_cases() {
 }
 
 _configure() {
-    [[ -z "$@" ]] && (vim $config) && return 0
+    [[ -z "$@" ]] && (${EDITOR:-vi} $config) && return 0
     target=$(_config_cases "$@")
 
     touch $config
@@ -239,6 +239,7 @@ _gist_id() {
     fi
 }
 
+# TODO a better way withou source
 _goto_gist() {
     _gist_id $1
 
