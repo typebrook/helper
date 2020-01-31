@@ -107,6 +107,7 @@ _ask_token() {
 
     while [[ ! $token =~ ^[[:alnum:]]{40}$ ]]; do
         [[ ! -z $token ]] && echo "Not a valid token"
+        trap 'echo; return 1' INT
         read -p "Paste your token here (Ctrl-C to skip): " token < /dev/tty
     done
     _configure token $token
@@ -121,13 +122,16 @@ _apply_config() {
         _ask_username
         _ask_token
     elif [[ -z $token ]] && [[ $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
-        _ask_token
+        if ! (_ask_token); then
+            echo 'To create/edit/delete a gist, a token is needed'
+            return 1
+        fi
     fi
 
     source $CONFIG
 }
 
-_apply_config "$@"
+_apply_config "$@" || exit 1
 
 auth_header="Authorization: token $token"
 
@@ -277,10 +281,13 @@ _goto_gist() {
 
     if [[ ! -d $folder/$GIST_ID  ]]; then
         echo 'Cloning gist as repo...'
-        git clone git@github.com:$GIST_ID.git $folder/$GIST_ID \
-        && echo 'Repo is cloned' \
-        || echo 'Failed to clone the gist' \
-        && return 1
+        if (git clone git@github.com:$GIST_ID.git $folder/$GIST_ID); then
+            echo 'Repo is cloned'
+            return 0
+        else
+            echo 'Failed to clone the gist'
+            return 1
+        fi
     fi
 
     echo This gist is at $folder/$GIST_ID
@@ -375,6 +382,7 @@ _new_file() {
 }
 
 # create a new gist with files
+# FIXME incorrect index
 # FIXME catch status code from curl if it fails
 _create_gist() {
     _set_gist "$@" || return 1
@@ -387,8 +395,7 @@ _create_gist() {
     | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
     | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
-    | _parse_response \
-    | sed -E "s/^/$(( $(wc -l $INDEX | cut -d' ' -f1) + 1 )) /" >> $INDEX \
+    | _parse_response >> $INDEX \
     && echo -e '\nGist created' \
     || echo 'Fail to create gist'
 
