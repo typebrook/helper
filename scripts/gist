@@ -138,6 +138,7 @@ starred=$folder/starred
 # TODO a way to show files
 # TODO show git status outdated
 _show_list() {
+    # FIXME how about starred file
     if [[ ! -e "$1" ]]; then 
         echo 'No local file found for last update, please run command:'
         echo "    gist update"
@@ -312,19 +313,19 @@ _show_detail() {
     | AccessJsonElement "$(_handle_comment)"
 }
 
-# FIXME put file before parameters
 _set_gist() {
-    while [[ "$1" =~ ^- && "$1" != "--" ]]; do case $1 in
+    while [[ -n "$@" ]]; do case $1 in
         -d | --desc)
           description="$2"
           shift; shift;;
         -f | --file)
           filename="$2"
           shift; shift;;
+        *)
+          files="$1 $files"
+          shift;;
       esac
     done
-    if [[ "$1" == '--' ]]; then shift; fi
-    files="$@"
     ls $files > /dev/null || return 1
 }
 
