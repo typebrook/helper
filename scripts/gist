@@ -136,7 +136,7 @@ _apply_config() {
 
 _apply_config "$@" || exit 1
 
-AUTH_HEADER="Authorization:token $token"
+AUTH_HEADER="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
 INDEX=$folder/index
@@ -163,9 +163,9 @@ httpGet()
 {
   local header=""
   case "$configuredClient" in
-    curl)   [[ -n $token ]] && header="--header $AUTH_HEADER"; curl -A curl -s $header "$@" ;;
-    wget)   [[ -n $token ]] && header="--header $AUTH_HEADER"; wget -qO- $header "$@" ;;
-    httpie) [[ -n $token ]] && header="'$AUTH_HEADER'"; http -b GET "$@" "$header";;
+    curl)   [[ -n $token ]] && header="--header Authorization: token $token"; curl -A curl -s $header "$@" ;;
+    wget)   [[ -n $token ]] && header="--header Authorization: token $token"; wget -qO- $header "$@" ;;
+    httpie) [[ -n $token ]] && header="'Authorization:token $token'"; http -b GET "$@" "$header";;
     fetch)  fetch -q "$@" ;;
   esac
 }
