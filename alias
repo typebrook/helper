@@ -25,7 +25,6 @@ vs() {
 todo() {
     ( which $1 ) && grep -Po 'TODO.*' $(which $1)
 }
-
 fix() {
     ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
