@@ -65,6 +65,7 @@ set -eo pipefail
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gistrc
 mkdir -p ~/.config && umask 0077
+configuredClient=""
 
 _config_cases() {
     if [[ $1 == 'token' ]]; then
@@ -115,7 +116,8 @@ _ask_token() {
 _apply_config() {
     source $CONFIG
     if [[ ! -e $CONFIG ]] || [[ -z $user ]]; then
-        echo 'Hi fellow! To access your gists, I need your Github username, also a personal token with scope which allows "gist"!'
+        echo -n 'Hi fellow! To access your gists, I need your Github username, '
+        echo -n "also a personal token with scope which allows "gist"!'"
         _ask_username
         _ask_token
     elif [[ -z $token ]] && [[ $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
@@ -129,10 +131,37 @@ _apply_config "$@"
 
 auth_header="Authorization: token $token"
 
-[[ -z "$folder" ]] && folder=~/gist
-mkdir -p $folder
+[[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
 INDEX=$folder/index
 STARRED=$folder/starred
+
+## This function determines which http get tool the system has installed and returns an error if there isnt one
+getConfiguredClient()
+{
+  if  command -v curl &>/dev/null; then
+    configuredClient="curl"
+  elif command -v wget &>/dev/null; then
+    configuredClient="wget"
+  elif command -v http &>/dev/null; then
+    configuredClient="httpie"
+  elif command -v fetch &>/dev/null; then
+    configuredClient="fetch"
+  else
+    echo "Error: This tool requires either curl, wget, httpie or fetch to be installed." >&2
+    return 1
+  fi
+}
+
+## Allows to call the users configured client without if statements everywhere
+httpGet()
+{
+  case "$configuredClient" in
+    curl)   curl -A curl -s "$@" ;;
+    wget)   wget -qO- "$@" ;;
+    httpie) http -b GET "$@" ;;
+    fetch)  fetch -q "$@" ;;
+  esac
+}
 
 # Show the list of gist, but not updated time
 # TODO a way to show files
@@ -168,7 +197,7 @@ _update() {
     local mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred" && mark="s"
 
-    curl -s $GITHUB_API/$route \
+    httpGet $GITHUB_API/$route \
     | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
     && _show_list $list_file \
     || echo Fail to update gists
@@ -178,7 +207,8 @@ _update() {
 
 ## parse JSON from STDIN with string of commands
 AccessJsonElement() {
-    PYTHONIOENCODING=utf-8 python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
+    PYTHONIOENCODING=utf-8 \
+    python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
     return "$?"
 }
 
@@ -304,10 +334,10 @@ for comment in raw:
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
-    curl -s $GITHUB_API/gists/$GIST_ID \
+    httpGet $GITHUB_API/gists/$GIST_ID \
     | AccessJsonElement "$(_handle_gist)"
 
-    curl -s $GITHUB_API/gists/$GIST_ID/comments \
+    httpGet $GITHUB_API/gists/$GIST_ID/comments \
     | AccessJsonElement "$(_handle_comment)"
 }
 
@@ -374,6 +404,7 @@ _help_message() {
     sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
 }
 
+getConfiguredClient
 case "$1" in
   "")
     _show_list $INDEX ;;
