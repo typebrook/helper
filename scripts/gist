@@ -51,11 +51,12 @@
 # * show this help message
 # gist (help | h)
 
-# TODO error handling, unit test
 # TODO parallel branch works with wget and other stuff
-# TODO completion
-# TODO grep mode for description, file content
 # TODO unify indent
+# TODO grep mode for description, file content
+# TODO description for current directory
+# TODO error handling, unit test
+# TODO completion
 
 # Validate configuration
 set -eo pipefail
