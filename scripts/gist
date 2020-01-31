@@ -239,7 +239,7 @@ _gist_id() {
     fi
 }
 
-# TODO a better way withou source
+# TODO a better way without source
 _goto_gist() {
     _gist_id $1
 
@@ -247,13 +247,15 @@ _goto_gist() {
         echo 'Cloning gist as repo...'
         git clone git@github.com:$GIST_ID.git $folder/$GIST_ID \
         && echo 'Repo is cloned' \
-        || echo 'Failed to clone the gist'
+        || echo 'Failed to clone the gist' \
+        && return 1
     fi
 
     echo This gist is at $folder/$GIST_ID
     echo -e "You can run the following command to jump to this directory: \n"
     echo -e "    \e[32m. gist $1\e[0m\n"
-    cd $folder/$GIST_ID && ls && tig --all 2> /dev/null
+    echo -n 'files: ' && cd $folder/$GIST_ID && ls
+    tig --all 2> /dev/null || true
 }
 
 _delete_gist() {
