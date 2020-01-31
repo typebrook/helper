@@ -56,7 +56,6 @@
 # TODO completion
 
 # Shell configuration
-set -eo pipefail
 [ "$TRACE" ] && set -x
 
 GITHUB_API=https://api.github.com
@@ -203,7 +202,7 @@ _show_list() {
 # parse JSON from STDIN with string of commands
 AccessJsonElement() {
     PYTHONIOENCODING=utf-8 \
-    python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
+    python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1" 2> /dev/null
     return "$?"
 }
 
@@ -247,7 +246,7 @@ _update() {
   fi
 
   response=$(curl -H "$auth_header" $GITHUB_API/$route)
-  false && echo Fail to update gists && return 1
+  false && echo Failed to update gists && return 1
   sed -i "$filter" $INDEX
   echo $response | _parse_response >> $INDEX
   _show_list $mark
@@ -393,12 +392,12 @@ _new_file() {
 }
 
 # create a new gist with files
-# FIXME catch status code from curl if it fails
 _create_gist() {
   _set_gist "$@" || return 1
   [[ -z "$files" ]] && files=$(_new_file $filename)
   [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
+  index=$(( $(sed '/^s/ d' $INDEX | wc -l) +1 ))
   echo 'Creating a new gist'
   for file in $files; do
     echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
@@ -406,11 +405,14 @@ _create_gist() {
   | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
   | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
   | sed '1 s/^/[/; $ s/$/]/' \
-  | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) >> $INDEX \
-  && echo -e '\nGist created' \
-  || echo 'Fail to create gist'
+  | _parse_response $index >> $INDEX
 
-  _show_list | tail -1
+  if [[ "$?" -ne 0 ]]; then
+    echo 'Gist is created'
+    _show_list | tail -1
+  else
+    echo 'Failed to create gist'
+  fi
 }
 
 # update description of a gist
