@@ -133,6 +133,7 @@ auth_header="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
 INDEX=$folder/index
+# TODO join star file into index
 STARRED=$folder/starred
 
 ## This function determines which http get tool the system has installed and returns an error if there isnt one
@@ -188,24 +189,7 @@ _show_list() {
     done
 }
 
-# get the list of gists
-_update() {
-    echo "fetching $user's gists from $GITHUB_API..."
-    echo
-    local list_file=$INDEX
-    local route="users/$user/gists"
-    local mark=""
-    [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred" && mark="s"
-
-    httpGet $GITHUB_API/$route \
-    | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
-    && _show_list $list_file \
-    || echo Fail to update gists
-
-    if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
-}
-
-## parse JSON from STDIN with string of commands
+# parse JSON from STDIN with string of commands
 AccessJsonElement() {
     PYTHONIOENCODING=utf-8 \
     python -c "from __future__ import print_function; import sys, json; raw = json.load(sys.stdin); $1"
@@ -232,6 +216,23 @@ _parse_response() {
         local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
         echo $link $blob_code $file_num $comment_num $description | tr -d '"'
     done
+}
+
+# get the list of gists
+_update() {
+    echo "fetching $user's gists from $GITHUB_API..."
+    echo
+    local list_file=$INDEX
+    local route="users/$user/gists"
+    local mark=""
+    [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred" && mark="s"
+
+    httpGet $GITHUB_API/$route \
+    | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
+    && _show_list $list_file \
+    || echo Fail to update gists
+
+    if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
 _sync_repos() {
