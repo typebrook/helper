@@ -161,9 +161,10 @@ getConfiguredClient()
 ## Allows to call the users configured client without if statements everywhere
 httpGet()
 {
+  local header=""
   case "$configuredClient" in
-    curl)   curl -A curl -s "$@" ;;
-    wget)   wget -qO- "$@" ;;
+    curl)   [[ -n $token ]] && header="--header $AUTH_HEADER"; curl -A curl -s $header "$@" ;;
+    wget)   [[ -n $token ]] && header="--header $AUTH_HEADER"; wget -qO- $header "$@" ;;
     httpie) http -b GET "$@" ;;
     fetch)  fetch -q "$@" ;;
   esac
@@ -247,7 +248,7 @@ _update() {
     filter='/^[s]/ d'
   fi
 
-  local response=$(curl -s -H "$AUTH_HEADER" $GITHUB_API/$route)
+  local response=$(httpGet $GITHUB_API/$route)
   false && echo Failed to update gists && return 1
   sed -i "$filter" $INDEX
   echo $response | _parse_response >> $INDEX
