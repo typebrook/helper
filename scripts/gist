@@ -131,8 +131,8 @@ auth_header="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist
 mkdir -p $folder
-index=$folder/index
-starred=$folder/starred
+INDEX=$folder/index
+STARRED=$folder/starred
 
 # Show the list of gist, but not updated time
 # TODO a way to show files
@@ -140,7 +140,7 @@ starred=$folder/starred
 _show_list() {
     if [[ ! -e "$1" ]]; then 
         echo 'No local file found for last update, please run command:'
-        echo "    gist update $([[ $1 == $starred ]] && echo 'star')"
+        echo "    gist update $([[ $1 == $STARRED ]] && echo 'star')"
         return 0
     fi
     cat $1 \
@@ -163,10 +163,10 @@ _show_list() {
 _update() {
     echo "fetching $user's gists from $GITHUB_API..."
     echo
-    local list_file=$index
+    local list_file=$INDEX
     local route="users/$user/gists"
     local mark=""
-    [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
+    [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred" && mark="s"
 
     curl -s $GITHUB_API/$route \
     | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
@@ -205,8 +205,8 @@ _parse_response() {
 }
 
 _sync_repos() {
-    local list_file=$index
-    [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred"
+    local list_file=$INDEX
+    [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred"
 
     # clone repos which are not in the local
     comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
@@ -214,7 +214,7 @@ _sync_repos() {
     | xargs -I{} --max-procs 8 git clone git@github.com:{}.git $folder/{}
 
     # pull if remote repo has different blob objects
-    cat $index | cut -d' ' -f2,3 \
+    cat $INDEX | cut -d' ' -f2,3 \
     | while read url blob_code_remote; do
         local repo=$folder/$(echo $url | sed 's#.*/##')
         local blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
@@ -228,12 +228,12 @@ _sync_repos() {
 
 # get gist id from index files
 _gist_id() {
-    GIST_ID=$( (grep -hs '' $index $starred || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
+    GIST_ID=$( (grep -hs '' $INDEX $STARRED || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
     if [[ -z "$GIST_ID" ]]; then
         echo -e "Not a valid index: \e[31m$1\e[0m"
         echo Use the index in the first column instead:
         echo
-        _show_list "$index"
+        _show_list "$INDEX"
         return 1
     fi
 }
@@ -262,14 +262,14 @@ _delete_gist() {
         _gist_id "$i"
         curl -X DELETE -s -H "$auth_header" $GITHUB_API/gists/$GIST_ID \
         && echo "$i" deleted \
-        && sed -i -E "/^$i / d" $index
+        && sed -i -E "/^$i / d" $INDEX
     done
 }
 
 # remove repos which are not in user gists anymore
 _clean_repos() {
     comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-             <(cat $index $starred 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+             <(cat $INDEX $STARRED 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
     | while read dir; do
         mv $folder/$dir /tmp && echo move $folder/$dir to /tmp
     done
@@ -352,11 +352,11 @@ _create_gist() {
     | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
     | _parse_response \
-    | sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index \
+    | sed -E "s/^/$(( $(wc -l $INDEX | cut -d' ' -f1) + 1 )) /" >> $INDEX \
     && echo -e '\nGist created' \
     || echo 'Fail to create gist'
 
-    _show_list $index | tail -1
+    _show_list $INDEX | tail -1
 }
 
 # update description of a gist
@@ -376,9 +376,9 @@ _help_message() {
 
 case "$1" in
   "")
-    _show_list $index ;;
+    _show_list $INDEX ;;
   star | s)
-    _show_list $starred ;;
+    _show_list $STARRED ;;
   update | u)
     _update "$2" ;;
   new | n)
