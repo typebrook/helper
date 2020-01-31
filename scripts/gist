@@ -63,7 +63,7 @@ set -eo pipefail
 [ "$TRACE" ] && set -x
 
 GITHUB_API=https://api.github.com
-config=~/.config/gistrc
+CONFIG=~/.config/gistrc
 mkdir -p ~/.config && umask 0077
 
 _config_cases() {
@@ -82,12 +82,12 @@ _config_cases() {
 }
 
 _configure() {
-    [[ -z "$@" ]] && (${EDITOR:-vi} $config) && return 0
+    [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
     target=$(_config_cases "$@")
 
-    touch $config
-    [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $config && echo $target >> $config
-    cat $config
+    touch $CONFIG
+    [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $CONFIG && echo $target >> $CONFIG
+    cat $CONFIG
 }
 
 _ask_username() {
@@ -113,8 +113,8 @@ _ask_token() {
 }
 
 _apply_config() {
-    source $config
-    if [[ ! -e $config ]] || [[ -z $user ]]; then
+    source $CONFIG
+    if [[ ! -e $CONFIG ]] || [[ -z $user ]]; then
         echo 'Hi fellow! To access your gists, I need your Github username, also a personal token with scope which allows "gist"!'
         _ask_username
         _ask_token
@@ -122,7 +122,7 @@ _apply_config() {
         _ask_token
     fi
 
-    source $config
+    source $CONFIG
 }
 
 _apply_config "$@"
