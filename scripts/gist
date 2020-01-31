@@ -15,13 +15,9 @@
 # 
 # * list your gists with format: [number] [url] [file_num] [comment_num] [short description]
 # gist [star | s]
-# 
-# * clone gist repos which are not in local
-# * pull master branch if a local repo is behind its remote
-# gist (sync | S) 
 #
-# * Go to local gist repo
-# . gist <number_of_gist_in_list> 
+# * show the path of local gist repo and files
+# gist <index_of_gist> 
 #
 # * create a new gist with files
 # gist (new | n) [-d | --desc "<gist-description>"] <files>...
@@ -30,13 +26,13 @@
 # gist (new | n) [-d | --desc "<gist-description>"] [-f | --file <file>] < <file-with-content>
 #
 # * show the detail of a gist
-# gist (detail | d) <gist_index>
+# gist (detail | d) <index_of_gist>
 #
 # * edit a gist description
-# gist (edit | e) <gist_index>
+# gist (edit | e) <index_of_gist>
 #
 # * delete a gist
-# gist (delete | D) <gist_index>...
+# gist (delete | D) <index_of_gist>...
 #
 # * clean removed gists in local
 # gist (clean | C)
@@ -59,7 +55,7 @@
 # TODO test on mac and remote machine
 # TODO completion
 
-# Validate configuration
+# Shell configuration
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
@@ -291,8 +287,6 @@ _gist_id() {
   fi
 }
 
-# FIXME source cause eixt
-# TODO a better way without source
 _goto_gist() {
   _gist_id $1
 
@@ -300,17 +294,15 @@ _goto_gist() {
     echo 'Cloning gist as repo...'
     git clone git@github.com:$GIST_ID.git $folder/$GIST_ID
     if [[ "$?" -ne 0 ]]; then
-        echo 'Repo is cloned'
+        echo 'Repo is cloned' > /dev/tty
     else
-        echo 'Failed to clone the gist'
+        echo 'Failed to clone the gist' > /dev/tty
     fi
   fi
 
-  echo This gist is at $folder/$GIST_ID
-  echo -e "You can run the following command to jump to this directory: \n"
-  echo -e "    \e[32m. gist $1\e[0m\n"
-  echo -n 'files: ' && cd $folder/$GIST_ID && ls
-  tig --all 2> /dev/null || true
+  echo $folder/$GIST_ID
+  cd $folder/$GIST_ID && ls
+  #tig --all 2> /dev/null || true
 }
 
 _delete_gist() {
