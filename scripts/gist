@@ -127,6 +127,11 @@ _apply_config() {
         echo 'To create/edit/delete a gist, a token is needed'
         return 1
     fi
+  elif [[ -z $token ]] && [[ $1 =~ ^(u|update)$ ]] && [[ $2 =~ ^(s|star) ]]; then
+    if ! (_ask_token); then
+        echo 'To get user starred gists, a token is needed'
+        return 1
+    fi
   fi
 
   source $CONFIG
@@ -138,8 +143,6 @@ auth_header="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
 INDEX=$folder/index
-# TODO join star file into index
-STARRED=$folder/starred
 
 ## This function determines which http get tool the system has installed and returns an error if there isnt one
 getConfiguredClient()
@@ -173,12 +176,17 @@ httpGet()
 # TODO a way to show files
 # TODO show git status outdated
 _show_list() {
-  if [[ ! -e "$1" ]]; then 
+  if [[ ! -e $INDEX ]]; then 
     echo 'No local file found for last update, please run command:'
-    echo "    gist update $([[ $1 == $STARRED ]] && echo 'star')"
+    echo '    gist update'
     return 0
   fi
-  cat $1 \
+  if [[ $1 == "s" ]]; then
+    filter='/^[^s]/ d'
+  else
+    filter='/^s/ d'
+  fi
+  cat $INDEX \
   | while read index link blob_code file_num extra description; do
     local repo=$folder/$(echo $link | sed 's#.*/##')
     local occupy=0
@@ -191,7 +199,8 @@ _show_list() {
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
     echo -e $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
-  done
+  done \
+  | sed "$filter"
 }
 
 # parse JSON from STDIN with string of commands
@@ -230,26 +239,28 @@ _parse_response() {
 _update() {
   echo "fetching $user's gists from $GITHUB_API..."
   echo
-  local list_file=$INDEX
   local route="users/$user/gists"
   local mark=""
-  [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred" && mark="s"
+  local filter='/^[^s]/ d'
+  if [[ "$1" =~ ^(star|s)$ ]];then
+    route="gists/starred"
+    mark="s"
+    filter='/^[s]/ d'
+  fi
 
-  curl -H "$auth_header" $GITHUB_API/$route \
-  | _parse_response | sed -E "s/^ */$mark/" > $list_file \
-  && _show_list $list_file \
-  || echo Fail to update gists
+  response=$(curl -H "$auth_header" $GITHUB_API/$route)
+  false && echo Fail to update gists && return 1
+  sed -i "$filter" $INDEX
+  echo $response | _parse_response >> $INDEX
+  _show_list $mark
 
   if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
 _sync_repos() {
-  local list_file=$INDEX
-  [[ "$1" =~ ^(star|s)$ ]] && list_file=$STARRED && route="gists/starred"
-
   # clone repos which are not in the local
   comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-           <(cat $list_file | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+           <(cat $INDEX | cut -d' ' -f2 | sed 's#.*/##' | sort) \
   | xargs -I{} --max-procs 8 git clone git@github.com:{}.git $folder/{}
 
   # pull if remote repo has different blob objects
@@ -267,18 +278,18 @@ _sync_repos() {
 
 # get gist id from index files
 _gist_id() {
-  GIST_ID=$( (grep -hs '' $INDEX $STARRED || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
+  GIST_ID=$( (grep -hs '' $INDEX || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
   if [[ -z "$GIST_ID" ]]; then
     echo -e "Not a valid index: \e[31m$1\e[0m"
     echo Use the index in the first column instead:
     echo
-    _show_list "$INDEX"
+    _show_list
     return 1
   fi
 }
 
-# TODO a better way without source
 # FIXME source cause eixt
+# TODO a better way without source
 _goto_gist() {
   _gist_id $1
 
@@ -311,7 +322,7 @@ _delete_gist() {
 # remove repos which are not in user gists anymore
 _clean_repos() {
   comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-           <(cat $INDEX $STARRED 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+           <(cat $INDEX 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
   | while read dir; do
     mv $folder/$dir /tmp && echo move $folder/$dir to /tmp
   done
@@ -401,7 +412,7 @@ _create_gist() {
   && echo -e '\nGist created' \
   || echo 'Fail to create gist'
 
-  _show_list $INDEX | tail -1
+  _show_list | tail -1
 }
 
 # update description of a gist
@@ -422,9 +433,9 @@ usage() {
 getConfiguredClient
 case "$1" in
   "")
-    _show_list $INDEX ;;
+    _show_list ;;
   star | s)
-    _show_list $STARRED ;;
+    _show_list s ;;
   update | u)
     _update "$2" ;;
   new | n)
