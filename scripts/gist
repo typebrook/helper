@@ -52,8 +52,8 @@
 # gist (help | h)
 
 # TODO parallel branch works with wget and other stuff
-# TODO unify indent
 # TODO grep mode for description, file content
+# TODO push github.com (may need new token)
 # TODO description for current directory
 # TODO error handling, unit test
 # TODO completion
@@ -98,11 +98,12 @@ _ask_username() {
   _configure user $user
 }
 
+# TODO token check, ref: https://developer.github.com/v3/apps/oauth_applications/#check-a-token
 _ask_token() {
   echo -n "Create a new token from web browser? [Y/n] "
   read answer < /dev/tty
   if [[ ! $answer =~ ^(N|n|No|NO|no)$ ]]; then
-    python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist; 
+    python -mwebbrowser https://github.com/settings/tokens/new\?scopes\=gist
   fi
 
   while [[ ! $token =~ ^[[:alnum:]]{40}$ ]]; do
