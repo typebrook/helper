@@ -62,7 +62,7 @@
 set -eo pipefail
 [ "$TRACE" ] && set -x
 
-github_api=https://api.github.com
+GITHUB_API=https://api.github.com
 config=~/.config/gistrc
 mkdir -p ~/.config && umask 0077
 
@@ -161,14 +161,14 @@ _show_list() {
 
 # get the list of gists
 _update() {
-    echo "fetching from api.github.com..."
+    echo "fetching $user's gists from $GITHUB_API..."
     echo
     local list_file=$index
     local route="users/$user/gists"
     local mark=""
     [[ "$1" =~ ^(star|s)$ ]] && list_file=$starred && route="gists/starred" && mark="s"
 
-    curl -s $github_api/$route \
+    curl -s $GITHUB_API/$route \
     | _parse_response | nl -s' ' | sed -E "s/^ */$mark/" > $list_file \
     && _show_list $list_file \
     || echo Fail to update gists
@@ -260,7 +260,7 @@ _goto_gist() {
 _delete_gist() {
     for i in "$@"; do
         _gist_id "$i"
-        curl -X DELETE -s -H "$auth_header" $github_api/gists/$GIST_ID \
+        curl -X DELETE -s -H "$auth_header" $GITHUB_API/gists/$GIST_ID \
         && echo "$i" deleted \
         && sed -i -E "/^$i / d" $index
     done
@@ -304,10 +304,10 @@ for comment in raw:
 # TODO format with simple text
 _show_detail() {
     _gist_id $1
-    curl -s $github_api/gists/$GIST_ID \
+    curl -s $GITHUB_API/gists/$GIST_ID \
     | AccessJsonElement "$(_handle_gist)"
 
-    curl -s $github_api/gists/$GIST_ID/comments \
+    curl -s $GITHUB_API/gists/$GIST_ID/comments \
     | AccessJsonElement "$(_handle_comment)"
 }
 
@@ -349,7 +349,7 @@ _create_gist() {
         echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
     done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
     | echo "{ \"public\": true, \"files\": $(cat -), \"description\": \"$description\"}" \
-    | curl -s -H "$auth_header" --data @- $github_api/gists \
+    | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
     | _parse_response \
     | sed -E "s/^/$(( $(wc -l $index | cut -d' ' -f1) + 1 )) /" >> $index \
@@ -366,7 +366,7 @@ _edit_gist() {
     echo -n 'Type new description: '
     read DESC < /dev/tty
     echo "{ \"description\": \"$DESC\" }" \
-    | curl -X PATCH -H "$auth_header" --data @- $github_api/gists/$GIST_ID > /dev/null \
+    | curl -X PATCH -H "$auth_header" --data @- $GITHUB_API/gists/$GIST_ID > /dev/null \
     && _update
 }
 
