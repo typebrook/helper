@@ -342,6 +342,7 @@ _show_detail() {
 }
 
 _set_gist() {
+    public=true
     while [[ -n "$@" ]]; do case $1 in
         -d | --desc)
           description="$2"
@@ -349,6 +350,9 @@ _set_gist() {
         -f | --file)
           filename="$2"
           shift; shift;;
+        -p)
+          public=false
+          shift;;
         *)
           files="$1 $files"
           shift;;
@@ -368,7 +372,6 @@ _new_file() {
 }
 
 # create a new gist with files
-# TODO support secret gist
 # FIXME catch status code from curl if it fails
 _create_gist() {
     _set_gist "$@" || return 1
@@ -378,7 +381,7 @@ _create_gist() {
     for file in $files; do
         echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
     done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
-    | echo "{ \"public\": true, \"files\": $(cat -), \"description\": \"$description\"}" \
+    | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
     | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
     | sed '1 s/^/[/; $ s/$/]/' \
     | _parse_response \
