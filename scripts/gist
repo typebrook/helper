@@ -116,18 +116,18 @@ _ask_token() {
 
 _apply_config() {
   source $CONFIG 2> /dev/null || true
-  if [[ ! -e $CONFIG ]] || [[ -z $user ]]; then
+  if [[ ! -e $CONFIG || -z $user ]]; then
     echo 'Hi fellow! To access your gists, I need your Github username'
     echo "Also a personal token with scope which allows "gist"!'"
     echo
     _ask_username
     _ask_token
-  elif [[ -z $token ]] && [[ $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
+  elif [[ -z $token && $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
     if ! (_ask_token); then
         echo 'To create/edit/delete a gist, a token is needed'
         return 1
     fi
-  elif [[ -z $token ]] && [[ $1 =~ ^(u|update)$ ]] && [[ $2 =~ ^(s|star) ]]; then
+  elif [[ -z $token && $1 =~ ^(u|update)$ && $2 =~ ^(s|star) ]]; then
     if ! (_ask_token); then
         echo 'To get user starred gists, a token is needed'
         return 1
