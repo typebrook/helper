@@ -64,6 +64,7 @@ configuredClient=""
 
 # handle configuration cases
 _configure() {
+  local target=""
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
   if [[ $1 == 'token' ]]; then
     [[ ${#2} -eq 40 ]] && target=$1=$2 \
@@ -135,7 +136,7 @@ _apply_config() {
 
 _apply_config "$@" || exit 1
 
-auth_header="Authorization: token $token"
+AUTH_HEADER="Authorization: token $token"
 
 [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
 INDEX=$folder/index
@@ -177,6 +178,7 @@ _show_list() {
     echo '    gist update'
     return 0
   fi
+  local filter=""
   if [[ $1 == "s" ]]; then
     filter='/^[^s]/ d'
   else
@@ -226,8 +228,8 @@ _parse_response() {
   | tac | sed 's/, /,/g' | nl -s' ' \
   | while read index link file_url_array public file_num comment_num description; do
     local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
-    [[ $public == 'False' ]] && mark=p
-    [[ -n $1 ]] && index=$1
+    [[ $public == 'False' ]] && local mark=p
+    [[ -n $1 ]] && local index=$1
     echo $mark$index $link $blob_code $file_num $comment_num $description | tr -d '"'
   done
 }
@@ -245,7 +247,7 @@ _update() {
     filter='/^[s]/ d'
   fi
 
-  response=$(curl -H "$auth_header" $GITHUB_API/$route)
+  local response=$(curl -s -H "$AUTH_HEADER" $GITHUB_API/$route)
   false && echo Failed to update gists && return 1
   sed -i "$filter" $INDEX
   echo $response | _parse_response >> $INDEX
@@ -307,7 +309,7 @@ _goto_gist() {
 _delete_gist() {
   for i in "$@"; do
     _gist_id "$i"
-    curl -X DELETE -s -H "$auth_header" $GITHUB_API/gists/$GIST_ID \
+    curl -X DELETE -s -H "$AUTH_HEADER" $GITHUB_API/gists/$GIST_ID \
     && echo "$i" deleted \
     && sed -i -E "/^$i / d" $INDEX
   done
@@ -383,7 +385,7 @@ _set_gist() {
 # Let user type the content of gist before setting filename
 _new_file() {
   [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
-  tmp_file=$(mktemp)
+  local tmp_file=$(mktemp)
   cat > $tmp_file
   echo -e '\n' > /dev/tty
   [[ -z "$1" ]] && read -p 'Type file name: ' filename < /dev/tty
@@ -397,13 +399,13 @@ _create_gist() {
   [[ -z "$files" ]] && files=$(_new_file $filename)
   [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
-  index=$(( $(sed '/^s/ d' $INDEX | wc -l) +1 ))
+  local index=$(( $(sed '/^s/ d' $INDEX | wc -l) +1 ))
   echo 'Creating a new gist'
   for file in $files; do
     echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
   done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
   | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
-  | curl -s -H "$auth_header" --data @- $GITHUB_API/gists \
+  | curl -s -H "$AUTH_HEADER" --data @- $GITHUB_API/gists \
   | sed '1 s/^/[/; $ s/$/]/' \
   | _parse_response $index >> $INDEX
 
@@ -422,7 +424,7 @@ _edit_gist() {
   echo -n 'Type new description: '
   read DESC < /dev/tty
   echo "{ \"description\": \"$DESC\" }" \
-  | curl -X PATCH -H "$auth_header" --data @- $GITHUB_API/gists/$GIST_ID > /dev/null \
+  | curl -X PATCH -H "$AUTH_HEADER" --data @- $GITHUB_API/gists/$GIST_ID > /dev/null \
   && _update
 }
 
