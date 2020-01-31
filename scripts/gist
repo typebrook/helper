@@ -138,10 +138,9 @@ starred=$folder/starred
 # TODO a way to show files
 # TODO show git status outdated
 _show_list() {
-    # FIXME how about starred file
     if [[ ! -e "$1" ]]; then 
         echo 'No local file found for last update, please run command:'
-        echo "    gist update"
+        echo "    gist update $([[ $1 == $starred ]] && echo 'star')"
         return 0
     fi
     cat $1 \
@@ -150,14 +149,13 @@ _show_list() {
         local occupy=0
 
         # if repo is not yet cloned, show green message "Not cloned yet"
-        [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=17
-
+        [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=16
         # if there are some changes in git index or working directory, show blue message "working"
-        [[ -n $(cd $repo && git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" && occupy=10
+        [[ -n $(cd $repo && git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" && occupy=9
         # if there is a commit not yet push, show red message "ahead"
-        [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=8
+        [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
-        echo -e $line_num $link $file_num $extra $(echo $description | cut -c -$(( 60 - $occupy )) )
+        echo -e $line_num $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
     done
 }
 
@@ -222,7 +220,7 @@ _sync_repos() {
         local blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
         cd $repo \
         && [[ $blob_code_local != $blob_code_remote ]] \
-        &&[[ $(git rev-parse origin/master) == $(git rev-parse master) ]] \
+        && [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] \
         && git pull
     done
     echo Everything is fine!
