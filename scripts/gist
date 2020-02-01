@@ -165,7 +165,7 @@ httpGet()
   case "$configuredClient" in
     curl)   [[ -n $token ]] && header="--header Authorization: token $token"; curl -A curl -s $header "$@" ;;
     wget)   [[ -n $token ]] && header="--header Authorization: token $token"; wget -qO- $header "$@" ;;
-    httpie) [[ -n $token ]] && header="'Authorization:token $token'"; http -b GET "$@" "$header";;
+    httpie) [[ -n $token ]] && header="Authorization:token $token"; http -b GET "$@" "$header";;
     fetch)  fetch -q "$@" ;;
   esac
 }
