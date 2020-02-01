@@ -134,7 +134,7 @@ _validate_config(){
 
 # load configuration
 _apply_config() {
-  source $CONFIG && _validate_config
+  _validate_config
 
   AUTH_HEADER="Authorization: token $token"
   [[ -z "$action" ]] && action="${EDITOR:-vi} *"
@@ -161,12 +161,13 @@ getConfiguredClient() {
 }
 
 ## Allows to call the users configured client without if statements everywhere
-httpGet() {
+http_method() {
   local header=""
+  local METHOD=$1; shift
   case "$configuredClient" in
-    curl)   [[ -n $token ]] && header="--header Authorization: token $token"; curl -A curl -s $header "$@" ;;
-    wget)   [[ -n $token ]] && header="--header Authorization: token $token"; wget -qO- $header "$@" ;;
-    httpie) [[ -n $token ]] && header="Authorization:token $token"; http -b GET "$@" "$header";;
+    curl)   [[ -n $token ]] && header="--header Authorization: token $token"; curl $METHOD -A curl -s $header $@ ;;
+    wget)   [[ -n $token ]] && header="--header Authorization: token $token"; wget --method=$METHOD -qO- $header $@ ;;
+    httpie) [[ -n $token ]] && header="Authorization:token $token";           http -b $METHOD $@ $header;;
     fetch)  fetch -q "$@" ;;
   esac
 }
@@ -249,7 +250,7 @@ _update() {
     filter='/^[s]/ d'
   fi
 
-  local response=$(httpGet $GITHUB_API/$route)
+  local response=$(http_method GET $GITHUB_API/$route)
   false && echo Failed to update gists && return 1
   sed -i "$filter" $INDEX
   echo $response | _parse_response >> $INDEX
@@ -357,10 +358,10 @@ for comment in raw:
 # TODO format with simple text
 _show_detail() {
   _gist_id $1
-  httpGet $GITHUB_API/gists/$GIST_ID \
+  http_method GET $GITHUB_API/gists/$GIST_ID \
   | AccessJsonElement "$(_handle_gist)"
 
-  httpGet $GITHUB_API/gists/$GIST_ID/comments \
+  http_method GET $GITHUB_API/gists/$GIST_ID/comments \
   | AccessJsonElement "$(_handle_comment)"
 }
 
