@@ -42,7 +42,7 @@
 # It is your business to do git commit and git push
 #
 # * configuration
-# gist (config | c) [token <value>] [user <value>] [folder <value>] [auto-sync false]
+# gist (config | c) [token|user|folder|auto-sync|EDITOR|action [value]]
 #
 # * show this help message
 # gist (help | h)
@@ -111,8 +111,7 @@ _ask_token() {
   _configure token $token
 }
 
-# load configuration
-_apply_config() {
+_validate_config(){
   source $CONFIG 2> /dev/null || true
   if [[ ! -e $CONFIG || -z $user ]]; then
     echo 'Hi fellow! To access your gists, I need your Github username'
@@ -131,12 +130,16 @@ _apply_config() {
         return 1
     fi
   fi
+}
 
-  source $CONFIG
+# load configuration
+_apply_config() {
+  source $CONFIG && _validate_config
 
+  AUTH_HEADER="Authorization: token $token"
+  [[ -z "$action" ]] && action="${EDITOR:-vi} *"
   [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
   INDEX=$folder/index
-  AUTH_HEADER="Authorization: token $token"
 }
 
 _apply_config "$@" || exit 1
@@ -302,6 +305,7 @@ _goto_gist() {
     fi
   fi
 
+  (cd $folder/$GIST_ID && eval "$action")
   echo $folder/$GIST_ID
 }
 
