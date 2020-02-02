@@ -47,7 +47,6 @@
 # * show this help message
 # gist (help | h)
 
-# TODO parallel branch works with wget and other stuff
 # TODO new command "user" to fetch other user's gists
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
@@ -436,7 +435,7 @@ _edit_gist() {
   echo -n 'Type new description: '
   read DESC < /dev/tty
   echo "{ \"description\": \"$DESC\" }" \
-  | curl -X PATCH -H "$AUTH_HEADER" --data @- $GITHUB_API/gists/$GIST_ID > /dev/null \
+  | http_method PATCH $GITHUB_API/gists/$GIST_ID > /dev/null \
   && _update
 }
 
