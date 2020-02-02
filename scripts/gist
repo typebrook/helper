@@ -134,7 +134,7 @@ _validate_config(){
 
 # load configuration
 _apply_config() {
-  _validate_config
+  _validate_config "$@" || return 1
 
   AUTH_HEADER="Authorization: token $token"
   [[ -z "$action" ]] && action="${EDITOR:-vi} *"
@@ -162,12 +162,17 @@ getConfiguredClient() {
 
 ## Allows to call the users configured client without if statements everywhere
 http_method() {
-  local header=""
   local METHOD=$1; shift
+  [[ $METHOD =~ (POST|PATCH) ]] && read data
   case "$configuredClient" in
-    curl)   [[ -n $token ]] && header="--header Authorization: token $token"; curl $METHOD -A curl -s $header $@ ;;
-    wget)   [[ -n $token ]] && header="--header Authorization: token $token"; wget --method=$METHOD -qO- $header $@ ;;
-    httpie) [[ -n $token ]] && header="Authorization:token $token";           http -b $METHOD $@ $header;;
+    curl)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2="--data"
+      curl -X $METHOD -A curl -s $extra "$header" $extra2 "$data" $@ ;;
+    wget)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-data'
+      wget --method=$METHOD -qO- $extra "$header" $extra2 "$data" $@ ;;
+    httpie) [[ -n $token ]] && header="Authorization:token $token"
+      http -b $METHOD $@ "$header";;
     fetch)  fetch -q "$@" ;;
   esac
 }
@@ -251,6 +256,8 @@ _update() {
   fi
 
   local response=$(http_method GET $GITHUB_API/$route)
+
+  # FIXME if response fail
   false && echo Failed to update gists && return 1
   sed -i "$filter" $INDEX
   echo $response | _parse_response >> $INDEX
@@ -313,7 +320,7 @@ _goto_gist() {
 _delete_gist() {
   for i in "$@"; do
     _gist_id "$i"
-    curl -X DELETE -s -H "$AUTH_HEADER" $GITHUB_API/gists/$GIST_ID \
+    http_method DELETE $GITHUB_API/gists/$GIST_ID \
     && echo "$i" deleted \
     && sed -i -E "/^$i / d" $INDEX
   done
@@ -397,6 +404,7 @@ _new_file() {
   echo /tmp/$filename
 }
 
+# FIXME curl bad credential exit code
 # create a new gist with files
 _create_gist() {
   _set_gist "$@" || return 1
@@ -409,8 +417,7 @@ _create_gist() {
     echo "\"$(basename $file)\": {\"content\": \"$(sed '$ !s/$/\\n/' $file)\"},"
   done | tr -d '\n' | sed 's/^/{/; s/,$/}/' \
   | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
-  | curl -s -H "$AUTH_HEADER" --data @- $GITHUB_API/gists \
-  | tee jojo \
+  | http_method POST $GITHUB_API/gists \
   | sed '1 s/^/[/; $ s/$/]/' \
   | _parse_response $index >> $INDEX
 
