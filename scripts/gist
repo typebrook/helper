@@ -56,7 +56,9 @@
 # TODO completion
 
 # Shell configuration
+set -o pipefail
 [ "$TRACE" ] && set -x
+trap 'rm -f "$http_data" "tmp_file"' EXIT
 
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
@@ -162,14 +164,14 @@ getConfiguredClient() {
 ## Allows to call the users configured client without if statements everywhere
 http_method() {
   local METHOD=$1; shift
-  [[ $METHOD =~ (POST|PATCH) ]] && read data
   case "$configuredClient" in
     curl)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
       [[ $METHOD =~ (POST|PATCH) ]] && extra2="--data"
-      curl -X $METHOD -A curl -s $extra "$header" $extra2 "$data" $@ ;;
+      curl -X $METHOD -A curl -s $extra "$header" $extra2 @$http_data $@ ;;
     wget)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
-      [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-data'
-      wget --method=$METHOD -qO- $extra "$header" $extra2 "$data" $@ ;;
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-file'
+      wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data $@ ;;
+      # TODO add other methods
     httpie) [[ -n $token ]] && header="Authorization:token $token"
       http -b $METHOD $@ "$header";;
     fetch)  fetch -q "$@" ;;
@@ -255,12 +257,10 @@ _update() {
     filter='/^[s]/ d'
   fi
 
-  local response=$(http_method GET $GITHUB_API/$route)
+  result=$(http_method GET $GITHUB_API/$route | _parse_response)
+  [[ -z $result ]] && echo Failed to update gists && return 1
 
-  # FIXME if response fail
-  false && echo Failed to update gists && return 1
-  sed -i "$filter" $INDEX
-  echo $response | _parse_response >> $INDEX
+  sed -i "$filter" $INDEX && echo "$result" >> $INDEX
   _show_list $mark
 
   if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
@@ -385,7 +385,7 @@ _set_gist() {
       filename="$2"
       shift; shift;;
     -p)
-      public=false
+      public=False
       shift;;
     *)
       files="$1 $files"
@@ -395,11 +395,10 @@ _set_gist() {
   ls $files > /dev/null || return 1
 }
 
-# TODO remove tmp file
 # Let user type the content of gist before setting filename
 _new_file() {
   [[ -t 0 ]] && echo "Type a gist. <Ctrl-C> to cancel, <Ctrl-D> when done" > /dev/tty
-  local tmp_file=$(mktemp)
+  tmp_file=$(mktemp)
   cat > $tmp_file
   echo -e '\n' > /dev/tty
   [[ -z "$1" ]] && read -p 'Type file name: ' filename < /dev/tty
@@ -407,12 +406,19 @@ _new_file() {
   echo /tmp/$filename
 }
 
-_make_gist_body() {
-  return 0
+_gist_body(){
+  echo "
+import os.path
+files_json = {}
+files = sys.stdin.readline().split()
+description = sys.stdin.readline().replace('\n','')
+for file in files:
+    with open(file, 'r') as f:
+        files_json[os.path.basename(file)] = {'content': f.read()}
+print(json.dumps({'public': $public, 'files': files_json, 'description': description}))
+  "
 }
 
-# FIXME curl bad credential exit code
-# FIXME file content with " and \
 # create a new gist with files
 _create_gist() {
   _set_gist "$@" || return 1
@@ -420,27 +426,18 @@ _create_gist() {
   [[ -z "$description" ]] && read -p 'Type description: ' description < /dev/tty
 
   echo 'Creating a new gist...'
-  local index=$(( $(sed '/^s/ d' $INDEX | wc -l) +1 ))
-  echo -e "$files\n$description\n$public" | AccessJsonElement "
-import os.path
-files_json = {}
-files = sys.stdin.readline().split()
-description = sys.stdin.readline().replace('\n','')
-public = sys.stdin.readline().replace('\n','')
-for file in files:
-    with open(file, 'r') as f:
-        files_json[os.path.basename(file)] = {'content': f.read()}
-print(json.dumps({'public': public, 'files': files_json, 'description': description}))
-  " | tee json \
-  | http_method POST $GITHUB_API/gists \
+  http_data=$(mktemp)
+
+  echo -e "$files\n$description" \
+  | AccessJsonElement "$(_gist_body)" > $http_data \
+  && http_method POST $GITHUB_API/gists \
   | tee result \
   | sed '1 s/^/[/; $ s/$/]/' \
-  | _parse_response $index \
-  | read result
+  | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) >> $INDEX
 
-  if true; then
+  if [[ $? -eq 0 ]]; then
     echo 'Gist is created'
-    echo $result >> $INDEX && _show_list | tail -1
+    _show_list | tail -1
   else
     echo 'Failed to create gist'
   fi
