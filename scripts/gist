@@ -418,11 +418,11 @@ _create_gist() {
   | echo "{ \"public\": $public, \"files\": $(cat -), \"description\": \"$description\"}" \
   | http_method POST $GITHUB_API/gists \
   | sed '1 s/^/[/; $ s/$/]/' \
-  | _parse_response $index >> $INDEX
+  | _parse_response $index
 
-  if [[ $? -eq 0 ]]; then
+  if [[ -n "$result" ]]; then
     echo 'Gist is created'
-    _show_list | tail -1
+    echo $result >> $INDEX && _show_list | tail -1
   else
     echo 'Failed to create gist'
   fi
