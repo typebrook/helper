@@ -32,7 +32,7 @@ nnoremap <leader>P :r !xsel -ob<CR>
 " move
 nnoremap <Tab> }
 nnoremap <S-Tab> {
-inoremap <C-L> <Esc>2li
+inoremap <C-L> <Right>
 cnoremap <C-L> <Right>
 cnoremap <C-H> <Left>
 nmap H 0
