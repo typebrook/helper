@@ -54,6 +54,7 @@ alias ai='sudo apt install' # apt install
 alias aptu='sudo apt update && sudo apt upgrade'
 alias si='sudo snap install' # snap install
 alias ni='sudo npm install -g' # nodejs install
+alias pi='sudo pip3 install' # nodejs install
 
 # cd to DIRs
 alias ..='cd ..'
