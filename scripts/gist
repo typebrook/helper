@@ -11,9 +11,9 @@
 #   [star | s]                    list your gists with format below, star for your starred gists: 
 #                                 [index_of_gist] [url] [file_num] [comment_num] [short description]
 #   update, u [star | s]          update the local list of your gists, star for your starred gists
-#   <index_of_gist>               show the path of local gist repo and files
+#   <index_of_gist>               show the path of local gist repo and do custom actions
 #   new, n [-d | --desc <description>] <files>... create a new gist with files
-#   new, n [-d | --desc <description>] [-f | --file <file_name>] < <file-with-content> create a new gist from STDIN
+#   new, n [-d | --desc <description>] [-f | --file <file_name>] create a new gist from STDIN
 #   detail, d <index_of_gist>     show the detail of a gist
 #   edit, e   <index_of_gist>     edit a gist description
 #   delete, D <index_of_gist>...  delete a gist
@@ -26,8 +26,8 @@
 #   gist (Show your gists)
 #   gist 3 (show the repo path of your 3rd gist, and do custom actions)
 #
-#   Since now a gist is a local cloned repo
-#   It is your business to do git commit and git push
+# Since now a gist is a local cloned repo
+# It is your business to do git commit and git push
 
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
@@ -172,7 +172,7 @@ _show_list() {
   local filter='/^s/ d; /^$/ d'
   [[ $1 == "s" ]] && filter='/^[^s]/ d; /^$/ d'
 
-  while read index link blob_code file_num extra description; do
+  while read index link blob_code file_num extra author description; do
     local repo=$folder/$(echo $link | sed 's#.*/##')
     local occupy=0
 
@@ -206,6 +206,7 @@ for gist in raw:
     print(gist["public"], end=" ")
     print(len(gist["files"]), end=" ")
     print(gist["comments"], end=" ")
+    print(gist["owner"]["login"], end=" ")
     print(gist["description"])
     ' 
 }
@@ -215,14 +216,15 @@ for gist in raw:
 _parse_response() {
   AccessJsonElement "$(_handle_gists)" \
   | tac | sed 's/, /,/g' | nl -s' ' \
-  | while read index link file_url_array public file_num comment_num description; do
+  | while read index link file_url_array public file_num comment_num author description; do
     local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
     [[ $public == 'False' ]] && local mark=p
     [[ -n $1 ]] && local index=$1
-    echo $mark$index $link $blob_code $file_num $comment_num $description | tr -d '"'
+    echo $mark$index $link $blob_code $file_num $comment_num $author $description | tr -d '"'
   done
 }
 
+# TODO add author, files and date of a gist 
 # get latest list of gists from Github API
 _update() {
   echo "fetching $user's gists from $GITHUB_API..."
