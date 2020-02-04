@@ -59,8 +59,8 @@ alias pi='sudo pip3 install' # nodejs install
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-cdg(){ 
-    cd ~/git; cd $1 
+cdg() { 
+    cd ~/git/$1 || cd ~/git 
 }
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
