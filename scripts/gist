@@ -161,8 +161,6 @@ http_method() {
 }
 
 # Show the list of gist, but not updated time
-# TODO a way to show files
-# TODO show git status outdated
 _show_list() {
   if [[ ! -e $INDEX ]]; then 
     echo 'No local file found for last update, please run command:'
@@ -225,7 +223,7 @@ _parse_response() {
   done
 }
 
-# TODO add author, files and date of a gist 
+# TODO add files and date of a gist 
 # get latest list of gists from Github API
 _update() {
   echo "fetching $user's gists from $GITHUB_API..."
