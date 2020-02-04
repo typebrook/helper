@@ -4,51 +4,29 @@
 # License: MIT
 # https://gist.github.com/typebrook/b0d2e7e67aa50298fdf8111ae7466b56
 #
+# gist
+# Description: Host your gists as local cloned git repo
+# Usage: gist [command] [<arg>]
 #
-# This script host your gists as local cloned git repo
-# It works under GNU curl, which is easy to get in most cases
+#   [star | s]                 list your gists with format below, star for your starred gists: 
+#   update [star | s]          update the local list of your gists, star for your starred gists
+#                              [number] [url] [file_num] [comment_num] [short description]
+#   <index_of_gist>            show the path of local gist repo and files
+#   new [-d | --desc "<gist-description>"] <files>...
+#                              create a new gist with files
+#   new [-d | --desc "<gist-description>"] [-f | --file <file_name>] < <file-with-content>
+#                              create a new gist from STDIN
+#   detail <index_of_gist>     show the detail of a gist
+#   edit   <index_of_gist>     edit a gist description
+#   delete <index_of_gist>...  delete a gist
+#   clean                      clean removed gists in local
+#   config [token | user | folder | auto-sync |EDITOR | action [value] ]
+#                              configuration
+#   user   <user>              get gists from a given Github user
+#   help                       show this help message
 #
-# Use the following commands to manage your gists:
-# 
-# * update the local list of your gists, star for your starred gists
-# gist (update | u) [star | s] 
-# 
-# * list your gists with format: [number] [url] [file_num] [comment_num] [short description]
-# gist [star | s]
-#
-# * show the path of local gist repo and files
-# gist <index_of_gist> 
-#
-# * create a new gist with files
-# gist (new | n) [-d | --desc "<gist-description>"] <files>...
-#
-# * create a new gist with STDIN
-# gist (new | n) [-d | --desc "<gist-description>"] [-f | --file <file>] < <file-with-content>
-#
-# * show the detail of a gist
-# gist (detail | d) <index_of_gist>
-#
-# * edit a gist description
-# gist (edit | e) <index_of_gist>
-#
-# * delete a gist
-# gist (delete | D) <index_of_gist>...
-#
-# * clean removed gists in local
-# gist (clean | C)
-# 
-# * update a gist 
-# Since now a gist is a local cloned repo
-# It is your business to do git commit and git push
-#
-# * configuration
-# gist (config | c) [token|user|folder|auto-sync|EDITOR|action [value]]
-#
-# * get gists from a given Github user
-# gist (user | U) <user>
-#
-# * show this help message
-# gist (help | h)
+#   Since now a gist is a local cloned repo
+#   It is your business to do git commit and git push
 
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
@@ -190,8 +168,8 @@ _show_list() {
     echo '    gist update'
     return 0
   fi
-  local filter='/^s/ d'
-  [[ $1 == "s" ]] && filter='/^[^s]/ d'
+  local filter='/^s/ d; /^$/ d'
+  [[ $1 == "s" ]] && filter='/^[^s]/ d; /^$/ d'
 
   while read index link blob_code file_num extra description; do
     local repo=$folder/$(echo $link | sed 's#.*/##')
@@ -207,6 +185,7 @@ _show_list() {
     echo -e $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
+  echo -e '\nrun "gist help" for more details'
 }
 
 # parse JSON from STDIN with string of commands
@@ -464,7 +443,7 @@ _edit_gist() {
 }
 
 usage() {
-  sed -E -n ' /^$/ q; 8,$ s/^#//p' $0
+  sed -E -n ' /^$/ q; 7,$ s/^#//p' $0
 }
 
 getConfiguredClient
