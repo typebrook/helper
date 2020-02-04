@@ -49,21 +49,18 @@ _configure() {
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
 
   local target=""
-  if [[ $1 == 'token' ]]; then
-    [[ ${#2} -eq 40 ]] && target=$1=$2 \
-    || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
+  if [[ $1 == 'user' ]]; then
+    [[ -z $2 ]] && echo "Must specify username" >&2 && return 1
+  elif [[ $1 == 'token' ]]; then
+    [[ ${#2} -ne 40 ]] && echo 'Invalid token format, it is not 40 chars' >&2 \
+    && return 1
   elif [[ $1 == 'auto_sync' ]]; then
-    [[ $2 == 'false' ]] && target=$1=$2
-  elif [[ $1 == 'folder' ]]; then
-    [[ -n "$2" ]] && target=$1=$2
-  elif [[ $1 == 'user' ]]; then
-    target=$1=$2
-  elif [[ $1 == 'action' ]]; then
-    target=$1="$2"
+    [[ ! $2 =~ ^(true|false)$ ]]  && return 1
   fi
+  target=$1=$2
 
   umask 0077 && touch $CONFIG
-  [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $CONFIG && echo $target >> $CONFIG
+  sed -i "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
   cat $CONFIG
 }
 
@@ -93,6 +90,7 @@ _ask_token() {
   _configure token $token
 }
 
+# check configuration is fine with user setting
 _validate_config(){
   source $CONFIG 2> /dev/null || true
   if [[ ! -e $CONFIG || -z $user ]]; then
