@@ -140,14 +140,14 @@ _apply_config() {
   _validate_config "$@" || return 1
 
   AUTH_HEADER="Authorization: token $token"
-  [[ -z "$action" ]] && action="${EDITOR:-vi} *"
+  [[ -z "$action" ]] && action="${EDITOR:-vi} ."
   [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
   INDEX=$folder/index
 }
 
 _apply_config "$@" || exit 1
 
-## This function determines which http get tool the system has installed and returns an error if there isnt one
+# This function determines which http get tool the system has installed and returns an error if there isnt one
 getConfiguredClient() {
   if  command -v curl &>/dev/null; then
     configuredClient="curl"
@@ -163,7 +163,7 @@ getConfiguredClient() {
   fi
 }
 
-## Allows to call the users configured client without if statements everywhere
+# Allows to call the users configured client without if statements everywhere
 http_method() {
   local METHOD=$1; shift
   case "$configuredClient" in
@@ -204,7 +204,7 @@ _show_list() {
     # if there is a commit not yet push, show red message "ahead"
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
-    echo $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
+    echo -e $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
 }
