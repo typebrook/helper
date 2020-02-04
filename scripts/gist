@@ -6,24 +6,25 @@
 #
 # gist
 # Description: Host your gists as local cloned git repo
-# Usage: gist [command] [<arg>]
+# Usage: gist [command] [<args>]
 #
-#   [star | s]                 list your gists with format below, star for your starred gists: 
-#   update [star | s]          update the local list of your gists, star for your starred gists
-#                              [number] [url] [file_num] [comment_num] [short description]
-#   <index_of_gist>            show the path of local gist repo and files
-#   new [-d | --desc "<gist-description>"] <files>...
-#                              create a new gist with files
-#   new [-d | --desc "<gist-description>"] [-f | --file <file_name>] < <file-with-content>
-#                              create a new gist from STDIN
-#   detail <index_of_gist>     show the detail of a gist
-#   edit   <index_of_gist>     edit a gist description
-#   delete <index_of_gist>...  delete a gist
-#   clean                      clean removed gists in local
-#   config [token | user | folder | auto-sync |EDITOR | action [value] ]
-#                              configuration
-#   user   <user>              get gists from a given Github user
-#   help                       show this help message
+#   [star | s]                    list your gists with format below, star for your starred gists: 
+#                                 [index_of_gist] [url] [file_num] [comment_num] [short description]
+#   update, u [star | s]          update the local list of your gists, star for your starred gists
+#   <index_of_gist>               show the path of local gist repo and files
+#   new, n [-d | --desc <description>] <files>... create a new gist with files
+#   new, n [-d | --desc <description>] [-f | --file <file_name>] < <file-with-content> create a new gist from STDIN
+#   detail, d <index_of_gist>     show the detail of a gist
+#   edit, e   <index_of_gist>     edit a gist description
+#   delete, D <index_of_gist>...  delete a gist
+#   clean, C                      clean removed gists in local
+#   config, c [token | user | folder | auto-sync | EDITOR | action [value] ] do configuration
+#   user, U   <user>              get gists from a given Github user
+#   help, h                       show this help message
+#
+# Example:
+#   gist (Show your gists)
+#   gist 3 (show the repo path of your 3rd gist, and do custom actions)
 #
 #   Since now a gist is a local cloned repo
 #   It is your business to do git commit and git push
