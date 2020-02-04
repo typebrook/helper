@@ -173,7 +173,8 @@ http_method() {
       wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data $@ ;;
       # TODO add other methods
     httpie) [[ -n $token ]] && header="Authorization:token $token"
-      http -b $METHOD $@ "$header";;
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2="@$http_data"
+      http -b $METHOD $@ "$header" $extra2 ;;
     fetch)  fetch -q "$@" ;;
   esac
 }
