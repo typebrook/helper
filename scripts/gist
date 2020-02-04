@@ -44,14 +44,16 @@
 # * configuration
 # gist (config | c) [token|user|folder|auto-sync|EDITOR|action [value]]
 #
+# * get gists from a given Github user
+# gist (user | U) <user>
+#
 # * show this help message
 # gist (help | h)
 
-# TODO new command "user" to fetch other user's gists
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
 # TODO description for current directory
-# TODO error handling, unit test
+# TODO unit test
 # TODO test on mac and remote machine
 # TODO completion
 
@@ -167,14 +169,14 @@ http_method() {
   case "$configuredClient" in
     curl)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
       [[ $METHOD =~ (POST|PATCH) ]] && extra2="--data"
-      curl -X $METHOD -A curl -s $extra "$header" $extra2 @$http_data $@ ;;
+      curl -X $METHOD -A curl -s $extra "$header" $extra2 @$http_data "$@" ;;
     wget)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
       [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-file'
-      wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data $@ ;;
-      # TODO add other methods
+      wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data "$@" ;;
     httpie) [[ -n $token ]] && header="Authorization:token $token"
       [[ $METHOD =~ (POST|PATCH) ]] && extra2="@$http_data"
-      http -b $METHOD $@ "$header" $extra2 ;;
+      http -b $METHOD "$@" "$header" $extra2 ;;
+    # TODO add other methods
     fetch)  fetch -q "$@" ;;
   esac
 }
@@ -188,14 +190,10 @@ _show_list() {
     echo '    gist update'
     return 0
   fi
-  local filter=""
-  if [[ $1 == "s" ]]; then
-    filter='/^[^s]/ d'
-  else
-    filter='/^s/ d'
-  fi
-  cat $INDEX \
-  | while read index link blob_code file_num extra description; do
+  local filter='/^s/ d'
+  [[ $1 == "s" ]] && filter='/^[^s]/ d'
+
+  while read index link blob_code file_num extra description; do
     local repo=$folder/$(echo $link | sed 's#.*/##')
     local occupy=0
 
@@ -206,8 +204,8 @@ _show_list() {
     # if there is a commit not yet push, show red message "ahead"
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
-    echo -e $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
-  done \
+    echo $index $link $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
+  done < $INDEX \
   | sed "$filter"
 }
 
@@ -265,6 +263,17 @@ _update() {
   _show_list $mark
 
   if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
+}
+
+_query_user() {
+  local route="users/$1/gists"
+  result=$(http_method GET $GITHUB_API/$route | _parse_response)
+  [[ -z $result ]] && echo Failed to update gists && return 1
+
+  echo "$result" \
+  | while read index link blob_code file_num extra description; do
+    echo $link $file_num $extra $(echo $description | cut -c -70 )
+  done
 }
 
 # update local git repos
@@ -484,6 +493,9 @@ case "$1" in
   config | c)
     shift
     _configure "$@" ;;
+  user | U)
+    shift
+    _query_user "$@" ;;
   help | h)
     usage ;;
   *)
