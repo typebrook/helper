@@ -250,11 +250,11 @@ _update() {
   echo
   local route="users/$user/gists"
   local mark=""
-  local filter='/^[^s]/ d'
+  local filter='/^[^s]/ d; /^$/ d'
   if [[ "$1" =~ ^(star|s)$ ]];then
     route="gists/starred"
     mark="s"
-    filter='/^[s]/ d'
+    filter='/^[s]/ d; /^$/ d'
   fi
 
   result=$(http_method GET $GITHUB_API/$route | _parse_response)
@@ -431,7 +431,6 @@ _create_gist() {
   echo -e "$files\n$description" \
   | AccessJsonElement "$(_gist_body)" > $http_data \
   && http_method POST $GITHUB_API/gists \
-  | tee result \
   | sed '1 s/^/[/; $ s/$/]/' \
   | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) >> $INDEX
 
