@@ -31,9 +31,8 @@
 
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
-# TODO description for current directory
 # TODO unit test
-# TODO test on mac and remote machine
+# TODO test on bats, mac and remote machine
 # TODO completion
 
 # Shell configuration
@@ -47,19 +46,20 @@ configuredClient=""
 
 # handle configuration cases
 _configure() {
-  local target=""
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
+
+  local target=""
   if [[ $1 == 'token' ]]; then
     [[ ${#2} -eq 40 ]] && target=$1=$2 \
     || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
   elif [[ $1 == 'auto_sync' ]]; then
-    [[ $2 == 'false' ]] && target=$1=$2 \
-    || target=$1=true
+    [[ $2 == 'false' ]] && target=$1=$2
   elif [[ $1 == 'folder' ]]; then
-    [[ -n "$2" ]] && target=$1=$2 \
-    || target=$1=~/gist
+    [[ -n "$2" ]] && target=$1=$2
   elif [[ $1 == 'user' ]]; then
     target=$1=$2
+  elif [[ $1 == 'action' ]]; then
+    target=$1="$2"
   fi
 
   umask 0077 && touch $CONFIG
