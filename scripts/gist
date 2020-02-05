@@ -187,7 +187,7 @@ _show_list() {
     echo -e $index $link $author $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
-  echo -e '\nrun "gist help" for more details'
+  echo -e '\nrun "gist help" for more details' > /dev/null
 }
 
 # parse JSON from STDIN with string of commands
@@ -441,8 +441,10 @@ _edit_gist() {
 
   echo -n 'Type new description: '
   read DESC < /dev/tty
-  echo "{ \"description\": \"$DESC\" }" \
-  | http_method PATCH $GITHUB_API/gists/$GIST_ID > /dev/null \
+  
+  http_data=$(mktemp)
+  echo "{ \"description\": \"$DESC\" }" > $http_data
+  http_method PATCH $http_data $GITHUB_API/gists/$GIST_ID > /dev/null \
   && _update
 }
 
