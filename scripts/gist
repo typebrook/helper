@@ -83,7 +83,6 @@ _ask_token() {
 
   while [[ ! $token =~ ^[[:alnum:]]{40}$ ]]; do
     [[ -n $token ]] && echo "Not a valid token"
-    trap 'echo; return 1' INT
     read -p "Paste your token here (Ctrl-C to skip): " token < /dev/tty
   done
   _configure token $token
