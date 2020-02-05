@@ -20,13 +20,13 @@ alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # script
 vs() { 
-    ( which $1 ) && vim $(which $1)
+  ( which $1 ) && vim $(which $1)
 }
 todo() {
-    ( which $1 ) && grep -Po 'TODO.*' $(which $1)
+  ( which $1 ) && grep -Po 'TODO.*' $(which $1)
 }
 fix() {
-    ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
+  ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
 cdgi() {
   dir=$(gist $1 --no-action)
@@ -40,13 +40,13 @@ alias hg='history | grep'
 alias rmrf='rm -rf'
 alias rr='move_to_tmp'
 move_to_tmp() { 
-    mv $@ /tmp 
+  mv $@ /tmp 
 }
 prompt() {
-    TMPFILE=$(mktemp); echo -e $1 > $TMPFILE && \
-    vim $TMPFILE && \
-    sed -i '$ q; s/$/ \\/' $TMPFILE && \
-    eval $(cat $TMPFILE | tee /dev/tty)
+  TMPFILE=$(mktemp); echo -e $1 > $TMPFILE && \
+  vim $TMPFILE && \
+  sed -i '$ q; s/$/ \\/' $TMPFILE && \
+  eval $(cat $TMPFILE | tee /dev/tty)
 }
 
 # package
@@ -60,7 +60,7 @@ alias pi='sudo pip3 install' # nodejs install
 alias ..='cd ..'
 alias ld='cd -' # last directory
 cdg() { 
-    cd ~/git/$1 || cd ~/git 
+  cd ~/git/$1 || cd ~/git 
 }
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
@@ -82,12 +82,8 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
-wg() { 
-    vim ~/vimwiki/$1.md 
-}
-wi() { 
-    cat ~/vimwiki/$1.md 
-}
+wg() { vim ~/vimwiki/$1.md }
+wi() { cat ~/vimwiki/$1.md }
 
 # crontab
 alias ce='crontab -e'
@@ -96,13 +92,13 @@ alias ce='crontab -e'
 alias r='_ranger_cd'
 alias ranrc='vim ~/.config/ranger/rc.conf'
 _ranger_cd() {
-    tempfile="$(mktemp -t tmp.XXXXXX)"
-    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    test -f "$tempfile" &&
-    if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-        cd -- "$(cat "$tempfile")"
-    fi
-    rm -f -- "$tempfile"
+  tempfile="$(mktemp -t tmp.XXXXXX)"
+  ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+  test -f "$tempfile" &&
+  if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+    cd -- "$(cat "$tempfile")"
+  fi
+  rm -f -- "$tempfile"
 }
 
 # disk
@@ -111,20 +107,20 @@ alias df='df -h'
 # git
 unalias gc &> /dev/null # override zsh plugin alias
 gc() {
-    git clone $1 && cd $(basename $1) 
+  git clone $1 && cd $(basename $1) 
 }
 gc1() {
-    git clone --depth=1 $1 && cd $(basename $1) 
+  git clone --depth=1 $1 && cd $(basename $1) 
 }
 gcg() {
-    git clone git@github.com:$1/$2.git && cd $(basename $2) 
+  git clone git@github.com:$1/$2.git && cd $(basename $2) 
 }
 alias gls='git log -S'
 alias cdgw='cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 github_release_asset() {
-    command="upload-github-release-asset.sh\n github_api_token=$(cat ~/settings/tokens/github)\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
-    prompt "$command"
+  command="upload-github-release-asset.sh\n github_api_token=$(cat ~/settings/tokens/github)\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
+  prompt "$command"
 }
 
 # docker
@@ -150,23 +146,23 @@ alias ts='tig status'
 alias ta='tig --all'
 alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
 upload_tig() {
-    upload-github-release-asset.sh \
-        github_api_token=$(cat ~/settings/tokens/github) \
-        owner=typebrook \
-        repo=tig \
-        tag=LATEST \
-        filename=$(which tig)
-        overwrite=false
+  upload-github-release-asset.sh \
+    github_api_token=$(cat ~/settings/tokens/github) \
+    owner=typebrook \
+    repo=tig \
+    tag=LATEST \
+    filename=$(which tig)
+    overwrite=false
 }
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
-alias adb-default='adb shell dumpsys package domain-preferred-apps'
-alias adb-list='adb shell dumpsys package d'
+alias adb_default='adb shell dumpsys package domain-preferred-apps'
+alias adb_list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
-alias adb-last-screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
+alias adb_last_screenshot='adb pull /sdcard/Screenshots/`adb shell ls -t /sdcard/Screenshots/ | head -1` ~/Desktop'
 adb_push() { 
-    adb push $1 /sdcard/Download 
+  adb push $1 /sdcard/Download 
 }
 
 # curl
@@ -182,27 +178,29 @@ alias oi='ogrinfo'
 alias oias='ogrinfo -al -so'
 
 # sample file
-alias sample-gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
-alias sample-geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
-alias sample-geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
-alias sample-csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
-alias sample-svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
-alias sample-mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
-alias sample-kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
-alias sample-osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
+alias sample_gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
+alias sample_geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
+alias sample_geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
+alias sample_csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
+alias sample_svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
+alias sample_mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
+alias sample_kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
+alias sample_osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 
 # data file
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
-alias data-rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
-alias data-rudymap-ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
-alias data-osm-diff="curl https://planet.openstreetmap.org/replication/minute/state.txt |\
-                     sed -n 2p | cut -d'=' -f2 | sed -r 's/(.{1})(.{3})/00\1\/\2\//' |\
-                     xargs -I {} echo -e https://planet.openstreetmap.org/replication/minute/'{}'.osc.gz |\
-                     xargs curl -O"
-alias data-taiwan-town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
-alias data-taiwan-village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
-alias data-taiwan-poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
-alias data-taiwan-county-code='curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt | iconv -f BIG-5 -t UTF-8 -'
+alias data_rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
+alias data_rudymap_ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
+data_osm_diff() {
+  curl https://planet.openstreetmap.org/replication/minute/state.txt \
+  | sed -n 2p | cut -d'=' -f2 | sed -r 's/(.{1})(.{3})/00\1\/\2\//' \
+  | xargs -I{} echo 'https://planet.openstreetmap.org/replication/minute/{}'.osc.gz \
+  | xargs curl -O
+}
+alias data_taiwan_town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
+alias data_taiwan_village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
+alias data_taiwan_poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
+alias data_taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt | iconv -f BIG-5 -t UTF-8 -'
 
 # clipboard
 alias xi='xsel -ib'
@@ -213,7 +211,7 @@ alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
-    convert $@ -append output.png 
+  convert $@ -append output.png 
 }
 
 # mail mutt
@@ -227,10 +225,10 @@ token() {
 }
 alias gr='_grepString'
 _grepString() { 
-    grep -R $1 .  
+  grep -R $1 .  
 }
-alias findn='find . -iname'
 alias wcl='wc -l'
+alias findn='find . -iname'
 alias x='xdg-open'
 alias f='free -h'
 alias yl='youtube-dl'
@@ -243,10 +241,10 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias du='ncdu'
 alias we='weechat'
 mvt_decode() {
-    python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
+  python3 $SETTING_DIR/scripts/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
 big52utf8() { 
-    iconv -f BIG-5 -t UTF-8 
+  iconv -f BIG-5 -t UTF-8 
 }
 
 # tmp
