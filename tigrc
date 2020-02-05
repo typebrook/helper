@@ -144,8 +144,9 @@ bind main pU ?git pull --rebase
 bind main uu ?git reset %(commit) --soft
 bind main uh ?git reset %(commit) --hard
 bind main uS ?sh -c "git reset %(commit) && git stash push -m 'deprecated from reset'" # reset and stash the changes
-bind main B !?git rebase --rebase-merges -i %(commit)
+bind main B !?git rebase -i %(commit)
 bind main gb !?git rebase --onto '%(prompt Rebase onto which branch? )' %(commit) %(repo:head)
+bind main gB !?git rebase --rebase-merges -i %(commit)
 bind main ! ?git revert %(commit)
 
 # tag
@@ -186,7 +187,7 @@ bind main I >sh -c "hub issue | tig"
 ## Statistics
 bind main gc >sh -c 'cloc --git %(commit) | tig'
 ## Script to bump Android version
-bind main <C-B> !sh scripts/bump_version.sh
+bind main <C-B> ! scripts/bump_version.sh && scripts/whatsnew.sh
 
 # note
 #bind generic gnn !git notes edit %(commit)
