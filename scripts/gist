@@ -163,8 +163,8 @@ _show_list() {
     echo '    gist update'
     return 0
   fi
-  [[ -z $1 ]] && filter='/^ *s/ d; /^$/ d'
-  [[ $1 == "s" ]] && filter='/^ *[^ s]/ d; /^$/ d'
+  [[ -z $1 ]] && local filter='/^ *s/ d; /^$/ d'
+  [[ $1 == "s" ]] && local filter='/^ *[^ s]/ d; /^$/ d'
 
   while read index link blob_code file_num extra author description; do
     [[ $1 == "s" ]] && local name=$author
@@ -181,7 +181,7 @@ _show_list() {
     echo -e "$(printf "% 3s" $index)" $link $name $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
-  echo -e '\nrun "gist help" for more details' > /dev/tty
+  echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
 }
 
 # support files
