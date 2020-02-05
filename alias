@@ -29,7 +29,7 @@ fix() {
     ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
 gicd() {
-  dir=$(gist $1 | tee /dev/tty | head -1)
+  dir=$(gist $1 --no-action)
   [[ -d $dir ]] && cd $dir
 }
 
