@@ -28,7 +28,7 @@ todo() {
 fix() {
     ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
-gicd() {
+cdgi() {
   dir=$(gist $1 --no-action)
   [[ -d $dir ]] && cd $dir
 }
@@ -68,9 +68,10 @@ alias cdD='cd ~/Documents'
 alias cdV='cd ~/Videos'
 alias cdP='cd ~/Pictures'
 
-# gist
+# github
 alias gn='gist new'
 alias cdgg='cd ~/git/gist'
+alias hub="GITHUB_TOKEN=$(cat $SETTING_DIR/tokens/github) hub"
 
 # about custom settings
 alias cds='cd $SETTING_DIR'
