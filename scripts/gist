@@ -20,16 +20,16 @@
 #   clean, C                      clean removed gists in local
 #   config, c [token | user | folder | auto-sync | EDITOR | action [value] ] do configuration
 #   user, U   <user>              get gists from a given Github user
+#   grep, g   <pattern>           grep gists by a given pattern
 #   help, h                       show this help message
-#
+#  
 # Example:
 #   gist (Show your gists)
 #   gist 3 (show the repo path of your 3rd gist, and do custom actions)
-#
+# 
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
 
-# TODO grep mode for description, file content
 # TODO push github.com (may need new token)
 # TODO unit test
 # TODO test on bats, mac and remote machine
@@ -164,7 +164,7 @@ _show_list() {
     echo '    gist update'
     return 0
   fi
-  local filter='/^ *s/ d; /^$/ d'
+  [[ -z $1 ]] && filter='/^ *s/ d; /^$/ d'
   [[ $1 == "s" ]] && filter='/^ *[^ s]/ d; /^$/ d'
 
   while read index link blob_code file_num extra author description; do
@@ -183,6 +183,11 @@ _show_list() {
   done < $INDEX \
   | sed "$filter"
   echo -e '\nrun "gist help" for more details' > /dev/tty
+}
+
+# support files
+_grep_content() {
+  _show_list other | grep -i $1
 }
 
 # parse JSON from STDIN with string of commands
@@ -441,7 +446,7 @@ _edit_gist() {
   read DESC < /dev/tty
   
   http_data=$(mktemp)
-  echo "{ \"description\": \"$DESC\" }" > $http_data
+  echo { \"description\": \"$(echo $DESC | sed 's/"/\\"/g')\" } > $http_data
   http_method PATCH $http_data $GITHUB_API/gists/$GIST_ID > /dev/null \
   && _update
 }
@@ -480,6 +485,9 @@ case "$1" in
   user | U)
     shift
     _query_user "$@" ;;
+  grep | g)
+    shift
+    _grep_content "$@" ;;
   help | h)
     usage ;;
   *)
