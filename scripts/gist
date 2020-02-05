@@ -420,7 +420,10 @@ _create_gist() {
   | AccessJsonElement "$(_gist_body)" > $http_data \
   && http_method POST $GITHUB_API/gists \
   | sed '1 s/^/[/; $ s/$/]/' \
-  | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) >> $INDEX
+  | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) \
+  | tee -a $INDEX \
+  | cut -d' ' -f2 | sed -E 's#.*/##' \
+  | (xargs -I{} git clone git@github.com:{}.git $folder/{} &> /dev/null &)
 
   if [[ $? -eq 0 ]]; then
     echo 'Gist is created'
