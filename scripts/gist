@@ -447,7 +447,7 @@ _edit_gist() {
 }
 
 usage() {
-  sed -E -n ' /^$/ q; 7,$ s/^#//p' $0
+  sed -E -n ' /^$/ q; 7,$ s/^# //p' $0
 }
 
 getConfiguredClient
