@@ -31,9 +31,8 @@
 
 # TODO grep mode for description, file content
 # TODO push github.com (may need new token)
-# TODO description for current directory
 # TODO unit test
-# TODO test on mac and remote machine
+# TODO test on bats, mac and remote machine
 # TODO completion
 
 # Shell configuration
@@ -47,23 +46,21 @@ configuredClient=""
 
 # handle configuration cases
 _configure() {
-  local target=""
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
-  if [[ $1 == 'token' ]]; then
-    [[ ${#2} -eq 40 ]] && target=$1=$2 \
-    || echo -e Invalid token format, it is not 40 chars '\n' > /dev/tty
+
+  local target=""
+  if [[ $1 == 'user' ]]; then
+    [[ -z $2 ]] && echo "Must specify username" >&2 && return 1
+  elif [[ $1 == 'token' ]]; then
+    [[ ${#2} -ne 40 ]] && echo 'Invalid token format, it is not 40 chars' >&2 \
+    && return 1
   elif [[ $1 == 'auto_sync' ]]; then
-    [[ $2 == 'false' ]] && target=$1=$2 \
-    || target=$1=true
-  elif [[ $1 == 'folder' ]]; then
-    [[ -n "$2" ]] && target=$1=$2 \
-    || target=$1=~/gist
-  elif [[ $1 == 'user' ]]; then
-    target=$1=$2
+    [[ ! $2 =~ ^(true|false)$ ]]  && return 1
   fi
+  target=$1=$2
 
   umask 0077 && touch $CONFIG
-  [[ "$target" =~ [^=]$ ]] && sed -i "/^$1=/ d" $CONFIG && echo $target >> $CONFIG
+  sed -i "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
   cat $CONFIG
 }
 
@@ -93,6 +90,7 @@ _ask_token() {
   _configure token $token
 }
 
+# check configuration is fine with user setting
 _validate_config(){
   source $CONFIG 2> /dev/null || true
   if [[ ! -e $CONFIG || -z $user ]]; then
@@ -161,8 +159,6 @@ http_method() {
 }
 
 # Show the list of gist, but not updated time
-# TODO a way to show files
-# TODO show git status outdated
 _show_list() {
   if [[ ! -e $INDEX ]]; then 
     echo 'No local file found for last update, please run command:'
@@ -225,7 +221,7 @@ _parse_response() {
   done
 }
 
-# TODO add author, files and date of a gist 
+# TODO add files and date of a gist 
 # get latest list of gists from Github API
 _update() {
   echo "fetching $user's gists from $GITHUB_API..."
