@@ -97,8 +97,7 @@ _validate_config(){
     echo 'Hi fellow! To access your gists, I need your Github username'
     echo "Also a personal token with scope which allows "gist"!'"
     echo
-    _ask_username
-    _ask_token
+    _ask_username && _ask_token && init=true
   elif [[ -z $token && $1 =~ ^(n|new|e|edit|D|delete)$ ]]; then
     if ! (_ask_token); then
         echo 'To create/edit/delete a gist, a token is needed'
@@ -180,10 +179,10 @@ _show_list() {
     # if there is a commit not yet push, show red message "ahead"
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
-    echo -e "$(printf "% 3s" $index) $link $name $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )"
+    echo -e "$(printf "% 3s" $index)" $link $name $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
-  echo -e '\nrun "gist help" for more details' > /dev/null
+  echo -e '\nrun "gist help" for more details' > /dev/tty
 }
 
 # parse JSON from STDIN with string of commands
@@ -449,6 +448,7 @@ usage() {
 }
 
 getConfiguredClient
+if [[ $init ]]; then _update; exit 0; fi
 case "$1" in
   "")
     _show_list ;;
