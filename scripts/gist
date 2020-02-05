@@ -38,7 +38,7 @@
 # Shell configuration
 set -o pipefail
 [ "$TRACE" ] && set -x
-trap 'rm -f "$http_data" "tmp_file"' EXIT
+trap 'rm -f "$http_data" "$tmp_file"' EXIT
 
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
