@@ -258,3 +258,7 @@ alias cdm='cd ~/git/sharkbig.github.io/rescue'
 alias cdmw='cd ~/git/sharkbig.github.io/.github/workflows'
 
 GITHUB_API='https://api.github.com'
+TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
+TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
+TAIPEI_BBOX='121.346,24.926,121.676,25.209'
+TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
