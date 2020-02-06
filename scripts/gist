@@ -315,7 +315,6 @@ _goto_gist() {
   echo $folder/$GIST_ID
 }
 
-# TODO Add confirmation
 _delete_gist() {
   read -r -p "Delete gists above? [y/N] " response
   response=${response,,}
