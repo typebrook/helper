@@ -155,6 +155,7 @@ http_method() {
   esac
 }
 
+# TODO Split into 2 funcs for filter and display
 # Show the list of gist, but not updated time
 _show_list() {
   if [[ ! -e $INDEX ]]; then 
