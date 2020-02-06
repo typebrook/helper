@@ -82,8 +82,12 @@ alias chs='cd $SETTING_DIR && tig status' # check setting changes
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
-wg() { vim ~/vimwiki/$1.md }
-wi() { cat ~/vimwiki/$1.md }
+wg() { 
+  vim ~/vimwiki/$1.md 
+}
+wi() { 
+  cat ~/vimwiki/$1.md 
+}
 
 # crontab
 alias ce='crontab -e'
