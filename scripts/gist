@@ -496,7 +496,7 @@ case "$1" in
     _grep_content "$@" ;;
   push | p)
     shift
-    _push_to_remote "$@" ;;
+    _push_to_remote "$1" ;;
   help | h)
     usage ;;
   *)
