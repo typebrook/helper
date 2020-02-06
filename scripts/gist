@@ -21,6 +21,7 @@
 #   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
 #   user, U   <user>              get gists from a given Github user
 #   grep, g   <pattern>           grep gists by a given pattern
+#   push, p   <pattern>           push changes by git
 #   help, h                       show this help message
 # 
 # Example:
@@ -189,6 +190,12 @@ _grep_content() {
   _show_list other | grep -i $1
 }
 
+_push_to_remote() {
+  _gist_id $1
+  cd $folder/$GIST_ID && git add . \
+  && git commit --allow-empty-message -m '' && git push origin master
+}
+
 # parse JSON from STDIN with string of commands
 AccessJsonElement() {
     PYTHONIOENCODING=utf-8 \
@@ -308,6 +315,7 @@ _goto_gist() {
   echo $folder/$GIST_ID
 }
 
+# TODO Add confirmation
 _delete_gist() {
   for i in "$@"; do
     _gist_id "$i"
@@ -486,6 +494,9 @@ case "$1" in
   grep | g)
     shift
     _grep_content "$@" ;;
+  push | p)
+    shift
+    _push_to_remote "$@" ;;
   help | h)
     usage ;;
   *)
