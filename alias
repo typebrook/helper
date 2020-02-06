@@ -53,8 +53,8 @@ prompt() {
 alias ai='sudo apt install' # apt install
 alias aptu='sudo apt update && sudo apt upgrade'
 alias si='sudo snap install' # snap install
-alias ni='sudo npm install -g' # nodejs install
 alias pi='sudo pip3 install' # nodejs install
+alias ni='sudo npm install -g' # nodejs install
 
 # cd to DIRs
 alias ..='cd ..'
@@ -69,14 +69,12 @@ alias cdV='cd ~/Videos'
 alias cdP='cd ~/Pictures'
 
 # github
-alias gn='gist new'
-alias cdgg='cd ~/git/gist'
 alias hub="GITHUB_TOKEN=$(cat $SETTING_DIR/tokens/github) hub"
 
 # about custom settings
-alias cds='cd $SETTING_DIR'
-alias cdss='cd $SETTING_DIR/scripts'
-alias chs='cd $SETTING_DIR && tig status' # check setting changes
+alias cds="cd $SETTING_DIR"
+alias cdss="cd $SETTING_DIR/scripts"
+alias chs="cd $SETTING_DIR && tig status" # check setting changes
 
 # about vimwiki
 alias cdw='cd ~/vimwiki'
