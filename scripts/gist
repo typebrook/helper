@@ -183,7 +183,7 @@ _show_list() {
   echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
 }
 
-# support files
+# TODO support filenames, file contents
 _grep_content() {
   _show_list other | grep -i $1
 }
@@ -195,7 +195,6 @@ AccessJsonElement() {
     return "$?"
 }
 
-# equal to: jq '.[] | "\(.html_url) \([.files[] | .raw_url]) \(.files | keys | length) \(.comments) \(.description)"'
 _handle_gists() {
     echo '
 raw = json.load(sys.stdin)
@@ -210,7 +209,7 @@ for gist in raw:
     ' 
 }
 
-# TODO check if a user create a very first gist
+# TODO check if a user has no gist
 # parse response from gists require
 _parse_response() {
   AccessJsonElement "$(_handle_gists)" \
