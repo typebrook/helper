@@ -317,6 +317,10 @@ _goto_gist() {
 
 # TODO Add confirmation
 _delete_gist() {
+  read -r -p "Delete gists above? [y/N] " response
+  response=${response,,}
+  [[ ! "$response" =~ ^(yes|y)$ ]] && return 0
+
   for i in "$@"; do
     _gist_id "$i"
     http_method DELETE $GITHUB_API/gists/$GIST_ID \
@@ -363,7 +367,6 @@ for comment in raw:
     ' 
 }
 
-# TODO format with simple text
 _show_detail() {
   _gist_id $1
   http_method GET $GITHUB_API/gists/$GIST_ID \
