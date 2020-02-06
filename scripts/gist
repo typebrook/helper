@@ -18,7 +18,7 @@
 #   edit, e   <index_of_gist>     edit a gist description
 #   delete, D <index_of_gist>...  delete a gist
 #   clean, C                      clean removed gists in local
-#   config, c [token | user | folder | auto-sync | EDITOR | action [value] ] do configuration
+#   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
 #   user, U   <user>              get gists from a given Github user
 #   grep, g   <pattern>           grep gists by a given pattern
 #   help, h                       show this help message
@@ -54,7 +54,7 @@ _configure() {
     [[ ${#2} -ne 40 ]] && echo 'Invalid token format, it is not 40 chars' >&2 \
     && return 1
   elif [[ $1 == 'auto_sync' ]]; then
-    [[ ! $2 =~ ^(true|false)$ ]]  && return 1
+    [[ ! $2 =~ ^(true|false)$ ]] && return 1
   fi
   target=$1=$2
 
@@ -116,7 +116,7 @@ _apply_config() {
   AUTH_HEADER="Authorization: token $token"
   [[ -z "$action" ]] && action="${EDITOR:-vi} ."
   [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
-  INDEX=$folder/index
+  INDEX=$folder/index; [[ -e $INDEX ]] || touch $INDEX
 }
 
 _apply_config "$@" || exit 1
@@ -243,7 +243,7 @@ _update() {
   sed -i "$filter" $INDEX && echo "$result" >> $INDEX
   _show_list $mark
 
-  if [[ $auto_sync != "false" ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
+  if [[ $auto_sync != 'false' ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
 }
 
 _query_user() {
