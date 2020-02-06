@@ -30,7 +30,7 @@
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
 
-# TODO push github.com (may need new token)
+# TODO import to github repo (may need a new token)
 # TODO test on bats, mac and remote machine
 # TODO completion
 
