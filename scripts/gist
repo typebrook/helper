@@ -29,7 +29,7 @@
 #   gist update (update the list of gists from github.com)
 #   gist 3 (show the repo path of your 3rd gist, and do custom actions)
 #   gist 3 --no-action (show the repo path of your 3rd gist, and do not perform actions)
-#   gist new foo --desc bar (create a new gist with description)
+#   gist new foo --desc bar (create a new gist with file and description)
 # 
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
@@ -179,6 +179,8 @@ _show_list() {
     [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=16
     # if there are some changes in git index or working directory, show blue message "working"
     [[ -n $(cd $repo && git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" && occupy=9
+    # if there files are different, show red message "outdated"
+    [[ $(_blob_code $repo) != $blob_code ]] 2>/dev/null && extra="\e[31m[outdated]\e[0m" && occupy=10
     # if there is a commit not yet push, show red message "ahead"
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
@@ -267,6 +269,11 @@ _query_user() {
   done
 }
 
+_blob_code() {
+  cd $1 \
+  && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-'
+}
+
 # update local git repos
 _sync_repos() {
   # clone repos which are not in the local
@@ -278,7 +285,7 @@ _sync_repos() {
   cat $INDEX | cut -d' ' -f2,3 \
   | while read url blob_code_remote; do
     local repo=$folder/$(echo $url | sed 's#.*/##')
-    local blob_code_local=$(cd $repo && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-')
+    local blob_code_local=$(_blob_code $repo)
     cd $repo \
     && [[ $blob_code_local != $blob_code_remote ]] \
     && [[ $(git rev-parse origin/master) == $(git rev-parse master) ]] \
