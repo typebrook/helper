@@ -28,7 +28,7 @@ todo() {
 fix() {
   ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
 }
-cdgi() {
+gi() {
   dir=$(gist $1 --no-action)
   [[ -d $dir ]] && cd $dir
 }
