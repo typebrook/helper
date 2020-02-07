@@ -5,7 +5,7 @@
 # https://gist.github.com/typebrook/b0d2e7e67aa50298fdf8111ae7466b56
 #
 # gist
-# Description: Host your gists as local cloned git repo
+# Description: Manage your gists with git and Github API v3
 # Usage: gist [command] [<args>]
 #
 #   [star | s]                    list your gists with format below, star for your starred gists: 
@@ -235,6 +235,7 @@ _parse_response() {
   done
 }
 
+# TODO pagnation for more than 30 gists
 # TODO add files and date of a gist 
 # get latest list of gists from Github API
 _update() {
