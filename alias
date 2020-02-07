@@ -20,13 +20,13 @@ alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # script
 vs() { 
-  ( which $1 ) && vim $(which $1)
+  which $1 && vim $(which $1)
 }
 todo() {
-  ( which $1 ) && grep -Po 'TODO.*' $(which $1)
+  which $1 && grep -Po 'TODO.*' $(which $1)
 }
 fix() {
-  ( which $1 ) && grep -Po 'FIXME.*' $(which $1)
+  which $1 && grep -Po 'FIXME.*' $(which $1)
 }
 gi() {
   dir=$(gist $1 --no-action)
