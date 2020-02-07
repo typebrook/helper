@@ -21,6 +21,7 @@
 #   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
 #   user, U   <user>              get gists from a given Github user
 #   grep, g   <pattern>           grep gists by a given pattern
+#   github, G <index_of_gist>     Import this gist as a new Github repo
 #   push, p   <pattern>           push changes by git
 #   help, h                       show this help message
 # 
@@ -34,7 +35,6 @@
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
 
-# TODO import to github repo (may need a new token)
 # TODO test on bats, mac and remote machine
 # TODO completion
 
@@ -192,7 +192,15 @@ _show_list() {
 
 # TODO support filenames, file contents
 _grep_content() {
-  _show_list other | grep -i $1
+  _show_list | grep -i $1
+}
+
+# TODO support filenames, file contents
+_import_to_github() {
+  _gist_id $1
+  echo put the folowing URL into webpage:
+  echo -n git@github.com:$GIST_ID.git
+  python -mwebbrowser https://github.com/new/import
 }
 
 _push_to_remote() {
@@ -508,6 +516,9 @@ case "$1" in
   grep | g)
     shift
     _grep_content "$@" ;;
+  github | G)
+    shift
+    _import_to_github "$1" ;;
   push | p)
     shift
     _push_to_remote "$1" ;;
