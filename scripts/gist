@@ -26,7 +26,10 @@
 # 
 # Example:
 #   gist (Show your gists)
+#   gist update (update the list of gists from github.com)
 #   gist 3 (show the repo path of your 3rd gist, and do custom actions)
+#   gist 3 --no-action (show the repo path of your 3rd gist, and do not perform actions)
+#   gist new foo --desc bar (create a new gist with description)
 # 
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
