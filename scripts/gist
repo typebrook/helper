@@ -170,10 +170,11 @@ _show_list() {
   [[ -z $1 ]] && local filter='/^ *s/ d; /^$/ d'
   [[ $1 == "s" ]] && local filter='/^ *[^ s]/ d; /^$/ d'
 
-  while read index link blob_code file_num extra author description; do
+  while read index link blob_code file_num comment_num author description; do
     [[ $1 == "s" ]] && local name=$author
     local repo=$folder/$(echo $link | sed 's#.*/##')
     local occupy=0
+    local extra="$file_num $comment_num"
 
     # if repo is not yet cloned, show green message "Not cloned yet"
     [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=16
@@ -184,7 +185,7 @@ _show_list() {
     # if there is a commit not yet push, show red message "ahead"
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
-    echo -e "$(printf "% 3s" $index)" $link $name $file_num $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
+    echo -e "$(printf "% 3s" $index)" $link $name $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
   done < $INDEX \
   | sed "$filter"
   echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
@@ -231,6 +232,7 @@ for gist in raw:
 }
 
 # TODO check if a user has no gist
+# FIXME replace space with sed
 # parse response from gists require
 _parse_response() {
   AccessJsonElement "$(_handle_gists)" \
