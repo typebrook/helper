@@ -38,8 +38,8 @@ alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 alias hg='history | grep'
 alias rmrf='rm -rf'
-alias rr='move_to_tmp'
-move_to_tmp() { 
+alias rr='_move_to_tmp'
+_move_to_tmp() { 
   mv $@ /tmp 
 }
 prompt() {

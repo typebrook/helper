@@ -122,8 +122,6 @@ _apply_config() {
   INDEX=$folder/index; [[ -e $INDEX ]] || touch $INDEX
 }
 
-_apply_config "$@" || exit 1
-
 # This function determines which http get tool the system has installed and returns an error if there isnt one
 getConfiguredClient() {
   if  command -v curl &>/dev/null; then
@@ -465,6 +463,7 @@ usage() {
   sed -E -n ' /^$/ q; 7,$ s/^# //p' $0
 }
 
+_apply_config "$@" || exit 1
 getConfiguredClient
 if [[ $init ]]; then _update; exit 0; fi
 case "$1" in
