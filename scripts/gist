@@ -12,8 +12,8 @@
 #                                 [index_of_gist] [url] [file_num] [comment_num] [short description]
 #   update, u [star | s]          update the local list of your gists, star for your starred gists
 #   <index_of_gist> [--no-action] show the path of local gist repo and do custom actions
-#   new, n [-d | --desc <description>] <files>... create a new gist with files
-#   new, n [-d | --desc <description>] [-f | --file <file_name>] create a new gist from STDIN
+#   new, n [-d | --desc <description>] [-p] <files>... create a new gist with files
+#   new, n [-d | --desc <description>] [-p] [-f | --file <file_name>] create a new gist from STDIN
 #   detail, d <index_of_gist>     show the detail of a gist
 #   edit, e   <index_of_gist>     edit a gist's description
 #   delete, D <index_of_gist>...  delete a gist
