@@ -15,7 +15,7 @@
 #   new, n [-d | --desc <description>] <files>... create a new gist with files
 #   new, n [-d | --desc <description>] [-f | --file <file_name>] create a new gist from STDIN
 #   detail, d <index_of_gist>     show the detail of a gist
-#   edit, e   <index_of_gist>     edit a gist description
+#   edit, e   <index_of_gist>     edit a gist's description
 #   delete, D <index_of_gist>...  delete a gist
 #   clean, C                      clean removed gists in local
 #   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
@@ -49,15 +49,17 @@ _configure() {
   [[ -z "$@" ]] && (${EDITOR:-vi} $CONFIG) && return 0
 
   local target=""
-  if [[ $1 == 'user' ]]; then
-    [[ -z $2 ]] && echo "Must specify username" >&2 && return 1
-  elif [[ $1 == 'token' ]]; then
-    [[ ${#2} -ne 40 ]] && echo 'Invalid token format, it is not 40 chars' >&2 \
-    && return 1
-  elif [[ $1 == 'auto_sync' ]]; then
-    [[ ! $2 =~ ^(true|false)$ ]] && return 1
+  if [[ $1 =~ ^(user|token|folder|auto_sync|EDITOR|action)$ ]]; then
+    if [[ $1 == 'user' ]]; then
+      [[ -z $2 ]] && echo "Must specify username" >&2 && return 1
+    elif [[ $1 == 'token' ]]; then
+      [[ ${#2} -ne 40 ]] && echo 'Invalid token format, it is not 40 chars' >&2 \
+      && return 1
+    elif [[ $1 == 'auto_sync' ]]; then
+      [[ ! $2 =~ ^(true|false)$ ]] && return 1
+    fi
+    target=$1=$2
   fi
-  target=$1=$2
 
   umask 0077 && touch $CONFIG
   sed -i "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
