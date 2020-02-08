@@ -37,7 +37,6 @@
 
 # TODO test on bats, mac and remote machine
 # TODO completion
-# FIXME mac: tac=tail -r
 
 # Shell configuration
 set -o pipefail
@@ -136,10 +135,8 @@ getConfiguredClient() {
     configuredClient="wget"
   elif command -v http &>/dev/null; then
     configuredClient="httpie"
-  elif command -v fetch &>/dev/null; then
-    configuredClient="fetch"
   else
-    echo "Error: This tool requires either curl, wget, httpie or fetch to be installed." >&2
+    echo "Error: This tool requires either curl, wget, or httpie to be installed." >&2
     return 1
   fi
 }
@@ -157,8 +154,6 @@ http_method() {
     httpie) [[ -n $token ]] && header="Authorization:token $token"
       [[ $METHOD =~ (POST|PATCH) ]] && extra2="@$http_data"
       http -b $METHOD "$@" "$header" $extra2 ;;
-    # TODO add other methods
-    fetch)  fetch -q "$@" ;;
   esac
 }
 
