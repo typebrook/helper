@@ -37,11 +37,14 @@
 
 # TODO test on bats, mac and remote machine
 # TODO completion
+# FIXME mac: tac=tail -r
 
 # Shell configuration
 set -o pipefail
 [ "$TRACE" ] && set -x
 trap 'rm -f "$http_data" "$tmp_file"' EXIT
+
+[ $(uname) == 'Darwin' ] && alias tac='tail -r'
 
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
@@ -65,7 +68,7 @@ _configure() {
   fi
 
   umask 0077 && touch $CONFIG
-  sed -i "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
+  sed -i'' -e "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
   cat $CONFIG
 }
 
@@ -235,10 +238,10 @@ for gist in raw:
 # FIXME replace space with sed
 # parse response from gists require
 _parse_response() {
-  AccessJsonElement "$(_handle_gists)" \
-  | tac | sed 's/, /,/g' | nl -s' ' \
+  | AccessJsonElement "$(_handle_gists)" \
+  | tac | sed -e 's/, /,/g' | nl -s' ' \
   | while read index link file_url_array public file_num comment_num author description; do
-    local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -sd '-')
+    local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E -e 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -s -d '-' -)
     [[ $public == 'False' ]] && local mark=p
     [[ -n $1 ]] && local index=$1
     echo $mark$index $link $blob_code $file_num $comment_num $author $description | tr -d '"'
@@ -263,7 +266,7 @@ _update() {
   result=$(http_method GET $GITHUB_API/$route | _parse_response)
   [[ -z $result ]] && echo Failed to update gists && return 1
 
-  sed -i "$filter" $INDEX && echo "$result" >> $INDEX
+  sed -i'' -e "$filter" $INDEX && echo "$result" >> $INDEX
   _show_list $mark
 
   if [[ $auto_sync != 'false' ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
@@ -288,14 +291,14 @@ _blob_code() {
 # update local git repos
 _sync_repos() {
   # clone repos which are not in the local
-  comm -13 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-           <(cat $INDEX | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+  comm -13 <(find $folder -maxdepth 1 -type d | sed -e '1d; s#.*/##' | sort) \
+           <(cat $INDEX | cut -d' ' -f2 | sed -e 's#.*/##' | sort) \
   | xargs -I{} --max-procs 8 git clone git@github.com:{}.git $folder/{}
 
   # pull if remote repo has different blob objects
   cat $INDEX | cut -d' ' -f2,3 \
   | while read url blob_code_remote; do
-    local repo=$folder/$(echo $url | sed 's#.*/##')
+    local repo=$folder/$(echo $url | sed -e 's#.*/##')
     local blob_code_local=$(_blob_code $repo)
     cd $repo \
     && [[ $blob_code_local != $blob_code_remote ]] \
@@ -307,7 +310,7 @@ _sync_repos() {
 
 # get gist id from index files
 _gist_id() {
-  GIST_ID=$( (grep -hs '' $INDEX || true) | sed -n "/^$1 / p" | cut -d' ' -f2 | sed -E 's#.*/##')
+  GIST_ID=$( (grep -hs '' $INDEX || true) | sed -n -e "/^$1 / p" | cut -d' ' -f2 | sed -E -e 's#.*/##')
   if [[ -z "$GIST_ID" ]]; then
     echo -e "Not a valid index: \e[31m$1\e[0m"
     echo Use the index in the first column instead:
@@ -345,14 +348,14 @@ _delete_gist() {
     _gist_id "$i"
     http_method DELETE $GITHUB_API/gists/$GIST_ID \
     && echo "$i" deleted \
-    && sed -i -E "/^$i / d" $INDEX
+    && sed -E -i'' -e "/^$i / d" $INDEX
   done
 }
 
 # remove repos which are not in user gists anymore
 _clean_repos() {
-  comm -23 <(find $folder -maxdepth 1 -type d | sed '1d; s#.*/##' | sort) \
-           <(cat $INDEX 2> /dev/null | cut -d' ' -f2 | sed 's#.*/##' | sort) \
+  comm -23 <(find $folder -maxdepth 1 -type d | sed -e '1d; s#.*/##' | sort) \
+           <(cat $INDEX 2> /dev/null | cut -d' ' -f2 | sed -e 's#.*/##' | sort) \
   | while read dir; do
     mv $folder/$dir /tmp && echo move $folder/$dir to /tmp
   done
@@ -453,10 +456,10 @@ _create_gist() {
   echo -e "$files\n$description" \
   | AccessJsonElement "$(_gist_body)" > $http_data \
   && http_method POST $GITHUB_API/gists \
-  | sed '1 s/^/[/; $ s/$/]/' \
-  | _parse_response $(( $(sed '/^s/ d' $INDEX | wc -l) +1 )) \
+  | sed -e '1 s/^/[/; $ s/$/]/' \
+  | _parse_response $(( $(sed -e '/^s/ d' $INDEX | wc -l) +1 )) \
   | tee -a $INDEX \
-  | cut -d' ' -f2 | sed -E 's#.*/##' \
+  | cut -d' ' -f2 | sed -E -e 's#.*/##' \
   | (xargs -I{} git clone git@github.com:{}.git $folder/{} &> /dev/null &)
 
   if [[ $? -eq 0 ]]; then
@@ -475,13 +478,13 @@ _edit_gist() {
   read DESC < /dev/tty
   
   http_data=$(mktemp)
-  echo { \"description\": \"$(echo $DESC | sed 's/"/\\"/g')\" } > $http_data
+  echo { \"description\": \"$(echo $DESC | sed -e 's/"/\\"/g')\" } > $http_data
   http_method PATCH $http_data $GITHUB_API/gists/$GIST_ID > /dev/null \
   && _update
 }
 
 usage() {
-  sed -E -n ' /^$/ q; 7,$ s/^# //p' $0
+  sed -E -n -e ' /^$/ q; 7,$ s/^# //p' $0
 }
 
 _apply_config "$@" || exit 1
