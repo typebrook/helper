@@ -10,7 +10,7 @@
 #
 #   [star | s]                    list your gists with format below, star for your starred gists: 
 #                                 [index_of_gist] [url] [file_num] [comment_num] [short description]
-#   update, u [star | s]          update the local list of your gists, star for your starred gists
+#   fetch, f [star | s]           update the local list of your gists, star for your starred gists
 #   <index_of_gist> [--no-action] show the path of local gist repo and do custom actions
 #   new, n [-d | --desc <description>] [-p] <files>... create a new gist with files
 #   new, n [-d | --desc <description>] [-p] [-f | --file <file_name>] create a new gist from STDIN
@@ -21,8 +21,8 @@
 #   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
 #   user, U   <user>              get gists from a given Github user
 #   grep, g   <pattern>           grep gists by a given pattern
+#   push, p   <pattern>           push changes by git (well, better to make commit by youself)
 #   github, G <index_of_gist>     Import this gist as a new Github repo
-#   push, p   <pattern>           push changes by git
 #   help, h                       show this help message
 # 
 # Example:
@@ -36,18 +36,59 @@
 # It is your business to do git commit and git push
 
 # TODO test on bats, mac and remote machine
-# TODO completion
+currentVersion="1.23.0"
+configuredClient=""
+
+GITHUB_API=https://api.github.com
+CONFIG=~/.config/gist.conf; mkdir -p ~/.config
 
 # Shell configuration
 set -o pipefail
 [ "$TRACE" ] && set -x
+[ $(uname) == 'Darwin' ] && alias tac='tail -r'
 trap 'rm -f "$http_data" "$tmp_file"' EXIT
 
-[ $(uname) == 'Darwin' ] && alias tac='tail -r'
+# This function determines which http get tool the system has installed and returns an error if there isnt one
+getConfiguredClient() {
+  if  command -v curl &>/dev/null; then
+    configuredClient="curl"
+  elif command -v wget &>/dev/null; then
+    configuredClient="wget"
+  elif command -v http &>/dev/null; then
+    configuredClient="httpie"
+  else
+    echo "Error: This tool requires either curl, wget, or httpie to be installed." >&2
+    return 1
+  fi
+}
 
-GITHUB_API=https://api.github.com
-CONFIG=~/.config/gist.conf; mkdir -p ~/.config
-configuredClient=""
+# Allows to call the users configured client without if statements everywhere
+http_method() {
+  local METHOD=$1; shift
+  case "$configuredClient" in
+    curl)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2="--data"
+      curl -X $METHOD -A curl -s $extra "$header" $extra2 @$http_data "$@" ;;
+    wget)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-file'
+      wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data "$@" ;;
+    httpie) [[ -n $token ]] && header="Authorization:token $token"
+      [[ $METHOD =~ (POST|PATCH) ]] && extra2="@$http_data"
+      http -b $METHOD "$@" "$header" $extra2 ;;
+  esac
+}
+
+# parse JSON from STDIN with string of commands
+_process_json() {
+    PYTHONIOENCODING=utf-8 \
+    python -c "from __future__ import print_function; import sys, json; $1"
+    return "$?"
+}
+
+# Displays version number
+version() {
+  echo "Version $currentVersion"
+}
 
 # handle configuration cases
 _configure() {
@@ -127,36 +168,6 @@ _apply_config() {
   INDEX=$folder/index; [[ -e $INDEX ]] || touch $INDEX
 }
 
-# This function determines which http get tool the system has installed and returns an error if there isnt one
-getConfiguredClient() {
-  if  command -v curl &>/dev/null; then
-    configuredClient="curl"
-  elif command -v wget &>/dev/null; then
-    configuredClient="wget"
-  elif command -v http &>/dev/null; then
-    configuredClient="httpie"
-  else
-    echo "Error: This tool requires either curl, wget, or httpie to be installed." >&2
-    return 1
-  fi
-}
-
-# Allows to call the users configured client without if statements everywhere
-http_method() {
-  local METHOD=$1; shift
-  case "$configuredClient" in
-    curl)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
-      [[ $METHOD =~ (POST|PATCH) ]] && extra2="--data"
-      curl -X $METHOD -A curl -s $extra "$header" $extra2 @$http_data "$@" ;;
-    wget)   [[ -n $token ]] && local extra="--header" local header="Authorization: token $token"
-      [[ $METHOD =~ (POST|PATCH) ]] && extra2='--body-file'
-      wget --method=$METHOD -qO- $extra "$header" $extra2 $http_data "$@" ;;
-    httpie) [[ -n $token ]] && header="Authorization:token $token"
-      [[ $METHOD =~ (POST|PATCH) ]] && extra2="@$http_data"
-      http -b $METHOD "$@" "$header" $extra2 ;;
-  esac
-}
-
 # TODO Split into 2 funcs for filter and display
 # Show the list of gist, but not updated time
 _show_list() {
@@ -168,7 +179,8 @@ _show_list() {
   [[ -z $1 ]] && local filter='/^ *s/ d; /^$/ d'
   [[ $1 == "s" ]] && local filter='/^ *[^ s]/ d; /^$/ d'
 
-  while read index link blob_code file_num comment_num author description; do
+  sed -e "$filter" $INDEX \
+  | while read index link blob_code file_num comment_num author description; do
     [[ $1 == "s" ]] && local name=$author
     local repo=$folder/$(echo $link | sed 's#.*/##')
     local occupy=0
@@ -184,8 +196,7 @@ _show_list() {
     [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
 
     echo -e "$(printf "% 3s" $index)" $link $name $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
-  done < $INDEX \
-  | sed "$filter"
+  done
   echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
 }
 
@@ -194,7 +205,6 @@ _grep_content() {
   _show_list | grep -i $1
 }
 
-# TODO support filenames, file contents
 _import_to_github() {
   _gist_id $1
   echo put the folowing URL into webpage:
@@ -208,15 +218,8 @@ _push_to_remote() {
   && git commit --allow-empty-message -m '' && git push origin master
 }
 
-# parse JSON from STDIN with string of commands
-AccessJsonElement() {
-    PYTHONIOENCODING=utf-8 \
-    python -c "from __future__ import print_function; import sys, json; $1"
-    return "$?"
-}
-
-_handle_gists() {
-    echo '
+_parse_gists() {
+    _process_json '
 raw = json.load(sys.stdin)
 for gist in raw:
     print(gist["html_url"], end=" ")
@@ -230,10 +233,9 @@ for gist in raw:
 }
 
 # TODO check if a user has no gist
-# FIXME replace space with sed
 # parse response from gists require
 _parse_response() {
-  | AccessJsonElement "$(_handle_gists)" \
+  _parse_gists \
   | tac | sed -e 's/, /,/g' | nl -s' ' \
   | while read index link file_url_array public file_num comment_num author description; do
     local blob_code=$(echo $file_url_array | tr ',' '\n' | sed -E -e 's#.*raw/(.*)/.*#\1#' | sort | cut -c -7 | paste -s -d '-' -)
@@ -246,7 +248,7 @@ _parse_response() {
 # TODO pagnation for more than 30 gists
 # TODO add files and date of a gist 
 # get latest list of gists from Github API
-_update() {
+_fetch_gists() {
   echo "fetching $user's gists from $GITHUB_API..."
   echo
   local route="users/$user/gists"
@@ -357,8 +359,8 @@ _clean_repos() {
 }
 
 # parse JSON from gist detail
-_handle_gist() {
-    echo '
+_parse_gist() {
+  _process_json '
 raw = json.load(sys.stdin)
 print("site:", raw["html_url"])
 print("description:", raw["description"])
@@ -369,12 +371,12 @@ print("updated_at:", raw["updated_at"])
 print("files:")
 for file in raw["files"].keys():
     print("   ", file)
-    ' 
+  ' 
 }
 
 # equal to jq '.[] | {user: .user.login, created_at: .created_at, updated_at: .updated_at, body: .body}'
-_handle_comment() {
-    echo '
+_parse_comment() {
+  _process_json '
 raw = json.load(sys.stdin);
 for comment in raw:
     print()
@@ -382,16 +384,16 @@ for comment in raw:
     print("|", "created_at:", comment["created_at"])
     print("|", "updated_at:", comment["updated_at"])
     print("|", comment["body"])
-    ' 
+  ' 
 }
 
 _show_detail() {
   _gist_id $1
   http_method GET $GITHUB_API/gists/$GIST_ID \
-  | AccessJsonElement "$(_handle_gist)"
+  | _parse_gist
 
   http_method GET $GITHUB_API/gists/$GIST_ID/comments \
-  | AccessJsonElement "$(_handle_comment)"
+  | _parse_comment
 }
 
 # set filename/description/permission for a new gist
@@ -427,7 +429,7 @@ _new_file() {
 }
 
 _gist_body(){
-  echo "
+  _process_json "
 import os.path
 files_json = {}
 files = sys.stdin.readline().split()
@@ -449,7 +451,7 @@ _create_gist() {
   http_data=$(mktemp)
 
   echo -e "$files\n$description" \
-  | AccessJsonElement "$(_gist_body)" > $http_data \
+  | _gist_body > $http_data \
   && http_method POST $GITHUB_API/gists \
   | sed -e '1 s/^/[/; $ s/$/]/' \
   | _parse_response $(( $(sed -e '/^s/ d' $INDEX | wc -l) +1 )) \
@@ -475,7 +477,7 @@ _edit_gist() {
   http_data=$(mktemp)
   echo { \"description\": \"$(echo $DESC | sed -e 's/"/\\"/g')\" } > $http_data
   http_method PATCH $http_data $GITHUB_API/gists/$GIST_ID > /dev/null \
-  && _update
+  && _fetch_gists
 }
 
 usage() {
@@ -484,14 +486,14 @@ usage() {
 
 _apply_config "$@" || exit 1
 getConfiguredClient
-if [[ $init ]]; then _update; exit 0; fi
+if [[ $init ]]; then _fetch_gists; exit 0; fi
 case "$1" in
   "")
     _show_list ;;
   star | s)
     _show_list s ;;
-  update | u)
-    _update "$2" ;;
+  fetch | f)
+    _fetch_gists "$2" ;;
   new | n)
     shift
     _create_gist "$@" ;;
@@ -522,6 +524,9 @@ case "$1" in
   push | p)
     shift
     _push_to_remote "$1" ;;
+  version)
+    echo "Version $currentVersion"
+    exit 0 ;;
   help | h)
     usage ;;
   *)
