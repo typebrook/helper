@@ -82,7 +82,10 @@ http_method() {
       http -b $METHOD "$@" "$header" $extra2 ;;
   esac
 }
-alias httpGet='http_method GET'
+
+httpGet(){
+  http_method GET "$@"
+}
 
 # parse JSON from STDIN with string of commands
 _process_json() {
@@ -92,11 +95,10 @@ _process_json() {
 }
 
 checkInternet() {
-  httpGET github.com > /dev/null 2>&1 || { echo "Error: no active internet connection" >&2; return 1; } # query github with a get request
+  httpGet github.com 2>&1 || { echo "Error: no active internet connection" >&2; return 1; } # query github with a get request
 }
 
-update()
-{
+update() {
   # Author: Alexander Epstein https://github.com/alexanderepstein
   # Update utility version 2.2.0
   # To test the tool enter in the defualt values that are in the examples for each variable
@@ -324,11 +326,11 @@ _fetch_gists() {
 _query_user() {
   local route="users/$1/gists"
   result=$(http_method GET $GITHUB_API/$route | _parse_response)
-  [[ -z $result ]] && echo Failed to update gists && return 1
+  [[ -z $result ]] && echo "Failed to query $1's gists" && return 1
 
   echo "$result" \
   | while read index link blob_code file_num extra description; do
-    echo $link $file_num $extra $(echo $description | cut -c -70 )
+    echo $link $file_num $extra $description | cut -c -$(tput cols)
   done
 }
 
@@ -337,7 +339,7 @@ _blob_code() {
 }
 
 # update local git repos
-# TODO support http protocol
+# TODO support HTTPS protocol
 _sync_repos() {
   # clone repos which are not in the local
   comm -13 <(find $folder -maxdepth 1 -type d | sed -e '1d; s#.*/##' | sort) \
@@ -579,7 +581,7 @@ case "$1" in
   version)
     echo "Version $currentVersion"
     exit 0 ;;
-  update | u)  
+  update)  
     checkInternet || exit 1
     update
     exit 0
