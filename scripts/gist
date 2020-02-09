@@ -24,6 +24,7 @@
 #   push, p   <pattern>           Push changes by git (well, better to make commit by youself)
 #   github, G <index_of_gist>     Import selected gist as a new Github repo
 #   help, h                       Show this help message
+#   version                       Get the tool version
 #   update                        Update Bash-Snippet Tools
 # 
 # Example:
@@ -31,7 +32,7 @@
 #   gist update (update the list of gists from github.com)
 #   gist 3 (show the repo path of your 3rd gist, and do custom actions)
 #   gist 3 --no-action (show the repo path of your 3rd gist, and do not perform actions)
-#   gist new foo --desc bar (create a new gist with file and description)
+#   gist new --desc bar foo (create a new gist with file and description)
 # 
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
