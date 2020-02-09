@@ -171,7 +171,6 @@ _apply_config() {
 }
 
 _check_repo_status() {
-    # if repo is not yet cloned, show green message "Not cloned yet"
     if [[ ! -d $1 ]]; then
       if [[ $auto_sync ]]; then echo "\e[32m[cloning]\e[0m"; fi
     else
@@ -185,7 +184,6 @@ _check_repo_status() {
     fi
 }
 
-# TODO Split into 2 funcs for filter and display
 # Show the list of gist, but not updated time
 _show_list() {
   if [[ ! -e $INDEX ]]; then 
