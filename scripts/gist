@@ -8,22 +8,23 @@
 # Description: Manage your gists with git and Github API v3
 # Usage: gist [command] [<args>]
 #
-#   [star | s]                    list your gists with format below, star for your starred gists: 
+#   [star | s]                    List your gists with format below, star for your starred gists: 
 #                                 [index_of_gist] [url] [file_num] [comment_num] [short description]
-#   fetch, f [star | s]           update the local list of your gists, star for your starred gists
-#   <index_of_gist> [--no-action] show the path of local gist repo and do custom actions
+#   fetch, f [star | s]           Update the local list of your gists, star for your starred gists
+#   <index_of_gist> [--no-action] Show the path of local gist repo and do custom actions
 #   new, n [-d | --desc <description>] [-p] <files>... create a new gist with files
 #   new, n [-d | --desc <description>] [-p] [-f | --file <file_name>] create a new gist from STDIN
-#   detail, d <index_of_gist>     show the detail of a gist
-#   edit, e   <index_of_gist>     edit a gist's description
-#   delete, D <index_of_gist>...  delete a gist
-#   clean, C                      clean removed gists in local
-#   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] do configuration
-#   user, U   <user>              get gists from a given Github user
-#   grep, g   <pattern>           grep gists by a given pattern
-#   push, p   <pattern>           push changes by git (well, better to make commit by youself)
-#   github, G <index_of_gist>     Import this gist as a new Github repo
-#   help, h                       show this help message
+#   detail, d <index_of_gist>     Show the detail of a gist
+#   edit, e   <index_of_gist>     Edit a gist's description
+#   delete, D <index_of_gist>...  Delete a gist
+#   clean, C                      Clean removed gists in local
+#   config, c [token | user | folder | auto_sync | EDITOR | action [value] ] Do configuration
+#   user, U   <user>              Get gists from a given Github user
+#   grep, g   <pattern>           Grep gists by a given pattern
+#   push, p   <pattern>           Push changes by git (well, better to make commit by youself)
+#   github, G <index_of_gist>     Import selected gist as a new Github repo
+#   help, h                       Show this help message
+#   update                        Update Bash-Snippet Tools
 # 
 # Example:
 #   gist (Show your gists)
@@ -81,6 +82,7 @@ http_method() {
       http -b $METHOD "$@" "$header" $extra2 ;;
   esac
 }
+alias httpGet='http_method GET'
 
 # parse JSON from STDIN with string of commands
 _process_json() {
@@ -89,9 +91,52 @@ _process_json() {
     return "$?"
 }
 
-# Displays version number
-version() {
-  echo "Version $currentVersion"
+checkInternet() {
+  httpGET github.com > /dev/null 2>&1 || { echo "Error: no active internet connection" >&2; return 1; } # query github with a get request
+}
+
+update()
+{
+  # Author: Alexander Epstein https://github.com/alexanderepstein
+  # Update utility version 2.2.0
+  # To test the tool enter in the defualt values that are in the examples for each variable
+  repositoryName="Bash-Snippets" #Name of repostiory to be updated ex. Sandman-Lite
+  githubUserName="alexanderepstein" #username that hosts the repostiory ex. alexanderepstein
+  nameOfInstallFile="install.sh" # change this if the installer file has a different name be sure to include file extension if there is one
+  latestVersion=$(httpGet https://api.github.com/repos/$githubUserName/$repositoryName/tags | grep -Eo '"name":.*?[^\\]",'| head -1 | grep -Eo "[0-9.]+" ) #always grabs the tag without the v option
+
+  if [[ $currentVersion == "" || $repositoryName == "" || $githubUserName == "" || $nameOfInstallFile == "" ]]; then
+    echo "Error: update utility has not been configured correctly." >&2
+    exit 1
+  elif [[ $latestVersion == "" ]]; then
+    echo "Error: no active internet connection" >&2
+    exit 1
+  else
+    if [[ "$latestVersion" != "$currentVersion" ]]; then
+      echo "Version $latestVersion available"
+      echo -n "Do you wish to update $repositoryName [Y/n]: "
+      read -r answer
+      if [[ "$answer" == [Yy] ]]; then
+        cd ~ || { echo 'Update Failed'; exit 1; }
+        if [[ -d  ~/$repositoryName ]]; then rm -r -f $repositoryName || { echo "Permissions Error: try running the update as sudo"; exit 1; } ; fi
+        echo -n "Downloading latest version of: $repositoryName."
+        git clone -q "https://github.com/$githubUserName/$repositoryName" && touch .BSnippetsHiddenFile || { echo "Failure!"; exit 1; } &
+        while [ ! -f .BSnippetsHiddenFile ]; do { echo -n "."; sleep 2; };done
+        rm -f .BSnippetsHiddenFile
+        echo "Success!"
+        cd $repositoryName || { echo 'Update Failed'; exit 1; }
+        git checkout "v$latestVersion" 2> /dev/null || git checkout "$latestVersion" 2> /dev/null || echo "Couldn't git checkout to stable release, updating to latest commit."
+        chmod a+x install.sh #this might be necessary in your case but wasnt in mine.
+        ./$nameOfInstallFile "update" || exit 1
+        cd ..
+        rm -r -f $repositoryName || { echo "Permissions Error: update succesfull but cannot delete temp files located at ~/$repositoryName delete this directory with sudo"; exit 1; }
+      else
+        exit 1
+      fi
+    else
+      echo "$repositoryName is already the latest version"
+    fi
+  fi
 }
 
 # handle configuration cases
@@ -491,7 +536,7 @@ usage() {
 }
 
 _apply_config "$@" || exit 1
-getConfiguredClient
+getConfiguredClient || exit 1
 if [[ $init ]]; then _fetch_gists; exit 0; fi
 case "$1" in
   "")
@@ -533,6 +578,11 @@ case "$1" in
   version)
     echo "Version $currentVersion"
     exit 0 ;;
+  update | u)  
+    checkInternet || exit 1
+    update
+    exit 0
+    ;;
   help | h)
     usage ;;
   *)
