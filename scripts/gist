@@ -190,8 +190,8 @@ _ask_token() {
 
 # check configuration is fine with user setting
 _validate_config(){
-  source $CONFIG 2> /dev/null || true
-  if [[ ! -e $CONFIG || -z $user ]]; then
+  source $CONFIG 2> /dev/null
+  if [[ -z $user ]]; then
     echo 'Hi fellow! To access your gists, I need your Github username'
     echo "Also a personal token with scope which allows "gist"!'"
     echo
@@ -251,7 +251,7 @@ _show_list() {
     echo -e "$(printf "% 3s" $index)" $link $name $extra $description \
     | cut -c -$(tput cols)
   done
-  echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
+  echo -e '\nrun "gist fetch" to update gists or "gist help" for more details' > /dev/tty
 }
 
 # TODO support filenames, file contents
