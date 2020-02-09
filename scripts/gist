@@ -220,7 +220,11 @@ _apply_config() {
 
 _check_repo_status() {
     if [[ ! -d $1 ]]; then
-      if [[ $auto_sync ]]; then echo "\e[32m[cloning]\e[0m"; fi
+      if $auto_sync; then 
+        echo "\e[32m[cloning]\e[0m"; 
+      else
+        echo "\e[32m[Not cloned yet]\e[0m"; 
+      fi
     else
       cd $1
       if [[ -n $(git status --short) ]] &>/dev/null; then 
@@ -252,7 +256,7 @@ _show_list() {
     echo -e "$(printf "% 3s" $index)" $link $name $extra $description \
     | cut -c -$(tput cols)
   done
-  echo -e '\nrun "gist fetch" to update gists or "gist help" for more details' > /dev/tty
+  $hint && echo -e '\nrun "gist fetch" to update gists or "gist help" for more details' > /dev/tty
 }
 
 # TODO support filenames, file contents
@@ -318,9 +322,9 @@ _fetch_gists() {
   [[ -z $result ]] && echo Failed to update gists && return 1
 
   sed -i'' -e "$filter" $INDEX && echo "$result" >> $INDEX
-  mark=$mark _show_list
+  mark=$mark hint=true _show_list
 
-  if [[ $auto_sync != 'false' ]]; then (_sync_repos $1 > /dev/null 2>&1 &); fi
+  $auto_sync && (_sync_repos $1 > /dev/null 2>&1 &)
 }
 
 _query_user() {
@@ -543,9 +547,10 @@ getConfiguredClient || exit 1
 if [[ $init ]]; then _fetch_gists; exit 0; fi
 case "$1" in
   "")
+    [[ -z "$hint" ]] && hint=true 
     _show_list ;;
   star | s)
-    mark=s _show_list ;;
+    hint=true mark=s _show_list ;;
   fetch | f)
     _fetch_gists "$2" ;;
   new | n)
