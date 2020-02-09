@@ -42,6 +42,10 @@ configuredClient=""
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
 
+action="${EDITOR:-vi} ."
+folder=~/gist && mkdir -p $folder
+auto_sync=true
+
 # Shell configuration
 set -o pipefail
 [ "$TRACE" ] && set -x
@@ -163,9 +167,22 @@ _apply_config() {
   _validate_config "$@" || return 1
 
   AUTH_HEADER="Authorization: token $token"
-  [[ -z "$action" ]] && action="${EDITOR:-vi} ."
-  [[ -z "$folder" ]] && folder=~/gist && mkdir -p $folder
   INDEX=$folder/index; [[ -e $INDEX ]] || touch $INDEX
+}
+
+_check_repo_status() {
+    # if repo is not yet cloned, show green message "Not cloned yet"
+    if [[ ! -d $1 ]]; then
+      if [[ $auto_sync ]]; then echo "\e[32m[cloning]\e[0m"; fi
+    else
+      cd $1
+      if [[ -n $(git status --short) ]] &>/dev/null; then 
+        echo "\e[36m[working]\e[0m"
+      else 
+        [[ $(_blob_code $1) != $2 ]] 2>/dev/null && echo "\e[31m[outdated]\e[0m"
+        [[ -n $(git cherry) ]] 2>/dev/null && echo "\e[31m[ahead]\e[0m"
+      fi
+    fi
 }
 
 # TODO Split into 2 funcs for filter and display
@@ -183,19 +200,11 @@ _show_list() {
   | while read index link blob_code file_num comment_num author description; do
     [[ $1 == "s" ]] && local name=$author
     local repo=$folder/$(echo $link | sed 's#.*/##')
-    local occupy=0
-    local extra="$file_num $comment_num"
+    local extra=$(_check_repo_status $repo $blob_code)
+    [[ -z $extra ]] && extra="$file_num $comment_num"
 
-    # if repo is not yet cloned, show green message "Not cloned yet"
-    [[ ! -d $repo ]] && extra="\e[32m[Not cloned yet]\e[0m" && occupy=16
-    # if there are some changes in git index or working directory, show blue message "working"
-    [[ -n $(cd $repo && git status --short) ]] 2>/dev/null && extra="\e[36m[working]\e[0m" && occupy=9
-    # if there files are different, show red message "outdated"
-    [[ $(_blob_code $repo) != $blob_code ]] 2>/dev/null && extra="\e[31m[outdated]\e[0m" && occupy=10
-    # if there is a commit not yet push, show red message "ahead"
-    [[ -n $(cd $repo && git cherry) ]] 2>/dev/null && extra="\e[31m[ahead]\e[0m" && occupy=7
-
-    echo -e "$(printf "% 3s" $index)" $link $name $extra $(echo $description | cut -c -$(( 60 -$occupy -1 )) )
+    echo -e "$(printf "% 3s" $index)" $link $name $extra $description \
+    | cut -c -$(tput cols)
   done
   echo -e '\nrun "gist help" or "gist h" for more details' > /dev/tty
 }
@@ -281,8 +290,7 @@ _query_user() {
 }
 
 _blob_code() {
-  cd $1 \
-  && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-'
+  cd $1 && git ls-tree master | cut -d' ' -f3 | cut -c-7 | sort | paste -sd '-'
 }
 
 # update local git repos
