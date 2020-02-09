@@ -191,6 +191,7 @@ _ask_token() {
 # check configuration is fine with user setting
 _validate_config(){
   source $CONFIG 2> /dev/null
+  [[ $1 =~ ^(c|config|h|help|u|user|update|version) ]] && return 0
   if [[ -z $user ]]; then
     echo 'Hi fellow! To access your gists, I need your Github username'
     echo "Also a personal token with scope which allows "gist"!'"
