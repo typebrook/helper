@@ -43,9 +43,9 @@ configuredClient=""
 GITHUB_API=https://api.github.com
 CONFIG=~/.config/gist.conf; mkdir -p ~/.config
 
-action="${EDITOR:-vi} ."
 folder=~/gist && mkdir -p $folder
-auto_sync=true
+action="${EDITOR:-vi} ."
+auto_sync=true # automatically clone the gist repo
 
 # Shell configuration
 set -o pipefail
@@ -157,7 +157,7 @@ _configure() {
   fi
 
   umask 0077 && touch $CONFIG
-  sed -i'' -e "/^$1=/ d" $CONFIG && [[ "$target" =~ [^=]$ ]] && echo $target >> $CONFIG
+  sed -i'' -e "/^$1=/ d" $CONFIG && [[ -n "$target" ]] && echo $target >> $CONFIG
   cat $CONFIG
 }
 
