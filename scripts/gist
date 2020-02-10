@@ -37,7 +37,6 @@
 # Since now a gist is a local cloned repo
 # It is your business to do git commit and git push
 
-# TODO test on bats, mac and remote machine
 currentVersion="1.23.0"
 configuredClient=""
 
@@ -50,8 +49,8 @@ auto_sync=true # automatically clone the gist repo
 
 # Shell configuration
 set -o pipefail
-[ "$TRACE" ] && set -x
-[ $(uname) == 'Darwin' ] && alias tac='tail -r'
+[[ $TRACE ]] && set -x
+[[ $(uname) == 'Darwin' ]] && alias tac='tail -r'
 trap 'rm -f "$http_data" "$tmp_file"' EXIT
 
 # This function determines which http get tool the system has installed and returns an error if there isnt one
