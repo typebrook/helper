@@ -548,12 +548,11 @@ usage() {
 _apply_config "$@" || exit 1
 getConfiguredClient || exit 1
 if [[ $init ]]; then _fetch_gists; exit 0; fi
+[[ -z "$hint" ]] && hint=true 
 case "$1" in
   "")
-    [[ -z "$hint" ]] && hint=true 
     hint=$hint _show_list ;;
   star | s)
-    [[ -z "$hint" ]] && hint=true 
     hint=$hint mark=s _show_list ;;
   fetch | f)
     _fetch_gists "$2" ;;
