@@ -70,6 +70,10 @@ alias cdP='cd ~/Pictures'
 
 # github
 alias hub="GITHUB_TOKEN=$(cat $SETTING_DIR/tokens/github) hub"
+alias github_token='xdg-open https://github.com/settings/tokens'
+github() {
+  xdg-open https://github.com/$1/$2
+}
 
 # about custom settings
 alias cds="cd $SETTING_DIR"
