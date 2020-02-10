@@ -69,7 +69,9 @@ alias cdV='cd ~/Videos'
 alias cdP='cd ~/Pictures'
 
 # github
-alias hub="GITHUB_TOKEN=$(cat $SETTING_DIR/tokens/github) hub"
+GITHUB_API='https://api.github.com'
+GITHUB_API_TOKEN=$(cat $SETTING_DIR/tokens/github 2>/dev/null)
+alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
 alias github_token='xdg-open https://github.com/settings/tokens'
 github() {
   xdg-open https://github.com/$1/$2
@@ -125,7 +127,7 @@ alias gls='git log -S'
 alias cdgw='cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 github_release_asset() {
-  command="upload-github-release-asset.sh\n github_api_token=$(cat ~/settings/tokens/github)\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
+  command="upload-github-release-asset.sh\n github_api_token=$GITHUB_API_TOKEN\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
   prompt "$command"
 }
 
@@ -263,7 +265,6 @@ alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/sharkbig.github.io/rescue'
 alias cdmw='cd ~/git/sharkbig.github.io/.github/workflows'
 
-GITHUB_API='https://api.github.com'
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
 TAIPEI_BBOX='121.346,24.926,121.676,25.209'

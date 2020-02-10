@@ -4,7 +4,7 @@
 export OSM_SERVER=https://api.openstreetmap.org
 
 export OSM_API=$OSM_SERVER/api/0.6
-export OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm)
+export OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm 2>/dev/null)
 
 FILENAME=$0
 
