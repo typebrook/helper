@@ -50,7 +50,7 @@ auto_sync=true # automatically clone the gist repo
 
 # Shell configuration
 set -o pipefail
-[[ $TRACE ]] && set -x
+[[ $TRACE == 'true' ]] && set -x
 [[ $(uname) == 'Darwin' ]] && alias tac='tail -r'
 trap 'rm -f "$http_data" "$tmp_file"' EXIT
 
