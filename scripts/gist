@@ -46,6 +46,7 @@ CONFIG=~/.config/gist.conf; mkdir -p ~/.config
 folder=~/gist && mkdir -p $folder
 action="${EDITOR:-vi} ."
 auto_sync=true # automatically clone the gist repo
+[[ -z $hint ]] && hint=true # default to show hint with list of gist
 
 # Shell configuration
 set -o pipefail
@@ -223,7 +224,7 @@ _apply_config() {
 
 _check_repo_status() {
     if [[ ! -d $1 ]]; then
-      if $auto_sync; then 
+      if [[ $auto_sync ]]; then 
         echo "\e[32m[cloning]\e[0m"; 
       else
         echo "\e[32m[Not cloned yet]\e[0m"; 
@@ -260,7 +261,7 @@ _show_list() {
     | cut -c -$(tput cols)
   done
 
-  $hint && echo -e '\nrun "gist fetch" to update gists or "gist help" for more details' > /dev/tty \
+  [[ $hint == 'true' ]] && echo -e '\nrun "gist fetch" to update gists or "gist help" for more details' > /dev/tty \
   || return 0
 }
 
@@ -328,9 +329,9 @@ _fetch_gists() {
   [[ -z $result ]] && echo Failed to update gists && return 1
 
   sed -i'' -e "$filter" $INDEX && echo "$result" >> $INDEX
-  mark=$mark hint=true _show_list
+  mark=$mark _show_list
 
-  $auto_sync && (_sync_repos $1 > /dev/null 2>&1 &)
+  [[ $auto_sync == 'true' ]] && (_sync_repos $1 > /dev/null 2>&1 &)
 }
 
 _query_user() {
@@ -551,12 +552,11 @@ usage() {
 _apply_config "$@" || exit 1
 getConfiguredClient || exit 1
 if [[ $init ]]; then _fetch_gists; exit 0; fi
-[[ -z $hint ]] && hint=true 
 case "$1" in
   "")
-    hint=$hint _show_list ;;
+    _show_list ;;
   star | s)
-    hint=$hint mark=s _show_list ;;
+    mark=s _show_list ;;
   fetch | f)
     _fetch_gists "$2" ;;
   new | n)
