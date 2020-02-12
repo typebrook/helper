@@ -224,7 +224,7 @@ _apply_config() {
 
 _check_repo_status() {
     if [[ ! -d $1 ]]; then
-      if [[ $auto_sync ]]; then 
+      if [[ $auto_sync == 'true' ]]; then 
         echo "\e[32m[cloning]\e[0m"; 
       else
         echo "\e[32m[Not cloned yet]\e[0m"; 
