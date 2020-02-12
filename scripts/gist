@@ -69,6 +69,7 @@ getConfiguredClient() {
 }
 
 # Allows to call the users configured client without if statements everywhere
+# TODO return false if code is not 20x
 http_method() {
   local METHOD=$1; shift
   case "$configuredClient" in
@@ -542,7 +543,7 @@ _edit_gist() {
   http_data=$(mktemp)
   echo { \"description\": \"$(echo $DESC | sed -e 's/"/\\"/g')\" } > $http_data
   http_method PATCH $http_data $GITHUB_API/gists/$GIST_ID > /dev/null \
-  && _fetch_gists
+  && hint=false _fetch_gists | grep -E "^[ ]+$1"
 }
 
 usage() {
