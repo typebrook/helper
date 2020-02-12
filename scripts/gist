@@ -526,7 +526,7 @@ _create_gist() {
 
   if [[ $? -eq 0 ]]; then
     echo 'Gist is created'
-    _show_list | tail -1
+    hint=false _show_list | tail -1
   else
     echo 'Failed to create gist'
   fi
