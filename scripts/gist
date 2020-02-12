@@ -145,8 +145,8 @@ update() {
 _configure() {
   [[ -z $@ ]] && (${EDITOR:-vi} $CONFIG) && return 0
 
-  local target=""
-  if [[ $1 =~ ^(user|token|folder|auto_sync|EDITOR|action)$ ]]; then
+  local valid_keys='user|token|folder|auto_sync|EDITOR|action'
+  if [[ $1 =~ ^($valid_keys)$ ]]; then
     if [[ $1 == 'user' ]]; then
       [[ -z $2 ]] && echo "Must specify username" >&2 && return 1
     elif [[ $1 == 'token' ]]; then
@@ -155,7 +155,10 @@ _configure() {
     elif [[ $1 == 'auto_sync' ]]; then
       [[ ! $2 =~ ^(true|false)$ ]] && return 1
     fi
-    local key=$1 && shift && target=$key=\'$@\'
+    local key=$1 && shift && local target=$key=\'$@\'
+  else 
+    echo "Not a valid key for configuration, use <$valid_keys> instead."
+    return 1
   fi
 
   umask 0077 && touch $CONFIG
@@ -172,8 +175,8 @@ _ask_username() {
   _configure user $user
 }
 
-# prompt for toekn
-# TODO token check, ref: https://developer.github.com/v3/apps/oauth_applications/#check-a-token
+# prompt for token
+# TODO check token scope contains gist, ref: https://developer.github.com/v3/apps/oauth_applications/#check-a-token
 _ask_token() {
   echo -n "Create a new token from web browser? [Y/n] "
   read answer < /dev/tty
@@ -266,9 +269,10 @@ _grep_content() {
   _show_list | grep -i $1
 }
 
+# Open Github repository import page
 _import_to_github() {
   _gist_id $1
-  echo put the folowing URL into webpage:
+  echo put the folowing URL into web page:
   echo -n git@github.com:$GIST_ID.git
   python -mwebbrowser https://github.com/new/import
 }
