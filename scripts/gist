@@ -534,6 +534,7 @@ _create_gist() {
 }
 
 # update description of a gist
+# TODO use response to modify index file, do not fetch gists again
 _edit_gist() {
   _gist_id $1
 
