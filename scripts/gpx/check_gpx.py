@@ -79,7 +79,7 @@ def main(argv):
     parser.add_argument("-d", help="distance of tolerance(m), 100 by default", dest="distance", default=100)
     args = parser.parse_args()
     for file in args.file:
-        check_valid(file, args.distance, args.i)
+        check_valid(file, float(args.distance), args.i)
 
 if __name__ == '__main__':
     main(sys.argv)
