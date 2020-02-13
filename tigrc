@@ -94,7 +94,7 @@ bind main 1 +sh -c "git rev-list --all --children | \
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bN @git branch %(branch) --track %(remote)/%(branch)
-bind main bu @git branch --set-upstream-to="%(prompt Set remote: )"/%(branch)
+bind main bu @git branch --set-upstream-to="%(prompt Set remote: )"/%(branch) %(branch)
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind generic bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
@@ -139,6 +139,7 @@ bind main F ?git fetch %(remote) %(branch)          # Go to Fetch
 bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
 bind main pu !git pull
+bind main pf !git pull '%(prompt Pull from witch remote? )' %(branch)
 bind main pU ?git pull --rebase
  
 # reset/rebase/revert
