@@ -112,6 +112,7 @@ bind main c @sh -c "git branch --points-at=%(commit) | \
 bind main bo >tig %(branch)
 bind main bO >tig "%(prompt Enter branch: )"
 bind main ba >tig --all
+bind main bR !git reorder
 
 # commit
 bind main a !>git commit --amend
