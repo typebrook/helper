@@ -65,8 +65,8 @@ cdg() {
 alias cda='cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
-alias cdV='cd ~/Videos'
 alias cdP='cd ~/Pictures'
+alias cdV='cd ~/Videos'
 
 # github
 GITHUB_API='https://api.github.com'
