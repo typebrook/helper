@@ -391,9 +391,7 @@ _goto_gist() {
 
   if [[ ! -d $folder/$GIST_ID  ]]; then
     echo 'Cloning gist as repo...'
-    git clone "git@github.com:$GIST_ID".git "$folder/$GIST_ID"
-
-    if $?; then
+    if git clone "git@github.com:$GIST_ID".git "$folder/$GIST_ID"; then
       echo 'Repo is cloned' > /dev/tty
     else
       echo 'Failed to clone the gist' > /dev/tty
@@ -467,6 +465,7 @@ _show_detail() {
 
 # set filename/description/permission for a new gist
 _set_gist() {
+  files=()
   public=True
   while [[ -n "$*" ]]; do case $1 in
     -d | --desc)
@@ -479,12 +478,11 @@ _set_gist() {
       public=False
       shift;;
     *)
-      files="$1 $files"
+      files+=($1)
       shift;;
     esac
   done
-  # FIXME user array instead
-  ls $files > /dev/null || return 1
+  ls "${files[@]}" > /dev/null || return 1
 }
 
 # Let user type the content of gist before setting filename
@@ -514,13 +512,13 @@ print(json.dumps({'public': $public, 'files': files_json, 'description': descrip
 # create a new gist with files
 _create_gist() {
   _set_gist "$@" || return 1
-  [[ -z $files ]] && files=$(_new_file "$filename")
+  [[ -z $files ]] && files=(_new_file "$filename")
   [[ -z $description ]] && read -r -p 'Type description: ' description < /dev/tty
 
   echo 'Creating a new gist...'
   http_data=$(mktemp)
 
-  echo -e "$files\n$description" \
+  echo -e "${files[*]}\n$description" \
   | _gist_body > "$http_data" \
   && http_method POST $GITHUB_API/gists \
   | sed -e '1 s/^/[/; $ s/$/]/' \
@@ -529,7 +527,7 @@ _create_gist() {
   | cut -d' ' -f2 | sed -E -e 's#.*/##' \
   | (xargs -I{} git clone git@github.com:{}.git $folder/{} &> /dev/null &)
 
-  if $?; then
+  if [[ $? -eq 0 ]]; then
     echo 'Gist is created'
     hint=false _show_list | tail -1
   else
