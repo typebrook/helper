@@ -15,11 +15,11 @@ then
 fi
 
 cd "$1" && \
-git pull my && \
 git fetch origin && \
-if git rev-list "$head" | grep "$(git rev-parse origin/master)" > /dev/null
+if ! git rev-list "$head" | grep "$(git rev-parse origin/master)" > /dev/null
 then
-    echo "New commit at" "$1"
+  [ $(git pull my) = 'Alrady up to date.' ] || \
+  echo "New commit at" "$1"
 fi
 
 echo "$(date)" check "$1" >> "$SETTING_DIR/log"
