@@ -4,7 +4,7 @@
 # check $1(repo) if upstream branch origin/master is
 # ahead of local branch $2(default to dev)
 
-if [ ! -d $1 ]; then
+if [ ! -d "$1" ]; then
     return 0
 fi
 
@@ -14,13 +14,12 @@ then
     head=$2
 fi
 
-cd $1
+cd "$1" && \
+git pull my && \
 git fetch origin && \
-git rev-list $head | grep $(git rev-parse origin/master) > /dev/null
-
-if [ $? -ne 0 ]
+if git rev-list "$head" | grep "$(git rev-parse origin/master)" > /dev/null
 then
-    echo "New commit at" $1
+    echo "New commit at" "$1"
 fi
 
-echo $(date) check $1 >> $SETTING_DIR/log
+echo "$(date)" check "$1" >> "$SETTING_DIR/log"
