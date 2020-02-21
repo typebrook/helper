@@ -19,3 +19,6 @@ $SETTING_DIR/scripts/sync.sh
 OSM_UTIL_DIR=$SETTING_DIR/scripts/osm
 source $OSM_UTIL_DIR/osm
 
+# go
+PATH=$PATH:$HOME/go/bin
+
