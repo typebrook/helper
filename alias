@@ -221,7 +221,10 @@ alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
-  convert $@ -append output.png 
+  convert "$@" -append output.png 
+}
+image_horizontal() { 
+  convert "$@" +append output.png 
 }
 
 # mail mutt

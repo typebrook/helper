@@ -95,7 +95,7 @@ bind main 1 +sh -c "git rev-list --all --children | \
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bN @git branch %(branch) --track %(remote)/%(branch)
-bind main bu @git branch --set-upstream-to="%(prompt Set remote: )"/%(branch) %(branch)
+bind main bu @git branch --set-upstream-to="%(prompt Set remote/branch: )"/%(branch) %(branch)
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind generic bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
