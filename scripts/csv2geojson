@@ -42,4 +42,5 @@ jq '{"type": "Feature",  "properties": .[2],  "geometry":{ "type": "Point",  "co
 # wrap features as geojson format
 jq -s '{"type": "FeatureCollection", "features": .}' |\
 tee /tmp/geojson
-echo stored into /tmp/geojson
+
+echo stored into /tmp/geojson > /dev/tty
