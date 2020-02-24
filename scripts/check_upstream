@@ -18,7 +18,7 @@ cd "$1" && \
 git fetch origin && \
 if ! git rev-list "$head" | grep "$(git rev-parse origin/master)" > /dev/null
 then
-  [ $(git pull my) = 'Alrady up to date.' ] || \
+  [[ $(git pull my) == 'Alrady up to date.' ]] || \
   echo "New commit at" "$1"
 fi
 

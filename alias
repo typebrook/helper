@@ -14,11 +14,10 @@ alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 # vim
 alias v='vim'
 alias vv='vim ~/vimwiki/index.md'
-alias ve='vim ~/.vim_runtime/my_configs.vim'
 alias vr='vim -R'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
-# script
+# for custom scripts
 vs() { 
   which $1 && vim $(which $1)
 }
@@ -55,7 +54,7 @@ prompt() {
 alias ai='sudo apt install' # apt install
 alias aptu='sudo apt update && sudo apt upgrade'
 alias si='sudo snap install' # snap install
-alias pi='sudo pip3 install' # nodejs install
+alias pi='sudo pip3 install' # python install
 alias ni='sudo npm install -g' # nodejs install
 
 # cd to DIRs
@@ -70,6 +69,18 @@ alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
 
+# git
+unalias gc &> /dev/null # override zsh plugin alias
+gc() {
+  git clone $1 && cd $(basename $1) 
+}
+gc1() {
+  git clone --depth=1 $1 && cd $(basename $1) 
+}
+alias gls='git log -S'
+alias cdgw='cd .github/workflows'
+alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
+
 # github
 GITHUB_API='https://api.github.com'
 GITHUB_API_TOKEN=$(cat $SETTING_DIR/tokens/github 2>/dev/null)
@@ -78,11 +89,34 @@ alias github_token='xdg-open https://github.com/settings/tokens'
 github() {
   xdg-open https://github.com/$1/$2
 }
+gcg() {
+  git clone git@github.com:$1/$2.git && cd $(basename $2) 
+}
+github_release_asset() {
+  command="upload-github-release-asset.sh\n github_api_token=$GITHUB_API_TOKEN\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
+  prompt "$command"
+}
+
+# tig
+alias cdt='cd ~/git/tig'
+alias t='tig'
+alias ts='tig status'
+alias ta='tig --all'
+alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
+upload_tig() {
+  upload-github-release-asset.sh \
+    github_api_token=$GITHUB_API_TOKEN \
+    owner=typebrook \
+    repo=tig \
+    tag=LATEST \
+    filename=$(which tig)
+    overwrite=false
+}
 
 # about custom settings
 alias cds="cd $SETTING_DIR"
 alias cdss="cd $SETTING_DIR/scripts"
-alias chs="cd $SETTING_DIR && tig status" # check setting changes
+alias chs="cd $SETTING_DIR && tig status"
 
 # about vimwiki
 alias cdw='cd ~/vimwiki'
@@ -114,25 +148,6 @@ _ranger_cd() {
 # disk
 alias df='df -h'
 
-# git
-unalias gc &> /dev/null # override zsh plugin alias
-gc() {
-  git clone $1 && cd $(basename $1) 
-}
-gc1() {
-  git clone --depth=1 $1 && cd $(basename $1) 
-}
-gcg() {
-  git clone git@github.com:$1/$2.git && cd $(basename $2) 
-}
-alias gls='git log -S'
-alias cdgw='cd .github/workflows'
-alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
-github_release_asset() {
-  command="upload-github-release-asset.sh\n github_api_token=$GITHUB_API_TOKEN\n owner=typebrook\n repo=tig\n tag=LATEST\n filename=$(which tig)\n overwrite=false"
-  prompt "$command"
-}
-
 # docker
 alias dp='docker ps'
 alias dpa='docker ps -a'
@@ -148,22 +163,6 @@ alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
 alias geothings='ssh geothings@geobingan.info'
 alias geothings-test='ssh geothings@test.geothings.tw'
-
-# tig
-alias cdt='cd ~/git/tig'
-alias t='tig'
-alias ts='tig status'
-alias ta='tig --all'
-alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
-upload_tig() {
-  upload-github-release-asset.sh \
-    github_api_token=$(cat ~/settings/tokens/github) \
-    owner=typebrook \
-    repo=tig \
-    tag=LATEST \
-    filename=$(which tig)
-    overwrite=false
-}
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
