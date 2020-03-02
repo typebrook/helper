@@ -16,7 +16,7 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed -i "\^# $REPO^, /^$/ d" $RCFILE
+sed -i "/^$/ N; \^# $REPO^, /^$/ d" $RCFILE
 echo "
 
 # $REPO
