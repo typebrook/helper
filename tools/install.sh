@@ -18,11 +18,9 @@ fi
 
 sed -i "/^$/ N; \^# $REPO^, /^$/ d" $RCFILE
 echo "
-
 # $REPO
 export SETTING_DIR=$SETTING_DIR
 source \$SETTING_DIR/tools/load-settings.sh
-
 " >> $RCFILE
 
 cd "$SETTING_DIR" && make
