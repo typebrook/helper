@@ -15,10 +15,11 @@ git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$SETTING_DIR" || {
 
 sed "/^# $REPO/, /^$/ d"
 cat <<EOF
+
 # $REPO
 export SETTING_DIR=$HOME/settings
 source $SETTING_DIR/tools/load-settings.sh
 
-EOF
+EOF >> ~/.$(basename $SHELL)rc
 
 cd "$SETTING_DIR" && make
