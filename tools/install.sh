@@ -15,7 +15,7 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed "/^# $REPO/, /^$/ d"
+sed -E "/^# $REPO/, /^$/ d"
 cat <<EOF
 
 # $REPO
