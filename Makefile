@@ -26,7 +26,7 @@ tig:
 wiki:
 	# vimwiki
 	if [ ! -d "$(HOME)/.vimwiki" ]; then \
-        git clone --depth=1 git@github.com:typebrook/wiki.git ~/vimwiki; \
+        git clone --depth=1 git@github.com:typebrook/wiki.git ~/vimwiki
 	fi
 
 crontab:
