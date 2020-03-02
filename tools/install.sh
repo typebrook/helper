@@ -8,7 +8,7 @@ REPO=${REPO:-typebrook/settings}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-dev}
 
-if [[ -d $SETTING_DIR ]]; then
+if [ ! -d $SETTING_DIR ]; then
   git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$SETTING_DIR" || {
       error "git clone of settings repo failed"
       exit 1
