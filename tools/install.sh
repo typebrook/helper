@@ -7,6 +7,7 @@ SETTING_DIR=${SETTING_DIR:-~/settings}
 REPO=${REPO:-typebrook/settings}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-dev}
+RCFILE=${RCFILE:-~/.$(basename $SHELL)rc}
 
 if [ ! -d $SETTING_DIR ]; then
   git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$SETTING_DIR" || {
@@ -15,13 +16,13 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed -E "/^# $REPO/, /^$/ d"
-cat <<EOF
+sed -i "\^# $REPO^, /^$/ d" $RCFILE
+echo "
 
 # $REPO
-export SETTING_DIR=$HOME/settings
-source $SETTING_DIR/tools/load-settings.sh
+export SETTING_DIR=$SETTING_DIR
+source \$SETTING_DIR/tools/load-settings.sh
 
-EOF >> ~/.$(basename $SHELL)rc
+" >> $RCFILE
 
 cd "$SETTING_DIR" && make
