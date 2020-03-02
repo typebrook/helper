@@ -30,4 +30,4 @@ wiki:
 	fi
 
 crontab:
-	(crontab -l 2>/dev/null; cat scripts/*.cron) | crontab -
+	(crontab -l 2>/dev/null; cat tools/*.cron) | crontab -
