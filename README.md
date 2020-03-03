@@ -1,9 +1,9 @@
 ## Getting Started
 **via curl**
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh | bash
 ```
 **via wget**
 ```
-sh -c "$(wget -O- https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh)"
+wget -O- https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh | bash
 ```
