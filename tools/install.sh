@@ -16,11 +16,11 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed -i "/^$/ N; \^# $REPO^, /^$/ d" $RCFILE
+sed -i "\^# $REPO^, /^$/ d"  $RCFILE
 echo "
 # $REPO
 export SETTING_DIR=$SETTING_DIR
 source \$SETTING_DIR/tools/load-settings.sh
 " >> $RCFILE
 
-cd "$SETTING_DIR" && make
+#cd "$SETTING_DIR" && make
