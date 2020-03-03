@@ -1,6 +1,10 @@
 .PHONY: *
 
-all: vim git tig
+all: git vim tig
+
+git:
+	rm -f ~/.gitconfig
+	ln -s `pwd`/gitconfig ~/.gitconfig
 
 vim:
 	# amix-vimrc
@@ -14,10 +18,6 @@ vim:
 	
 	rm -f ~/.vim_runtime/my_configs.vim
 	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
-
-git:
-	rm -f ~/.gitconfig
-	ln -s `pwd`/gitconfig ~/.gitconfig
 
 tig:
 	rm -f ~/.tigrc
