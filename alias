@@ -164,7 +164,6 @@ alias dr='docker run --rm -it'
 alias keygen='ssh-keygen -t rsa -C "typebrook@gmail.com"'
 alias topo='ssh typebrook@topo.tw'
 alias ptt='ssh bbsu@ptt.cc'
-alias geothings='ssh geothings@geobingan.info'
 alias geothings-test='ssh geothings@test.geothings.tw'
 
 # Android
@@ -263,10 +262,10 @@ big52utf8() {
 }
 
 # tmp
+alias and='cd ~/git/geoBingAn.Android'
 alias cdo='cd ~/git/openmaptiles'
 alias cdS='cd ~/git/StreetComplete'
 alias cdW='cd ~/git/geoBingAnWeb'
-alias and='cd ~/git/geoBingAn.Android'
 alias cdT='cd ~/git/taiwan-topo'
 alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/tilemaker'
