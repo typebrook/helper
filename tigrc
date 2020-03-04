@@ -41,7 +41,8 @@ bind generic Ua @git remote add "%(prompt New Github remote name: )" git@github.
 bind generic UA @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
 bind generic Ur @git remote rename "%(prompt Rename which remote?: )" "%(prompt Enter new remote name: )"
 bind generic U! @git remote remove "%(prompt Remove which remote?: )"
-bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
+bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" git@github.com:"%(prompt User/Repo: )"
+bind generic US @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 bind generic Uf ?git fetch "%(prompt Fetch from which remote?: )"
 bind generic UU ?git remote update --prune
 bind generic Uprf ?git fetch "%(prompt Fetch from which remote?: )" pull/"%(prompt PR number: )"/head:pr
