@@ -1,8 +1,11 @@
 #!/usr/bin/env sh
 #
-# Author: Stefan Buck
+# Author: Hsieh Chin Fan (typebrook) <typebrook@gmail.com>
 # License: MIT
-# https://gist.github.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447
+# https://gist.github.com/typebrook/4947769e266173303d8848f496e272c9
+#
+# Originally created by stefanbuck
+# fork from: https://gist.github.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447
 #
 #
 # This script accepts the following parameters:
