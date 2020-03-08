@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # Author: Stefan Buck
 # License: MIT
@@ -39,10 +39,8 @@ GH_API="https://api.github.com"
 GH_REPO="$GH_API/repos/$owner/$repo"
 GH_TAGS="$GH_REPO/releases/tags/$tag"
 AUTH="Authorization: token $github_api_token"
-WGET_ARGS="--content-disposition --auth-no-challenge --no-cookie"
-CURL_ARGS="-LJO#"
 
-if [[ "$tag" == 'LATEST' ]]; then
+if [ "$tag" = 'LATEST' ]; then
   GH_TAGS="$GH_REPO/releases/latest"
 fi
 
@@ -62,10 +60,10 @@ eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m
 if [ "$asset_id" = ""  ]; then
     echo "No need to overwrite asset"
 else
-    if [[ "$overwrite" == "true" ]] || [[ "$overwrite" == "delete" ]]; then
+    if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
         echo "Deleting asset($asset_id)... "
         curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
-        if [[ "$overwrite" == "delete" ]]; then
+        if [ "$overwrite" = "delete" ]; then
             exit 0
         fi
     else
