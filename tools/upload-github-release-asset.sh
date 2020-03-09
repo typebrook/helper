@@ -13,6 +13,7 @@
 # * owner
 # * repo
 # * tag
+# * type (asset or edit)
 # * filename
 # * github_api_token
 # * overwrite (optional, could be ture, false, delete, default to be false)
@@ -26,7 +27,6 @@
 
 # Check dependencies.
 set -e
-xargs=$(which gxargs || which xargs)
 
 # Validate settings.
 [ "$TRACE" ] && set -x
@@ -57,29 +57,50 @@ response=$(curl -sH "$AUTH" $GH_TAGS)
 eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/release_id/')
 [ "$release_id"  ] || { echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2; exit 1; }
 
-# Get ID of the asset based on given filename.
-# If exists, delete it.
-eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
-if [ "$asset_id" = ""  ]; then
-    echo "No need to overwrite asset"
-else
-    if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
-        echo "Deleting asset($asset_id)... "
-        curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
-        if [ "$overwrite" = "delete" ]; then
-            exit 0
-        fi
-    else
-        echo "File already exists on tag $tag"
-        echo "If you want to overwrite it, set overwrite=true"
-        exit 1
-    fi
-fi
+upload_asset() {
+  # Get ID of the asset based on given filename.
+  # If exists, delete it.
+  eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
+  if [ "$asset_id" = ""  ]; then
+      echo "No need to overwrite asset"
+  else
+      if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
+          echo "Deleting asset($asset_id)... "
+          curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+          if [ "$overwrite" = "delete" ]; then
+              exit 0
+          fi
+      else
+          echo "File already exists on tag $tag"
+          echo "If you want to overwrite it, set overwrite=true"
+          exit 1
+      fi
+  fi
 
-# Upload asset
-echo "Uploading asset... "
+  # Upload asset
+  echo "Uploading asset... "
 
-# Construct url
-GH_ASSET="https://uploads.github.com/repos/$owner/$repo/releases/$release_id/assets?name=$(basename $filename)"
+  # Construct url
+  GH_ASSET="https://uploads.github.com/repos/$owner/$repo/releases/$release_id/assets?name=$(basename $filename)"
 
-curl --data-binary @"$filename" -H "Authorization: token $github_api_token" -H "Content-Type: application/octet-stream" $GH_ASSET
+  curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
+}
+
+edit_release() {
+  GH_RELEASE="$GH_REPO/releases/$release_id"
+  curl -v -X PATCH -H "$AUTH" -H "Content-Type: application/json" $GH_RELEASE \
+    -d "{ \
+        \"tag_name\": \"$tag\", \
+        \"target_commitish\": \"master\", \
+        \"name\": \"daily-taiwan-pbf\", \
+        \"body\": \"$(cat $filename | sed 's/"/\\"/g; $! s/$/\\n/' | tr -d '\n') \", \
+        \"draft\": false, \
+        \"prerelease\": false \
+    }"
+}
+
+case $type in
+  asset) upload_asset;;
+  edit) edit_release;;
+  *) echo "type should be 'asset' or 'edit'";;
+esac
