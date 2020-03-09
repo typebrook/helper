@@ -88,15 +88,18 @@ upload_asset() {
 
 edit_release() {
   GH_RELEASE="$GH_REPO/releases/$release_id"
-  curl -v -X PATCH -H "$AUTH" -H "Content-Type: application/json" $GH_RELEASE \
-    -d "{ \
-        \"tag_name\": \"$tag\", \
-        \"target_commitish\": \"master\", \
-        \"name\": \"daily-taiwan-pbf\", \
-        \"body\": \"$(cat $filename | sed 's/"/\\"/g; $! s/$/\\n/' | tr -d '\n') \", \
-        \"draft\": false, \
-        \"prerelease\": false \
-    }"
+  body=$(cat <<EOF
+{
+  "tag_name": "$tag",
+  "target_commitish": "master",
+  "name": "daily-taiwan-pbf",
+  "body": "$(cat $filename | sed 's/"/\\"/g; $! s/$/\\n/' | tr -d '\n')",
+  "draft": false,
+  "prerelease": false
+}
+EOF
+  )
+  curl -v -X PATCH -H "$AUTH" -H "Content-Type: application/json" -d "$body" $GH_RELEASE
 }
 
 case $type in
