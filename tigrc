@@ -194,7 +194,7 @@ bind main I >sh -c "hub issue | tig"
 ## Statistics
 bind main gc >sh -c 'cloc --git %(commit) | tig'
 ## Script to bump Android version
-bind main <C-B> !sh -c 'tools/bump_version.sh && tools/whatsnew.sh'
+bind main <C-B> !sh -c 'scripts/bump_version.sh && scripts/whatsnew.sh'
 
 # note
 #bind generic gnn !git notes edit %(commit)
