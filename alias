@@ -120,7 +120,7 @@ upload_tig() {
 alias cds="cd $SETTING_DIR"
 alias chs="cd $SETTING_DIR && tig status"
 cdss() {
-  cd $SETTING_DIR/tools && cd $1 || true
+  cd $SETTING_DIR/tools/$1 || cd $SETTING_DIR/tools 
 }
 
 # about vimwiki
