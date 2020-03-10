@@ -47,7 +47,7 @@ if [ "$tag" = 'LATEST' ]; then
   GH_TAGS="$GH_REPO/releases/latest"
 fi
 if [ "$type" = '' ]; then
-  sed -E -n -e ' /^$/ q; 10,$ s/^# *//p' "$0"
+  sed -E -n -e ' /^$/ q; 11,$ s/^# *//p' "$0"
   exit 0
 fi
 
