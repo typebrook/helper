@@ -62,19 +62,19 @@ upload_asset() {
   # If exists, delete it.
   eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
   if [ "$asset_id" = ""  ]; then
-      echo "No need to overwrite asset"
+    echo "No need to overwrite asset"
   else
-      if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
-          echo "Deleting asset($asset_id)... "
-          curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
-          if [ "$overwrite" = "delete" ]; then
-              exit 0
-          fi
-      else
-          echo "File already exists on tag $tag"
-          echo "If you want to overwrite it, set overwrite=true"
-          exit 1
+    if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
+      echo "Deleting asset($asset_id)... "
+      curl  -X "DELETE" -H "Authorization: token $github_api_token" "https://api.github.com/repos/$owner/$repo/releases/assets/$asset_id"
+      if [ "$overwrite" = "delete" ]; then
+          exit 0
       fi
+    else
+      echo "File already exists on tag $tag"
+      echo "If you want to overwrite it, set overwrite=true"
+      exit 1
+    fi
   fi
 
   # Upload asset
@@ -105,5 +105,6 @@ EOF
 case $type in
   asset) upload_asset;;
   edit) edit_release;;
+  *) sed -E -n -e ' /^$/ q; 10,$ s/^# //p' "$0";;
   *) echo "type should be 'asset' or 'edit'";;
 esac
