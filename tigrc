@@ -302,6 +302,7 @@ bind refs F ?git fetch %(remote) %(ref)
 bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
 bind refs pd ?git push %(remote) :%(ref)
 bind refs pD ?git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs r none
 bind refs rd ?git branch --remotes -D %(remote)/%(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
