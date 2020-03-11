@@ -7,10 +7,10 @@
 # Originally created by stefanbuck
 # fork from: https://gist.github.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447
 #
+# --
+# This script manages a release note or its asset with GitHub API v3.
+# It accepts the following parameters:
 #
-# This script accepts the following parameters:
-#
-# * owner
 # * repo
 # * tag
 # * type (asset or edit)
@@ -18,12 +18,13 @@
 # * github_api_token
 # * overwrite (optional, could be ture, false, delete, default to be false)
 #
-# Script to manage a release or its asset using the GitHub API v3.
-#
 # Example:
 #
-# github-release.sh github_api_token=TOKEN owner=stefanbuck repo=playground tag=v0.1.0 type=asset filename=./build.zip overwrite=true
+# # Upload a file as asset. If there is a asset with the same filename, then overwrite it.
+# github-release.sh github_api_token=TOKEN repo=stefanbuck/playground tag=v0.1.0 type=asset filename=./build.zip overwrite=true
 #
+# # Edit a release note with file content
+# github-release.sh github_api_token=TOKEN repo=stefanbuck/playground tag=v0.1.0 type=edit filename=note
 
 # Check dependencies.
 set -e
@@ -39,7 +40,7 @@ done
 
 # Define variables.
 GH_API="https://api.github.com"
-GH_REPO="$GH_API/repos/$owner/$repo"
+GH_REPO="$GH_API/repos/$repo"
 GH_TAGS="$GH_REPO/releases/tags/$tag"
 AUTH="Authorization: token $github_api_token"
 
@@ -47,7 +48,7 @@ if [ "$tag" = 'LATEST' ]; then
   GH_TAGS="$GH_REPO/releases/latest"
 fi
 if [ "$type" = '' ]; then
-  sed -E -n -e ' /^$/ q; 11,$ s/^# *//p' "$0"
+  sed -E -n -e ' /^$/ q; /# --/,$ s/^# *//p' "$0"
   exit 0
 fi
 
@@ -85,7 +86,7 @@ upload_asset() {
   echo "Uploading asset... "
 
   # Construct url
-  GH_ASSET="https://uploads.github.com/repos/$owner/$repo/releases/$release_id/assets?name=$(basename $filename)"
+  GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$(basename $filename)"
 
   curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
 }
