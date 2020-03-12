@@ -1,6 +1,8 @@
 #!/bin/bash
 
-GEOFABRICK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
+set -e
+
+GEOFABRIK_SERVER=http://download.geofabrik.de/asia/taiwan-updates
 PBF_FILE=$1
 
 # get latest sequence number
@@ -23,7 +25,7 @@ while
 do
     mkdir -p changes
     SEQ_PATH=$(echo $SEQ | sed -r 's/(.{1})(.{3})/00\1\/\2/')
-    CHANGE_URL=$GEOFABRICK_SERVER/000/$SEQ_PATH.osc.gz
+    CHANGE_URL=$GEOFABRIK_SERVER/000/$SEQ_PATH.osc.gz
     echo $CHANGE_URL
     curl -o changes/$SEQ.osc.gz $CHANGE_URL && \
     osmium apply-changes $PBF_FILE changes/$SEQ.osc.gz \
