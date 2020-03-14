@@ -162,7 +162,9 @@ alias dc='docker-compose run --rm'
 alias ds='docker stop'
 alias drm='docker `docker ps -aq`'
 alias dr='docker run --rm -it'
-alias drb='docker run --rm -it --entrypoint /bin/bash $1'
+drb() {
+  docker run --rm -it --entrypoint /bin/bash $@
+}
 
 # ssh
 alias keygen='ssh-keygen -t rsa -C "typebrook@gmail.com"'
