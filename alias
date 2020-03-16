@@ -208,10 +208,16 @@ alias sample_osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias data_rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data_rudymap_ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
-data_osm_diff() {
+data_osm_diff_min() {
   curl https://planet.openstreetmap.org/replication/minute/state.txt \
-  | sed -n 2p | cut -d'=' -f2 | sed -r 's/(.{1})(.{3})/00\1\/\2\//' \
+  | sed -n 2p | cut -d'=' -f2 | sed -r 's#(.{1})(.{3})#00\1/\2#' \
   | xargs -I{} echo 'https://planet.openstreetmap.org/replication/minute/{}'.osc.gz \
+  | xargs curl -O
+}
+data_osm_diff_hour() {
+  curl https://planet.openstreetmap.org/replication/hour/state.txt \
+  | sed -n 2p | cut -d'=' -f2 | sed -r 's#(.{2})(.{3})#000/0\1/\2#' \
+  | xargs -I{} echo 'https://planet.openstreetmap.org/replication/hour/{}'.osc.gz \
   | xargs curl -O
 }
 alias data_taiwan_town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
