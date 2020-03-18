@@ -27,10 +27,7 @@ todo() {
 fix() {
   which $1 && grep -Po 'FIXME.*' $(which $1)
 }
-gi() {
-  dir=$(gist $1 --no-action)
-  [[ -d $dir ]] && cd $dir
-}
+alias g='gist'
 
 # shell
 alias src="source $HOME/.$(basename $SHELL)rc"

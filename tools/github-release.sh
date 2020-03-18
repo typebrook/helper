@@ -62,33 +62,44 @@ response=$(curl -sH "$AUTH" $GH_TAGS)
 eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/release_id/')
 [ "$release_id"  ] || { echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2; exit 1; }
 
+post_asset() {
+  # Upload asset
+  echo "Uploading asset... " > /dev/tty
+  # Construct url
+  GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$(basename $1)"
+
+  curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
+}
+
+delete_asset() {
+  echo "Deleting asset($1)... " > /dev/tty
+  curl -X "DELETE" -H "$AUTH" "$GH_REPO/releases/assets/$1"
+}
+
 upload_asset() {
   # Get ID of the asset based on given filename.
   # If exists, delete it.
-  eval $(echo "$response" | grep -C2 "\"name\":.\+$(basename $filename)" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
+  eval $(echo "$response" | grep -C2 "\"name\": \"$(basename $filename)\"" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
   if [ "$asset_id" = ""  ]; then
     echo "No need to overwrite asset"
+    post_asset $filename
   else
-    if [ "$overwrite" = "true" ] || [ "$overwrite" = "delete" ]; then
-      echo "Deleting asset($asset_id)... "
-      curl  -X "DELETE" -H "$AUTH" "$GH_REPO/releases/assets/$asset_id"
-      if [ "$overwrite" = "delete" ]; then
-          exit 0
-      fi
+    if [ "$overwrite" = "true" ]; then
+      new_asset_id=$(post_asset ${filename}_bak | sed -E 's/^\{[^{]+"id":([0-9]+).+$/\1/')
+      [ "$new_asset_id" = "" ] && exit 1 || delete_asset "$asset_id"
+
+      echo "Renaming asset($new_asset_id) from $(basename $filename)_bak to $(basename $filename)" > /dev/tty
+      curl -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+        --data "{\"name\":\"$(basename $filename)\"}" "$GH_REPO/releases/assets/$new_asset_id"
+    elif [ "$overwrite" = "delete" ]; then
+      delete_asset "$asset_id"
+      exit 0
     else
       echo "File already exists on tag $tag"
       echo "If you want to overwrite it, set overwrite=true"
       exit 1
     fi
   fi
-
-  # Upload asset
-  echo "Uploading asset... "
-
-  # Construct url
-  GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$(basename $filename)"
-
-  curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
 }
 
 edit_release() {
@@ -104,7 +115,7 @@ edit_release() {
 }
 EOF
   )
-  curl -v -X PATCH -H "$AUTH" -H "Content-Type: application/json" -d "$body" $GH_RELEASE
+  curl -X PATCH -H "$AUTH" -H "Content-Type: application/json" -d "$body" $GH_RELEASE
 }
 
 case $type in
