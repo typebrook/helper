@@ -232,7 +232,8 @@ bind status gn @sh -c "git ls-files -v | grep '^h ' | cut -d' ' -f2 | \
 # stash
 bind status s ?>git stash 
 bind status S @git stash push -m "%(prompt Enter stash name: )"
-bind status gs !git stashstaged
+bind status gs !git stash --keep-index
+bind status gS !git stashstaged
 bind status <C-S> >sh -c 'git stash && git stash apply stash@{0}'
 
 # quick commit
