@@ -106,6 +106,7 @@ bind generic bD ?>git branch -D "%(prompt Delete branch anyway: )"
 bind main bbD ?>git branch -D %(branch)
 bind main brd ?git branch -rd %(remote)/%(branch)
 bind main bv +sh -c "git branch -vv | grep %(branch)"
+bind main bV !sh -c "git branch -vv"
 bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
 bind main bM @git branch --force "%(prompt Move which branch to here? )" %(commit)
 bind main c @sh -c "git branch --points-at=%(commit) | \
