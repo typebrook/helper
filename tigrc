@@ -296,6 +296,7 @@ bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 # refs view
 #====================
 bind refs b none
+bind refs r none
 bind refs C none
 bind refs c @git checkout %(ref)
 
@@ -305,11 +306,14 @@ bind refs F ?git fetch %(remote) %(ref)
 bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
 bind refs pd ?git push %(remote) :%(ref)
 bind refs pD ?git push '%(prompt Delete from which remote? )' :%(ref)
-bind refs r none
 bind refs rd ?git branch --remotes -D %(remote)/%(ref)
 
 bind refs . >sh -c "git diff --patch-with-stat %(branch) | tig"
 bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
+
+# get the remotes contains given tag
+bind refs r none
+bind refs rr !sh -c "git remote | xargs -I{} sh -c 'echo {} $(git ls-remote {} %(ref))' | grep -E ' ' | cut -d' ' -f1"
 
 #====================
 # log view
