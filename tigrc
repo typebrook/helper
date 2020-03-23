@@ -27,6 +27,7 @@ bind generic p none
 bind generic xx +sh -c "echo -n %(commit) | head -c7 | xsel -ib && echo Commit Clipped!"
 bind generic xc +sh -c "echo -n %(commit) | xsel -ib && echo Full Commit Clipped!"
 bind generic xt +sh -c "echo -n %(text) | xsel -ib && echo Text Clipped!"
+bind generic xT +sh -c "git cat-file -p %(commit) | sed 1,5d | xsel -ib && echo commit message Clipped"
 bind generic xrb +sh -c "echo -n %(branch) | xsel -ib && echo Branch Clipped!"
 bind generic xrB +sh -c "echo -n %(remote):%(branch) | xsel -ib && echo Remote Branch Clipped!"
 bind generic xrt +sh -c "echo -n %(tag) | xsel -ib && echo tag Clipped"
@@ -168,7 +169,9 @@ bind generic Tc !git tag %(tag) %(tag)^{} -f -m "New tag content" -e
 bind generic Tl !sh -c 'git ls-remote --tags %(remote) | grep %(tag)'
 bind generic Ts >tig show %(tag)
 bind generic Td @git tag -d "%(prompt Delete which tag? )"
+bind generic Tpr ?git push "%(prompt Push to which Remote? )" %(tag)
 bind generic Tpd ?git push %(remote) :%(tag)
+bind generic TpD ?git push "%(prompt Which remote? )" -d %(tag)
 bind generic TTd @git tag -d %(tag)
 bind generic pt ?git push --tags
 bind generic pT ?git push %(remote) %(tag)
