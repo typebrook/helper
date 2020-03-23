@@ -248,6 +248,8 @@ bind status U ?>git reset --hard
 bind status gc @git clean --force
 bind status Ba @git rebase --abort
 bind status Bc @git rebase --continue
+bind status Ma @git merge --abort
+bind status Mc @git merge --continue
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 
 # apply patch file
