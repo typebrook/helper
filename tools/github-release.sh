@@ -16,7 +16,8 @@
 # * type (asset or edit)
 # * filename
 # * github_api_token
-# * overwrite (optional, could be ture, false, delete, default to be false)
+# * action (optional, could be upload, overwrite, rename, delete, default to be upload)
+# * extra  (optional, new filename for action 'rename')
 #
 # Example:
 #
@@ -64,15 +65,21 @@ eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:al
 
 post_asset() {
   # Upload asset
-  echo "Uploading asset... " > /dev/tty
+  echo "Uploading asset... "
   # Construct url
   GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$(basename $1)"
 
   curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
 }
 
+rename_asset() {
+  echo "Renaming asset($1) from $2 to $3"
+  curl -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+    --data "{\"name\":\"$3\"}" "$GH_REPO/releases/assets/$1"
+}
+
 delete_asset() {
-  echo "Deleting asset($1)... " > /dev/tty
+  echo "Deleting asset($1)... "
   curl -X "DELETE" -H "$AUTH" "$GH_REPO/releases/assets/$1"
 }
 
@@ -84,19 +91,19 @@ upload_asset() {
     echo "No need to overwrite asset"
     post_asset $filename
   else
-    if [ "$overwrite" = "true" ]; then
-      new_asset_id=$(post_asset ${filename}_bak | sed -E 's/^\{[^{]+"id":([0-9]+).+$/\1/')
+    if [ "$action" = "overwrite" ]; then
+      new_asset_id=$(post_asset "bak_$filename" | sed -E 's/^\{[^{]+"id":([0-9]+).+$/\1/')
       [ "$new_asset_id" = "" ] && exit 1 || delete_asset "$asset_id"
 
-      echo "Renaming asset($new_asset_id) from $(basename $filename)_bak to $(basename $filename)" > /dev/tty
-      curl -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
-        --data "{\"name\":\"$(basename $filename)\"}" "$GH_REPO/releases/assets/$new_asset_id"
-    elif [ "$overwrite" = "delete" ]; then
+      rename_asset "$new_asset_id" "bak_$filename" "$filename"
+    elif [ "$action" = "rename" ]; then
+      rename_asset "$asset_id" "$filename" "$extra"
+    elif [ "$action" = "delete" ]; then
       delete_asset "$asset_id"
       exit 0
     else
       echo "File already exists on tag $tag"
-      echo "If you want to overwrite it, set overwrite=true"
+      echo "If you want to overwrite it, set action=overwrite"
       exit 1
     fi
   fi
