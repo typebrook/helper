@@ -16,3 +16,6 @@ while read -r commit; do
   git add gist/gist && git commit -m "$message"
 done
 
+cd $repo
+git checkout master
+
