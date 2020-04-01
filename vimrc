@@ -198,7 +198,6 @@ Plug 'iberianpig/tig-explorer.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'   }
 
 " Initialize plugin system
 call plug#end()
