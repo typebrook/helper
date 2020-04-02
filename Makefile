@@ -1,6 +1,7 @@
 .PHONY: *
 
 all: git vim tig
+	mkdir -p ~/git
 
 git:
 	rm -f ~/.gitconfig
@@ -22,11 +23,14 @@ vim:
 tig:
 	rm -f ~/.tigrc
 	ln -s `pwd`/tigrc ~/.tigrc
+	if [ ! -d "$(HOME)/git/tig" ]; then \
+		git clone --depth=100 https://github.com/typebrook/tig ~/git/tig; \
+	fi
 
 wiki:
 	# vimwiki
 	if [ ! -d "$(HOME)/.vimwiki" ]; then \
-		git clone --depth=1 https://github.com/typebrook/wiki.git ~/vimwiki
+		git clone https://github.com/typebrook/wiki.git ~/vimwiki; \
 	fi
 
 crontab:
