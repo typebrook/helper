@@ -43,6 +43,10 @@ alias ll='ls -alh'
 alias hg='history | grep'
 alias rmrf='rm -rf'
 alias rr='_move_to_tmp'
+cdp() {
+  [[ ! -d $1 ]] && mkdir -p $1
+  cd $1
+}
 _move_to_tmp() { 
   mv $@ /tmp 
 }
@@ -58,7 +62,7 @@ prompt() {
 # package
 alias ai='sudo apt install' # apt install
 alias aptu='sudo apt update && sudo apt upgrade'
-alias pac='sudo pacman -y' # pacman install
+alias pac='sudo pacman -S' # pacman install
 alias si='sudo snap install' # snap install
 alias pi='sudo pip3 install' # python install
 alias ni='sudo npm install -g' # nodejs install
@@ -69,7 +73,7 @@ alias ld='cd -' # last directory
 cdg() { 
   cd ~/git/$1 || cd ~/git 
 }
-alias cda='cd ~/data'
+alias cda='mkdir -p ~/data && cd ~/data'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
