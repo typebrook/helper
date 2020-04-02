@@ -27,6 +27,9 @@ tig:
 		git clone --depth=100 https://github.com/typebrook/tig ~/git/tig; \
 	fi
 
+zsh:
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 wiki:
 	# vimwiki
 	if [ ! -d "$(HOME)/.vimwiki" ]; then \

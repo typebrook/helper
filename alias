@@ -58,7 +58,7 @@ prompt() {
 # package
 alias ai='sudo apt install' # apt install
 alias aptu='sudo apt update && sudo apt upgrade'
-alias pac='sudo pacman -Sy' # pacman install
+alias pac='sudo pacman -y' # pacman install
 alias si='sudo snap install' # snap install
 alias pi='sudo pip3 install' # python install
 alias ni='sudo npm install -g' # nodejs install
