@@ -2,6 +2,9 @@ if [[ -z "$SETTING_DIR" ]]; then
     SETTING_DIR=$HOME/settings
 fi
 
+# set default editor
+export EDITOR=vim
+
 # load custom aliases
 source $SETTING_DIR/alias
 
