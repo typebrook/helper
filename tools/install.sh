@@ -21,6 +21,7 @@ echo "
 # $REPO
 export SETTING_DIR=$SETTING_DIR
 source \$SETTING_DIR/tools/load-settings.sh
-" >> $RCFILE
+" >> $RCFILE && \
+source $RCFILE
 
 cd "$SETTING_DIR" && make
