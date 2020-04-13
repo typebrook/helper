@@ -28,12 +28,7 @@ fix() {
   which $1 && grep -Po 'FIXME.*' $(which $1)
 }
 alias g='gist'
-alias gs='gist star'
 alias gl='gist last'
-alias gg='gist grep'
-alias gt='gist tag'
-alias gtt='gist tags'
-alias gd='gist detail'
 
 # shell
 alias path="echo $PATH"
