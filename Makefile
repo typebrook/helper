@@ -26,8 +26,6 @@ tig:
 	if [ ! -d "$(HOME)/git/tig" ]; then \
 		git clone --depth=100 https://github.com/typebrook/tig ~/git/tig; \
 	fi
-	curl https://raw.githubusercontent.com/git/git/v2.3.5/contrib/diff-highlight/diff-highlight \
-	-o "$$(echo $$PATH | grep -E ~/\[^:\]+ -o | sed -ne 2p)/diff-highlight"
 
 zsh:
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
