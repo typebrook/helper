@@ -16,7 +16,7 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed -i "\^# $REPO^, /^$/ d"  $RCFILE
+sed -i "\^# $REPO^, /^$/ d" $RCFILE
 echo "
 # $REPO
 export SETTING_DIR=$SETTING_DIR
