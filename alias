@@ -119,8 +119,9 @@ upload_tig() {
     github_api_token=$GITHUB_API_TOKEN \
     repo=typebrook/tig \
     tag=LATEST \
+    type=asset \
     filename=$(which tig)
-    overwrite=false
+    action=overwrite
 }
 
 # about custom settings
