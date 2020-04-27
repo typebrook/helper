@@ -1,4 +1,4 @@
-#! /bin/sh
+# My alias for bash and zsh
 
 # settings
 alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
