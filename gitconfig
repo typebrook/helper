@@ -26,7 +26,5 @@
 [merge]
     tool = vimdiff
 
-[color]
-	ui = off
 [credential]
 	helper = store
