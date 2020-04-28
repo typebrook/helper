@@ -9,15 +9,7 @@
                    git stash apply stash@{1} && \
                    git stash show -p | git apply -R && \
                    git stash drop stash@{1}
-#    swapProtoccol = !bash "\
-#        remote={$1}\
-#        url='git@github.com:typberook/settings.git'\
-#        if [ $url =~ ^git ]; then\
-#            new_url=$(echo $url | sed 's#git@#https://#; s#:#/#');\
-#        else\
-#            new_url=$url;\
-#        fi;\
-#        git remote set-url $remote $new_url"
+    swapprotocol = !swap-protocol.sh
 
 [core]
 	pager = tig
