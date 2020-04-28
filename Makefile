@@ -10,7 +10,7 @@ git:
 vim:
 	# amix-vimrc
 	if [ ! -d "$(HOME)/.vim_runtime" ]; then \
-		git clone --depth=1 https://github.com/typebrook/vimrc.git ~/.vim_runtime && \
+		git clone --depth=1 git@github.com:typebrook/vimrc.git ~/.vim_runtime && \
         sh ~/.vim_runtime/install_awesome_vimrc.sh; \
 	fi
 	# vim-plug
@@ -24,7 +24,7 @@ tig:
 	rm -f ~/.tigrc
 	ln -s `pwd`/tigrc ~/.tigrc
 	if [ ! -d "$(HOME)/git/tig" ]; then \
-		git clone --depth=100 https://github.com/typebrook/tig ~/git/tig; \
+		git clone --depth=100 git@github.com:typebrook/tig ~/git/tig; \
 	fi
 
 zsh:
@@ -33,7 +33,7 @@ zsh:
 wiki:
 	# vimwiki
 	if [ ! -d "$(HOME)/.vimwiki" ]; then \
-		git clone https://github.com/typebrook/wiki.git ~/vimwiki; \
+		git clone git@github.com:typebrook/wiki.git ~/vimwiki; \
 	fi
 
 crontab:
