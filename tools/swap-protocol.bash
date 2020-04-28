@@ -14,3 +14,5 @@ git remote -v \
     sed -E 's#https://([^/]+)/(.+)#git@\1:\2#' <<<$url | xargs git remote set-url $extra $remote
   fi
 done
+
+git remote -v

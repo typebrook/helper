@@ -9,7 +9,7 @@
                    git stash apply stash@{1} && \
                    git stash show -p | git apply -R && \
                    git stash drop stash@{1}
-    swapprotocol = !swap-protocol.sh
+    swapprotocol = !swap-protocol.bash
 
 [core]
 	pager = tig
