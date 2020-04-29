@@ -19,8 +19,9 @@ function! Bye()
     endif
 endfunction
 nnoremap <silent> <C-C> :call Bye()<CR>
-nnoremap <leader>, :.terminal<CR>
-nnoremap <leader>< :%terminal<CR>
+nnoremap <leader>, :.terminal ++noclose<CR>
+vnoremap <leader>, :terminal ++noclose<CR>
+nnoremap <leader>< :%terminal ++noclose<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
 nnoremap <leader>u :set clipboard=unnamedplus<CR>
