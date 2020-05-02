@@ -98,7 +98,8 @@ github_api() {
   curl --header "Authorization: token $GITHUB_API_TOKEN" $GITHUB_API/$1
 }
 gcg() {
-  git clone git@github.com:$1/$2.git && cd $(basename $2) 
+  local user=$1; local repo=$2; shift; shift
+  git clone git@github.com:$user/$repo.git $@ && cd $(basename $repo) $*
 }
 release() {
   command="github-release.sh\n  github_api_token=$GITHUB_API_TOKEN\n  repo=typebrook/mapstew\n  tag=daily-taiwan-pbf\n  type=asset\n  filename=taiwan-latest.osm.pbf\n  action=upload|overwrite|rename|delete\n  extra="
