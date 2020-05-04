@@ -13,9 +13,11 @@ git remote -v \
 
   if [[ $url =~ git@.*github.com ]]; then
     target=${target:-https}
+    # git@ -> https://
     [[ $target == https ]] && sed -E 's#^git@(.+):(.+)$#https://\1/\2#' <<<$url | xargs git remote set-url $extra $remote
   elif [[ $url =~ https://.*github.com ]]; then
     target=${target:-git}
+    # https:// -> git@
     [[ $target == git ]] && sed -E 's#^https://([^/]+)/(.+)$#git@\1:\2#' <<<$url | xargs git remote set-url $extra $remote
   fi
 done
