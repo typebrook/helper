@@ -1,4 +1,6 @@
 #! /usr/bin/env bash
+# Get the first remote URL within git/https protocol on github.com
+# Swap the protocol, and apply new protocol to every remaining remotes
 
 target=''
 extra=''
@@ -6,7 +8,9 @@ extra=''
 # For each remote
 git remote -v \
 | while read remote url etc; do
+  # Set fetch/push URL seperately
   [[ $etc =~ push ]] && extra='--push' || extra=''
+
   if [[ $url =~ git@.*github.com ]]; then
     target=${target:-https}
     [[ $target == https ]] && sed -E 's#^git@(.+):(.+)$#https://\1/\2#' <<<$url | xargs git remote set-url $extra $remote
