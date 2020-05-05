@@ -33,7 +33,7 @@ alias gl='gist last'
 
 # shell
 alias path="echo $PATH"
-alias fd="ls -l /proc/$$/fd"
+alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
 alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 alias hg='history | grep'
