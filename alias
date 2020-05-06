@@ -39,6 +39,7 @@ alias ll='ls -alh'
 alias hg='history | grep'
 alias rmrf='rm -rf'
 alias rr='_move_to_tmp'
+alias sound="echo -ne '\a'"
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1
