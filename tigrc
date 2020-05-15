@@ -33,6 +33,7 @@ bind generic xrB +sh -c "echo -n %(remote):%(branch) | xsel -ib && echo Remote B
 bind generic xrt +sh -c "echo -n %(tag) | xsel -ib && echo tag Clipped"
 bind generic xf +sh -c "echo -n %(file) | xsel -ib && echo File Clipped"
 bind generic xb +sh -c "echo -n %(blob) | head -c7 | xsel -ib && echo Blob Clipped"
+bind main    xb +sh -c "echo -n %(branch) | xsel -ib && echo Branch Clipped"
 bind generic xB +sh -c "echo -n %(blob) | xsel -ib && echo Full Blob Clipped"
 
 ## Remote
