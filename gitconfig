@@ -12,7 +12,6 @@
     swapprotocol = !swap-protocol.bash
 
 [core]
-	pager = tig
 	editor = vim
 
 [merge]
