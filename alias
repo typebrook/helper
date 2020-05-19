@@ -32,6 +32,7 @@ alias g='gist'
 alias gl='gist last'
 
 # shell
+alias s='sudo'
 alias path="echo $PATH"
 alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
 alias src="source $HOME/.$(basename $SHELL)rc"
@@ -250,7 +251,7 @@ alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
-  convert "$@" -append output.png 
+  convert "$@" -append output.png
 }
 image_horizontal() { 
   convert "$@" +append output.png 
