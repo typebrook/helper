@@ -72,6 +72,7 @@ alias pqi='pacman -Qi'
 alias pql='pacman -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
+alias ysi='yay -Si'
 
 # cd to DIRs
 alias ..='cd ..'
