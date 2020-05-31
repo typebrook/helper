@@ -37,7 +37,7 @@ alias path="echo $PATH"
 alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
 alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
-llw() { ll $(which $1); }
+llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
 alias rmrf='rm -rf'
 alias rr='_move_to_tmp'
@@ -72,6 +72,7 @@ alias pqi='pacman -Qi'
 alias pql='pacman -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
+alias ys='yay -S'
 alias ysi='yay -Si'
 
 # cd to DIRs
