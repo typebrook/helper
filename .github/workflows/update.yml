@@ -1,0 +1,14 @@
+name: test
+
+on:
+  push:
+    branches:
+    tags: 
+      - test.update*
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: which jq
