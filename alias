@@ -97,7 +97,7 @@ gc1() {
 }
 alias gls='git log -S'
 alias cdgg='cd $(git rev-parse --show-toplevel)'
-alias cdgw='cd .github/workflows'
+alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 
 # github
