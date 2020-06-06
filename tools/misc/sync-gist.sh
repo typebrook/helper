@@ -13,7 +13,7 @@ while read -r commit; do
 
   cd ~/git/Bash-Snippets
   cp $repo/gist gist/gist
-  git add gist/gist && git commit -m "$message"
+  git add gist/gist && git commit -m "$message" || true
 done
 
 cd $repo
