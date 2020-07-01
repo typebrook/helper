@@ -67,16 +67,15 @@ alias ni='sudo npm install -g' # nodejs install
 
 # pacman
 alias pac='sudo pacman -S' # pacman install
+alias ys='yay -S'
 alias psi='pacman -Si'
+alias ysi='yay -Si'
 alias pss='pacman -Ss'
+alias yss='yay -Ss'
 alias pqi='pacman -Qi'
-alias pql='pacman -Ql'
+alias yql='yay -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
-alias ys='yay -S'
-alias ysi='yay -Si'
-alias yss='yay -Ss'
-alias yfl='yay -Fl'
 
 # cd to DIRs
 alias ..='cd ..'
