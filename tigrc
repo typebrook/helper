@@ -166,7 +166,7 @@ bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(Rename tag to? )" %(comm
 bind generic TM @sh -c 'git cat-file -p %(tag) |\
                     sed -n \'6,$p\' |\
                     (git tag -d %(tag) && git tag "%(prompt Rename tag into? )" -a -F -) > /dev/null'
-bind generic Tc !git tag %(tag) %(tag)^{} -f -m "New tag content" -e
+bind generic Tc !sh -c 'git tag %(tag) %(tag)^{} -f -m \"$(git tag %(tag) -n10)\" -e'
 bind generic Tl !sh -c 'git ls-remote --tags %(remote) | grep %(tag)'
 bind generic Ts >tig show %(tag)
 bind generic Td @git tag -d "%(prompt Delete which tag? )"
