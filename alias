@@ -68,6 +68,8 @@ alias ni='sudo npm install -g' # nodejs install
 # pacman
 alias pac='sudo pacman -S' # pacman install
 alias ys='yay -S'
+alias pqs='pacman -Qs'
+alias pqi='pacman -Qi'
 alias psi='pacman -Si'
 alias ysi='yay -Si'
 alias pss='pacman -Ss'
@@ -305,6 +307,7 @@ alias cdW='cd ~/git/geoBingAnWeb'
 alias cdT='cd ~/git/taiwan-topo'
 alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
+alias cdT='cd ~/git/tilemaker'
 alias cdL='cd ~/Insync/pham@geothings.tw/Google\ Drive\ -\ Shared\ drives/LEOTEK'
 alias stew='cd ~/git/mapstew'
 alias mac='ssh geothings@192.168.8.33'
