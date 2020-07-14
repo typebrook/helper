@@ -18,6 +18,7 @@
 # * github_api_token
 # * action (optional, could be upload, overwrite, rename, delete, default to be upload)
 # * extra  (optional, new filename for action 'rename')
+# * create (optional, create a new release if it doesn't exist)
 #
 # Example:
 #
@@ -32,6 +33,8 @@ set -e
 
 # Validate settings.
 [ "$TRACE" ] && set -x
+# Keep tty
+exec 3>&1
 
 CONFIG=$@
 
@@ -60,26 +63,45 @@ curl -o /dev/null -sH "$AUTH" $GH_REPO || { echo "Error: Invalid repo, token or 
 response=$(curl -sH "$AUTH" $GH_TAGS)
 
 # Get ID of the release.
-eval $(echo "$response" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/release_id/')
-[ "$release_id"  ] || { echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2; exit 1; }
+release_id=$(echo "$response" | grep -m1 -w \"id\": | sed -E -e 's/[^0-9]//g')
+if [ -z "$release_id" ]; then
+  if [ "$create" = 'true' ]; then
+    body=$(cat <<EOF
+{
+  "tag_name": "$tag",
+  "target_commitish": "master",
+  "name": "$tag",
+  "body": "",
+  "draft": false,
+  "prerelease": false
+}
+EOF
+    )
+    response=$(curl -H "$AUTH" -H "Content-Type: application/json" -d "$body" "$GH_REPO/releases")
+    release_id=$(echo "$response" | grep -m1 -w \"id\": | sed -E -e 's/[^0-9]//g')
+  else
+    echo "Error: Failed to get release id for tag: $tag"; echo "$response" | awk 'length($0)<100' >&2
+    exit 1
+  fi
+fi
 
 post_asset() {
   # Upload asset
-  echo "Uploading asset... "
+  echo "Uploading asset... " >&3
   # Construct url
-  GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$(basename $1)"
+  GH_ASSET="https://uploads.github.com/repos/$repo/releases/$release_id/assets?name=$1"
 
   curl --data-binary @"$filename" -H "$AUTH" -H "Content-Type: application/octet-stream" $GH_ASSET
 }
 
 rename_asset() {
-  echo "Renaming asset($1) from $2 to $3"
+  echo "Renaming asset($1) from $2 to $3" >&3
   curl -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
-    --data "{\"name\":\"$3\"}" "$GH_REPO/releases/assets/$1"
+    --data "{\"name\":\"$3\", \"label\":\"$3\"}" "$GH_REPO/releases/assets/$1"
 }
 
 delete_asset() {
-  echo "Deleting asset($1)... "
+  echo "Deleting asset($1)... " >&3
   curl -X "DELETE" -H "$AUTH" "$GH_REPO/releases/assets/$1"
 }
 
@@ -89,13 +111,13 @@ upload_asset() {
   eval $(echo "$response" | grep -C2 "\"name\": \"$(basename $filename)\"" | grep -m 1 "id.:" | grep -w id | tr : = | tr -cd '[[:alnum:]]=' | sed 's/id/asset_id/')
   if [ "$asset_id" = ""  ]; then
     echo "No need to overwrite asset"
-    post_asset $filename
+    post_asset $(basename $filename)
   else
     if [ "$action" = "overwrite" ]; then
-      new_asset_id=$(post_asset "bak_$filename" | sed -E 's/^\{[^{]+"id":([0-9]+).+$/\1/')
+      new_asset_id=$(post_asset "bak_$(basename $filename)" | sed -E 's/^\{[^{]+"id":([0-9]+).+$/\1/')
       [ "$new_asset_id" = "" ] && exit 1 || delete_asset "$asset_id"
 
-      rename_asset "$new_asset_id" "bak_$filename" "$filename"
+      rename_asset "$new_asset_id" "bak_$(basename $filename)" "$(basename $filename)"
     elif [ "$action" = "rename" ]; then
       rename_asset "$asset_id" "$filename" "$extra"
     elif [ "$action" = "delete" ]; then
@@ -115,7 +137,7 @@ edit_release() {
 {
   "tag_name": "$tag",
   "target_commitish": "master",
-  "name": "daily-taiwan-pbf",
+  "name": "$tag",
   "body": "$(cat $filename | sed 's/"/\\"/g; $! s/$/\\n/' | tr -d '\n')",
   "draft": false,
   "prerelease": false
