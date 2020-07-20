@@ -185,7 +185,7 @@ alias dp='docker ps'
 alias di='docker images'
 alias dc='docker-compose run --rm'
 alias ds='docker stop'
-alias drm='docker `docker ps -aq`'
+alias drm='docker rm `docker ps -aq`'
 alias dr='docker run --rm -it'
 drb() {
   docker run --rm -it --entrypoint /bin/bash $@
@@ -309,6 +309,7 @@ alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
 alias cdT='cd ~/git/tilemaker'
 alias cdL='cd ~/Insync/pham@geothings.tw/Google\ Drive\ -\ Shared\ drives/LEOTEK'
+alias cdssh='cd ~/.ssh'
 alias stew='cd ~/git/mapstew'
 alias mac='ssh geothings@192.168.8.33'
 
