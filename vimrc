@@ -9,6 +9,7 @@ set nowrap
 set nostartofline
 set sidescroll=1
 set sidescrolloff=999
+set shell=/bin/bash
 
 " general
 function! Bye()
