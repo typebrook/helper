@@ -137,6 +137,7 @@ bind main p none # override default pager binding
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u %(remote) %(branch):%(branch)
+bind main pb ?git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind main pR ?git push -u '%(prompt Which remote? )' %(branch):'%(prompt Which branch? )'
 bind main pF ?git push --force
 bind main pd ?git push %(remote) :%(branch)
