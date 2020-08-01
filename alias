@@ -70,7 +70,6 @@ alias pac='sudo pacman -S' # pacman install
 alias ys='yay -S'
 alias pqs='pacman -Qs'
 alias pqi='pacman -Qi'
-alias psi='pacman -Si'
 alias ysi='yay -Si'
 alias pss='pacman -Ss'
 alias yss='yay -Ss'
@@ -78,6 +77,11 @@ alias pqi='pacman -Qi'
 alias yql='yay -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
+alias pqe='pacman -Qqe'
+psi() {
+  pqe | grep $1 >/dev/null && echo '[Installed]'
+  pacman -Si $1
+}
 
 # cd to DIRs
 alias ..='cd ..'
