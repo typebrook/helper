@@ -1,7 +1,11 @@
 #!/bin/sh
 
-echo -n "type comment: "
-read comment
+set -e
+
+read -e -p 'Type comment: ' -r comment </dev/tty
+if [ -z $OSM_USER_PASSWD ]; then
+  read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
+fi
 
 info="<osm>
         <changeset>
@@ -16,6 +20,6 @@ changeset_id=$(echo $info |\
                curl -u $OSM_USER_PASSWD --upload-file - $OSM_API/changeset/create |\
                tail -1)
 
-echo
-echo "changeset created, check $OSM_SERVER/changeset/$changeset_id"
-echo "$changeset_id is copied into clipboard"
+echo >/dev/tty
+echo "changeset created, check $OSM_SERVER/changeset/$changeset_id" >/dev/tty
+echo $changeset_id
