@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+OSM_API=https://api.openstreetmap.org/api/0.6
+
+read -e -p 'Type comment: ' -r comment </dev/tty
+if [ -z ${OSM_USER_PASSWD} ]; then
+  read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
+fi
+
+# Create Changeset
+info="<osm>
+        <changeset>
+          <tag k='comment' v='${comment}'/>
+          <tag k='created_by' v='bash script'/>
+          <tag k='bot' v='yes'/>
+        </changeset>
+      </osm>
+     "
+
+changeset_id=$(<<<"${info}" curl -u ${OSM_USER_PASSWD} --upload-file - ${OSM_API}/changeset/create | tail -1)
+
+echo >/dev/tty
+echo "changeset created, check $OSM_SERVER/changeset/${changeset_id}" >/dev/tty
+echo $changeset_id
+
+# Upload OSC file to Changeset
+sed -r "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" <$1 |\
+tee /dev/tty | \
+curl -X POST -u ${OSM_USER_PASSWD} -i -T - $OSM_API/changeset/${changeset_id}/upload
+
+# Close Changeset
+curl -X PUT -u ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
