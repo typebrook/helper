@@ -15,17 +15,6 @@ if [ -z ${OSM_USER_PASSWD} ]; then
   read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
 fi
 
-# Create Changeset
-CHANGESET_BODY="
-      <osm>
-        <changeset>
-          <tag k='comment' v='${comment}'/>
-          <tag k='created_by' v='bash script'/>
-          <tag k='bot' v='yes'/>
-        </changeset>
-      </osm>
-     "
-
 # Create changeset with given information
 curl ${OSM_API}/changeset/create \
   --user ${OSM_USER_PASSWD} \
