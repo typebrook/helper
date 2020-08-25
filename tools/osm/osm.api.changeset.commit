@@ -35,9 +35,9 @@ echo "changeset created, check ${OSM_SERVER}/changeset/${changeset_id}" >/dev/tt
 echo ${changeset_id}
 
 # Upload OSC file to Changeset
-sed -r "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" <$1 |\
+sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $1 |\
 tee /dev/tty | \
-curl -X POST -u ${OSM_USER_PASSWD} -i -T - $OSM_API/changeset/${changeset_id}/upload
+curl -X POST --user ${OSM_USER_PASSWD} -i --upload-file - $OSM_API/changeset/${changeset_id}/upload
 
 # Close Changeset
-curl -X PUT -u ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
+curl -X PUT --user ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
