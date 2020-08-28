@@ -15,11 +15,7 @@ export EDITOR=vim
 source $SETTING_DIR/alias
 
 # Add custom scripts into PATH
-PATH=$PATH:$SETTING_DIR/tools
-find $SETTING_DIR/tools -type d | sed 1d |\
-while read dir; do
-  PATH=$PATH:$dir
-done
+find $SETTING_DIR/tools -print0 -type f -executable | xargs -I{} -0 ln -sf {} ~/.local/bin
 
 # sync with important git repos
 $SETTING_DIR/tools/sync.sh
