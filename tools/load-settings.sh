@@ -1,5 +1,11 @@
 if [[ -z "$SETTING_DIR" ]]; then
-    SETTING_DIR=$HOME/settings
+  SETTING_DIR=$HOME/settings
+fi
+
+if [[ $0 == 'zsh' ]]; then
+  setopt extended_glob
+elif [[ $0 == 'bash' ]]; then
+  shopt -s extglob
 fi
 
 # set default editor
@@ -12,7 +18,7 @@ source $SETTING_DIR/alias
 PATH=$PATH:$SETTING_DIR/tools
 find $SETTING_DIR/tools -type d | sed 1d |\
 while read dir; do
-    PATH=$PATH:$dir
+  PATH=$PATH:$dir
 done
 
 # sync with important git repos
