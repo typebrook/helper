@@ -15,7 +15,7 @@ vim:
 	fi
 	# vim-plug
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	
 	rm -f ~/.vim_runtime/my_configs.vim
 	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
@@ -28,7 +28,7 @@ tig:
 	fi
 
 zsh:
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
 
 wiki:
 	# vimwiki
