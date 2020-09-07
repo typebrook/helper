@@ -122,7 +122,7 @@ bind main ba >tig --all
 bind main bR !git reorder
 
 # commit
-bind main a !>git commit --amend
+bind main a !>git commit --amend --allow-empty
 bind main E >git commit --allow-empty -m "%(prompt Empty commit, enter message: )"
 
 # merge
@@ -179,7 +179,7 @@ bind generic pt ?git push --tags
 bind generic pT ?git push %(remote) %(tag)
 
 # search in history
-bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=raw'
+bind main S >sh -c 'git log -G "%(prompt Search: )" --pretty=raw | tig --pretty=raw'
 
 # submodule
 bind main Zu ?>git submodule update
@@ -243,7 +243,7 @@ bind status <C-S> >sh -c 'git stash && git stash apply stash@{0}'
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
-bind status a !>git commit --amend
+bind status a !>git commit --amend --allow-empty
 bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
 bind status d ?>rm %(file)
 bind status D ?>git clean -dfx
