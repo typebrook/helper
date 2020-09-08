@@ -1,7 +1,10 @@
 ## Getting Started
 **via curl**
 ```
-curl -fsSL https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh | bash
+curl -fsS https://raw.githubusercontent.com/typebrook/settings/dev/tools/install.sh | bash
+
+# Or shorter
+curl -fsSL https://git.io/JUnU7 | bash
 ```
 **via wget**
 ```
