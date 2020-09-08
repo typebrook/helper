@@ -1,7 +1,3 @@
-if [[ -z "$SETTING_DIR" ]]; then
-  SETTING_DIR=$HOME/settings
-fi
-
 if [[ $0 == 'zsh' ]]; then
   setopt extended_glob
 elif [[ $0 == 'bash' ]]; then
@@ -12,16 +8,14 @@ fi
 export EDITOR=vim
 
 # load custom aliases
+SETTING_DIR=${SETTING_DIR:=$HOME/settings}
 source $SETTING_DIR/alias
-
-# sync with important git repos
-$SETTING_DIR/tools/sync.sh
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
 PATH=$PATH:$BIN_DIR
 mkdir -p $BIN_DIR
-find $BIN_DIR -xtype l | xargs rm
+find $BIN_DIR -xtype l | xargs rm 2>/dev/null || true
 
 find $SETTING_DIR/tools -type f -executable | \
 xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
@@ -29,6 +23,9 @@ xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
 # load custom functions
 OSM_UTIL_DIR=$SETTING_DIR/tools/osm
 source $OSM_UTIL_DIR/osm
+
+# sync with important git repos
+$SETTING_DIR/tools/sync.sh
 
 # go
 PATH=$PATH:$HOME/go/bin
