@@ -25,7 +25,7 @@ OSM_UTIL_DIR=$SETTING_DIR/tools/osm
 source $OSM_UTIL_DIR/osm
 
 # sync with important git repos
-$SETTING_DIR/tools/sync.sh
+$SETTING_DIR/tools/init/sync.sh
 
 # go
 PATH=$PATH:$HOME/go/bin

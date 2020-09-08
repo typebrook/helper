@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-set -e
+set -xe
 
 # Default settings
 SETTING_DIR=${SETTING_DIR:-~/settings}
@@ -16,12 +16,12 @@ if [ ! -d $SETTING_DIR ]; then
   }
 fi
 
-sed -i "\^# $REPO^, /^$/ d" $RCFILE
-echo "
+# Write initial commands into .bashrc or .zshrc
+sed -i'.bak' "\^# $REPO^, /^$/ d" $RCFILE
+cat >>$RCFILE <<EOF
 # $REPO
 export SETTING_DIR=$SETTING_DIR
-source \$SETTING_DIR/tools/load-settings.sh
-" >> $RCFILE && \
-source $RCFILE
+source \$SETTING_DIR/tools/init/load-settings.sh
+EOF
 
 cd "$SETTING_DIR" && make

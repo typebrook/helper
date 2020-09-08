@@ -26,7 +26,7 @@ tig:
 	ln -s `pwd`/tigrc ~/.tigrc
 	if [ ! -d "$(HOME)/git/tig" ]; then \
 		git clone --depth=100 --origin my git@github.com:typebrook/tig ~/git/tig; \
-		cd ~/git/tig && git remote add origin git@github.com:jonas/tig.git && \
+		cd ~/git/tig && git remote add origin git@github.com:jonas/tig.git; \
 	fi
 
 zsh:
