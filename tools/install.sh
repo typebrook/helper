@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-set -xe
+set -e
 
 # Default settings
 SETTING_DIR=${SETTING_DIR:-~/settings}
