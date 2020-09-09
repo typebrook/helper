@@ -41,6 +41,7 @@ nmap H 0
 nnoremap L $
 nnoremap <C-L> 60l
 nnoremap <C-H> 60h
+nnoremap / ms/
 
 " disable syntax
 nnoremap <silent> <leader>s
