@@ -20,6 +20,7 @@ function! Bye()
     endif
 endfunction
 nnoremap <silent> <C-C> :call Bye()<CR>
+nnoremap <silent> <C-S-C> :q!<CR>
 nnoremap <leader>, :.terminal ++noclose<CR>
 vnoremap <leader>, :terminal ++noclose<CR>
 nnoremap <leader>< :%terminal ++noclose<CR>

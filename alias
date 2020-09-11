@@ -90,6 +90,7 @@ cdg() {
   cd ~/git/$1 || cd ~/git 
 }
 alias cda='mkdir -p ~/data && cd ~/data'
+alias cdc='cd ~/.config'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
