@@ -67,6 +67,7 @@ alias ni='sudo npm install -g' # nodejs install
 
 # pacman
 alias pac='sudo pacman -S' # pacman install
+alias psy='sudo pacman -Syy'
 alias ys='yay -S'
 alias pqs='pacman -Qs'
 alias pqi='pacman -Qi'

@@ -46,3 +46,6 @@ wiki:
 
 crontab:
 	(crontab -l 2>/dev/null; cat tools/*.cron) | crontab -
+
+libinput:
+	sudo ln -sf `pwd`/misc/libinput/* /etc/X11/xorg.conf.d/
