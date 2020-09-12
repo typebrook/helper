@@ -298,6 +298,7 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias du='ncdu'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
+alias pg='ping google.com'
 mvt_decode() {
   python3 $SETTING_DIR/tools/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
