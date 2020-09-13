@@ -306,6 +306,9 @@ mvt_decode() {
 big52utf8() { 
   iconv -f BIG-5 -t UTF-8 
 }
+bak() {
+  mv $1 $1.bak
+}
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
