@@ -323,6 +323,7 @@ alias cdL='cd ~/Insync/pham@geothings.tw/Google\ Drive\ -\ Shared\ drives/LEOTEK
 alias cdssh='cd ~/.ssh'
 alias stew='cd ~/git/mapstew'
 alias mac='ssh geothings@192.168.8.33'
+alias chmodx='sudo chmod +x'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
