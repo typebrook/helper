@@ -9,3 +9,4 @@ fi
 # others repo
 check_upstream ~/git/tig || echo in `pwd` > /dev/tty &
 check_upstream ~/.vim_runtime || echo in `pwd` > /dev/tty &
+check_upstream ~/.task || echo in `pwd` > /dev/tty &
