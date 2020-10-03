@@ -1,12 +1,10 @@
 #!/bin/bash
 
 # my repo
-cd $SETTING_DIR && git pull --quiet || echo in `pwd` > /dev/tty &
-if [ -d ~/vimwiki ]; then
-  cd ~/vimwiki && git pull --quiet || echo in `pwd` > /dev/tty &
-fi
+sync $SETTING_DIR
+sync ~/vimwiki
+sync ~/.task
 
 # others repo
 check_upstream ~/git/tig || echo in `pwd` > /dev/tty &
 check_upstream ~/.vim_runtime || echo in `pwd` > /dev/tty &
-check_upstream ~/.task || echo in `pwd` > /dev/tty &
