@@ -311,7 +311,7 @@ bak() {
 
 # task
 tt() {
-  vit $@ 
+  tasksh $@ 
   ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
 }
 
