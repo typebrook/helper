@@ -159,7 +159,6 @@ cdss() {
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
-alias ww='cd ~/vimwiki && git add * && git commit -am "update" && git push'
 wg() { 
   vim ~/vimwiki/$1.md 
 }
@@ -308,6 +307,12 @@ big52utf8() {
 }
 bak() {
   cp $1 $1.bak
+}
+
+# task
+tt() {
+  vit $@ 
+  ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
 }
 
 # tmp
