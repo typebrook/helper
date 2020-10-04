@@ -314,6 +314,7 @@ tt() {
   tasksh $@ 
   ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
 }
+alias taskrc='vim ~/.taskrc'
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
