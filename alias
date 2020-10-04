@@ -79,6 +79,7 @@ alias yql='yay -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
 alias pqe='pacman -Qqe'
+alias pR='sudo pacman -R'
 psi() {
   pqe | grep $1 >/dev/null && echo -e "$(tput setaf 13)[Installed]$(tput sgr0)"
   pacman -Si $1

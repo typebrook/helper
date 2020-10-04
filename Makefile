@@ -49,3 +49,6 @@ crontab:
 
 libinput:
 	sudo ln -sf `pwd`/misc/libinput/* /etc/X11/xorg.conf.d/
+
+task:
+	ln -sf taskrc ~/.taskrc
