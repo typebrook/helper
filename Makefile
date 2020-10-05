@@ -52,3 +52,7 @@ libinput:
 
 task:
 	ln -sf taskrc ~/.taskrc
+	if [ ! -d "$(HOME)/.task/.git" ]; then \
+		if [ -d "$(HOME)/.task" ]; then rm -rf "$(HOME)/.task"; fi; \
+		git clone --depth 1 https://github.com/typebrook/task.git ~/.task; \
+	fi
