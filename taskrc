@@ -29,8 +29,7 @@ include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
-dateformat=b.d
-report.list.filter=status:pending
+dateformat=b.d H:N
 search.case.sensitive=no
 default.command=next
 
@@ -46,6 +45,9 @@ report.nchc.filter=project:geothings.graphql.nchc-report
 report.nchc.labels=ID,Desc
 report.nchc.columns=id,description.count
 report.nchc.sort=entry+
-context.work=+geothings
+
+context.office=-home -trivial -not.office
+context.geothings=( +geothings or project:geothings )
+context.foo=-trivial
 context.free=+trivial
-context.none=-trivial
+context=office
