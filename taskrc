@@ -29,6 +29,8 @@ include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
+include /usr/share/doc/task/rc/holidays.en-US.rc
+
 dateformat=b.d H:N
 search.case.sensitive=no
 default.command=next
@@ -50,4 +52,4 @@ context.office=-home -trivial -not.office
 context.geothings=( +geothings or project:geothings )
 context.foo=-trivial
 context.free=+trivial
-context=office
+context=geothings
