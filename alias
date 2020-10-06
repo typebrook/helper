@@ -311,12 +311,16 @@ bak() {
 }
 
 # task
-tt() {
+alias taskrc='vim ~/.taskrc'
+alias cdtask='cd ~/.task'
+li() {
   tasksh $@ 
   ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
 }
-alias taskrc='vim ~/.taskrc'
-alias cdtask='cd ~/.task'
+tt() {
+  taskwarrior-tui
+  ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
+}
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
