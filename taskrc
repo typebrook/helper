@@ -29,8 +29,6 @@ include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
-include /usr/share/doc/task/rc/holidays.en-US.rc
-
 dateformat=b.d H:N
 search.case.sensitive=no
 default.command=next
@@ -50,6 +48,12 @@ report.nchc.sort=entry+
 
 context.office=-home -trivial -not.office
 context.geothings=( +geothings or project:geothings )
-context.foo=-trivial
+context.foo=-trivial -home
 context.free=+trivial
-context=geothings
+context=office
+
+calendar.holidays=full
+holiday.double-ten.name=雙十補假
+holiday.double-ten.date=20201009
+holiday.new-year.name=元旦
+holiday.new-year.date=20210101
