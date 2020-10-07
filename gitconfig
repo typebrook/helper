@@ -1,6 +1,6 @@
 [user]
-	email = typebrook@gmail.com
-	name = Hsieh Chin Fan
+    email = typebrook@gmail.com
+    name = Hsieh Chin Fan
 
 [alias]
     reorder = "!GIT_SEQUENCE_EDITOR=\"sed -i -n 'h;1n;2p;g;p'\" git rebase -i HEAD~2"
@@ -12,11 +12,11 @@
     swapprotocol = !swap-protocol.bash
 
 [core]
-	editor = vim
-	pager =
+    editor = vim
+    pager =
 
 [merge]
     tool = vimdiff
 
 [credential]
-	helper = store
+    helper = store
