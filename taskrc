@@ -50,7 +50,9 @@ context.office=-home -trivial -not.office
 context.geothings=( +geothings or project:geothings )
 context.foo=-trivial -home
 context.free=+trivial
+context.dev=-trivial project:dev
 context=office
+context=foo
 
 calendar.holidays=full
 holiday.double-ten.name=雙十補假
