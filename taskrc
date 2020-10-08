@@ -33,6 +33,8 @@ dateformat=b.d H:N
 search.case.sensitive=no
 default.command=next
 
+calendar.details=full
+
 uda.reviewed.type=date
 uda.reviewed.label=Reviewed
 report._reviewed.description=Tasksh review report.  Adjust the filter to your needs.
@@ -51,7 +53,6 @@ context.geothings=( +geothings or project:geothings )
 context.foo=-trivial -home
 context.free=+trivial
 context.dev=-trivial project:dev
-context=office
 context=foo
 
 calendar.holidays=full
