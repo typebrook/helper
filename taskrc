@@ -48,12 +48,11 @@ report.nchc.labels=ID,Desc
 report.nchc.columns=id,description.count
 report.nchc.sort=entry+
 
-context.office=-home -trivial -not.office
 context.geothings=( +geothings or project:geothings )
-context.foo=-trivial -home
-context.free=+trivial
-context.dev=-trivial project:dev
-context=foo
+context.office=-trivial -home -not.office +office
+context.foo=-trivial -home -office
+context.home=-trivial -office
+context.dev=-trivial -office project:dev
 
 calendar.holidays=full
 holiday.double-ten.name=雙十補假
@@ -74,3 +73,4 @@ holiday.ch_5.name=春節
 holiday.ch_5.date=20210216
 holiday.ch_6.name=補上班
 holiday.ch_6.date=20210220
+context=foo
