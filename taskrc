@@ -50,7 +50,7 @@ report.nchc.sort=entry+
 
 context.geothings=( +geothings or project:geothings )
 context.office=-trivial -home -not.office +office
-context.foo=-trivial -home -office
+context.foo=-home -office
 context.home=-trivial -office
 context.dev=-trivial -office project:dev
 
