@@ -12,7 +12,7 @@ bind generic gg move-first-line
 bind generic G move-last-line
 
 # scroll right easily
-bind generic <C-H> scroll-left
+bind generic 0     scroll-left
 bind generic <C-L> scroll-right
 
 # redraw, refresh, source tigrc

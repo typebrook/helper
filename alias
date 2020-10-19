@@ -14,8 +14,9 @@ alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 # vim
 alias v='vim'
 alias sv='sudo vim'
-alias vv='vim ~/vimwiki/index.md'
+alias vl="vim -c ':CtrlPMRU<CR>'"
 alias vr='vim -R'
+alias vv='vim ~/vimwiki/index.md'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # for custom scripts
@@ -112,8 +113,8 @@ alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 
 # github
-GITHUB_API='https://api.github.com'
-GITHUB_API_TOKEN=$(cat $SETTING_DIR/tokens/github 2>/dev/null)
+export GITHUB_API='https://api.github.com'
+export GITHUB_API_TOKEN=$(cat $SETTING_DIR/tokens/github 2>/dev/null)
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
 alias github_token='xdg-open https://github.com/settings/tokens'
 github() {
