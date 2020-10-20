@@ -289,7 +289,6 @@ _grepString() {
 alias wcl='wc -l'
 alias findn='find . -iname'
 alias x='xdg-open'
-alias f='free -h'
 alias yl='youtube-dl'
 alias yla='youtube-dl -x --audio-format mp3'
 alias editor='select-editor'
