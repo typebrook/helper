@@ -79,6 +79,7 @@ alias pqi='pacman -Qi'
 alias yql='yay -Ql'
 alias pf='pacman -F'
 alias pfl='pacman -Fl'
+alias yfl='yay -Fl'
 alias pqe='pacman -Qqe'
 alias pR='sudo pacman -R'
 psi() {
@@ -301,7 +302,7 @@ alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
 mvt_decode() {
-  python3 $SETTING_DIR/tools/mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
+  mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
 big52utf8() { 
   iconv -f BIG-5 -t UTF-8 
