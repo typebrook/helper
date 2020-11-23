@@ -1,2 +1,2 @@
 # Push changes on ~/.task
-0 * * * * (cd ~/.task && git add * && git commit -am update && git push origin &>/dev/null &)
+*/20 * * * * cd ~/.task && git add * && git commit -am update && git push origin 2>&1
