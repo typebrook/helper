@@ -82,6 +82,7 @@ vnoremap " <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
 vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
+vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 
 " abbrev
 iabbrev @@ typebrook@gmail.com

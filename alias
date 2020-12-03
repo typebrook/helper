@@ -78,6 +78,7 @@ alias yss='yay -Ss'
 alias pqi='pacman -Qi'
 alias yql='yay -Ql'
 alias pf='pacman -F'
+alias yf='yay -F'
 alias pfl='pacman -Fl'
 alias yfl='yay -Fl'
 alias pqe='pacman -Qqe'
@@ -134,6 +135,9 @@ release() {
 }
 asset() {
   curl -LO https://github.com/$1/$2/releases/download/$3/$4
+}
+raw() {
+    curl -O https://raw.githubusercontent.com/$1/$2/$3
 }
 
 # tig
