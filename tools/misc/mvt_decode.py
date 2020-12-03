@@ -1,7 +1,7 @@
+#! /bin/env python3
+
 import mapbox_vector_tile
 import sys
-
-#Python3
 
 mvt = sys.argv[1]
 
