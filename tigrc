@@ -144,7 +144,6 @@ bind main pd ?git push %(remote) :%(branch)
 bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Which reference? )'
 
 # fetch
-bind main F ?git fetch %(remote) %(branch)          # Go to Fetch
 bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
 bind main pu !git pull %(remote) %(branch)
