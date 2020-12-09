@@ -305,6 +305,7 @@ alias du='ncdu'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
+alias bb='bb.sh'
 mvt_decode() {
   mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
