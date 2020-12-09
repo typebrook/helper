@@ -7,7 +7,7 @@ alias zshrc="vim ~/.zshrc && source ~/.$(basename $SHELL)rc"
 alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim $SETTING_DIR/tigrc"
-alias muttrc='vim ~/.muttrc'
+alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
 alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 
