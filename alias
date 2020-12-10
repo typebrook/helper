@@ -16,6 +16,7 @@ alias v='vim'
 alias sv='sudo vim'
 alias vl="vim -c ':CtrlPMRU<CR>'"
 alias vr='vim -R'
+alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
@@ -345,16 +346,3 @@ TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
 TAIPEI_BBOX='121.346,24.926,121.676,25.209'
 TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
-
-color() {
-  for ((i=0; i<256; i++)) ;do
-      echo -n '  '
-      tput setab $i
-      tput setaf $(( ( (i>231&&i<244 ) || ( (i<17)&& (i%8<2)) ||
-        (i>16&&i<232)&& ((i-16)%6 <(i<100?3:2) ) && ((i-16)%36<15) )?7:16))
-      printf " C %03d " $i
-      tput op
-      (( ((i<16||i>231) && ((i+1)%8==0)) || ((i>16&&i<232)&& ((i-15)%6==0)) )) &&
-        printf "\n" ''
-    done
-}
