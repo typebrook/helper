@@ -16,6 +16,7 @@ alias v='vim'
 alias sv='sudo vim'
 alias vl="vim -c ':CtrlPMRU<CR>'"
 alias vr='vim -R'
+alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
