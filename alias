@@ -53,10 +53,10 @@ _move_to_tmp() {
 }
 prompt() {
   TMPFILE=$(mktemp)
-  echo -e $1 > $TMPFILE \
+  echo -e $1 >$TMPFILE \
   && vim $TMPFILE \
   && sed -i '$ q; s/$/ \\/' $TMPFILE \
-  && eval $(cat $TMPFILE | tee /dev/tty)
+  && eval $( <$TMPFILE tee /dev/tty )
   rm $TMPFILE
 }
 
