@@ -296,6 +296,9 @@ bind tree m >tig --follow -- %(file)
 
 bind tree xt +sh -c "git rev-parse %(commit)^{tree} | xsel -ib -o | awk '{print \"Tree Clipped\", $1}'"
 
+bind tree c NONE
+bind tree cp +sh -c "git cat-file -p %(blob) >%(file) && echo File copied to %(file)"
+
 bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 
 #====================
