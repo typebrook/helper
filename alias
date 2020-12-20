@@ -101,6 +101,7 @@ alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
+alias cdb='cd ~/git/bashblog'
 
 # git
 unalias gc &> /dev/null # override zsh plugin alias
