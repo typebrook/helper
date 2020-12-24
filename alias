@@ -289,8 +289,7 @@ alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 token() {
   cd $SETTING_DIR/tokens && [[ -e $1 ]] && cat $1 || ls -l
 }
-alias gr='_grepString'
-_grepString() { 
+gr() { 
   grep -R $1 .  
 }
 alias wcl='wc -l'
