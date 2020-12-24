@@ -325,6 +325,7 @@ bak() {
 # task
 alias taskrc='vim ~/.taskrc'
 alias cdtask='cd ~/.task'
+alias cdk='cd ~/.task'
 alias li='tasksh'
 tt() {
   taskwarrior-tui
