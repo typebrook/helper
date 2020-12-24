@@ -29,3 +29,6 @@ $SETTING_DIR/tools/init/sync.sh
 
 # go
 PATH=$PATH:$HOME/go/bin
+
+# android-studio
+PATH=$PATH:$HOME/android-studio/bin
