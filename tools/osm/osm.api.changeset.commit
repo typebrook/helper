@@ -15,11 +15,11 @@ if [ -z ${OSM_USER_PASSWD} ]; then
   read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
 fi
 
-# Create changeset with given information
-curl ${OSM_API}/changeset/create \
-  --user ${OSM_USER_PASSWD} \
-  --upload-file - \
-  <<EOF | tail -1 | changeset_id=$(cat)
+create_changeset() {
+  curl ${OSM_API}/changeset/create \
+    --user ${OSM_USER_PASSWD} \
+    --upload-file - \
+    <<EOF | tail -1
 <osm>
   <changeset>
     <tag k='comment' v='${comment}'/>
@@ -28,6 +28,10 @@ curl ${OSM_API}/changeset/create \
   </changeset>
 </osm>
 EOF
+}
+
+# Create changeset with given information
+changeset_id=$(create_changeset)
 
 # Print created changeset id
 echo >/dev/tty
