@@ -287,7 +287,7 @@ alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 token() {
   cd $SETTING_DIR/tokens && [[ -e $1 ]] && cat $1 || ls -l
 }
-unalias gr
+unalias gr &>/dev/null
 gr() { 
   grep -R $1 .  
 }
