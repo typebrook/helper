@@ -272,7 +272,8 @@ alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
-  convert "$@" -append output.png
+  suffix=${1##*.}
+  convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
 }
 image_horizontal() { 
   convert "$@" +append output.png 
