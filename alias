@@ -34,8 +34,8 @@ alias g='gist'
 alias gl='gist last'
 
 # shell
-alias s='systemctl'
-alias j='journalctl -xe'
+alias s='sudo systemctl'
+alias j='sudo journalctl -xe'
 alias path="echo $PATH"
 alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
 alias src="source $HOME/.$(basename $SHELL)rc"
