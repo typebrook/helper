@@ -81,7 +81,7 @@ alias yql='yay -Ql'
 alias pf='pacman -F'
 alias yf='yay -F'
 alias pfl='pacman -Fl'
-alias yfl='yay -Fl'
+alias yfl='yay -Ql'
 alias pqe='pacman -Qqe'
 alias pR='sudo pacman -R'
 psi() {
@@ -241,6 +241,12 @@ alias sample_svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
 alias sample_mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
 alias sample_kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
 alias sample_osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
+alias sample_image='curl https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg'
+taiwan_dem() {
+  <<<"http://dtm.moi.gov.tw/不分幅_全台及澎湖.zip" perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg' |\
+  xargs curl -Lo taiwan_dem.zip
+  unzip -p taiwan_dem.zip 20m.tif >20m.tif
+}
 
 # data file
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
@@ -333,6 +339,9 @@ tt() {
 # upload
 up() {
     curl -F"file=@${1}" http://0x0.st
+}
+short() {
+    curl -F"shorten=${1}" http://0x0.st
 }
 
 # tmp
