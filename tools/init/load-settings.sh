@@ -4,6 +4,8 @@ elif [[ $0 == 'bash' ]]; then
   shopt -s extglob
 fi
 
+cd ~/Downloads
+
 # set default editor
 export EDITOR=vim
 

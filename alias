@@ -34,7 +34,8 @@ alias g='gist'
 alias gl='gist last'
 
 # shell
-alias s='sudo'
+alias s='sudo systemctl'
+alias j='sudo journalctl -xe'
 alias path="echo $PATH"
 alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
 alias src="source $HOME/.$(basename $SHELL)rc"
@@ -118,7 +119,7 @@ alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to 
 
 # github
 export GITHUB_API='https://api.github.com'
-export GITHUB_API_TOKEN=$(cat $SETTING_DIR/tokens/github 2>/dev/null)
+export GITHUB_API_TOKEN="$(cat $SETTING_DIR/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
 alias github_token='xdg-open https://github.com/settings/tokens'
 github() {
@@ -278,7 +279,8 @@ alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
-  convert "$@" -append output.png
+  suffix=${1##*.}
+  convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
 }
 image_horizontal() { 
   convert "$@" +append output.png 
@@ -346,18 +348,14 @@ short() {
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
-alias cdo='cd ~/git/openmaptiles'
 alias cdS='cd ~/git/StreetComplete'
-alias cdW='cd ~/git/geoBingAnWeb'
 alias cdT='cd ~/git/taiwan-topo'
 alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
-alias cdL='cd ~/Insync/pham@geothings.tw/Google\ Drive\ -\ Shared\ drives/LEOTEK'
 alias cdssh='cd ~/.ssh'
 alias stew='cd ~/git/mapstew'
-alias mac='ssh geothings@192.168.8.33'
 alias chmodx='sudo chmod +x'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
