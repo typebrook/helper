@@ -1,5 +1,8 @@
 #!/bin/sh
 
+ID=${1:-$(cat /tmp/changeset 2>/dev/null)}
+[ -z $ID ] && echo Please specify Changeset ID && exit 1
+
 read -e -p 'Type comment: ' -r comment </dev/tty
 
 echo "<osm><changeset><tag k=\"comment\" v=\"$comment\"/></changeset></osm>" | \
