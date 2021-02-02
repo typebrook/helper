@@ -1,7 +1,6 @@
 #!/bin/sh
 
-echo -n 'type comment: '
-read -r comment
+read -e -p 'Type comment: ' -r comment </dev/tty
 
 echo "<osm><changeset><tag k=\"comment\" v=\"$comment\"/></changeset></osm>" | \
 curl -X PUT -u $OSM_USER_PASSWD -i -T - $OSM_API/changeset/$1
