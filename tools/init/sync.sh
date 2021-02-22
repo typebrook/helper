@@ -8,6 +8,7 @@ sync() {
 sync $SETTING_DIR
 sync ~/vimwiki
 sync ~/.task
+sync ~/.password-store
 
 # others repo
 check_upstream ~/git/tig || echo in `pwd` > /dev/tty &
