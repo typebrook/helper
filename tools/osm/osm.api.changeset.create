@@ -22,4 +22,4 @@ changeset_id=$(echo $info |\
 
 echo >/dev/tty
 echo "changeset created, check $OSM_SERVER/changeset/$changeset_id" >/dev/tty
-echo $changeset_id
+echo $changeset_id | tee /tmp/changeset && echo copied to /tmp/changeset
