@@ -179,16 +179,14 @@ wi() {
 # crontab
 alias ce='crontab -e'
 
-# ranger
-alias r='_ranger_cd'
-alias ranrc='vim ~/.config/ranger/rc.conf'
-_ranger_cd() {
-  tempfile="$(mktemp -t tmp.XXXXXX)"
-  ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-  test -f "$tempfile" &&
-  if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-    cd -- "$(cat "$tempfile")"
-  fi
+# lf
+alias r='_lf_cd'
+_lf_cd() {
+  tempfile=$(mktemp -t tmp.XXXXXX)
+  lf --last-dir-path $tempfile
+
+  test -f "$tempfile" && \
+  cd -- "$(cat "$tempfile")" && \
   rm -f -- "$tempfile"
 }
 
@@ -313,6 +311,9 @@ alias du='ncdu'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
+date-reset() {
+  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+}
 mvt_decode() {
   mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
@@ -329,6 +330,7 @@ bak() {
 }
 
 # task
+alias tk='task'
 alias taskrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
 alias cdk='cd ~/.task'
