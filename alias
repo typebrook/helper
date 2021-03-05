@@ -244,7 +244,7 @@ alias sample_image='curl https://file-examples-com.github.io/uploads/2017/10/fil
 taiwan_dem() {
   <<<"http://dtm.moi.gov.tw/不分幅_全台及澎湖.zip" perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg' |\
   xargs curl -Lo taiwan_dem.zip
-  unzip -p taiwan_dem.zip 20m.tif >20m.tif
+  unzip -p taiwan_dem.zip dem_20m.tif >20m.tif
 }
 
 # data file
