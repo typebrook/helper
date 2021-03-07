@@ -206,6 +206,7 @@ drb() {
 
 # ssh
 alias ptt='ssh bbsu@ptt.cc'
+alias topo='ssh topo.tw'
 alias geothings-test='ssh geothings@test.geothings.tw'
 
 # Android
