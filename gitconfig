@@ -18,5 +18,8 @@
 [merge]
     tool = vimdiff
 
+[pull]
+    ff = only
+
 [credential]
     helper = store

@@ -211,6 +211,7 @@ alias geothings-test='ssh geothings@test.geothings.tw'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
+alias adb.view='adb shell am start -a android.intent.action.VIEW -d' 
 alias adb_default='adb shell dumpsys package domain-preferred-apps'
 alias adb_list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
