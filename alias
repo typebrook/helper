@@ -32,6 +32,8 @@ fix() {
 }
 alias g='gist'
 alias gl='gist last'
+unalias gg &>/dev/null
+alias gg='gist grep'
 
 # shell
 alias s='sudo systemctl'

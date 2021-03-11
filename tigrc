@@ -162,6 +162,7 @@ bind main ! ?git revert %(commit)
 # tag
 bind generic Tn @git tag "%(prompt Enter tag name: )" %(commit)
 bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
+bind generic TSN !git tag "%(prompt Enter tag name: )" %(commit) -s
 bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(Rename tag to? )" %(commit)'
 bind generic TM @sh -c 'git cat-file -p %(tag) |\
                     sed -n \'6,$p\' |\
