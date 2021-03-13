@@ -1,16 +1,25 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 shopt -s lastpipe
 
 OSM_SERVER=https://api.openstreetmap.org
-# Test server, use it for debug
-#OSM_SERVER=https://master.apis.dev.openstreetmap.org
+OSM_TEST_SERVER=https://master.apis.dev.openstreetmap.org
+if [[ $@ =~ '--serious' ]]; then
+  SERVER=$OSM_SERVER
+else
+  SERVER=$OSM_TEST_SERVER
+fi
 
-OSM_API=${OSM_SERVER}/api/0.6
+OSM_API=${SERVER}/api/0.6
+FILE=${$@//--serious/}
 
 # Prompt for comment and User:Password
-read -e -p 'Type comment: ' -r comment </dev/tty
+if [[ ! -t 0 ]]; then
+  comment=$(cat)
+else
+  read -e -p 'Type comment: ' -r comment </dev/tty
+fi
 if [ -z ${OSM_USER_PASSWD} ]; then
   read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
 fi
@@ -35,11 +44,11 @@ changeset_id=$(create_changeset)
 
 # Print created changeset id
 echo >/dev/tty
-echo "changeset created, check ${OSM_SERVER}/changeset/${changeset_id}" >/dev/tty
+echo "changeset created, check ${SERVER}/changeset/${changeset_id}" >/dev/tty
 echo ${changeset_id}
 
 # Upload OSC file to Changeset
-sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $1 |\
+sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $FILE |\
 tee /dev/tty | \
 curl -X POST --user ${OSM_USER_PASSWD} -i --upload-file - $OSM_API/changeset/${changeset_id}/upload
 

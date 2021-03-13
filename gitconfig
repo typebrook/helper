@@ -1,6 +1,7 @@
 [user]
     email = typebrook@gmail.com
     name = Hsieh Chin Fan
+    signingkey = D6E0FBF2ED83191843F83EE1ABE01EF36DD8C14A
 
 [alias]
     reorder = "!GIT_SEQUENCE_EDITOR=\"sed -i -n 'h;1n;2p;g;p'\" git rebase -i HEAD~2"
