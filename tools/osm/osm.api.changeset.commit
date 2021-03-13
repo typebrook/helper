@@ -42,7 +42,7 @@ EOF
 
 # Return http code after uploading a file
 uploade_file_to_changeset() {
-  curl $OSM_API/changeset/${changeset_id}/upload \
+  curl -X POST $OSM_API/changeset/${changeset_id}/upload \
     --user ${OSM_USER_PASSWD} -i \
     --upload-file - \
     --silent -o /dev/null -w "%{http_code}" 
