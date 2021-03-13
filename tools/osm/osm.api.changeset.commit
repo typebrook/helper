@@ -61,4 +61,4 @@ sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $FILE |\
 uploade_file_to_changeset | if [[ $(cat) != '200' ]]; then exit 1; fi
 
 # Close Changeset
-curl -X PUT --user ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
+curl --silent -X PUT --user ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
