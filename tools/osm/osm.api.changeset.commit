@@ -28,6 +28,7 @@ create_changeset() {
   curl ${OSM_API}/changeset/create \
     --user ${OSM_USER_PASSWD} \
     --upload-file - \
+    --slient \
     <<EOF | tail -1
 <osm>
   <changeset>
