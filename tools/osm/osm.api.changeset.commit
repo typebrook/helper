@@ -12,7 +12,7 @@ else
 fi
 
 OSM_API=${SERVER}/api/0.6
-FILE=${$@//--serious/}
+FILE=${@//--serious/}
 
 # Prompt for comment and User:Password
 if [[ ! -t 0 ]]; then
