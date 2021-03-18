@@ -25,6 +25,7 @@ if [ -z ${OSM_USER_PASSWD} ]; then
 fi
 
 create_changeset() {
+  SOURCE_TAG="${SOURCE:+<tag k=\'source\' v=\'$SOURCE\'/>}"
   curl ${OSM_API}/changeset/create \
     --user ${OSM_USER_PASSWD} \
     --upload-file - \
@@ -32,6 +33,7 @@ create_changeset() {
     <<EOF | tail -1
 <osm>
   <changeset>
+    ${SOURCE_TAG}
     <tag k='comment' v='${comment}'/>
     <tag k='created_by' v='bash script'/>
     <tag k='bot' v='yes'/>
