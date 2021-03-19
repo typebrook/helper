@@ -25,7 +25,8 @@ if [ -z ${OSM_USER_PASSWD} ]; then
 fi
 
 create_changeset() {
-  SOURCE_TAG="${SOURCE:+<tag k=\'source\' v=\'$SOURCE\'/>}"
+  SOURCE_TAG="${SOURCE:+$(printf "<tag k='source' v='%s'/>" $SOURCE)}"
+
   curl ${OSM_API}/changeset/create \
     --user ${OSM_USER_PASSWD} \
     --upload-file - \
