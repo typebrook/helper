@@ -50,17 +50,30 @@ uploade_file_to_changeset() {
     --silent -o /dev/null -w "%{http_code}" 
 }
 
+close_changeset() {
+  curl -X PUT ${OSM_API}/changeset/${changeset_id}/close \
+    --user ${OSM_USER_PASSWD} -i \
+    --silent -o /dev/null -w "%{http_code}" 
+}
+
 # Create changeset with given information
 changeset_id=$(create_changeset)
 
 # Print created changeset id
-echo >/dev/tty
-echo "changeset created, check ${SERVER}/changeset/${changeset_id}" >/dev/tty
+echo "Changeset created, check ${SERVER}/changeset/${changeset_id}" >/dev/tty
 echo ${changeset_id}
 
 # Upload OSC file to Changeset
 sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $FILE |\
-uploade_file_to_changeset | if [[ $(cat) != '200' ]]; then exit 1; fi
+uploade_file_to_changeset | if [[ $(cat) == '200' ]]; then 
+  echo Upload file $FILE to changeset ${changeset_id} >/dev/tty
+else
+  exit 1
+fi
 
 # Close Changeset
-curl --silent -X PUT --user ${OSM_USER_PASSWD} -i ${OSM_API}/changeset/${changeset_id}/close
+close_changeset | if [[ $(cat) == '200' ]]; then 
+  echo Changeset ${changeset_id} closed >/dev/tty
+else
+  exit 1
+fi 
