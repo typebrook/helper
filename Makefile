@@ -1,6 +1,6 @@
 .PHONY: *
 
-all: git vim tig
+all: git vim tig gpg
 	mkdir -p ~/git
 
 git:
@@ -56,3 +56,7 @@ task:
 		if [ -d "$(HOME)/.task" ]; then rm -rf "$(HOME)/.task"; fi; \
 		git clone --depth 1 https://github.com/typebrook/task.git ~/.task; \
 	fi
+
+gpg:
+	sudo ln -sf `pwd`/gpg-agent ~/.gnupg/gpg-agent.conf
+	gpgconf --reload gpg-agent
