@@ -369,6 +369,7 @@ alias cdT='cd ~/git/tilemaker'
 alias cdssh='cd ~/.ssh'
 alias pass='pass -c'
 alias cdpass='cd ~/.password-store'
+alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
 alias chmodx='sudo chmod +x'
 

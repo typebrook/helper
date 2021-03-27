@@ -33,8 +33,8 @@ nnoremap <leader>R :read !
 nnoremap <leader>P :r !xsel -ob<CR>
 
 " move
-nnoremap <Tab> }
-nnoremap <S-Tab> {
+" nnoremap <Tab> }
+" nnoremap <S-Tab> {
 inoremap <C-L> <Right>
 cnoremap <C-L> <Right>
 cnoremap <C-H> <Left>
