@@ -35,7 +35,8 @@ alias gl='gist last'
 unalias gg &>/dev/null
 alias gg='gist grep'
 
-# shell
+# unix
+alias chmodx='sudo chmod +x'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
 alias path="echo $PATH"
@@ -207,6 +208,7 @@ drb() {
 }
 
 # ssh
+alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias topo='ssh topo.tw'
 alias geothings-test='ssh geothings@test.geothings.tw'
@@ -350,13 +352,19 @@ tt() {
   ( cd ~/.task && git add --all && git commit -m 'update' && git push origin & ) &>/dev/null 
 }
 
-# upload
+# upload with 0x0.st
 up() {
     curl -F"file=@${1}" http://0x0.st
 }
 short() {
     curl -F"shorten=${1}" http://0x0.st
 }
+
+# pass
+alias cdpass='cd ~/.password-store'
+alias p='pass'
+alias pc='pass -c'
+alias pgc='pass generate -c'
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
@@ -366,12 +374,8 @@ alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
-alias cdssh='cd ~/.ssh'
-alias cdpass='cd ~/.password-store'
-alias pc='pass -c'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
-alias chmodx='sudo chmod +x'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
