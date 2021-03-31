@@ -290,9 +290,6 @@ image_horizontal() {
   convert "$@" +append output.png 
 }
 
-# mail mutt
-alias m='mutt'
-
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
