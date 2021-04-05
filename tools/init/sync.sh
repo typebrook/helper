@@ -16,5 +16,5 @@ check_upstream ~/.vim_runtime || echo in `pwd` >/dev/tty &
 
 # rsync
 if [[ `cat /etc/hostname` != 'vultr' ]]; then
-  rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &
+  rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird &
 fi
