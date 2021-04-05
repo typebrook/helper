@@ -15,4 +15,4 @@ check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
 check_upstream ~/.vim_runtime || echo in `pwd` >/dev/tty &
 
 # thunderbird
-rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird/
+rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird/ &
