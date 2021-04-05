@@ -33,3 +33,6 @@ PATH=$PATH:$HOME/go/bin
 
 # android-studio
 PATH=$PATH:$HOME/android-studio/bin
+
+# Run something after exit shell
+trap 'exit.sh' EXIT
