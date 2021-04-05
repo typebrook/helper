@@ -291,7 +291,7 @@ image_horizontal() {
 }
 
 # thunderbird
-alias thunder.push='rsync -a --delete ~/.thunderbird/ pham@topo.tw:~/.thunderbird'
+alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird/'
 
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
