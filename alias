@@ -184,6 +184,7 @@ alias ce='crontab -e'
 
 # lf
 alias r='_lf_cd'
+alias l='_lf_cd'
 _lf_cd() {
   tempfile=$(mktemp -t tmp.XXXXXX)
   lf --last-dir-path $tempfile
@@ -291,7 +292,7 @@ image_horizontal() {
 }
 
 # thunderbird
-alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird/'
+alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &'
 
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
