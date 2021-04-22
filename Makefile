@@ -10,7 +10,7 @@ git:
 vim:
 	# amix-vimrc
 	if [ ! -d "$(HOME)/.vim_runtime" ]; then \
-		git clone --depth=1 --origin my git@github.com:typebrook/vimrc.git ~/.vim_runtime && \
+		git clone --depth=5 --origin my git@github.com:typebrook/vimrc.git ~/.vim_runtime && \
 		cd ~/.vim_runtime && git remote add origin git@github.com:amix/vimrc.git && \
         sh ~/.vim_runtime/install_awesome_vimrc.sh; \
 	fi
