@@ -15,6 +15,6 @@ check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
 check_upstream ~/.vim_runtime || echo in `pwd` >/dev/tty &
 
 # thunderbird
-if [[ `cat /etc/hostname` != 'vultr' ]]; then
-  rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird &
-fi
+#if [[ `cat /etc/hostname` != 'vultr' ]]; then
+#  rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird &
+#fi
