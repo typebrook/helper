@@ -18,6 +18,7 @@ alias vl="vim -c ':CtrlPMRU<CR>'"
 alias vr='vim -R'
 alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
+alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 
 # for custom scripts
@@ -376,6 +377,7 @@ alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
+alias sshs='ssh admin@52.199.215.221'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'

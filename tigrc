@@ -60,7 +60,7 @@ bind generic gL ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 # highlight diff without +/-
 # set diff-show-signs = false
 # set diff_column_highlight = ALL
-set diff-highlight = true
+set diff-highlight = false
 
 # misc settings
 set ignore-case = true
@@ -146,6 +146,7 @@ bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Whic
 # fetch
 bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
+bind main gF ?git fetch '%(prompt Which remote? )' '%(prompt Which branch? )'
 bind main pu !git pull %(remote) %(branch)
 bind main pf !git pull '%(prompt Pull from witch remote? )' %(branch)
 bind main pU ?git pull --rebase
