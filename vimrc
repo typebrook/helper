@@ -103,6 +103,9 @@ autocmd FileType xml setlocal foldmethod=syntax
 let g:json_syntax_folding=1
 autocmd FileType json setlocal foldmethod=syntax
 
+" Apply new SniptMat Parser
+let g:snipMate = { 'snippet_version' : 1  }
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Settings for Vimwiki
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
