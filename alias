@@ -295,6 +295,12 @@ image_horizontal() {
 # thunderbird
 alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &'
 
+# Reset clock
+date-reset() {
+  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+}
+alias clock-reset='hwclock --systohc'
+
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
@@ -318,9 +324,6 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
-date-reset() {
-  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
-}
 mvt_decode() {
   mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
 }
