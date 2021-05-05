@@ -237,8 +237,7 @@ alias pip3='python3 -m pip'
 
 # gdal
 alias oo='ogr2ogr'
-alias oi='ogrinfo'
-alias oias='ogrinfo -al -so'
+alias oi='ogrinfo -al -so'
 
 # sample file
 alias sample_gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
