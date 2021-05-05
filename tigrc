@@ -166,8 +166,8 @@ bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
 bind generic TSN !git tag "%(prompt Enter tag name: )" %(commit) -s
 bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(Rename tag to? )" %(commit)'
 bind generic TM @sh -c 'git cat-file -p %(tag) |\
-                    sed -n \'6,$p\' |\
-                    (git tag -d %(tag) && git tag "%(prompt Rename tag into? )" -a -F -) > /dev/null'
+                        sed -n \'6,$p\' |\
+                        (git tag -d %(tag) && git tag "%(prompt Rename tag into? )" -a -F -) > /dev/null'
 bind generic Tc !sh -c 'git tag %(tag) %(tag)^{} -f -m \"$(git tag %(tag) -n10)\" -e'
 bind generic Tl !sh -c 'git ls-remote --tags %(remote) | grep %(tag)'
 bind generic Ts >tig show %(tag)

@@ -49,6 +49,7 @@ alias hg='history | grep'
 alias rmrf='rm -rf'
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
+alias pst="pstree -ps $$"
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1
