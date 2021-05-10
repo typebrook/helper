@@ -248,7 +248,9 @@ alias sample_svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
 alias sample_mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
 alias sample_kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
 alias sample_osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
-alias sample_image='curl https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg'
+alias sample_image='curl -O https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg'
+alias sample_proto='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
+alias sample_proto_osm='curl -O https://raw.githubusercontent.com/openstreetmap/OSM-binary/master/src/osmformat.proto'
 taiwan_dem() {
   <<<"http://dtm.moi.gov.tw/不分幅_全台及澎湖.zip" perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg' |\
   xargs curl -Lo taiwan_dem.zip
