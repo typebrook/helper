@@ -247,7 +247,7 @@ bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a !>git commit --amend --allow-empty
 bind status p ?>sh -c "git commit -m 'update' && git push" # quick push
 bind status d ?>rm %(file)
-bind status D ?>git clean -dfx
+bind status D ?>git clean -df
 
 # solve conflict
 bind status U ?>git reset --hard

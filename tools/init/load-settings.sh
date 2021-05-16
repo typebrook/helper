@@ -34,5 +34,8 @@ PATH=$PATH:$HOME/go/bin
 # android-studio
 PATH=$PATH:$HOME/android-studio/bin
 
+# cargo
+PATH=$PATH:$HOME/.cargo/bin
+
 # Run something after exit shell
 trap 'exit.sh' EXIT
