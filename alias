@@ -242,6 +242,7 @@ alias oi='ogrinfo -al -so'
 # sample file
 alias sample_gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample_geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
+alias sample_shapefile='curl -O https://docs.mapbox.com/help/data/stations.zip && unzip stations.zip'
 alias sample_geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample_csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
 alias sample_svg='curl -O https://docs.mapbox.com/help/data/bicycle-24.svg'
@@ -282,8 +283,6 @@ alias data_taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/da
 alias xi='xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
-alias xll='xo >> ~/vimwiki/working.md'
-alias xc='xsel -ob | gcc -xc -'
 
 # image
 image_vertical() { 
@@ -327,7 +326,13 @@ alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
 mvt_decode() {
-  mvt_decode.py $1 | tr \' \" | sed 's/True/true/g' | jq .
+  if [[ ! -t 0 ]]; then
+    tmp=$(mktemp)
+    cat >$tmp
+  else
+    tmp=$1
+  fi
+  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g' | jq .
 }
 big52utf8() { 
   iconv -f BIG-5 -t UTF-8 
