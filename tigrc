@@ -161,9 +161,9 @@ bind main gB !?git rebase --rebase-merges -i %(commit)
 bind main ! ?git revert %(commit)
 
 # tag
-bind generic Tn @git tag "%(prompt Enter tag name: )" %(commit)
-bind generic TN !git tag "%(prompt Enter tag name: )" %(commit) -a
-bind generic TSN !git tag "%(prompt Enter tag name: )" %(commit) -s
+bind generic Tn @git tag "%(prompt New tag, please enter tag name: )" %(commit)
+bind generic TN !git tag "%(prompt Annotated tag, please enter the name: )" %(commit) -a
+bind generic TSN !git tag "%(prompt Signed Annotated tag, please enter the name: )" %(commit) -s
 bind generic Tm @sh -c 'git tag -d %(tag) && git tag "%(Rename tag to? )" %(commit)'
 bind generic TM @sh -c 'git cat-file -p %(tag) |\
                         sed -n \'6,$p\' |\

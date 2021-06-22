@@ -15,6 +15,7 @@ alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 alias v='vim'
 alias sv='sudo vim'
 alias vl="vim -c ':CtrlPMRU<CR>'"
+alias ve="vim -c ':e! ~/.vim_runtime/my_configs.vim'"
 alias vr='vim -R'
 alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
@@ -108,6 +109,7 @@ alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
 alias cdb='cd ~/git/bashblog'
+alias cdmd='cd ~/git/map/deploy'
 
 # git
 unalias gc &> /dev/null # override zsh plugin alias
@@ -200,8 +202,8 @@ _lf_cd() {
 alias df='df -h'
 
 # docker
-alias dp='docker ps'
-alias di='docker images'
+alias dps='docker ps'
+alias dis='docker images'
 alias dc='docker-compose run --rm'
 alias ds='docker stop'
 alias drm='docker rm `docker ps -aq`'
@@ -250,8 +252,9 @@ alias sample_mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
 alias sample_kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
 alias sample_osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 alias sample_image='curl -O https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg'
-alias sample_proto='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
-alias sample_proto_osm='curl -O https://raw.githubusercontent.com/openstreetmap/OSM-binary/master/src/osmformat.proto'
+alias proto_mvt='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
+alias proto_osm='curl -O https://raw.githubusercontent.com/openstreetmap/OSM-binary/master/src/osmformat.proto'
+alias proto_geobuf='curl -O https://raw.githubusercontent.com/mapbox/geobuf/master/geobuf.proto'
 taiwan_dem() {
   <<<"http://dtm.moi.gov.tw/不分幅_全台及澎湖.zip" perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg' |\
   xargs curl -Lo taiwan_dem.zip
@@ -325,6 +328,9 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
 alias pg='ping google.com'
+pbf() {
+  protoc --decode_raw
+}
 mvt_decode() {
   if [[ ! -t 0 ]]; then
     tmp=$(mktemp)
@@ -391,7 +397,6 @@ alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
-alias sshs='ssh admin@52.199.215.221'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
