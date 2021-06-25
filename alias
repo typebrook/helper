@@ -47,7 +47,7 @@ alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
-alias rmrf='rm -rf'
+alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && [[ ! $PATH =~ `pwd`  ]] && rm -rf'
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 alias pst="pstree -ps $$"
