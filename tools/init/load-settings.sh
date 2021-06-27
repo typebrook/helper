@@ -1,7 +1,7 @@
-if [[ $0 == 'zsh' ]]; then
+if [[ $SHELL =~ zsh$ ]]; then
   setopt extended_glob
   fpath=($SETTING_DIR/zsh $fpath)
-elif [[ $0 == 'bash' ]]; then
+elif [[ $SHELL =~ bash$ ]]; then
   shopt -s extglob
 fi
 
