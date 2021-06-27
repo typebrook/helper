@@ -10,6 +10,7 @@ set nostartofline
 set sidescroll=1
 set sidescrolloff=999
 set shell=/bin/bash
+" set clipboard=unnamedplus
 
 " general
 function! Bye()
@@ -26,11 +27,11 @@ vnoremap <leader>, :terminal ++noclose<CR>
 nnoremap <leader>< :%terminal ++noclose<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
-nnoremap <leader>u :set clipboard=unnamedplus<CR>
 nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 nnoremap <leader>R :read !
 nnoremap <leader>P :r !xsel -ob<CR>
+set autoread
 
 " move
 " nnoremap <Tab> }
