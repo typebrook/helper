@@ -177,7 +177,7 @@ cdss() {
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 wg() { 
-  vim ~/vimwiki/$1.md 
+  vim ~/vimwiki/${1%%.md}.md 
 }
 wi() { 
   cat ~/vimwiki/$1.md 
@@ -204,7 +204,7 @@ alias df='df -h'
 # docker
 alias dps='docker ps'
 alias dis='docker images'
-alias dc='docker-compose run --rm'
+alias dc='docker-compose'
 alias ds='docker stop'
 alias drm='docker rm `docker ps -aq`'
 alias dr='docker run --rm -it'
@@ -217,6 +217,7 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias topo='ssh topo.tw'
 alias geothings-test='ssh geothings@test.geothings.tw'
+alias demo='ssh -i ~/.ssh/ec2-nlsc-tileservice.pem ubuntu@demo.geosurvey.io'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
