@@ -51,6 +51,7 @@ alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && [[ ! $PATH =~ `pwd`  ]] && rm -rf'
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 alias pst="pstree -ps $$"
+alias duu='du -hd 1 . | sort -hr'
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1

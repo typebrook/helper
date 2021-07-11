@@ -9,10 +9,10 @@ sync $SETTING_DIR
 sync ~/vimwiki
 sync ~/.task
 sync ~/.password-store
+sync ~/.vim_runtime
 
 # others repo
 check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
-check_upstream ~/.vim_runtime master || echo in `pwd` >/dev/tty &
 
 # thunderbird
 #if [[ `cat /etc/hostname` != 'vultr' ]]; then
