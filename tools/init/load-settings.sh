@@ -1,3 +1,8 @@
+# load custom aliases
+export SETTING_DIR=${SETTING_DIR:=$HOME/settings}
+source $SETTING_DIR/alias
+
+# Config shell
 if [[ $SHELL =~ zsh$ ]]; then
   setopt extended_glob
   fpath=($SETTING_DIR/zsh $fpath)
@@ -7,10 +12,6 @@ fi
 
 # set default editor
 export EDITOR=vim
-
-# load custom aliases
-SETTING_DIR=${SETTING_DIR:=$HOME/settings}
-source $SETTING_DIR/alias
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin

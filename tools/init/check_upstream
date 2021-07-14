@@ -21,4 +21,4 @@ if ! git rev-list "$head" | grep "$(git rev-parse origin/master)" > /dev/null; t
   echo "New commit at" "$1"
 fi
 
-echo "$(date)" check "$1" >> "$SETTING_DIR/log"
+echo "$(date)" check "$1" >> "$SETTING_DIR/log" || echo error happens when check upstream at $1
