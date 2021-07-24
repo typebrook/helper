@@ -21,6 +21,7 @@ alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
+alias vgx='sudo vim /etc/nginx/sites-enabled/*'
 
 # for custom scripts
 vs() { 
@@ -85,6 +86,7 @@ alias ysi='yay -Si'
 alias pss='pacman -Ss'
 alias yss='yay -Ss'
 alias pqi='pacman -Qi'
+alias pql='pacman -Ql'
 alias yql='yay -Ql'
 alias pf='pacman -F'
 alias yf='yay -F'
