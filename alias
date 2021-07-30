@@ -366,6 +366,7 @@ alias cdtrash='cd ~/.local/share/Trash'
 trash() {
     mv $@ ~/.local/share/Trash
 }
+transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n  transfer <file|directory>\n  ... | transfer <file_name>">&2;return 1;fi;if tty -s;then file="$1";file_name=$(basename "$file");if [ ! -e "$file" ];then echo "$file: No such file or directory">&2;return 1;fi;if [ -d "$file" ];then file_name="$file_name.zip" ,;(cd "$file"&&zip -r -q - .)|curl --progress-bar --upload-file "-" "https://topo.tw/up/$file_name"|tee /dev/null,;else cat "$file"|curl --progress-bar --upload-file "-" "https://topo.tw/up/$file_name"|tee /dev/null;fi;else file_name=$1;curl --progress-bar --upload-file "-" "https://topo.tw/up/$file_name"|tee /dev/null;fi;}
 
 # task
 alias tk='task'
@@ -395,11 +396,11 @@ alias pgc='pass generate -c'
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
 alias cdS='cd ~/git/StreetComplete'
-alias cdT='cd ~/git/taiwan-topo'
 alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
+alias cdtt='cd ~/git/template'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
 
