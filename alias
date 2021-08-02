@@ -131,7 +131,6 @@ alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to 
 export GITHUB_API='https://api.github.com'
 export GITHUB_API_TOKEN="$(cat $SETTING_DIR/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
-alias github_token='xdg-open https://github.com/settings/tokens'
 github() {
   xdg-open https://github.com/$1/$2
 }
@@ -146,11 +145,11 @@ release() {
   command="github-release.sh\n  github_api_token=$GITHUB_API_TOKEN\n  repo=typebrook/mapstew\n  tag=daily-taiwan-pbf\n  type=asset\n  filename=taiwan-latest.osm.pbf\n  action=upload|overwrite|rename|delete\n  extra="
   prompt "$command"
 }
-asset() {
+github_asset() {
   curl -LO https://github.com/$1/$2/releases/download/$3/$4
 }
-raw() {
-    curl -O https://raw.githubusercontent.com/$1/$2/$3
+github_raw() {
+  curl -O https://raw.githubusercontent.com/$1/$2/$3
 }
 
 # tig
@@ -158,7 +157,6 @@ alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
 alias ta='tig --all'
-alias get-tig='curl -LO https://github.com/typebrook/tig/releases/download/tig-2.5.0/tig'
 upload_tig() {
   github-release.sh \
     github_api_token=$GITHUB_API_TOKEN \
