@@ -298,6 +298,9 @@ image_vertical() {
 image_horizontal() { 
   convert "$@" +append output.png 
 }
+image_from_data_url() {
+  xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
+}
 
 # thunderbird
 alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &'
