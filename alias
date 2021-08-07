@@ -21,7 +21,7 @@ alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
-alias vgx='sudo vim /etc/nginx/sites-enabled/*'
+alias vgx='sudo vim /etc/nginx/sites-enabled/* && nginx -t && sudo systemctl reload nginx'
 
 # for custom scripts
 vs() { 
