@@ -218,8 +218,8 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias topo='ssh topo.tw'
 alias geothings-test='ssh geothings@test.geothings.tw'
-alias demo='ssh -i ~/.ssh/ec2-nlsc-tileservice.pem ubuntu@demo.geosurvey.io'
-alias demo2='ssh -i ~/.ssh/ec2-nlsc-tileservice.pem ubuntu@dev.geosurvey.io'
+alias demo='ssh demo.geosurvey.io'
+alias demo2='ssh dev.geosurvey.io'
 alias cool='ssh pham@10.0.0.2'
 
 # Android
