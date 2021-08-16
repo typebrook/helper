@@ -94,6 +94,7 @@ bind main 1 +sh -c "git rev-list --all --children | \
                     grep '^%(commit)' | \
                     awk '{print $2}') | \
                     xsel -ib && echo first children" # useless now
+bind main J @sh -c 'BRANCH=$(git branch --show-current) && git checkout %(commit) && git branch --force $BRANCH %(commit) && git checkout $BRANCH'
 
 # branch
 bind main b none
@@ -227,6 +228,9 @@ bind blob m >tig --follow -- %(file)
 #====================
 bind status j :/^[MCADRUT?]
 bind status k :?^[MCADRUT?]
+
+# use vscode to edit a file
+bind status E !>code %(file)
 
 # update index
 bind status A @git add .

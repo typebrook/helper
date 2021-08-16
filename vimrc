@@ -32,6 +32,7 @@ nnoremap <C-J> ddp
 nnoremap <leader>R :read !
 nnoremap <leader>P :r !xsel -ob<CR>
 set autoread
+set nofoldenable " disable folding
 
 " move
 " nnoremap <Tab> }
