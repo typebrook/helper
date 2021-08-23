@@ -80,7 +80,7 @@ set t_BE=
 
 " surround with '' or ""
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
-"vnoremap " <ESC>`<i"<ESC>`>la"<ESC>
+vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
 vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
