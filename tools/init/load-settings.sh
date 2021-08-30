@@ -1,6 +1,7 @@
 # load custom aliases
 export SETTING_DIR=${SETTING_DIR:=$HOME/settings}
 source $SETTING_DIR/alias
+source $SETTING_DIR/private/*
 
 # Config shell
 if [[ $SHELL =~ zsh$ ]]; then

@@ -216,11 +216,6 @@ drb() {
 # ssh
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
-alias topo='ssh topo.tw'
-alias geothings-test='ssh geothings@test.geothings.tw'
-alias demo='ssh demo.geosurvey.io'
-alias demo2='ssh dev.geosurvey.io'
-alias cool='ssh pham@10.0.0.2'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
