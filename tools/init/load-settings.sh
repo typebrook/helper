@@ -22,6 +22,9 @@ find $BIN_DIR -xtype l | xargs rm 2>/dev/null || true
 find $SETTING_DIR/tools -type f -executable | \
 xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
 
+# Mail
+MAIL=$HOME/Maildir
+
 # load custom functions
 OSM_UTIL_DIR=$SETTING_DIR/tools/osm
 source $OSM_UTIL_DIR/osm
