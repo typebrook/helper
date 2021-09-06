@@ -33,6 +33,9 @@ source $OSM_UTIL_DIR/osm
 # sync with important git repos
 $SETTING_DIR/tools/init/sync.sh
 
+# local
+PATH=$PATH:$HOME/.local/bin
+
 # go
 PATH=$PATH:$HOME/go/bin
 
@@ -41,6 +44,9 @@ PATH=$PATH:$HOME/android-studio/bin
 
 # cargo
 PATH=$PATH:$HOME/.cargo/bin
+
+# yarn
+PATH=$PATH:$HOME/.yarn/bin
 
 # Run something after exit shell
 trap 'exit.sh' EXIT
