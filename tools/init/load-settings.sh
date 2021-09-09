@@ -4,12 +4,15 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
 
 # Config shell
-if [[ $SHELL =~ zsh$ ]]; then
-  setopt extended_glob
-  fpath=($SETTING_DIR/zsh $fpath)
-elif [[ $SHELL =~ bash$ ]]; then
-  shopt -s extglob
-fi
+case $0 in
+  zsh)
+    setopt extended_glob
+    fpath=($SETTING_DIR/zsh $fpath)
+    ;;
+  bash)
+    shopt -s extglob
+    ;;
+esac
 
 # set default editor
 export EDITOR=vim
