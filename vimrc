@@ -108,6 +108,9 @@ autocmd FileType json setlocal foldmethod=syntax
 " Apply new SniptMat Parser
 let g:snipMate = { 'snippet_version' : 1  }
 
+" Set width of mutt as 72
+au BufRead /tmp/mutt-* set tw=72
+
 " Redirection with buffer
 " Usage:
 " 	:Redir hi ............. show the full output of command ':hi' in a scratch window
