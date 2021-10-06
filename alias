@@ -42,6 +42,7 @@ alias gg='gist grep'
 alias chmodx='sudo chmod +x'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
+alias m='mutt'
 alias ju='sudo journalctl -u'
 alias path="echo $PATH"
 alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
