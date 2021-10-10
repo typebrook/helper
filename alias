@@ -378,7 +378,8 @@ tt() {
 
 # upload with 0x0.st
 up() {
-    curl -F"file=@${1}" http://0x0.st
+    #curl -F"file=@${1}" http://0x0.st
+    curl -F "file=@${1}" https://api.anonfiles.com/upload
 }
 short() {
     curl -F"shorten=${1}" http://0x0.st
