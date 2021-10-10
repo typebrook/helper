@@ -331,7 +331,6 @@ alias tma='tmux a'
 alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias we='weechat'
 alias p8='ping 8.8.8.8'
-alias pg='ping google.com'
 pbf() {
   protoc --decode_raw
 }
@@ -386,7 +385,7 @@ short() {
 }
 
 # pass
-alias cdpass='cd ~/.password-store'
+alias chp='tig -C ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pgc='pass generate -c'
