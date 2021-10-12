@@ -4,12 +4,13 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
 
 # Config shell
-case $0 in
-  zsh)
+case $SHELL in
+  *zsh)
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)
+    setopt extended_glob
     ;;
-  bash)
+  *bash)
     shopt -s extglob
     ;;
 esac
