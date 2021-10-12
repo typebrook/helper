@@ -8,7 +8,7 @@ case $SHELL in
   *zsh)
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)
-    setopt extended_glob
+    source $SETTING_DIR/zsh/*
     zle -N deer
     bindkey '\ek' deer
     ;;
