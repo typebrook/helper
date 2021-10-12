@@ -9,6 +9,8 @@ case $SHELL in
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)
     setopt extended_glob
+    zle -N deer
+    bindkey '\ek' deer
     ;;
   *bash)
     shopt -s extglob
