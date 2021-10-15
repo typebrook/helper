@@ -79,7 +79,7 @@ set main-view = \
 # override graph toggling
 bind main G move-last-line
 bind main ` :toggle commit-title-graph
-bind generic F none
+bind main F none
 bind generic <C-T> :toggle commit-title-refs
 
 # edit tigrc
