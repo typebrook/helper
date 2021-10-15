@@ -1,0 +1,121 @@
+set folder = "imaps://pham@mail.topo.tw:993"
+set imap_pass = `pass pham@topo.tw`
+set message_cachedir = "~/.mail"
+
+set smtp_url = "smtp://pham@mail.topo.tw:25"
+set smtp_pass = "$imap_pass"
+
+set from = "pham@topo.tw"
+set realname = "謝晉凡 Hsieh Chin Fan"
+set signature="$SETTING_DIR/.signature"
+
+set spoolfile = "+INBOX"
+set mbox= "+mbox"
+set move = yes
+set record = "+Sent"
+set trash = "+Trash"
+set postponed = "+Drafts"
+
+#mailboxes =INBOX =mbox =Sent =Trash =Drafts #=talk-tw =pay =service
+
+subscribe talk-tw@openstreetmap.org
+
+set editor = "vim"
+set charset = "utf-8"
+set send_charset = "us-ascii:utf-8"
+set header = no
+set pager_stop
+set sleep_time=0 # When changing folder
+
+# Vim-style key binding, \c means Ctrl
+# ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim%E9%A3%8E%E6%A0%BC%E9%94%AE%E4%BD%8D%E7%BB%91%E5%AE%9A
+bind pager G bottom
+bind pager j next-line
+bind pager k previous-line
+bind pager \cf next-page
+bind pager \cb previous-page
+bind pager \cd half-down
+bind pager \cu half-up
+bind pager \cj next-entry
+bind pager \ck previous-entry
+bind pager gg top
+bind pager G bottom
+bind index gg first-entry
+bind index G last-entry
+bind index R group-reply
+bind index \cf next-page
+bind index \cb previous-page
+bind pager \cd half-down
+bind pager \cu half-up
+bind index } bottom-page
+bind index x tag-entry
+
+# basic colors -------------------------------------------------------
+color normal        white           black
+color error         red             black
+color tilde         white           black
+color message       cyan            black
+color markers       red             black
+color attachment    brightred       black
+color search        brightmagenta   black
+color status        brightwhite     black
+color indicator     white           blue
+color tree          magenta         black   # arrows in threads
+
+# 列表部分 -------------------------------------------------------
+# 高亮不同状态的邮件, 具体的pattern(例如~N)参见mutt manual的4.2节
+
+color index         red             black         "~A"                        # all messages
+color index         brightred       black         "~E"                        # expired messages
+color index         brightcyan      black         "~N"                        # new messages
+color index         brightcyan      black         "~O"                        # old messages
+color index         brightmagenta   black         "~Q"                        # messages that have been replied to
+color index         white           black         "~R"                        # read messages
+color index         brightblue      black         "~U"                        # unread messages
+color index         brightblue      black         "~U~$"                      # unread, unreferenced messages
+color index         brightblue      black         "~v"                        # messages part of a collapsed thread
+color index         brightblue      black         "~P"                        # messages from me
+color index         cyan            black         "~p!~F"                     # messages to me
+color index         brightgreen     black         "~N~p!~F"                   # new messages to me
+color index         brightgreen     black         "~U~p!~F"                   # unread messages to me
+color index         green           black         "~R~p!~F"                   # messages to me
+color index         red             black         "~F"                        # flagged messages
+color index         red             black         "~F~p"                      # flagged messages to me
+color index         red             black         "~N~F"                      # new flagged messages
+color index         red             black         "~N~F~p"                    # new flagged messages to me
+color index         red             black         "~U~F~p"                    # new flagged messages to me
+color index         white           brightmagenta "~D"                        # deleted messages
+color index         white           black         "~v~(!~N!~O)"               # collapsed thread with no unread
+color index         magenta          black         "~v~(~N|~O)"               # collapsed thread with some unread
+color index         magenta           black         "~N~v~(~N)"               # collapsed thread with unread parent
+color index         red             white           "~v~(~F)!~N"              # collapsed thread with flagged, no unread
+color index         yellow          white           "~v~(~F~N)"               # collapsed thread with some unread & flagged
+color index         green           white           "~N~v~(~F~N)"             # collapsed thread with unread parent & flagged
+color index         green           white           "~N~v~(~F)"               # collapsed thread with unread parent, no unread inside, but some flagged
+color index         yellow          red             "~v~(~D)"                 # thread with deleted (doesn't differentiate between all or partial)
+
+# 邮件内容页面邮件头部分高亮 ------------------------------------------
+
+# color header
+color header        green     black         "^(From)"
+color header        brightyellow    black         "^(Subject)"
+
+# 引文起始符号设置
+set quote_regexp = "^([ ]t]*[|>:}#])+"
+set quote_regexp = "^([ \t ]*[>])+"
+
+# 嵌套引文不同层的颜色
+color quoted        blue            black
+color quoted1       magenta         black
+color quoted2       cyan            black
+color quoted3       yellow          black
+color quoted4       red             black
+
+# urls
+color body       brightblue    black "(^|<| )mailto:[^ ]+@[^ ]( |>|$)"
+color body       brightblue    black "(^|<| )(http|https|ftp|file|telnet|news|finger)://[^ ]+( |>|$)"
+
+# *bold*, _underline_, and /italic/
+color body       brightcyan    black "(^| )\\*[^ ]+\\*( |$)"
+color body       brightcyan    black "(^| )_[^ ]+_( |$)"
+color body       brightcyan    black "(^| )/[^ ]+/( |$)"

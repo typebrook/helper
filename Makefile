@@ -59,3 +59,7 @@ task:
 gpg:
 	sudo ln -sf `pwd`/gpg-agent ~/.gnupg/gpg-agent.conf
 	gpgconf --reload gpg-agent
+
+mutt:
+	mkdir -p ~/.config/mutt
+	ln -s `pwd`/muttrc ~/.config/mutt/muttrc
