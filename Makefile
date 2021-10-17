@@ -62,4 +62,4 @@ gpg:
 
 mutt:
 	mkdir -p ~/.config/mutt
-	ln -s `pwd`/muttrc ~/.config/mutt/muttrc
+	ln -sf `pwd`/muttrc ~/.config/mutt/muttrc
