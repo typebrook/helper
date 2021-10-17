@@ -224,8 +224,8 @@ alias adb.view='adb shell am start -a android.intent.action.VIEW -d'
 alias adb.default='adb shell dumpsys package domain-preferred-apps'
 alias adb.list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
-alias adb.screenshot='DIR=/sdcard/Pictures/Screenshots/; adb pull $DIR/`adb shell ls -t $DIR | head -1` ~/Desktop'
-alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` ~/Desktop'
+alias adb.screenshot='DIR=/sdcard/Pictures/Screenshots/; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
+alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
 adb.push() { 
   adb push $1 /sdcard/Download 
 }
