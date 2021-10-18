@@ -45,8 +45,8 @@ bind index G last-entry
 bind index R group-reply
 bind index \cf next-page
 bind index \cb previous-page
-bind pager \cd half-down
-bind pager \cu half-up
+bind index \cd half-down
+bind index \cu half-up
 bind index } bottom-page
 bind index x tag-entry
 
