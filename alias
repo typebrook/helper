@@ -70,7 +70,7 @@ prompt() {
   && eval $(<$TMPFILE tee /dev/tty)
   rm $TMPFILE
 }
-files() {
+file.size() {
     find $1 -type f -print0 |\
     xargs -0 ls -l |\
     awk '{ n=int(log($5)/log(2));
@@ -404,6 +404,7 @@ short() {
 
 # pass
 alias chp='tig -C ~/.password-store'
+alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pgc='pass generate -c'
