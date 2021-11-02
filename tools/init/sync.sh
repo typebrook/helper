@@ -12,7 +12,7 @@ sync ~/.password-store
 sync ~/.vim_runtime
 
 # others repo
-check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
+#check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
 
 # thunderbird
 #if [[ `cat /etc/hostname` != 'vultr' ]]; then
