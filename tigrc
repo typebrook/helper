@@ -47,6 +47,7 @@ bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" git@
 bind generic US @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 bind generic Uf ?git fetch "%(prompt Fetch from which remote?: )"
 bind generic UU ?git remote update --prune
+bind generic UT ?sh -c "git pull %(remote) --tags --force"
 bind generic Uprf ?git fetch "%(prompt Fetch from which remote? )" pull/"%(prompt PR number: )"/head:pr
 bind generic UP !git swapProtocol
 
