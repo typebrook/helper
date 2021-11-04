@@ -188,8 +188,8 @@ bind main Zu ?>git submodule update
 bind main Zi ?>git submodule init
 
 # show diff based on revision
-bind main . >sh -c "git diff --patch-with-stat %(commit) | tig"
-bind main > >sh -c "git diff --patch-with-stat %(commit) --no-prefix -U1000 | tig"
+bind main . >sh -c "git diff --patch-with-stat %(commit) | tig show"
+bind main > >sh -c "git diff --patch-with-stat %(commit) --no-prefix -U1000 | tig show"
 
 # make patches
 bind main PP ?>git format-patch %(commit)
