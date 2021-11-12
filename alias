@@ -408,6 +408,7 @@ alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pgc='pass generate -c'
+alias words='cat /usr/share/dict/* | egrep "^[a-z]{4,8}$" | shuf | head -40 | xargs -n2'
 
 # tmp
 alias and='cd ~/git/geoBingAn.Android'
