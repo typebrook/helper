@@ -243,6 +243,8 @@ alias adb.list='adb shell dumpsys package d'
 alias rmcache='rm -rf ~/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/*'
 alias adb.screenshot='DIR=/sdcard/Pictures/Screenshots/; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
 alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
+alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
+alias adb.input='adb shell input text'
 adb.push() { 
   adb push $1 /sdcard/Download 
 }
@@ -306,15 +308,17 @@ alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 
 # image
-image_vertical() { 
+image.vertical() { 
   suffix=${1##*.}
   convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
 }
-image_horizontal() { 
+image.horizontal() { 
   convert "$@" +append output.png 
 }
-image_from_data_url() {
+image.from_data_url() {
+  [[ $1 == '' ]] && echo File name needed && return 1
   xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
+  identify $1
 }
 
 # thunderbird
