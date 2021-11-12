@@ -57,6 +57,7 @@ bind generic w :toggle ignore-case
 # see reflog, reset refernece
 bind generic gl ?git checkout HEAD@{"%(prompt Enter HEAD@{} number: )"}
 bind generic gL ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+bind reflog  c  ?git checkout %(commit)
 
 # highlight diff without +/-
 # set diff-show-signs = false
