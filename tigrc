@@ -255,6 +255,8 @@ bind status d ?>rm %(file)
 bind status D ?>git clean -df
 
 # solve conflict
+bind status M none
+bind status Mo @git checkout --ours -- %(file)
 bind status U ?>git reset --hard
 bind status gc @git clean --force
 bind status Ba @git rebase --abort
