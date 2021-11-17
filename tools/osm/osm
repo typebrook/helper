@@ -1,7 +1,8 @@
 #! /bin/sh
 
-#export OSM_SERVER=https://master.apis.dev.openstreetmap.org
+export OSM_TEST_SERVER=https://master.apis.dev.openstreetmap.org
 export OSM_SERVER=https://api.openstreetmap.org
+export OSM_TES_SERVER=https://api.openstreetmap.org
 
 export OSM_API=$OSM_SERVER/api/0.6
 export OSM_USER_PASSWD=$(cat $SETTING_DIR/tokens/osm 2>/dev/null)
