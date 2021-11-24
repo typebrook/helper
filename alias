@@ -263,6 +263,7 @@ alias oi='ogrinfo -al -so'
 # sample file
 alias sample.gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample.geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
+alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
 alias sample.shapefile='curl -O https://docs.mapbox.com/help/data/stations.zip && unzip stations.zip'
 alias sample.geotiff='curl -O https://docs.mapbox.com/help/data/landsat.tif'
 alias sample.csv='curl -O https://docs.mapbox.com/help/data/airports.csv'
