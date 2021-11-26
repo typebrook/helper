@@ -12,6 +12,7 @@ alias gitconfig='vim ~/.gitconfig'
 alias sshconfig='vim ~/.ssh/config'
 alias cdconfig='cd ~/config'
 alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
+alias xa='xargs'
 
 # vim
 alias v='vim'
