@@ -63,3 +63,6 @@ gpg:
 mutt:
 	mkdir -p ~/.config/mutt
 	ln -sf `pwd`/muttrc ~/.config/mutt/muttrc
+
+tmux:
+	ln -sf `pwd`misc/tmux.conf ~/.tmux.conf
