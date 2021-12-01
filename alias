@@ -169,7 +169,7 @@ release() {
 github_asset() {
   curl -LO https://github.com/$1/$2/releases/download/$3/$4
 }
-github_raw() {
+github.raw() {
   curl -O https://raw.githubusercontent.com/$1/$2/$3
 }
 
