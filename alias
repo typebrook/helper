@@ -11,6 +11,7 @@ alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
 alias sshconfig='vim ~/.ssh/config'
 alias cdconfig='cd ~/config'
+alias txconfig='vim ~/.tmux.conf'
 alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 alias xa='xargs'
 
