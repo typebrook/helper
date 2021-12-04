@@ -159,6 +159,15 @@ augroup END
 let g:instant_markdown_autostart = 0
 nnoremap <leader>md :InstantMarkdownPreview<CR>    
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Settings for Blog
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Generate static pages
+augroup vimwikiPush
+  autocmd!
+  autocmd VimLeave ~/git/makesite/*/*.md :!(cd ~/git/makesite && make &)
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
