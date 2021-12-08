@@ -27,6 +27,11 @@ alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
 
+# ssh
+sshtar() {
+    prompt "tar cf - foo | ssh topo 'cd ~/Downloads; tar xf -'"
+}
+
 # for custom scripts
 vs() { 
   which $1 && vim $(which $1)
@@ -199,7 +204,7 @@ cdss() {
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
-wg() { 
+wgg() { 
   vim ~/vimwiki/${1%%.md}.md 
 }
 wi() { 
