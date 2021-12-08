@@ -232,10 +232,10 @@ _lf_cd() {
 alias df='df -h'
 
 # docker
+alias dk='docker'
 alias dps='docker ps'
 alias dis='docker images'
 alias dc='docker-compose'
-alias ds='docker stop'
 alias drm='docker rm `docker ps -aq`'
 alias dr='docker run --rm -it'
 drb() {
