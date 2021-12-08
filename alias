@@ -28,8 +28,10 @@ alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
 alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
 
 # ssh
+alias cdssh='cd ~/.ssh'
+alias ptt='ssh bbsu@ptt.cc'
 sshtar() {
-    prompt "tar cf - foo | ssh topo 'cd ~/Downloads; tar xf -'"
+    prompt "tar cf - foo | ssh topo 'cd ~/Downloads; tar xf -' \nssh topo 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 
 # for custom scripts
@@ -239,10 +241,6 @@ alias dr='docker run --rm -it'
 drb() {
   docker run --rm -it --entrypoint /bin/bash $@
 }
-
-# ssh
-alias cdssh='cd ~/.ssh'
-alias ptt='ssh bbsu@ptt.cc'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
