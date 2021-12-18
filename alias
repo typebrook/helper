@@ -206,7 +206,7 @@ cdss() {
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
-wgg() { 
+wg() { 
   vim ~/vimwiki/${1%%.md}.md 
 }
 wi() { 
