@@ -397,9 +397,10 @@ trash() {
 
 # task
 alias tk='task'
-alias taskrc='vim ~/.taskrc'
+alias tkn='task next'
+alias tkc='task cont'
+alias tkrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
-alias cdk='cd ~/.task'
 alias li='tasksh'
 tt() {
   taskwarrior-tui
