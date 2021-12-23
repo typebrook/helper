@@ -329,6 +329,18 @@ image.from_data_url() {
   xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
   identify $1
 }
+image.text() {
+    convert \
+        -size 230x130 \
+        -background lightblue \
+        -font Noto-Sans-Bold \
+        -pointsize 25 \
+        -fill black \
+        -gravity NorthWest \
+        caption:"foo" \
+        -flatten \
+        caption1.jpge
+}
 
 # thunderbird
 alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &'
