@@ -359,7 +359,7 @@ token() {
 }
 unalias gr &>/dev/null
 gr() { 
-  grep -R $1 .  
+  grep -IR $1 .  
 }
 alias wcl='wc -l'
 alias findn='find . -iname'
