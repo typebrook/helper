@@ -80,7 +80,7 @@ cnoremap \\ \(\)<Left><Left>
 " Fix paste bug triggered by inoremaps
 set t_BE=
 
-" surround with '' or ""
+" surround with charactor
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
 vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
