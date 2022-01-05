@@ -20,14 +20,6 @@ vim:
 	rm -f ~/.vim_runtime/my_configs.vim
 	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
 
-tig:
-	rm -f ~/.tigrc
-	ln -s `pwd`/tigrc ~/.tigrc
-	if [ ! -d "$(HOME)/git/tig" ]; then \
-		git clone --depth=100 --origin my git@github.com:typebrook/tig ~/git/tig; \
-		cd ~/git/tig && git remote add origin git@github.com:jonas/tig.git; \
-	fi
-
 zsh:
 	curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
 
@@ -66,3 +58,8 @@ mutt:
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
+
+blog:
+	if [ ! -d "$(HOME)/blog" ]; then \
+		git clone ssh://topo/~/blog; \
+	fi
