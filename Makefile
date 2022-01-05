@@ -59,6 +59,7 @@ mutt:
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
 
+# Blog on my VPS
 blog:
 	if [ ! -d "$(HOME)/blog" ]; then \
 		git clone ssh://topo/~/blog; \
