@@ -6,6 +6,7 @@ sync() {
   cd $1 && git pull --quiet || echo in `pwd` >/dev/tty &
 }
 sync $SETTING_DIR
+sync ~/blog
 sync ~/vimwiki
 sync ~/.task
 sync ~/.password-store
