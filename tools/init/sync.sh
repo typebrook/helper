@@ -2,8 +2,7 @@
 
 # my repo
 sync() {
-  [[ -d $1 || -z $(git remote -v) ]] && return
-  cd $1
+  { cd $1 && [[ -n $(git remote -v) ]] || return ; } 2>/dev/null
   git pull --quiet || echo in `pwd` >/dev/tty &
 }
 sync $SETTING_DIR
