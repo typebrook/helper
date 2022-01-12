@@ -4,7 +4,7 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
 
 # Config shell
-case $0 in
+case $SHELL in
   *zsh)
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)

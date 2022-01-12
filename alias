@@ -208,10 +208,10 @@ cdss() {
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 wg() { 
-  vim ~/vimwiki/${1%%.md}.md 
+  vim ~/wiki/md/${1%%.md}.md 
 }
 wi() { 
-  cat ~/vimwiki/$1.md 
+  cat ~/wiki/md/${1%%.md}.md 
 }
 
 # crontab
