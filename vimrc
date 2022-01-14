@@ -150,12 +150,12 @@ nnoremap <leader>i I- <esc>l
 nnoremap <leader>I :s/^[ ]*- \(\[.\] \)*//<CR>
 nmap <leader>D dd:VimwikiMakeDiaryNote<CR>Gp:w!<CR>:Bclose<CR>
 vnoremap <leader>D d:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
-let g:vimwiki_list = [{'path': '~/wiki', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
 " Git push quietly whenever leaving vim with VimWiki files
 augroup vimwikiPush
   autocmd!
-  autocmd VimLeave ~/wiki/* :!(cd ~/wiki && git add % && git commit -am update && git push origin >/dev/null 2>&1 &)
+  autocmd VimLeave ~/vimwiki/* :!(cd ~/vimwiki && git add * && git commit -am update && git push origin >/dev/null 2>&1 &)
 augroup END
 
 " Configuration fro vim-instant-markdown
