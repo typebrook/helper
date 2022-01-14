@@ -4,15 +4,16 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
 
 # Config shell
-case $SHELL in
-  *zsh)
+shell=$(cat /proc/$$/cmdline | tr -d '\0')
+case $shell in
+  *zsh*)
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)
     autoload -U deer
     zle -N deer
     bindkey '\ek' deer
     ;;
-  *bash)
+  *bash*)
     shopt -s extglob
     ;;
 esac
