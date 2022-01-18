@@ -99,13 +99,6 @@ file.size() {
     }'
 }
 
-# package
-alias ai='sudo apt install' # apt install
-alias aptu='sudo apt update && sudo apt upgrade'
-alias si='sudo snap install' # snap install
-alias pi='sudo pip3 install' # python install
-alias ni='sudo npm install -g' # nodejs install
-
 # pacman
 alias pac='sudo pacman -S' # pacman install
 alias psy='sudo pacman -Syy'
@@ -117,7 +110,9 @@ alias pss='pacman -Ss'
 alias yss='yay -Ss'
 alias pqi='pacman -Qi'
 alias pql='pacman -Qlq'
-alias pqlg='pacman -Qlq | grep bin'
+pqlg() { 
+    pacman -Qlq $1 | grep bin
+}
 alias yql='yay -Ql'
 alias pf='pacman -F'
 alias yf='yay -F'
@@ -141,7 +136,7 @@ alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
-alias cdb='cd ~/git/bashblog'
+alias cdb='cd ~/git/blog'
 alias cdmd='cd ~/git/map/deploy'
 
 # git
