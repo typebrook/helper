@@ -1,5 +1,7 @@
-# load custom aliases
 export SETTING_DIR=${SETTING_DIR:=$HOME/settings}
+export EDITOR=vim
+
+# load custom aliases
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
 
@@ -9,6 +11,7 @@ case $shell in
   *zsh*)
     setopt extended_glob
     fpath=($SETTING_DIR/zsh $fpath)
+    compinit
     autoload -U deer
     zle -N deer
     bindkey '\ek' deer
@@ -17,9 +20,6 @@ case $shell in
     shopt -s extglob
     ;;
 esac
-
-# set default editor
-export EDITOR=vim
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
@@ -33,12 +33,8 @@ xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
 # Mail
 MAIL=$HOME/Maildir
 
-# load custom functions
-OSM_UTIL_DIR=$SETTING_DIR/tools/osm
-source $OSM_UTIL_DIR/osm
-
 # sync with important git repos
-$SETTING_DIR/tools/init/sync.sh
+sync.sh
 
 # local
 PATH=$PATH:$HOME/.local/bin
