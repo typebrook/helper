@@ -3,7 +3,7 @@ export EDITOR=vim
 
 # load custom aliases
 source $SETTING_DIR/alias
-[[ -d $SETTING_DIR/private ]] && source $SETTING_DIR/private/*
+[[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
 # Config shell
 shell=$(cat /proc/$$/cmdline | tr -d '\0')

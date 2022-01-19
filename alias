@@ -446,6 +446,8 @@ alias cdtt='cd ~/git/template'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
 alias tw='tiddlywiki'
+alias tw='tiddlywiki'
+alias vc='vultr-cli'
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
