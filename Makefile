@@ -1,7 +1,7 @@
 .ONESHELL:
 .PHONY: *
 
-all: git vim tig gpg
+all: git tig vim tig gpg
 	mkdir -p ~/git
 
 git:
@@ -19,8 +19,7 @@ vim:
 	fi
 	# vim-plug
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	rm -f ~/.vim_runtime/my_configs.vim
-	ln -s `pwd`/vimrc ~/.vim_runtime/my_configs.vim
+	ln -sf `pwd`/vimrc ~/.vim_runtime/my_configs.vim
 
 zsh:
 	curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
@@ -71,4 +70,3 @@ pass:
 	if [ ! -d "$(HOME)/.password-store" ]; then
 		git clone ssh://topo/~/.password-store ~/.password-store;
 	fi
-

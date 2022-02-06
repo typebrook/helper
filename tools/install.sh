@@ -19,6 +19,7 @@ fi
 # Write initial commands into .bashrc or .zshrc
 sed -i'.bak' "\^# $REPO^, /^$/ d" $RCFILE
 cat >>$RCFILE <<EOF
+
 # $REPO
 export SETTING_DIR=$SETTING_DIR
 source \$SETTING_DIR/tools/init/load-settings.sh
