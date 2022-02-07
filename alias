@@ -203,7 +203,8 @@ cdss() {
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
 ww() { 
-  vim ~/vimwiki/${1%%.md}.md 
+  wiki=${1%%.md}
+  vim ~/vimwiki/${wiki:-index}.md 
 }
 wg() { 
   grep -r "$@" ~/vimwiki
