@@ -18,7 +18,7 @@ alias xa='xargs'
 # vim
 alias v='vim'
 alias sv='sudo vim'
-alias vl="vim -c ':CtrlPMRU<CR>'"
+alias vl="vim -c ':MRU'"
 alias ve="vim -c ':e! ~/.vim_runtime/my_configs.vim'"
 alias vr='vim -R'
 alias vu='vim -u NONE'
