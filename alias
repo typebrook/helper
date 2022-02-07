@@ -452,9 +452,15 @@ alias stew='cd ~/git/mapstew'
 alias tw='tiddlywiki'
 alias tw='tiddlywiki'
 alias vc='vultr-cli'
+check_repo() {
+    cd $1
+    echo check $1
+    git status -s
+    [[ -n $(git cherry origin) ]] 2>/dev/null && local status="\e[31m[ahead]\e[0m"
+}
 check() {
-    cd $SETTING_DIR && echo check `pwd` && git status -s
-    cd $HOME/.password-store && echo check `pwd` && git status -s
+    check_repo $SETTING_DIR
+    check_repo $HOME/.password-store
 }
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
