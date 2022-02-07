@@ -7,6 +7,7 @@ all: git tig vim tig gpg
 git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/gitconfig ~/.gitconfig
+	mkdir -p ~/HOME/git
 
 tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
