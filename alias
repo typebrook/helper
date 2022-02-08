@@ -23,7 +23,7 @@ alias ve="vim -c ':e! ~/.vim_runtime/my_configs.vim'"
 alias vr='vim -R'
 alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
-alias vi='vim ~/vimwiki/index.md'
+alias vi='vim ~/vimwiki/diary/diary.md'
 alias vq='vim ~/buffer'
 alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
 
