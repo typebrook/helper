@@ -249,6 +249,9 @@ Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
+Plug 'junegunn/fzf.vim'
+Plug 'michal-h21/vim-zettel'
+
 " Initialize plugin system
 call plug#end()
 
