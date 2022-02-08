@@ -23,9 +23,9 @@ alias ve="vim -c ':e! ~/.vim_runtime/my_configs.vim'"
 alias vr='vim -R'
 alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
+alias vi='vim ~/vimwiki/index.md'
 alias vq='vim ~/buffer'
-alias cdv='cd ~/.vim_runtime' # amix/vimrc repo
-alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
+alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
 
 # ssh
 alias cdssh='cd ~/.ssh'
@@ -447,6 +447,7 @@ alias cdm='cd ~/git/mapstew'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias cdtt='cd ~/git/template'
+alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
 alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
 alias tw='tiddlywiki'
