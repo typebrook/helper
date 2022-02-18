@@ -62,8 +62,8 @@ color status        brightwhite     black
 color indicator     white           blue
 color tree          magenta         black   # arrows in threads
 
-# 列表部分 -------------------------------------------------------
-# 高亮不同状态的邮件, 具体的pattern(例如~N)参见mutt manual的4.2节
+# For list -------------------------------------------------------
+# Highlight mails by their status. For a specific pattern(e.g. ~N), pleas read mutt manual 4.2
 
 color index         red             black         "~A"                        # all messages
 color index         brightred       black         "~E"                        # expired messages
@@ -94,17 +94,17 @@ color index         green           white           "~N~v~(~F~N)"             # 
 color index         green           white           "~N~v~(~F)"               # collapsed thread with unread parent, no unread inside, but some flagged
 color index         yellow          red             "~v~(~D)"                 # thread with deleted (doesn't differentiate between all or partial)
 
-# 邮件内容页面邮件头部分高亮 ------------------------------------------
+# Highlight mail header ------------------------------------------
 
 # color header
 color header        green     black         "^(From)"
 color header        brightyellow    black         "^(Subject)"
 
-# 引文起始符号设置
+# Set quote's starting symbol
 set quote_regexp = "^([ ]t]*[|>:}#])+"
 set quote_regexp = "^([ \t ]*[>])+"
 
-# 嵌套引文不同层的颜色
+# Highlight quotes by indent
 color quoted        blue            black
 color quoted1       magenta         black
 color quoted2       cyan            black
