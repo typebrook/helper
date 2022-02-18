@@ -1,7 +1,7 @@
 .ONESHELL:
 .PHONY: *
 
-all: git vim tig gpg
+all: git vim git tig gpg
 	mkdir -p ~/git
 
 git:
