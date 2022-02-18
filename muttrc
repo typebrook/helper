@@ -16,6 +16,12 @@ set record = "+Sent"
 set trash = "+Trash"
 set postponed = "+Drafts"
 
+set pgp_use_gpg_agent=yes
+set crypt_use_gpgme=yes
+# replace D21D8761 with your gpg key id
+set pgp_sign_as=6DD8C14A
+set pgp_timeout=300
+
 #mailboxes =INBOX =mbox =Sent =Trash =Drafts #=talk-tw =pay =service
 
 subscribe talk-tw@openstreetmap.org
