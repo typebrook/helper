@@ -5,9 +5,6 @@ export EDITOR=vim
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
-# set caps as ctrl under X
-setxkbmap -option ctrl:nocaps 2>/dev/null
-
 # Config shell
 shell=$(cat /proc/$$/cmdline | tr -d '\0')
 case $shell in
