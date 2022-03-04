@@ -13,7 +13,6 @@ alias sshconfig='vim ~/.ssh/config'
 alias cdconfig='cd ~/config'
 alias txconfig='vim ~/.tmux.conf'
 alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
-alias xa='xargs'
 
 # vim
 alias v='vim'
@@ -66,6 +65,7 @@ alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 alias pst="pstree -ps $$"
 alias duu='du -hd 1 . | sort -hr'
+alias xa='xargs'
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1
