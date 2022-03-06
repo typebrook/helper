@@ -152,7 +152,7 @@ alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 check_repo() {
-    cd $1
+    cd $1 2>/dev/null || return 0
     echo check $1
     git status -s
     [[ -n $(git cherry origin) ]] 2>/dev/null && print "\e[31m[ahead]\e[0m"
@@ -162,7 +162,7 @@ check() {
     check_repo $HOME/.password-store
     check_repo $HOME/vimwiki
 }
-alias ch='check 2>/dev/null'
+alias ch='check'
 
 # github
 export GITHUB_API='https://api.github.com'
