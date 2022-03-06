@@ -162,7 +162,7 @@ check() {
     check_repo $HOME/.password-store
     check_repo $HOME/vimwiki
 }
-alias ch='check'
+alias ch='check 2>/dev/null'
 
 # github
 export GITHUB_API='https://api.github.com'
