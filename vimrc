@@ -167,9 +167,9 @@ nnoremap <leader>md :InstantMarkdownPreview<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Generate static pages
-augroup blogPush
+augroup blogRebuild
   autocmd!
-  autocmd VimLeave ~/git/makesite/*/*.md :!(cd ~/git/makesite && make &)
+  autocmd VimLeave ~/blog/*.md :!(cd ~/blog && hugo &)
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

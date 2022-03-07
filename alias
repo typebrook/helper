@@ -469,6 +469,7 @@ alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias stew='cd ~/git/mapstew'
 alias vc='vultr-cli'
+alias latest='find . -type f | xargs ls -ltr | tail'
 #hugo(){
 #    docker run --rm \
 #        -u `id -u`:`id -g` \
