@@ -25,6 +25,9 @@ alias vv='vim ~/vimwiki/index.md'
 alias vi='vim ~/vimwiki/diary/diary.md'
 alias vq='vim ~/buffer'
 alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
+vh () {
+    vim "$1" && hugo
+}
 
 # ssh
 alias cdssh='cd ~/.ssh'
@@ -455,27 +458,25 @@ words() {
     cat /usr/share/dict/usa | egrep "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
 }
 
+# Nginx
+alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
+alias cdngx='cd /etc/nginx'
+
 # tmp
-alias and='cd ~/git/geoBingAn.Android'
 alias cdS='cd ~/git/StreetComplete'
-alias cdand='cd ~/git/sample'
 alias cdm='cd ~/git/mapstew'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
-alias cdtt='cd ~/git/template'
-alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
-alias cdngx='cd /etc/nginx'
 alias stew='cd ~/git/mapstew'
-alias tw='tiddlywiki'
-alias tw='tiddlywiki'
 alias vc='vultr-cli'
-hugo(){
-    docker run --rm \
-        -u `id -u`:`id -g` \
-        -v `pwd`:/src \
-        klakegg/hugo \
-        $@
-}
+#hugo(){
+#    docker run --rm \
+#        -u `id -u`:`id -g` \
+#        -v `pwd`:/src \
+#        $EXTRA \
+#        klakegg/hugo \
+#        $@
+#}
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
