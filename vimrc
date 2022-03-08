@@ -242,15 +242,15 @@ call plug#begin('~/.vim/plugged')
 Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
-Plug 'lifepillar/pgsql.vim'
+"Plug 'lifepillar/pgsql.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'iberianpig/tig-explorer.vim'
-Plug 'rust-lang/rust.vim'
-Plug 'racer-rust/vim-racer'
-Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
-
+"Plug 'iberianpig/tig-explorer.vim'
+"Plug 'rust-lang/rust.vim'
+"Plug 'racer-rust/vim-racer'
+"Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'junegunn/fzf.vim'
 Plug 'michal-h21/vim-zettel'
+Plug 'rlue/vim-barbaric'
 
 " Initialize plugin system
 call plug#end()
