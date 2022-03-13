@@ -174,7 +174,7 @@ alias ch='check'
 
 # github
 export GITHUB_API='https://api.github.com'
-export GITHUB_API_TOKEN="$(cat $SETTING_DIR/tokens/github 2>/dev/null)"
+export GITHUB_API_TOKEN="~/.ssh/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
 github() {
   xdg-open https://github.com/$1/$2
