@@ -139,7 +139,7 @@ alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
-alias cdb='cd ~/git/blog'
+alias cdb='cd ~/blog'
 alias cdmd='cd ~/git/map/deploy'
 
 # git
