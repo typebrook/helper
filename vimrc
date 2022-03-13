@@ -88,6 +88,7 @@ vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap , <ESC>`<i<<ESC>`>la><ESC>
+vnoremap 8 <ESC>`<i*<ESC>`>la*<ESC>
 
 " abbrev
 iabbrev @@ typebrook@gmail.com
@@ -169,7 +170,7 @@ nnoremap <leader>md :InstantMarkdownPreview<CR>
 " Generate static pages
 augroup blogRebuild
   autocmd!
-  autocmd VimLeave ~/blog/*.md :!(cd ~/blog && hugo &)
+  autocmd BufWritePost ~/blog/*.md :!(cd ~/blog && hugo &>/dev/null &)
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

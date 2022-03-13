@@ -84,6 +84,11 @@ prompt() {
   && eval $(<$TMPFILE tee /dev/tty)
   rm $TMPFILE
 }
+file.sort() {
+    find $1 -type f -print0 |\
+    xargs -0 ls --sort=size -lh |\
+    head -20
+}
 file.size() {
     find $1 -type f -print0 |\
     xargs -0 ls -l |\
@@ -139,7 +144,7 @@ alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
-alias cdb='cd ~/git/blog'
+alias cdb='cd ~/blog'
 alias cdmd='cd ~/git/map/deploy'
 
 # git
