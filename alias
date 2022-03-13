@@ -357,10 +357,10 @@ image.text() {
         -font Noto-Sans-Bold \
         -pointsize 25 \
         -fill black \
-        -gravity NorthWest \
-        caption:"foo" \
+        -gravity Center \
+        caption:"${1:=foo}" \
         -flatten \
-        caption1.jpge
+        "${2:=foo}".jpg
 }
 
 # thunderbird
