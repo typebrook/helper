@@ -219,6 +219,8 @@ cdss() {
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='cd ~/vimwiki && tig --all'
+alias today='vim ~/vimwiki/diary/`date +'%Y-%m-%d'`.md'
+alias to='today'
 ww() { 
   wiki=${1%%.md}
   vim ~/vimwiki/${wiki:-index}.md 
