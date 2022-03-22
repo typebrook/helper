@@ -247,7 +247,7 @@ Plug 'tpope/vim-surround'
 "Plug 'lifepillar/pgsql.vim'
 Plug 'vimwiki/vimwiki'
 "Plug 'iberianpig/tig-explorer.vim'
-"Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim'
 "Plug 'racer-rust/vim-racer'
 "Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'junegunn/fzf.vim'
