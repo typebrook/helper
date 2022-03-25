@@ -140,6 +140,7 @@ alias cdc='cd ~/.config'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
+alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdb='cd ~/blog'
 alias cdmd='cd ~/git/map/deploy'
@@ -453,7 +454,7 @@ short() {
 
 # pass
 alias chp='tig -C ~/.password-store'
-alias cdpass='cd ~/.password-store'
+alias 5cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
