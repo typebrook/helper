@@ -71,3 +71,6 @@ pass:
 	if [ ! -d "$(HOME)/.password-store" ]; then
 		git clone ssh://topo/~/.password-store ~/.password-store;
 	fi
+
+openbox:
+	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
