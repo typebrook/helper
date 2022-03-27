@@ -142,8 +142,14 @@ alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
-alias cdb='cd ~/blog'
 alias cdmd='cd ~/git/map/deploy'
+
+# blog
+alias cdb='cd ~/blog'
+vp() { 
+  post=$1 && shift
+  vim $@ ~/blog/content/posts/$post
+}
 
 # git
 unalias gc &> /dev/null # override zsh plugin alias
