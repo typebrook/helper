@@ -467,7 +467,7 @@
         <command>takeshot --win</command>
       </action>
     </keybind>
-    <keybind key="C-A-Print">
+    <keybind key="W-s">
       <action name="Execute">
         <command>takeshot --area</command>
       </action>
@@ -520,7 +520,7 @@
         <command>~/.config/openbox/rofi/bin/powermenu</command>
       </action>
     </keybind>
-    <keybind key="W-s">
+    <keybind key="C-A-Print">
       <action name="Execute">
         <command>~/.config/openbox/rofi/bin/screenshot</command>
       </action>
