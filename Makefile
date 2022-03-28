@@ -74,3 +74,9 @@ pass:
 
 openbox:
 	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
+
+xkb:
+	sudo cat >/etc/profile.d/xkb.sh <<EOF
+	#! /bin/env bash
+	setxkbmap -option ctrl:nocaps 2>/dev/null
+	EOF
