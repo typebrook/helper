@@ -57,6 +57,7 @@ gpg:
 mutt:
 	mkdir -p ~/.config/mutt
 	ln -sf `pwd`/muttrc ~/.config/mutt/muttrc
+	ln -sf `pwd`/misc/mailcap ~/.mailcap
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf

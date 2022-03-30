@@ -33,6 +33,9 @@ set header = no
 set pager_stop
 set sleep_time=0 # When changing folder
 
+# Open mail externally
+bind attach x view-mailcap
+
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim%E9%A3%8E%E6%A0%BC%E9%94%AE%E4%BD%8D%E7%BB%91%E5%AE%9A
 bind pager G bottom
