@@ -454,8 +454,11 @@ up() {
     curl -F"file=@${1}" http://0x0.st
     #curl -F "file=@${1}" https://api.anonfiles.com/upload
 }
-sshup() {
+ssh.up() {
     scp "$1" topo:~/public 
+}
+ssh.down() {
+    ssh topo rm ~/public/"$1"
 }
 short() {
     curl -F"shorten=${1}" http://0x0.st
