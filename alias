@@ -221,7 +221,7 @@ upload_tig() {
 
 # about custom settings
 alias cds="cd $SETTING_DIR"
-alias chs="cd $SETTING_DIR && tig status"
+alias chs="tig -C $SETTING_DIR status"
 cdss() {
   cd $SETTING_DIR/tools/$1 || cd $SETTING_DIR/tools 
 }
