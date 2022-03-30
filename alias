@@ -463,7 +463,7 @@ short() {
 
 # pass
 alias chp='tig -C ~/.password-store'
-alias 5cdpass='cd ~/.password-store'
+alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
