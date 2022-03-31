@@ -15,9 +15,11 @@ case $shell in
     autoload -U deer
     zle -N deer
     bindkey '\ek' deer
+    alias history='history -i'
     ;;
   *bash*)
     shopt -s extglob
+    HISTTIMEFORMAT='%Y-%m-%d %T '
     ;;
 esac
 
