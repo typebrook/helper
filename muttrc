@@ -1,6 +1,7 @@
 set folder = "imaps://pham@mail.topo.tw:993"
 set imap_pass = `pass pham@topo.tw`
 set message_cachedir = "~/.mail"
+set header_cache     = "~/.mail"
 
 set smtp_url = "smtp://pham@mail.topo.tw:25"
 set smtp_pass = "$imap_pass"
