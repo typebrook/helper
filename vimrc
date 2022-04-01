@@ -88,6 +88,7 @@ vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap , <ESC>`<i<<ESC>`>la><ESC>
+vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
 vnoremap 8 <ESC>`<i*<ESC>`>la*<ESC>
 vnoremap z <ESC>`<i「<ESC>`>la」<ESC>
 
@@ -153,10 +154,10 @@ nnoremap <leader>I :s/^[ ]*- \(\[.\] \)*//<CR>
 nmap <leader>D dd:VimwikiMakeDiaryNote<CR>Gp:w!<CR>:Bclose<CR>
 vnoremap <leader>D d:VimwikiMakeDiaryNote<CR>Gp:w!<CR>
 let g:vimwiki_list = [{
-    'path': '~/vimwiki/', 
-    'syntax': 'markdown', 
-    'ext': '.md'
-}]
+    \ 'path': '~/vimwiki/', 
+    \ 'syntax': 'markdown', 
+    \ 'ext': '.md',
+    \ }]
 
 " Git push quietly whenever leaving vim with VimWiki files
 augroup vimwikiPush

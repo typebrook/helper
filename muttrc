@@ -31,8 +31,9 @@ set send_charset = "us-ascii:utf-8"
 set header = no
 set pager_stop
 set sleep_time=0 # When changing folder
-set timeout=10
-set quit=ask-no
+set timeout = 10
+set quit = ask-no
+set sort = threads
 
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim%E9%A3%8E%E6%A0%BC%E9%94%AE%E4%BD%8D%E7%BB%91%E5%AE%9A
@@ -49,7 +50,8 @@ bind pager \cj next-entry
 bind pager \ck previous-entry
 bind index g noop
 bind index gg first-entry
-bind index l select-entry
+#bind index l select-entry
+bind index <Return> sync-mailbox
 bind index \cl limit
 bind index G last-entry
 bind index R group-reply
@@ -61,6 +63,7 @@ bind index } bottom-page
 bind index x tag-entry
 bind attach x view-mailcap
 macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's configuration file"
+macro index <Return> ":exec sync-mailbox sidebar-open\n" "Sync Mailbox"
 
 # Sidebar
 mailboxes =INBOX =mbox =pay =Sent =Trash =Drafts =talk-tw =service =keep
