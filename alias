@@ -455,7 +455,12 @@ up() {
     #curl -F "file=@${1}" https://api.anonfiles.com/upload
 }
 ssh.up() {
-    scp "$1" topo:~/public 
+    scp "$1" topo:~/public/"$2" 
+}
+ssh.up.today() {
+    DATE=$(date --iso-8601)
+    ssh topo mkdir ~/public/$DATE
+    ssh.up "$1" $DATE
 }
 ssh.down() {
     ssh topo rm ~/public/"$1"
