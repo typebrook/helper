@@ -58,7 +58,8 @@ alias ju='sudo journalctl -u'
 path() {
     echo $PATH
 }
-alias fd="echo /proc/$$/fd; ls -l /proc/$$/fd"
+fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
+port() { sudo lsof -i :$1; }
 alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 llw() { which $1 | xargs ls -alh; }
