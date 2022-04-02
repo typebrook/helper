@@ -1,31 +1,31 @@
+# IMAP/SMTP settings
 set folder = "imaps://pham@mail.topo.tw:993/"
 set imap_pass = `pass pham@topo.tw`
 set header_cache     = "~/.cache/mutt"
 set message_cachedir = "~/.cache/mutt"
-
 set smtp_url = "smtp://pham@mail.topo.tw:25"
 set smtp_pass = "$imap_pass"
 
+# Identify meself
 set from = "pham@topo.tw"
 set realname = "謝晉凡 Hsieh Chin Fan"
 set signature="$SETTING_DIR/.signature"
+set pgp_use_gpg_agent=yes
+set crypt_use_gpgme=yes
+set pgp_timeout=300
+set pgp_sign_as=6DD8C14A # replace 6DD8C14A with your gpg key id
 
+# Basic Mailbox
 set spoolfile = "+INBOX"
 set mbox= "+mbox"
 set move = yes
 set record = "+Sent"
 set trash = "+Trash"
 set postponed = "+Drafts"
-set index_format = "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
-
-set pgp_use_gpg_agent=yes
-set crypt_use_gpgme=yes
-set pgp_timeout=300
-# replace 6DD8C14A with your gpg key id
-set pgp_sign_as=6DD8C14A
 
 subscribe talk-tw@openstreetmap.org
 
+# Interface
 set editor = "vim"
 set charset = "utf-8"
 set send_charset = "us-ascii:utf-8"
@@ -94,7 +94,7 @@ color sidebar_divider color8 black
 color sidebar_flagged red black
 color sidebar_new green black
 
-# basic colors -------------------------------------------------------
+# basic colors
 color normal        white           black
 color error         red             black
 color tilde         white           black
@@ -106,9 +106,8 @@ color status        brightwhite     black
 color indicator     white           blue
 color tree          magenta         black   # arrows in threads
 
-# For list -------------------------------------------------------
+# For list
 # Highlight mails by their status. For a specific pattern(e.g. ~N), pleas read mutt manual 4.2
-
 color index         red             black         "~A"                        # all messages
 color index         brightred       black         "~E"                        # expired messages
 color index         brightcyan      black         "~N"                        # new messages
@@ -138,8 +137,6 @@ color index         yellow          white         "~v~(~F~N)"                 # 
 color index         green           white         "~N~v~(~F~N)"               # collapsed thread with unread parent & flagged
 color index         green           white         "~N~v~(~F)"                 # collapsed thread with unread parent, no unread inside, but some flagged
 color index         yellow          red           "~v~(~D)"                   # thread with deleted (doesn't differentiate between all or partial)
-
-# Highlight mail header ------------------------------------------
 
 # color header
 color header        green           black         "^(From)"
