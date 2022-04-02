@@ -81,3 +81,6 @@ xkb:
 	#! /bin/env bash
 	setxkbmap -option ctrl:nocaps 2>/dev/null
 	EOF
+
+urlview:
+	ln -sf `pwd`/misc/urlview ~/.urlview
