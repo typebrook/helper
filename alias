@@ -460,7 +460,7 @@ ssh.up() {
 }
 ssh.up.today() {
     DATE=$(date --iso-8601)
-    ssh topo mkdir ~/public/$DATE
+    ssh topo mkdir -p ~/public/$DATE
     ssh.up "$1" $DATE
 }
 ssh.down() {
