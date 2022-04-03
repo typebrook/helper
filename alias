@@ -151,8 +151,8 @@ alias cdmd='cd ~/git/map/deploy'
 # blog
 alias cdb='cd ~/blog'
 vp() { 
-  post=$1 && shift
-  vim $@ ~/blog/content/posts/$post
+  post="$(find ~/blog/content -name "$1")" && shift
+  vim $@ $post
 }
 
 # git

@@ -1,7 +1,7 @@
 #compdef vp
 
 function _vp() {
-    compadd -S '' $(cd ~/blog/content/posts && ls ${words[2]}*)
+  compadd -S '' $(find ~/blog/content -name '*.md' | grep -o '[^/]*$')
 }
 
 _vp
