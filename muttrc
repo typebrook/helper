@@ -37,6 +37,7 @@ set quit = ask-no
 set sort = threads
 set pager_index_lines = 5
 set markers = no # Remove '+' for long links with limited terminal width
+set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
 
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim%E9%A3%8E%E6%A0%BC%E9%94%AE%E4%BD%8D%E7%BB%91%E5%AE%9A

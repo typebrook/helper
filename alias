@@ -54,10 +54,7 @@ alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
 alias m='mutt'
 alias ju='sudo journalctl -u'
-# Should not use alias, because $PATH is not initialized
-path() {
-    echo $PATH
-}
+path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
 alias src="source $HOME/.$(basename $SHELL)rc"
@@ -70,13 +67,12 @@ alias sound="echo -ne '\a'"
 alias pst="pstree -ps $$"
 alias duu='du -hd 1 . | sort -hr'
 alias xa='xargs'
+alias latest='find . -type f | xargs ls -ltr | tail'
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1
 }
-_move_to_tmp() { 
-  mv $@ /tmp 
-}
+_move_to_tmp() { mv $@ /tmp; }
 prompt() {
   TMPFILE=$(mktemp)
   echo -e "$@" >$TMPFILE \
@@ -229,19 +225,12 @@ cdss() {
 
 # about vimwiki
 alias cdw='cd ~/vimwiki'
-alias chw='cd ~/vimwiki && tig --all'
+alias chw='tig -C ~/vimwiki'
 alias today='vim ~/vimwiki/diary/`date +'%Y-%m-%d'`.md'
 alias to='today'
-ww() { 
-  wiki=${1%%.md}
-  vim ~/vimwiki/${wiki:-index}.md 
-}
-wg() { 
-  grep -r "$@" ~/vimwiki
-}
-wi() { 
-  cat ~/vimwiki/${1%%.md}.md 
-}
+ww() { vim ~/vimwiki/${1%%.md}.md; }
+wg() { grep -r "$@" ~/vimwiki; }
+wi() { cat ~/vimwiki/${1%%.md}.md; }
 
 # crontab
 alias ce='crontab -e'
@@ -492,7 +481,7 @@ alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias stew='cd ~/git/mapstew'
 alias vc='vultr-cli'
-alias latest='find . -type f | xargs ls -ltr | tail'
+alias jl='jrnl'
 #hugo(){
 #    docker run --rm \
 #        -u `id -u`:`id -g` \
