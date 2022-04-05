@@ -52,7 +52,6 @@ bind index \ck previous-entry
 bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser gg first-entry
-bind index R group-reply
 bind index \cf next-page
 bind index \cb previous-page
 bind index \cd half-down
