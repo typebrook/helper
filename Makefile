@@ -51,13 +51,13 @@ task:
 	fi
 
 gpg:
-	ln -sf `pwd`/gpg-agent ~/.gnupg/gpg-agent.conf
+	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
 	gpgconf --reload gpg-agent
 
 mutt:
 	mkdir -p ~/.config/mutt
-	ln -sf `pwd`/muttrc ~/.config/mutt/muttrc
-	ln -sf `pwd`/misc/mailcap ~/.mailcap
+	ln -sf `pwd`/mutt/muttrc ~/.config/mutt/muttrc
+	ln -sf `pwd`/mutt/mailcap ~/.mailcap
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
