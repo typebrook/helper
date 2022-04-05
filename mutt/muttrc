@@ -9,7 +9,7 @@ set smtp_pass = "$imap_pass"
 # Identify meself
 set from = "pham@topo.tw"
 set realname = "謝晉凡 Hsieh Chin Fan"
-set signature="$SETTING_DIR/.signature"
+set signature="$SETTING_DIR/mutt/.signature"
 set pgp_use_gpg_agent=yes
 set crypt_use_gpgme=yes
 set pgp_timeout=300

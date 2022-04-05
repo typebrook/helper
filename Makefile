@@ -51,7 +51,7 @@ task:
 	fi
 
 gpg:
-	ln -sf `pwd`/gpg-agent ~/.gnupg/gpg-agent.conf
+	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
 	gpgconf --reload gpg-agent
 
 mutt:
