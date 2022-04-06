@@ -154,7 +154,7 @@ vp() {
 # git
 unalias gc &> /dev/null # override zsh plugin alias
 gc() {
-  git clone $1 && cd $(basename $1) 
+  git clone $1 && cd $(basename ${1%.git}) 
 }
 gc1() {
   git clone --depth=1 $1 && cd $(basename $1) 
