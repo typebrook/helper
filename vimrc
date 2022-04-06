@@ -86,6 +86,7 @@ vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
 vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>gvlol
+inoremap [ []<C-O>h
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap , <ESC>`<i<<ESC>`>la><ESC>
 vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
