@@ -10,6 +10,7 @@ alias tigrc="vim $SETTING_DIR/tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
 alias sshconfig='vim ~/.ssh/config'
+alias sshauth='vim ~/.ssh/authorized_keys'
 alias cdconfig='cd ~/config'
 alias txconfig='vim ~/.tmux.conf'
 alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
@@ -147,8 +148,17 @@ alias cdmd='cd ~/git/map/deploy'
 # blog
 alias cdb='cd ~/blog'
 vp() { 
-  post="$(find ~/blog/content -name "$1")" && shift
-  vim $@ $post
+  cd ~/blog
+  filename="${1%.md}.md"
+  post="$(find content -name "$filename")"
+
+  if [ -z "$post" ]; then
+      hugo new posts/"$filename"
+      post="content/posts/$filename"
+  fi
+
+  shift
+  vim $@ "$post"
 }
 
 # git
