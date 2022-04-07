@@ -238,7 +238,7 @@ alias cdw='cd ~/vimwiki'
 alias chw='tig -C ~/vimwiki'
 alias today='vim ~/vimwiki/diary/`date +'%Y-%m-%d'`.md'
 alias to='today'
-ww() { vim ~/vimwiki/${1%%.md}.md; }
+ww() { entry="${1:-guideline}"; vim ~/vimwiki/${entry%%.md}.md; }
 wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
 wi() { cat ~/vimwiki/${1%%.md}.md; }
 
