@@ -43,7 +43,7 @@ ssh.up.today() {
     ssh.up $1 $DATE
 }
 ssh.down() {
-    ssh topo rm ~/public/"$1"
+    ssh -t topo rm -rf -i ~/public/"$1"
 }
 
 # for custom scripts
