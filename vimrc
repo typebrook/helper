@@ -163,7 +163,7 @@ let g:vimwiki_list = [{
 " Git push quietly whenever leaving vim with VimWiki files
 augroup vimwikiPush
   autocmd!
-  autocmd VimLeave ~/vimwiki/* :!(cd ~/vimwiki && git add * && git commit -am update && git push origin >/dev/null 2>&1 &)
+  autocmd VimLeave ~/vimwiki/* :!(cd ~/vimwiki && git add * && git commit -am Update && git push origin >/dev/null 2>&1 &)
 augroup END
 
 " Configuration fro vim-instant-markdown
