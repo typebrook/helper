@@ -8,6 +8,7 @@ alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
+alias gpgconfig='vim ~/.gnupg/gpg-agent.conf'
 alias sshconfig='vim ~/.ssh/config'
 alias sshauth='vim ~/.ssh/authorized_keys'
 alias sshknown='vim ~/.ssh/known_hosts'
@@ -70,6 +71,7 @@ alias ju='sudo journalctl -u'
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
+alias ports='sudo lsof -i -Pn | grep LISTEN'
 alias src="source $HOME/.$(basename $SHELL)rc"
 alias ll='ls -alh'
 llw() { which $1 | xargs ls -alh; }
