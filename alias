@@ -83,6 +83,7 @@ alias pst="pstree -ps $$"
 alias duu='du -hd 1 . | sort -hr'
 alias xa='xargs'
 alias latest='find . -type f | xargs ls -ltr | tail'
+alias ascii='man ascii'
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
   cd $1
