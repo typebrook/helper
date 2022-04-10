@@ -1,29 +1,29 @@
 # My alias for bash and zsh
 
-# settings
+# config
 alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
-alias all="source $SETTING_DIR/alias"
 alias zshrc="vim ~/.zshrc && source ~/.$(basename $SHELL)rc"
 alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
 alias vimrc='vim ~/.vimrc'
-alias tigrc="vim $SETTING_DIR/tigrc"
+alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
 alias sshconfig='vim ~/.ssh/config'
 alias sshauth='vim ~/.ssh/authorized_keys'
+alias sshknown='vim ~/.ssh/known_hosts'
 alias cdconfig='cd ~/config'
 alias txconfig='vim ~/.tmux.conf'
-alias log="cat $SETTING_DIR/log | grep '`date +'%b %d'`'"
 
 # vim
 alias v='vim'
+alias vi='vim'
 alias sv='sudo vim'
-alias vl="vim -c ':MRU'"
-alias ve="vim -c ':e! ~/.vim_runtime/my_configs.vim'"
+alias vl="vim -c 'norm '"
+#alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
+alias ve="vim -c 'e! ~/.vim_runtime/my_configs.vim'"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
-alias vi='vim'
 alias vq='vim ~/buffer'
 alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
 
@@ -32,6 +32,18 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 sshtar() {
     prompt "tar cf - foo | ssh topo 'cd ~/Downloads; tar xf -' \nssh topo 'tar czf - --directory=/home/public dir' | tar xvzf -"
+}
+ssh.up() {
+    scp $1 topo:~/public/${2:-$1} 
+    echo https://topo.tw/p/$2/$1
+}
+ssh.up.today() {
+    DATE=$(date --iso-8601)
+    ssh topo mkdir -p ~/public/$DATE
+    ssh.up $1 $DATE
+}
+ssh.down() {
+    ssh topo rm ~/public/"$1"
 }
 
 # for custom scripts
@@ -50,7 +62,7 @@ unalias gg &>/dev/null
 alias gg='gist grep'
 
 # unix
-alias chmodx='sudo chmod +x'
+alias chx='chmod +x'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
 alias m='mutt'
@@ -137,13 +149,12 @@ cdg() {
   cd ~/git/$1 || cd ~/git 
 }
 alias cda='mkdir -p ~/data && cd ~/data'
-alias cdc='cd ~/.config'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
-alias cdmd='cd ~/git/map/deploy'
+alias cdM='cd ~/Musics'
 
 # blog
 alias cdb='cd ~/blog'
@@ -372,9 +383,6 @@ image.text() {
         "${2:=foo}".jpg
 }
 
-# thunderbird
-alias thunder.pull='rsync -a --delete pham@topo.tw:~/.thunderbird/ ~/.thunderbird &'
-
 # Reset clock
 date-reset() {
   sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
@@ -453,18 +461,6 @@ tt() {
 up() {
     curl -F"file=@${1}" http://0x0.st
     #curl -F "file=@${1}" https://api.anonfiles.com/upload
-}
-ssh.up() {
-    scp $1 topo:~/public/${2:-$1} 
-    echo https://topo.tw/p/$2/$1
-}
-ssh.up.today() {
-    DATE=$(date --iso-8601)
-    ssh topo mkdir -p ~/public/$DATE
-    ssh.up $1 $DATE
-}
-ssh.down() {
-    ssh topo rm ~/public/"$1"
 }
 short() {
     curl -F"shorten=${1}" http://0x0.st
