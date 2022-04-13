@@ -149,7 +149,8 @@ psi() {
 alias ..='cd ..'
 alias ld='cd -' # last directory
 cdg() { 
-  cd ~/git/$1 || cd ~/git 
+  target=$(sed 's# #/#g' <<<"$@")
+  cd ~/git/$target || cd ~/git 
 }
 alias cda='mkdir -p ~/data && cd ~/data'
 alias cdd='cd ~/Downloads'
