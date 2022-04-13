@@ -278,9 +278,8 @@ alias dis='docker images'
 alias dc='docker-compose'
 alias drm='docker rm `docker ps -aq`'
 alias dr='docker run --rm -it'
-drb() {
-  docker run --rm -it --entrypoint /bin/bash $@
-}
+alias drsh='docker run --rm -it --entrypoint /bin/sh $@'
+alias drbash='docker run --rm -it --entrypoint /bin/bash $@'
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
