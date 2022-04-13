@@ -177,12 +177,9 @@ vp() {
 
 # git
 unalias gc &> /dev/null # override zsh plugin alias
-gc() {
-  git clone $1 && cd $(basename ${1%.git}) 
-}
-gc1() {
-  git clone --depth=1 $1 && cd $(basename $1) 
-}
+gc() { git clone $1 && cd $(basename ${1%.git}); }
+gc1() { git clone --depth=1 $1 && cd $(basename $1); }
+gcv() { gc topo:$1; }
 alias gls='git log -S'
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
