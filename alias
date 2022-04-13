@@ -280,6 +280,9 @@ alias drm='docker rm `docker ps -aq`'
 alias dr='docker run --rm -it'
 alias drsh='docker run --rm -it --entrypoint /bin/sh $@'
 alias drbash='docker run --rm -it --entrypoint /bin/bash $@'
+docker.tags() {
+    curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | jq '.results[]["name"]' | sort
+}
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
