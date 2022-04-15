@@ -77,7 +77,7 @@ alias ll='ls -lh'
 alias lla='ls -lha'
 llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
-alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && [[ ! $PATH =~ `pwd`  ]] && rm -rf'
+alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && rm -rf'
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 alias pst="pstree -ps $$"
