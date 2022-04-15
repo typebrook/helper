@@ -73,7 +73,8 @@ fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
 alias ports='sudo lsof -i -Pn | grep LISTEN'
 alias src="source $HOME/.$(basename $SHELL)rc"
-alias ll='ls -alh'
+alias ll='ls -lh'
+alias lla='ls -lha'
 llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
 alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && [[ ! $PATH =~ `pwd`  ]] && rm -rf'
@@ -274,11 +275,11 @@ alias df='df -h'
 
 # docker
 alias dk='docker'
-alias dps='docker ps'
-alias dis='docker images'
 alias dc='docker-compose'
+alias dis='docker images'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
 alias drm='docker rm `docker ps -aq`'
-alias dr='docker run --rm -it'
 alias drsh='docker run --rm -it --entrypoint /bin/sh $@'
 alias drbash='docker run --rm -it --entrypoint /bin/bash $@'
 docker.tags() {
