@@ -1,16 +1,22 @@
 #!/bin/bash
 #
 # fdswap
-#
-if [ "$2" = "" ]; then 
-	echo "
-    Usage: $0 /path/to/oldfile /path/to/newfile [pids]
-    Example: $0 /var/log/daemon.log /var/log/newvolume/daemon.log 1234
-    Example: $0 /dev/pts/53 /dev/null 2345"; exit 0
+# 
+# Orignal author: ingvarha
+# ref: https://ingvarha.wordpress.com/2010/07/10/changing-a-process-file-descriptor-on-the-fly/
+
+if [ "$2" = "" ]; then
+<<HELP cat
+  Usage: ${0##*/} /path/to/oldfile /path/to/newfile [pids]
+  Example: ${0##*/} /var/log/daemon.log /var/log/newvolume/daemon.log 1234
+  Example: ${0##*/} /dev/pts/53 /dev/null 2345
+HELP
+  exit 0
 fi
 
-if gdb --version > /dev/null 2>&1; then true
-else echo "Unable to find gdb."; exit 1
+if ! gdb --version &>/dev/null; then
+  echo "Unable to find gdb."
+  exit 1
 fi
 
 src="$1"; dst="$2"; shift; shift 
@@ -18,18 +24,18 @@ pids=$*
 
 for pid in ${pids:=$( /sbin/fuser $src | cut -d ':' -f 2 )}; 
 do
-    echo "src=$src, dst=$dst"
-    echo "$src has $pid using it" 
-    cmd=$(mktemp)
-    { 
-        echo "attach $pid" 
-        echo 'call (int)open("'$dst'", 66, 0666)'
-        for ufd in $(LANG=C ls -l /proc/$pid/fd | \
-        grep "$src"\$ | awk ' { print $9; } '); 
-        do echo 'call (int)dup2($1,'"$ufd"')'; done 
-        echo 'call (int)close($1)'
-        echo 'detach'; echo 'quit' 
-        sleep 5
-    } | tee /dev/tty >$cmd
-    gdb -x $cmd
+  echo "src=$src, dst=$dst"
+  echo "$src has $pid using it" 
+  cmd=$(mktemp)
+  { 
+    echo "attach $pid" 
+    echo 'call (int)open("'$dst'", 66, 0666)'
+    for ufd in $(LANG=C ls -l /proc/$pid/fd | \
+    grep "$src"\$ | awk ' { print $9; } '); 
+    do echo 'call (int)dup2($1,'"$ufd"')'; done 
+    echo 'call (int)close($1)'
+    echo 'detach'; echo 'quit' 
+    sleep 5
+  } | tee /dev/tty >$cmd
+  gdb -x $cmd
 done
