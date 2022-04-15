@@ -7,9 +7,9 @@
 
 if [ "$2" = "" ]; then
 <<HELP cat
-  Usage: ${0##*/} /path/to/oldfile /path/to/newfile [pids]
-  Example: ${0##*/} /var/log/daemon.log /var/log/newvolume/daemon.log 1234
-  Example: ${0##*/} /dev/pts/53 /dev/null 2345
+Usage: ${0##*/} /path/to/oldfile /path/to/newfile [pids]
+Example: ${0##*/} /var/log/daemon.log /var/log/newvolume/daemon.log 1234
+Example: ${0##*/} /dev/pts/53 /dev/null 2345
 HELP
   exit 0
 fi
