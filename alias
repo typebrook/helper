@@ -82,7 +82,7 @@ alias hg='history | grep'
 alias rmrf='[[ `pwd` =~ ^$HOME.*  ]] && rm -rf'
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
-alias pst="pstree -ps $$"
+pst(){ pstree -ps ${1:-$$}; }
 alias duu='du -hd 1 . | sort -hr'
 alias xa='xargs'
 alias latest='find . -type f | xargs ls -ltr | tail'
