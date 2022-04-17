@@ -281,17 +281,9 @@ alias dc='docker-compose'
 alias dis='docker images'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
-alias drm='docker rm `docker ps -aq`'
-<<<<<<< HEAD
-alias dr='docker run --rm -it'
-drsh() { docker run --rm -it --entrypoint /bin/sh $@; }
-drbash() { docker run --rm -it --entrypoint /bin/bash $@; }
+docker.sh() { docker run --rm -it --entrypoint /bin/sh $@; }
+docker.bash() { docker run --rm -it --entrypoint /bin/bash $@; }
 docker.tags() { curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | jq '.results[]["name"]' | sort; }
-alias drsh='docker run --rm -it --entrypoint /bin/sh $@'
-alias drbash='docker run --rm -it --entrypoint /bin/bash $@'
-docker.tags() {
-    curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | jq '.results[]["name"]' | sort
-}
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
