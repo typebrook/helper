@@ -37,7 +37,7 @@ xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
 MAIL=$HOME/Maildir
 
 # sync with important git repos
-sync.sh
+(sync.sh &)
 
 # local
 PATH=$PATH:$HOME/.local/bin
