@@ -1,5 +1,6 @@
 export SETTING_DIR=${SETTING_DIR:=$HOME/settings}
 export EDITOR=vim
+export TERM=xterm-256color
 
 # load custom aliases
 source $SETTING_DIR/alias
