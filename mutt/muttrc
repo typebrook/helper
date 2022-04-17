@@ -46,7 +46,7 @@ bind index q browse-mailboxes
 bind index y edit-label
 bind index x tag-entry
 bind index t edit-label
-bind index l select-entry
+bind index,browser l select-entry
 bind index \cl limit
 bind index \cj next-entry
 bind index \ck previous-entry
