@@ -77,10 +77,11 @@ openbox:
 	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
 
 xkb:
-	sudo cat >/etc/profile.d/xkb.sh <<EOF
-	#! /bin/env bash
+	#sudo cat >/etc/profile.d/xkb.sh <<EOF
+	##! /bin/env bash
+	#setxkbmap -option ctrl:nocaps 2>/dev/null
+	#EOF
 	setxkbmap -option ctrl:nocaps 2>/dev/null
-	EOF
 
 urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
