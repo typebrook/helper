@@ -92,6 +92,7 @@ vnoremap , <ESC>`<i<<ESC>`>la><ESC>
 vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
 vnoremap 8 <ESC>`<i*<ESC>`>la*<ESC>
 vnoremap z <ESC>`<i「<ESC>`>la」<ESC>
+vnoremap ~ <ESC>`<i~<ESC>`>la~<ESC>
 
 " abbrev
 iabbrev @@ typebrook@gmail.com
