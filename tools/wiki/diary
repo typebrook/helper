@@ -1,0 +1,20 @@
+#! /bin/bash
+
+#read -p 'Year 20XX ? ' -r YEAR
+#echo
+YEAR=22
+
+read -p 'Month? ' -r MONTH
+MONTH=$(printf "%02d" $MONTH)
+
+while read -p 'Day? ' -r DAY; do
+  DAY=$(printf "%02d" $DAY)
+  FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
+
+  if [ -e $FILE ]; then
+    vim -c 'Goyo' $FILE
+    break
+  else
+    echo No diary at 20$YEAR-$MONTH-$DAY
+  fi
+done

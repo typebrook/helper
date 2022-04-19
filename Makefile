@@ -76,6 +76,9 @@ pass:
 openbox:
 	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
 
+archcraft:
+	ls -sf `pwd`/tools/desktop/takeshot /usr/local/bin/takeshot
+
 xkb:
 	#sudo cat >/etc/profile.d/xkb.sh <<EOF
 	##! /bin/env bash
