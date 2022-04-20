@@ -13,8 +13,8 @@ shell=${shell##*/}
 
 # fzf
 if which fzf &>/dev/null; then
-  [ -f ~/.fzf.$shell ] && source ~/.fzf.$shell
   fzf_preview() { fzf --preview 'cat {}'; }
+  source ~/.fzf.$shell &>/dev/null
 fi
 
 if [[ $shell == zsh ]]; then
