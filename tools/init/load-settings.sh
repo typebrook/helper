@@ -7,7 +7,9 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
 # Config shell
-shell=$(</proc/$$/cmdline tr -d '\0' | xargs basename)
+
+shell=$(</proc/$$/cmdline tr -d '\0' | tr -d '-')
+shell=${shell##*/}
 
 # fzf
 if which fzf &>/dev/null; then
