@@ -243,6 +243,7 @@
       </action>
     </keybind>
     -->
+    <!--
     <keybind key="A-z">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -252,6 +253,8 @@
         <width>32%</width>
       </action>
     </keybind>
+    -->
+    <!--
     <keybind key="A-x">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -261,6 +264,8 @@
         <width>32%</width>
       </action>
     </keybind>
+    -->
+    <!--
     <keybind key="A-c">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -270,6 +275,7 @@
         <width>32%</width>
       </action>
     </keybind>
+    -->
     <!-- Windows Tiling -->
     <keybind key="W-KP_1">
       <action name="UnmaximizeFull"/>
