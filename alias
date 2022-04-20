@@ -334,24 +334,25 @@ taiwan_dem() {
 
 # data file
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
-alias data_rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
-alias data_rudymap_ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
-data_osm_diff_min() {
+alias data.rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
+alias data.rudymap_ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
+data.osm_diff_min() {
   curl https://planet.openstreetmap.org/replication/minute/state.txt \
   | sed -n 2p | cut -d'=' -f2 | sed -r 's#(.{1})(.{3})#00\1/\2#' \
   | xargs -I{} echo 'https://planet.openstreetmap.org/replication/minute/{}'.osc.gz \
   | xargs curl -O
 }
-data_osm_diff_hour() {
+data.osm_diff_hour() {
   curl https://planet.openstreetmap.org/replication/hour/state.txt \
   | sed -n 2p | cut -d'=' -f2 | sed -r 's#(.{2})(.{3})#000/0\1/\2#' \
   | xargs -I{} echo 'https://planet.openstreetmap.org/replication/hour/{}'.osc.gz \
   | xargs curl -O
 }
-alias data_taiwan_town='curl -o town.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
-alias data_taiwan_village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
-alias data_taiwan_poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
-alias data_taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt | iconv -f BIG-5 -t UTF-8 -'
+# https://data.gov.tw/dataset/7441
+alias data.taiwan_town='curl -o town.zip -L  https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=CD02C824-45C5-48C8-B631-98B205A2E35A'
+alias data.taiwan_village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
+alias data.taiwan_poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
+alias data.taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt | iconv -f BIG-5 -t UTF-8 -'
 
 # clipboard
 alias xi='xsel -ib'
