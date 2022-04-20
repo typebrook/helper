@@ -7,7 +7,7 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
 # Config shell
-shell=$(</proc/$$/cmdline tr -cd '[:alpha:]')
+shell=$(</proc/$$/cmdline tr -d '\0' | xargs basename)
 
 # fzf
 if which fzf &>/dev/null; then
@@ -19,17 +19,17 @@ if [[ $shell == zsh ]]; then
   setopt extended_glob
   fpath=($SETTING_DIR/zsh $fpath)
   compinit
-  autoload -U deer
-  zle -N deer
-  bindkey '\ek' deer
   alias history='history -i'
 
-  bindkey -s "^I" 'fzf_preview'
+  #autoload -U deer
+  #zle -N deer
+  #bindkey '\ek' deer
+  bindkey -s '\ek' 'fzf_preview'
 elif [[ $shell == bash ]]; then
   shopt -s extglob
   HISTTIMEFORMAT='%Y-%m-%d %T '
 
-  bind -x '"\C-i":"fzf_preview"'
+  bind -m emacs-standard -x '"\ek": fzf_preview'
 fi
 
 # Add custom scripts into PATH
