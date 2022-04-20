@@ -19,7 +19,9 @@ while [ $(jobs -r | wc -l) -gt 0 ]; do
   sleep 1;
 done
 
-notify-send 'Repos synced'
+if which notify-send &>/dev/null; then
+  notify-send 'Repos synced'
+fi
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
