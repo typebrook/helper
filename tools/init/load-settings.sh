@@ -7,22 +7,31 @@ source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
 # Config shell
-shell=$(cat /proc/$$/cmdline | tr -d '\0')
-case $shell in
-  *zsh*)
-    setopt extended_glob
-    fpath=($SETTING_DIR/zsh $fpath)
-    compinit
-    autoload -U deer
-    zle -N deer
-    bindkey '\ek' deer
-    alias history='history -i'
-    ;;
-  *bash*)
-    shopt -s extglob
-    HISTTIMEFORMAT='%Y-%m-%d %T '
-    ;;
-esac
+SHELL=$(cat /proc/$$/cmdline | tr -d '\0' | xargs basename)
+
+# fzf
+if which fzf &>/dev/null; then
+  [ -f ~/.fzf.$SHELL ] && source ~/.fzf.$SHELL
+  fzf_preview() { fzf --preview 'cat {}'; }
+fi
+
+if [[ $SHELL == zsh ]]; then
+  setopt extended_glob
+  fpath=($SETTING_DIR/zsh $fpath)
+  compinit
+  autoload -U deer
+  zle -N deer
+  bindkey '\ek' deer
+  alias history='history -i'
+
+  #zle -N fzf_preview
+  bindkey -s "^I" 'fzf_preview'
+elif [[ $SHELL == bash ]]; then
+  shopt -s extglob
+  HISTTIMEFORMAT='%Y-%m-%d %T '
+
+  bind -x '"\C-i": "fzf_preview"'
+fi
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
