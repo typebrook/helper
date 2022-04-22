@@ -4,17 +4,22 @@
 #echo
 YEAR=22
 
-read -p 'Month? ' -r MONTH
-MONTH=$(printf "%02d" $MONTH)
+while read -p 'Month? ' -r MONTH; do
+  [ -z $MONTH ] && MONTH=$(date +%m)
+  MONTH=$(printf "%02d" $MONTH)
+  date -d $YEAR-$MONTH-01 &>/dev/null && break
+done
 
 while read -p 'Day? ' -r DAY; do
   DAY=$(printf "%02d" $DAY)
-  FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
-
-  if [ -e $FILE ]; then
-    vim -c 'Goyo' $FILE
-    break
-  else
-    echo No diary at 20$YEAR-$MONTH-$DAY
-  fi
+  date -d $YEAR-$MONTH-$DAY &>/dev/null && break
+  #if [ -e $FILE ]; then
+  #  vim -c 'Goyo' $FILE
+  #  break
+  #else
+  #  echo No diary at 20$YEAR-$MONTH-$DAY
+  #fi
 done
+
+FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
+vim -c 'Goyo' $FILE
