@@ -11,14 +11,9 @@ while read -p 'Month? ' -r MONTH; do
 done
 
 while read -p 'Day? ' -r DAY; do
+  [ -z $DAY ] && DAY=$(date +%d)
   DAY=$(printf "%02d" $DAY)
   date -d $YEAR-$MONTH-$DAY &>/dev/null && break
-  #if [ -e $FILE ]; then
-  #  vim -c 'Goyo' $FILE
-  #  break
-  #else
-  #  echo No diary at 20$YEAR-$MONTH-$DAY
-  #fi
 done
 
 FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
