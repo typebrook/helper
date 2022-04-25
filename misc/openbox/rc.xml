@@ -917,6 +917,10 @@
     <application class="*">
       <focus>yes</focus>
       <decor>yes</decor>
+      <position force="yes">
+        <x>center</x>
+        <y>center</y>
+      </position>
     </application>
     <application name="obconf">
       <position force="yes">
@@ -931,12 +935,6 @@
       <decor>no</decor>
     </application>
     <application title="Nitrogen">
-      <position force="yes">
-        <x>center</x>
-        <y>center</y>
-      </position>
-    </application>
-    <application title="alacritty">
       <position force="yes">
         <x>center</x>
         <y>center</y>
