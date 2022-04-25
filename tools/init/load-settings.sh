@@ -67,4 +67,4 @@ PATH=$PATH:$HOME/.yarn/bin
 # Run something after exit shell
 trap 'exit.sh' EXIT
 
-cd ~/Downloads
+[[ $pwd == ~ ]] && cd ~/Downloads
