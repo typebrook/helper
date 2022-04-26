@@ -254,17 +254,15 @@
       </action>
     </keybind>
     -->
-    <!--
     <keybind key="A-x">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
-        <x>34%</x>
+        <x>20%</x>
         <y>15</y>
         <height>97%</height>
-        <width>32%</width>
+        <width>65%</width>
       </action>
     </keybind>
-    -->
     <!--
     <keybind key="A-c">
       <action name="Unmaximize"/>
