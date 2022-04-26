@@ -1,20 +1,32 @@
 #! /bin/bash
 
-#read -p 'Year 20XX ? ' -r YEAR
-#echo
-YEAR=22
+pick_date() {
+  YEAR=${YEAR:-22}
 
-while read -p 'Month? ' -r MONTH; do
-  [ -z $MONTH ] && MONTH=$(date +%m)
-  MONTH=$(printf "%02d" $MONTH)
-  date -d $YEAR-$MONTH-01 &>/dev/null && break
-done
+  while read -p 'Month? ' -r MONTH; do
+    [ -z $MONTH ] && MONTH=$(date +%m)
+    MONTH=$(printf "%02d" $MONTH)
+    date -d $YEAR-$MONTH-01 &>/dev/null && break
+  done
 
-while read -p 'Day? ' -r DAY; do
-  [ -z $DAY ] && DAY=$(date +%d)
-  DAY=$(printf "%02d" $DAY)
-  date -d $YEAR-$MONTH-$DAY &>/dev/null && break
-done
+  while read -p 'Day? ' -r DAY; do
+    [ -z $DAY ] && DAY=$(date +%d)
+    DAY=$(printf "%02d" $DAY)
+    date -d $YEAR-$MONTH-$DAY &>/dev/null && break
+  done
 
-FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
-vim -c 'Goyo' $FILE
+  FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
+  vim -c 'Goyo' $FILE
+}
+
+add_entry() {
+  set -x
+  echo - "$@" >>~/vimwiki/diary/$(date --iso-8601).md
+  set +x
+}
+
+if [ $# -eq 0 ]; then
+  pick_date
+else
+  add_entry "$@"
+fi
