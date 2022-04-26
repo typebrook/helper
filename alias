@@ -84,6 +84,7 @@ alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 pst(){ pstree -ps ${1:-$$}; }
 alias duu='du -hd 1 . | sort -hr'
+name() { find . -iname "$1"; }
 alias latest='find . -type f | xargs ls -ltr | tail'
 cdp() {
   [[ ! -d $1 ]] && mkdir -p $1
