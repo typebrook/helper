@@ -251,7 +251,7 @@ cdss() {
 # about vimwiki
 alias cdw='cd ~/vimwiki'
 alias chw='tig -C ~/vimwiki'
-ww() { entry="${1:-guideline}"; vim ~/vimwiki/${entry%%.md}.md; }
+ww() { entry="${1:-guideline}"; vim -c Goyo ~/vimwiki/${entry%%.md}.md; }
 wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
 wi() { cat ~/vimwiki/${1%%.md}.md; }
 alias dia='diary'

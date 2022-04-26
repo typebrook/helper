@@ -24,9 +24,7 @@ print_today() {
 }
 
 add_entry() {
-  set -x
   echo - "$@" >>~/vimwiki/diary/$(date --iso-8601).md
-  set +x
 }
 
 case "$1" in
