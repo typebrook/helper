@@ -255,6 +255,7 @@ ww() { entry="${1:-guideline}"; vim ~/vimwiki/${entry%%.md}.md; }
 wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
 wi() { cat ~/vimwiki/${1%%.md}.md; }
 alias dia='diary'
+alias diaa='diary p'
 
 # crontab
 alias ce='crontab -e'
