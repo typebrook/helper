@@ -32,19 +32,19 @@ alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 sshtar() {
-    prompt "tar cf - foo | ssh topo 'cd ~/Downloads; tar xf -' \nssh topo 'tar czf - --directory=/home/public dir' | tar xvzf -"
+    prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 ssh.up() {
-    scp $1 topo:~/public/${2:-$1} 
+    scp $1 vps:~/public/${2:-$1} 
     echo https://topo.tw/p/$2${2:+/}$1
 }
 ssh.up.today() {
     DATE=$(date --iso-8601)
-    ssh topo mkdir -p ~/public/$DATE
+    ssh vps mkdir -p ~/public/$DATE
     ssh.up $1 $DATE
 }
 ssh.down() {
-    ssh -t topo rm -rf -i ~/public/"$1"
+    ssh -t vps rm -rf -i ~/public/"$1"
 }
 
 # for custom scripts
@@ -182,7 +182,7 @@ vp() {
 unalias gc &> /dev/null # override zsh plugin alias
 gc() { git clone $1 && cd $(basename ${1%.git}); }
 gc1() { git clone --depth=1 $1 && cd $(basename $1); }
-gcv() { gc topo:$1; }
+gcv() { gc vps:$1; }
 alias gls='git log -S'
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'

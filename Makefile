@@ -65,12 +65,12 @@ tmux:
 # Blog on my VPS
 blog:
 	if [ ! -d "$(HOME)/blog" ]; then
-		git clone ssh://topo/~/blog $(HOME)/blog;
+		git clone ssh://vps/~/blog $(HOME)/blog;
 	fi
 
 pass:
 	if [ ! -d "$(HOME)/.password-store" ]; then
-		git clone ssh://topo/~/.password-store ~/.password-store;
+		git clone ssh://vps/~/.password-store ~/.password-store;
 	fi
 
 openbox:
