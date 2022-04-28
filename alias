@@ -27,6 +27,7 @@ alias vu='vim -u NONE'
 alias vv='vim ~/vimwiki/index.md'
 alias vq='vim ~/buffer'
 alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
+vs() { which $1 && vim $(which $1); }
 
 # ssh
 alias cdssh='cd ~/.ssh'
@@ -47,16 +48,7 @@ ssh.down() {
     ssh -t vps rm -rf -i ~/public/"$1"
 }
 
-# for custom scripts
-vs() { 
-  which $1 && vim $(which $1)
-}
-todo() {
-  which $1 && grep -Po 'TODO.*' $(which $1)
-}
-fix() {
-  which $1 && grep -Po 'FIXME.*' $(which $1)
-}
+# Gist
 alias g='gist'
 alias gl='gist last'
 unalias gg &>/dev/null
@@ -256,6 +248,7 @@ wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
 wi() { cat ~/vimwiki/${1%%.md}.md; }
 alias dia='diary'
 alias diaa='diary p'
+alias diat='diary today'
 
 # crontab
 alias ce='crontab -e'
@@ -501,6 +494,8 @@ alias jl='jrnl'
 #        klakegg/hugo \
 #        $@
 #}
+todo() { cd ~/vimwiki && grep -R ' TODO ' --exclude-dir=logseq/; }
+fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'

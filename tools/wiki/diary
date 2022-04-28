@@ -23,6 +23,10 @@ print_today() {
   cat ~/vimwiki/diary/$(date --iso-8601).md
 }
 
+edit_today() {
+  vim ~/vimwiki/diary/$(date --iso-8601).md
+}
+
 add_entry() {
   echo - "$@" >>~/vimwiki/diary/$(date --iso-8601).md
 }
@@ -32,6 +36,8 @@ case "$1" in
     pick_date ;;
   p)
     print_today ;;
+  today)
+    edit_today ;;
   *)
     add_entry "$@" ;;
 esac
