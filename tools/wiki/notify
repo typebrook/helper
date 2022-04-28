@@ -1,0 +1,7 @@
+#! /bin/sh
+
+exec >/dev/pts/$(ls /dev/pts -t | head -1)
+
+echo
+echo
+cat

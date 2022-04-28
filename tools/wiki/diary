@@ -1,6 +1,8 @@
 #! /bin/bash
 
-pick_date() {
+today=~/vimwiki/diary/$(date --iso-8601).md
+
+specify_date() {
   YEAR=${YEAR:-22}
 
   while read -p 'Month? ' -r MONTH; do
@@ -20,21 +22,22 @@ pick_date() {
 }
 
 print_today() {
-  cat ~/vimwiki/diary/$(date --iso-8601).md
+  cat $today
 }
 
 edit_today() {
-  vim ~/vimwiki/diary/$(date --iso-8601).md
+  vim $today
 }
 
 add_entry() {
-  echo - "$@" >>~/vimwiki/diary/$(date --iso-8601).md
+  [[ $# -ne 0 ]] && echo - "$@" >>$today
+  sed -E 's/\t/  /g; s/(^[[:space:]]*)/\1- /' >>$today
 }
 
 case "$1" in
-  "")
-    pick_date ;;
-  p)
+  specify) 
+    specify_date ;;
+  print)
     print_today ;;
   today)
     edit_today ;;

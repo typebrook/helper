@@ -247,7 +247,8 @@ ww() { entry="${1:-guideline}"; vim -c Goyo ~/vimwiki/${entry%%.md}.md; }
 wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
 wi() { cat ~/vimwiki/${1%%.md}.md; }
 alias dia='diary'
-alias diaa='diary p'
+alias dias='diary specify'
+alias diaa='diary print'
 alias diat='diary today'
 
 # crontab
