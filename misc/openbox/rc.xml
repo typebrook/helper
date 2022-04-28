@@ -181,6 +181,17 @@
         </finalactions>
       </action>
     </keybind>
+    <keybind key="A-S-Tab">
+      <action name="PreviousWindow">
+        <allDesktops>yes</allDesktops>
+        <!-- Hide black border around windows -->
+        <bar>no</bar>
+        <finalactions>
+          <action name="focus"/>
+          <action name="raise"/>
+        </finalactions>
+      </action>
+    </keybind>
     <!-- Window Tiling: Snap feature -->
     <keybind key="W-Left">
       <action name="UnmaximizeFull"/>

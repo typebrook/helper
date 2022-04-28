@@ -15,13 +15,14 @@ sync ~/.task &
 sync ~/.password-store &
 sync ~/.vim_runtime &
 
-while [ $(jobs -r | wc -l) -gt 0 ]; do
-  sleep 1;
-done
-
-if which notify-send &>/dev/null; then
-  notify-send 'Repos synced'
-fi
+while true; do
+  if test $(jobs -r | wc -l) -gt 0; then
+    sleep 1;
+  else
+    which notify-send &>/dev/null && notify-send 'Repos synced'
+    break
+  fi
+done &
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
