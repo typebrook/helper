@@ -10,7 +10,6 @@ source $SETTING_DIR/alias
 
 shell=$(</proc/$$/cmdline tr -d '\0' | tr -d '-')
 shell=${shell##*/}
-echo shell $shell
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
@@ -46,8 +45,8 @@ fi
 
 if [[ $shell == zsh ]]; then
   setopt extended_glob
-  fpath=( "$SETTING_DIR/zsh" "$fpath" )
   compinit
+  fpath=($SETTING_DIR/zsh $fpath)
   alias history='history -i'
 
   #autoload -U deer
