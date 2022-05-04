@@ -10,29 +10,7 @@ source $SETTING_DIR/alias
 
 shell=$(</proc/$$/cmdline tr -d '\0' | tr -d '-')
 shell=${shell##*/}
-
-# fzf
-if which fzf &>/dev/null; then
-  fzf_preview() { fzf --preview 'cat {}'; }
-  source ~/.fzf.$shell &>/dev/null
-fi
-
-if [[ $shell == zsh ]]; then
-  setopt extended_glob
-  fpath=($SETTING_DIR/zsh $fpath)
-  compinit
-  alias history='history -i'
-
-  #autoload -U deer
-  #zle -N deer
-  #bindkey '\ek' deer
-  bindkey -s '\ek' 'fzf_preview'
-elif [[ $shell == bash ]]; then
-  shopt -s extglob
-  HISTTIMEFORMAT='%Y-%m-%d %T '
-
-  bind -m emacs-standard -x '"\ek": fzf_preview'
-fi
+echo shell $shell
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
@@ -51,18 +29,37 @@ MAIL=$HOME/Maildir
 
 # local
 PATH=$PATH:$HOME/.local/bin
-
 # go
 PATH=$PATH:$HOME/go/bin
-
 # android-studio
 PATH=$PATH:$HOME/android-studio/bin
-
 # cargo
 PATH=$PATH:$HOME/.cargo/bin
-
 # yarn
 PATH=$PATH:$HOME/.yarn/bin
+
+# fzf
+if which fzf &>/dev/null; then
+  fzf_preview() { fzf --preview 'cat {}'; }
+  source ~/.fzf.${shell} &>/dev/null
+fi
+
+if [[ $shell == zsh ]]; then
+  setopt extended_glob
+  fpath=( "$SETTING_DIR/zsh" "$fpath" )
+  compinit
+  alias history='history -i'
+
+  #autoload -U deer
+  #zle -N deer
+  #bindkey '\ek' deer
+  bindkey -s '\ek' 'fzf_preview'
+elif [[ $shell == bash ]]; then
+  shopt -s extglob
+  HISTTIMEFORMAT='%Y-%m-%d %T '
+
+  bind -m emacs-standard -x '"\ek": fzf_preview'
+fi
 
 # Run something after exit shell
 trap 'exit.sh' EXIT
