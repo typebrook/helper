@@ -71,7 +71,7 @@ alias ll='ls -lh'
 alias lla='ls -lha'
 llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
-rmrf() { mv $1 /tmp/ }
+rmrf() { mv $1 /tmp/; }
 alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
 pst(){ pstree -ps ${1:-$$}; }
