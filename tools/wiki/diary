@@ -31,7 +31,7 @@ edit_today() {
 
 add_entry() {
   [[ $# -ne 0 ]] && echo - "$@" >>$today
-  sed -E 's/\t/  /g; s/(^[[:space:]]*)/\1- /' >>$today
+  sed -E 's/\t/    /g; s/(^[[:space:]]*)/\1- /' >>$today
 }
 
 case "$1" in
