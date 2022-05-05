@@ -178,7 +178,7 @@ nnoremap <leader>md :InstantMarkdownPreview<CR>
 " Generate static pages
 augroup blogRebuild
   autocmd!
-  autocmd BufWritePost ~/blog/*.md :!(cd ~/blog && hugo &>/dev/null &)
+  autocmd BufWritePost ~/blog/*.md :!cd ~/blog && hugo >/dev/null
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
