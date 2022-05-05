@@ -159,7 +159,7 @@ alias cdM='cd ~/Musics'
 # blog
 alias cdb='cd ~/blog'
 vp() { 
-  [[ $HOST = vultr ]] || PREFIX='ssh -t vps'
+  [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
 
   filename="${1%.md}.md"
   post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
