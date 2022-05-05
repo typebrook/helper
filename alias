@@ -13,7 +13,7 @@ alias sshconfig='vim ~/.ssh/config'
 alias sshauth='vim ~/.ssh/authorized_keys'
 alias sshknown='vim ~/.ssh/known_hosts'
 alias cdconfig='cd ~/config'
-alias txconfig='vim ~/.tmux.conf'
+alias tmuxconfig='vim ~/.tmux.conf'
 
 # vim
 alias v='vim'
@@ -24,7 +24,6 @@ alias vl="vim -c 'norm '"
 alias ve="vim -c 'e! ~/.vim_runtime/my_configs.vim'"
 alias vro='vim -R'
 alias vu='vim -u NONE'
-alias vv='vim ~/vimwiki/index.md'
 alias vq='vim ~/buffer'
 alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
 vs() { which $1 && vim $(which $1); }
@@ -61,7 +60,7 @@ alias j='sudo journalctl -xe'
 alias ju='sudo journalctl -u'
 alias m='mutt'
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
-ps1.swap() { if [ -z $PS1_bak ]; then PS1_bak="$PS1"; PS1='> '; else PS1="$PS1_bak"; unset PS1_bak; fi }
+ps1.swap() { if [ -z $PS1_bak ]; then PS1_bak="$PS1"; PS1='> '; else PS1="$PS1_bak"; unset PS1_bak; fi; }
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
 alias ports='sudo lsof -i -Pn | grep LISTEN'
@@ -169,7 +168,11 @@ vp() {
   fi
 
   shift
-  vim $@ "$post"
+  if [[ $HOST = vultr ]]; then
+    vim $@ "$post"
+  else
+    ssh vim $@ "$post"
+  fi
 }
 
 # git
