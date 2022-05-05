@@ -31,6 +31,7 @@ vs() { which $1 && vim $(which $1); }
 # ssh
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
+alias sshv='ssh vps'
 sshtar() {
     prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
@@ -158,21 +159,18 @@ alias cdM='cd ~/Musics'
 # blog
 alias cdb='cd ~/blog'
 vp() { 
-  cd ~/blog
+  [[ $HOST = vultr ]] || PREFIX='ssh -t vps'
+
   filename="${1%.md}.md"
-  post="$(find content -name "$filename")"
+  post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
 
   if [ -z "$post" ]; then
-      hugo new posts/"$filename"
-      post="content/posts/$filename"
+    echo hugo new posts/$filename | eval ${PREFIX:-sh}
+    post="~/blog/content/posts/$filename"
   fi
 
   shift
-  if [[ $HOST = vultr ]]; then
-    vim $@ "$post"
-  else
-    ssh vim $@ "$post"
-  fi
+  eval $PREFIX vim $@ "$post"
 }
 
 # git

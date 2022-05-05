@@ -45,8 +45,8 @@ fi
 
 if [[ $shell == zsh ]]; then
   setopt extended_glob
-  compinit
   fpath=($SETTING_DIR/zsh $fpath)
+  compinit
   alias history='history -i'
 
   #autoload -U deer
