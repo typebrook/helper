@@ -31,7 +31,7 @@ vs() { which $1 && vim $(which $1); }
 # ssh
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
-alias sshv='ssh vps'
+alias sshv='ssh -t vps'
 sshtar() {
     prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
@@ -364,7 +364,8 @@ image.vertical() {
   convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
 }
 image.horizontal() { 
-  convert "$@" +append output.png 
+  ext=${1##*.}
+  convert "$@" +append output.$ext
 }
 image.from_data_url() {
   [[ $1 == '' ]] && echo File name needed && return 1
