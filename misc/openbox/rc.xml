@@ -467,14 +467,9 @@
         <command>takeshot --now</command>
       </action>
     </keybind>
-    <keybind key="A-Print">
-      <action name="Execute">
-        <command>takeshot --in5</command>
-      </action>
-    </keybind>
     <keybind key="S-Print">
       <action name="Execute">
-        <command>takeshot --in10</command>
+        <command>takeshot --in5</command>
       </action>
     </keybind>
     <keybind key="C-Print">
