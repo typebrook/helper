@@ -1,4 +1,4 @@
-export SETTING_DIR=${SETTING_DIR:=$HOME/settings}
+export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export EDITOR=vim
 export TERM=xterm-256color
 

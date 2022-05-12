@@ -236,11 +236,8 @@ upload_tig() {
 }
 
 # about custom settings
-alias cds="cd $SETTING_DIR"
-alias chs="tig -C $SETTING_DIR status"
-cdss() {
-  cd $SETTING_DIR/tools/$1 || cd $SETTING_DIR/tools 
-}
+alias cdh="cd $SETTING_DIR"
+alias chh="tig -C $SETTING_DIR status"
 
 # about vimwiki
 alias cdw='cd ~/vimwiki'

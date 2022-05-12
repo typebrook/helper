@@ -1,13 +1,15 @@
 .ONESHELL:
 .PHONY: *
 
-all: git vim git tig gpg
+all: git tig vim gpg
 	mkdir -p ~/git
+
+other: zsh fzf wiki pass mutt tmux
 
 git:
 	rm -f ~/.gitconfig
 	ln -s `pwd`/gitconfig ~/.gitconfig
-	mkdir -p ~/HOME/git
+	mkdir -p ~/git
 
 tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
@@ -21,6 +23,10 @@ vim:
 	# vim-plug
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	ln -sf `pwd`/vimrc ~/.vim_runtime/my_configs.vim
+
+gpg:
+	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
+	gpgconf --reload gpg-agent
 
 zsh:
 	curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
@@ -37,6 +43,19 @@ wiki:
 		git clone git@github.com:typebrook/wiki.git ~/vimwiki; 
 	fi
 
+pass:
+	if [ ! -d "$(HOME)/.password-store" ]; then
+		git clone ssh://vps/~/.password-store ~/.password-store;
+	fi
+
+mutt:
+	mkdir -p ~/.config/mutt
+	ln -sf `pwd`/mutt/muttrc ~/.config/mutt/muttrc
+	ln -sf `pwd`/mutt/mailcap ~/.mailcap
+
+tmux:
+	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
+
 crontab:
 	(crontab -l 2>/dev/null; cat tools/cron/* | sed '/^#/ d') | crontab -
 
@@ -50,27 +69,9 @@ task:
 		git clone --depth 1 git@github.com:typebrook/task.git ~/.task;
 	fi
 
-gpg:
-	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
-	gpgconf --reload gpg-agent
-
-mutt:
-	mkdir -p ~/.config/mutt
-	ln -sf `pwd`/mutt/muttrc ~/.config/mutt/muttrc
-	ln -sf `pwd`/mutt/mailcap ~/.mailcap
-
-tmux:
-	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
-
-# Blog on my VPS
 blog:
 	if [ ! -d "$(HOME)/blog" ]; then
 		git clone ssh://vps/~/blog $(HOME)/blog;
-	fi
-
-pass:
-	if [ ! -d "$(HOME)/.password-store" ]; then
-		git clone ssh://vps/~/.password-store ~/.password-store;
 	fi
 
 openbox:

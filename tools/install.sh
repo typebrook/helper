@@ -3,15 +3,15 @@
 set -e
 
 # Default settings
-SETTING_DIR=${SETTING_DIR:-~/settings}
-REPO=${REPO:-typebrook/settings}
+SETTING_DIR=${SETTING_DIR:-~/helper}
+REPO=${REPO:-typebrook/helper}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-dev}
 RCFILE=${RCFILE:-~/.$(basename $SHELL)rc}
 
 if [ ! -d $SETTING_DIR ]; then
   git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$SETTING_DIR" || {
-      error "git clone of settings repo failed"
+      error "git clone of helper repo failed"
       exit 1
   }
 fi
