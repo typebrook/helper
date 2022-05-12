@@ -5,13 +5,13 @@ today=~/vimwiki/diary/$(date --iso-8601).md
 specify_date() {
   YEAR=${YEAR:-22}
 
-  while read -p 'Month? ' -r MONTH; do
+  while read -e -p 'Month? ' -r MONTH </dev/tty; do
     [ -z $MONTH ] && MONTH=$(date +%m)
     MONTH=$(printf "%02d" $MONTH)
     date -d $YEAR-$MONTH-01 &>/dev/null && break
   done
 
-  while read -p 'Day? ' -r DAY; do
+  while read -e -p 'Day? ' -r DAY </dev/tty; do
     [ -z $DAY ] && DAY=$(date +%d)
     DAY=$(printf "%02d" $DAY)
     date -d $YEAR-$MONTH-$DAY &>/dev/null && break
@@ -31,7 +31,9 @@ edit_today() {
 
 add_entry() {
   [[ $# -ne 0 ]] && echo - "$@" >>$today
-  sed -E 's/\t/    /g; s/(^[[:space:]]*)/\1- /' >>$today
+  while read -e -r entry; do
+    echo $entry | sed -E 's/\t/    /g; s/(^[[:space:]]*)/\1- /' >>$today
+  done
 }
 
 case "$1" in
