@@ -140,6 +140,7 @@ psi() {
   [[ $(pacman -Qqe $1) != '' ]] 2>/dev/null && echo -e "$(tput setaf 13)[Installed]$(tput sgr0)"
   pacman -Si $1
 }
+pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
 # cd to DIRs
 alias ..='cd ..'
