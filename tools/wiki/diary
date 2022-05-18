@@ -22,6 +22,7 @@ specify_date() {
 }
 
 print_today() {
+  [[ ! -e $today ]] && touch $today
   cat $today
 }
 

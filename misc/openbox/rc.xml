@@ -496,7 +496,7 @@
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
-        <command>thunar</command>
+        <command>thunar ~/Downloads</command>
       </action>
     </keybind>
     <keybind key="W-w">
