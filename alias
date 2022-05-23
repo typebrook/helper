@@ -478,7 +478,7 @@ words() {
 }
 
 # Nginx
-alias vgx='sudo vim /etc/nginx/sites-enabled/* && sudo nginx -t && sudo systemctl reload nginx'
+alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
 alias cdngx='cd /etc/nginx'
 
 # tmp
