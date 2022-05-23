@@ -11,6 +11,7 @@ set sidescroll=1
 set sidescrolloff=999
 set shell=/bin/bash
 set shiftwidth=2
+" autocmd FileType sh set shiftwidth=2
 " set clipboard=unnamedplus
 
 " general
@@ -102,9 +103,6 @@ iabbrev @@ typebrook@gmail.com
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
 vnoremap <C-K> <ESC>`<i[<ESC>`>la]()<ESC>i
-
-" shell script
-#autocmd FileType sh set shiftwidth=2
 
 " XML fold
 let g:xml_syntax_folding=1
