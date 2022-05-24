@@ -193,6 +193,7 @@ check() {
     check_repo $SETTING_DIR
     check_repo $HOME/.password-store
     check_repo $HOME/vimwiki
+    check_repo $HOME/.task
 }
 alias ch='check'
 
@@ -472,7 +473,7 @@ alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
-alias pgc='pass generate -c'
+alias pgc='pass generate -ic'
 words() {
     cat /usr/share/dict/usa | egrep "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
 }
