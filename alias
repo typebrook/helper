@@ -33,19 +33,19 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias sshv='ssh -t vps'
 sshtar() {
-    prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
+  prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 ssh.up() {
-    scp $1 vps:~/public/${2:-$1} 
-    echo https://topo.tw/p/$2${2:+/}$1
+  scp $1 vps:~/public/${2%/}${2:+/}$1 
+  echo https://topo.tw/p/${2%/}${2:+/}$1
 }
 ssh.up.today() {
-    DATE=$(date --iso-8601)
-    ssh vps mkdir -p ~/public/$DATE
-    ssh.up $1 $DATE
+  DATE=$(date --iso-8601)
+  ssh vps mkdir -p ~/public/$DATE
+  ssh.up $1 $DATE
 }
 ssh.down() {
-    ssh -t vps rm -rf -i ~/public/"$1"
+  ssh -t vps rm -rf -i ~/public/"$1"
 }
 
 # Gist
