@@ -36,8 +36,9 @@ sshtar() {
   prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 ssh.up() {
-  scp $1 vps:~/public/${2%/}${2:+/}$1 
-  echo https://topo.tw/p/${2%/}${2:+/}$1
+  folder=${2%/}${2:+/}
+  cat $1 | ssh vps "mkdir -p ~/public/$folder; cat >~/public/$folder$1"
+  echo https://topo.tw/p/$folder$1
 }
 ssh.up.today() {
   DATE=$(date --iso-8601)
@@ -449,7 +450,9 @@ trash() {
 # task
 alias tk='task'
 alias tkn='task next'
-alias tkc='task cont'
+alias tkc='task context'
+alias tkcn='task context none'
+alias tkch='task context home'
 alias tkrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
 alias li='tasksh'

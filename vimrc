@@ -11,7 +11,7 @@ set sidescroll=1
 set sidescrolloff=999
 set shell=/bin/bash
 set shiftwidth=2
-" autocmd FileType sh set shiftwidth=2
+autocmd FileType vimwiki set shiftwidth=4
 " set clipboard=unnamedplus
 
 " general
