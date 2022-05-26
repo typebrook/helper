@@ -14,6 +14,7 @@ sync ~/vimwiki &
 sync ~/.task &
 sync ~/.password-store &
 sync ~/.vim_runtime &
+sync ~/bean &
 
 while true; do
   if test $(jobs -r | wc -l) -gt 0; then

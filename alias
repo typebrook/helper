@@ -331,7 +331,7 @@ alias sample.mvt='curl -O https://demotiles.maplibre.org/tiles/5/25/14.pbf'
 alias proto.mvt='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
 alias proto.osm='curl -O https://raw.githubusercontent.com/openstreetmap/OSM-binary/master/src/osmformat.proto'
 alias proto.geobuf='curl -O https://raw.githubusercontent.com/mapbox/geobuf/master/geobuf.proto'
-alias data.ical='curl -O http://www.google.com/calendar/ical/taiwan__zh_tw@holiday.calendar.google.com/public/basic.ics'
+alias data.ical='curl -LO http://www.google.com/calendar/ical/zh-tw.taiwan%23holiday%40group.v.calendar.google.com/public/basic.ics'
 taiwan_dem() {
   <<<"http://dtm.moi.gov.tw/不分幅_全台及澎湖.zip" perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg' |\
   xargs curl -Lo taiwan_dem.zip
