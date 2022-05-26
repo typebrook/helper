@@ -259,6 +259,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'michal-h21/vim-zettel'
 Plug 'rlue/vim-barbaric'
+Plug 'nathangrigg/vim-beancount'
 
 " Initialize plugin system
 call plug#end()
