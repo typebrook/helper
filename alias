@@ -36,8 +36,9 @@ sshtar() {
   prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 ssh.up() {
+  set -o pipefail
   folder=${2%/}${2:+/}
-  cat $1 | ssh vps "mkdir -p ~/public/$folder; cat >~/public/$folder$1"
+  cat $1 | ssh vps "mkdir -p ~/public/$folder; cat >~/public/$folder$1" || return 1
   echo https://topo.tw/p/$folder$1
 }
 ssh.up.today() {
@@ -128,7 +129,7 @@ alias pss='pacman -Ss'
 alias yss='yay -Ss'
 alias pqi='pacman -Qi'
 alias pql='pacman -Qlq'
-pqlg() { 
+pqlb() { 
     pacman -Qlq $1 | grep bin
 }
 alias yql='yay -Ql'
