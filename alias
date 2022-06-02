@@ -32,7 +32,7 @@ vs() { which $1 && vim $(which $1); }
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias sshv='ssh -t vps'
-sshtar() {
+ssh.tar() {
   prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
 }
 ssh.up() {
