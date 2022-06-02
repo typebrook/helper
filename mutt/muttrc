@@ -14,6 +14,7 @@ set pgp_use_gpg_agent=yes
 set crypt_use_gpgme=yes
 set pgp_timeout=300
 set pgp_sign_as=6DD8C14A # replace 6DD8C14A with your gpg key id
+set edit_headers=yes
 
 # Basic Mailbox
 set spoolfile = "+INBOX"
