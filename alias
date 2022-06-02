@@ -455,6 +455,9 @@ trash() { mv $@ ~/.local/share/Trash; }
 alias tk='task'
 alias tkn='task next'
 alias tkc='task context'
+tkw(){
+  task $1 mod wait:$2
+}
 alias tkcn='task context none'
 alias tkch='task context home'
 alias tkrc='vim ~/.taskrc'
