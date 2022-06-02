@@ -33,7 +33,7 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias sshv='ssh -t vps'
 ssh.tar() {
-  prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/home/public dir' | tar xvzf -"
+  prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
 }
 ssh.up() {
   set -o pipefail
