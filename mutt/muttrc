@@ -75,6 +75,7 @@ macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's c
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
+macro index h "\clall\n" "All messages"
 
 # Sidebar
 mailboxes =INBOX =mbox "+------ Watch ------" =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
