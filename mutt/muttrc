@@ -77,13 +77,14 @@ macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
 
 # Sidebar
-mailboxes =INBOX =mbox "+---------- Watch ----------" =pay =osm =keep "+-------- Processed --------" =Sent =Trash =Drafts
+mailboxes =INBOX =mbox "+------ Watch ------" =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
 set mail_check = 120
 set mail_check_stats
 set imap_check_subscribed
 set sidebar_visible = yes
 set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
 set sidebar_short_path = yes
+set sidebar_width = 20
 bind index,pager B sidebar-toggle-visible
 bind index,pager \Cp sidebar-prev
 bind index,pager \Cn sidebar-next
