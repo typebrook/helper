@@ -500,6 +500,7 @@ alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias stew='cd ~/git/mapstew'
 alias vc='vultr-cli'
+alias thsr='curl -L google.com >/tmp/foo.html && xdg-open /tmp/foo.html'
 #hugo(){
 #    docker run --rm \
 #        -u `id -u`:`id -g` \
