@@ -76,6 +76,7 @@ macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
 macro index h "\clall\n" "All messages"
+macro index d '<tag-prefix><delete-message>' 'Delete'
 
 # Sidebar
 mailboxes =INBOX =mbox "+------ Watch ------" =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
