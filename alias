@@ -118,6 +118,7 @@ file.size() {
   }'
 }
 highlight() { grep --color -E "$1|\$"; }
+alias null='cat /dev/null'
 
 # pacman
 alias pac='sudo pacman -S' # pacman install
