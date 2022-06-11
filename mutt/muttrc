@@ -35,7 +35,7 @@ set pager_stop
 set sleep_time = 0 # When changing folder
 set timeout = 10
 set quit = ask-no
-set sort = threads
+set sort = reverse-threads
 set pager_index_lines = 5
 set markers = no # Remove '+' for long links with limited terminal width
 set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
