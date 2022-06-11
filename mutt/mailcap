@@ -1,2 +1,3 @@
-text/html; xdg-open '%s' &; test=test -n "$DISPLAY"; needsterminal;
-text/html; lynx -dump %s; nametemplate=%s.html; copiousoutput;
+#text/html; xdg-open '%s' &; test=test -n "$DISPLAY"; needsterminal;
+application/*; mkdir -p /tmp/mutt \; cp %s /tmp/mutt \; xdg-open /tmp/mutt/$(basename %s) &
+#text/html; lynx -dump %s; nametemplate=%s.html; copiousoutput;
