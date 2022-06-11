@@ -158,7 +158,7 @@ alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
-alias cdM='cd ~/Musics'
+alias cdM='cd ~/Music'
 
 # blog
 alias cdb='cd ~/blog'

@@ -216,7 +216,7 @@
       <action name="UnmaximizeFull"/>
       <action name="MoveResizeTo">
         <width>60%</width>
-        <height>80%</height>
+        <height>85%</height>
       </action>
       <action name="MoveToCenter"/>
     </keybind>
