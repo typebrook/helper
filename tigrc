@@ -102,8 +102,8 @@ bind main J @sh -c 'BRANCH=$(git branch --show-current) && git checkout %(commit
 bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bN @git branch %(branch) --track %(remote)/%(branch)
-bind main bu @git branch --set-upstream-to="%(prompt Set remote: )"/%(branch) %(branch)
-bind main bU @git branch --set-upstream-to="%(prompt Set remote/branch: )" %(branch)
+bind main bu +sh -c 'git branch --set-upstream-to="%(prompt Set remote: )"/%(branch) %(branch) || echo Fails'
+bind main bU +sh -c 'git branch --set-upstream-to="%(prompt Set remote/branch: )" %(branch) || echo Fails'
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind generic bd @git branch -d "%(prompt Delete branch: )"
 bind main bbd @git branch -d %(branch)
