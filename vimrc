@@ -35,6 +35,7 @@ nnoremap <C-K> ddkP
 nnoremap <C-J> ddp
 nnoremap <leader>R :read !
 nnoremap <leader>P :r !xsel -ob<CR>
+nnoremap <leader>nn :NERDTree<CR>
 set autoread
 set nofoldenable " disable folding
 
@@ -260,6 +261,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'michal-h21/vim-zettel'
 Plug 'rlue/vim-barbaric'
 Plug 'nathangrigg/vim-beancount'
+Plug 'preservim/nerdtree'
 
 " Initialize plugin system
 call plug#end()
@@ -287,5 +289,3 @@ function! LF()
     redraw!
 endfunction
 command! -bar LF call LF()
-" Override NERDTree comes with amix/vimrc
-map <leader>nn :LF<cr>
