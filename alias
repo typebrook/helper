@@ -63,6 +63,7 @@ alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
 alias ju='sudo journalctl -u'
 alias m='mutt'
+alias gmail="mutt -F $SETTING_DIR/mutt/gmail"
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 ps1.swap() { if [ -z $PS1_bak ]; then PS1_bak="$PS1"; PS1='> '; else PS1="$PS1_bak"; unset PS1_bak; fi; }
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
