@@ -10,6 +10,7 @@ sync() {
 }
 sync $SETTING_DIR &
 sync ~/blog &
+sync ~/git/vps &
 sync ~/vimwiki &
 sync ~/.task &
 sync ~/.password-store &
