@@ -289,7 +289,7 @@ alias dps='docker ps'
 alias dpsa='docker ps -a'
 docker.sh() { docker run --rm -it --entrypoint /bin/sh $@; }
 docker.bash() { docker run --rm -it --entrypoint /bin/bash $@; }
-docker.tags() { curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | jq '.results[]["name"]' | sort; }
+docker.tags() { curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | tee /dev/tty | jq '.results[]["name"]' | sort; }
 
 # Android
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
