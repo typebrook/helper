@@ -48,7 +48,7 @@ bind index y edit-label
 bind index x tag-entry
 bind index t edit-label
 bind index,browser l select-entry
-bind index \cl limit
+bind index \\ limit
 bind index \cj next-entry
 bind index \ck previous-entry
 bind index,browser G last-entry
@@ -75,7 +75,7 @@ macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's c
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
-macro index h "\clall\n" "All messages"
+macro index h "\\all\n" "All messages"
 macro index d '<tag-prefix><delete-message>' 'Delete'
 
 # Sidebar
