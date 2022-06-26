@@ -359,3 +359,4 @@ bind help e >sh -c "vim ~/.tigrc"
 # color
 #====================
 color diff-chunk white magenta
+color cursor	black   green	bold
