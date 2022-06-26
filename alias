@@ -266,6 +266,7 @@ alias diat='diary today'
 
 # crontab
 alias ce='crontab -e'
+alias cl='crontab -l'
 
 # lf
 alias r='_lf_cd'
