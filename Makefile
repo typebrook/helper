@@ -89,3 +89,6 @@ xkb:
 
 urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
+
+alacritty:
+	ln -sf `pwd`/alacritty/* ~/.config/alacritty/
