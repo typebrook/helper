@@ -13,7 +13,7 @@ shell=${shell##*/}
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
-PATH=$PATH:$BIN_DIR
+PATH=$BIN_DIR:$PATH
 mkdir -p $BIN_DIR
 find $BIN_DIR -xtype l | xargs rm 2>/dev/null || true
 

@@ -2,8 +2,7 @@
 
 # config
 alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
-alias zshrc="vim ~/.zshrc && source ~/.$(basename $SHELL)rc"
-alias bashrc="vim ~/.bashrc && source ~/.$(basename $SHELL)rc"
+alias $(basename $SHELL)rc="vim ~/.$(basename $SHELL)rc && source ~/.$(basename $SHELL)rc"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
