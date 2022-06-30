@@ -49,9 +49,7 @@ pass:
 	fi
 
 mutt:
-	mkdir -p ~/.config/mutt
-	ln -sf `pwd`/mutt/muttrc ~/.config/mutt/muttrc
-	ln -sf `pwd`/mutt/mailcap ~/.mailcap
+	ln -sf `pwd`/mutt/ ~/.config/mutt/
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf

@@ -1,21 +1,7 @@
-# IMAP/SMTP settings
-set imap_user = "typebrook@gmail.com"
-set imap_pass = `pass google/imap_for_typebrook`
+# Default settings
 set header_cache     = "~/.cache/mutt"
 set message_cachedir = "~/.cache/mutt"
-set smtp_url = "typebrook@gmail.com"
-set smtp_pass = "$imap_pass"
-
-set folder = "imaps://imap.gmail.com/"
-set spoolfile = "+INBOX"
-set postponed = "+[Gmail]/Drafts"
-set record = "+[Gmail]/Sent Mail"
-set trash = "+[Gmail]/Trash"
-
-subscribe talk-tw@openstreetmap.org
-
-set ssl_starttls = yes 
-set ssl_force_tls = yes
+set edit_headers=yes
 
 # Interface
 set editor = "vim"
@@ -39,7 +25,7 @@ bind index y edit-label
 bind index x tag-entry
 bind index t edit-label
 bind index,browser l select-entry
-bind index \cl limit
+bind index \\ limit
 bind index \cj next-entry
 bind index \ck previous-entry
 bind index,browser G last-entry
@@ -66,9 +52,10 @@ macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's c
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
-macro index h "\clall\n" "All messages"
+macro index h "\\all\n" "All messages"
 macro index d '<tag-prefix><delete-message>' 'Delete'
 
+# Sidebar
 set mail_check = 120
 set mail_check_stats
 set imap_check_subscribed
@@ -115,13 +102,13 @@ color index         brightblue      black         "~P"                        # 
 color index         cyan            black         "~p!~F"                     # messages to me
 color index         brightgreen     black         "~N~p!~F"                   # new messages to me
 color index         brightgreen     black         "~U~p!~F"                   # unread messages to me
-color index         green           black         "~R~p!~F"                   # messages to me
+color index         brightgreen     black         "~R~p!~F"                   # messages to me
 color index         red             black         "~F"                        # flagged messages
 color index         red             black         "~F~p"                      # flagged messages to me
 color index         red             black         "~N~F"                      # new flagged messages
 color index         red             black         "~N~F~p"                    # new flagged messages to me
 color index         red             black         "~U~F~p"                    # new flagged messages to me
-color index         brightgreen     black         "~T"                        # tagged messages
+color index         brightyellow    black         "~T"                        # tagged messages
 color index         black           brightmagenta "~D"                        # deleted messages
 color index         white           black         "~v~(!~N!~O)"               # collapsed thread with no unread
 color index         magenta         black         "~v~(~N|~O)"                # collapsed thread with some unread
