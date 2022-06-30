@@ -1,32 +1,70 @@
-base
-btrfs-progs
-certbot-nginx
-discount
-docker
-dovecot
-fzf
-gcc
-git
-git-lfs
-go
-grub
-htop
-inetutils
-linux
-linux-firmware
-make
-man-db
-net-tools
-nginx-mod-headers-more
-openssh
-pkgfile
-postfix
-python-pip
-s-nail
-sudo
-tmux
-tree
-vim
-which
-xsel
-zsh
+at 3.2.5-1
+autoconf 2.71-1
+automake 1.16.5-1
+base 2-2
+bat 0.21.0-1
+bind 9.18.4-1
+bison 3.8.2-4
+btrfs-progs 5.18.1-1
+certbot-nginx 1.28.0-1
+cronie 1.6.1-1
+discount 2.2.7.b-1
+docker 1:20.10.17-1
+dovecot 2.3.19.1-1
+fakeroot 1.29-1
+flex 2.6.4-3
+fuse2 2.9.9-4
+fzf 0.30.0-3
+gcc 12.1.0-2
+gd 2.3.3-4
+gdal 3.4.3-3
+git 2.36.1-1
+git-lfs 3.2.0-1
+github-cli 2.13.0-1
+gnu-netcat 0.7.1-8
+go 2:1.18.3-1
+grub 2:2.06.r261.g2f4430cc0-1
+htop 3.2.1-1
+hugo 0.101.0-1
+inetutils 2.2-1
+jq 1.6-4
+linux 5.18.6.arch1-1
+linux-firmware 20220610.7b71b75-1
+lshw B.02.19.2-4
+lsof 4.95.0-1
+m4 1.4.19-1
+make 4.3-3
+man-db 2.10.2-1
+mutt 2.2.6-1
+net-tools 2.10-1
+nginx-mainline-mod-dav-ext 3.0.0-21
+nginx-mod-headers-more 0.33-13
+openssh 9.0p1-1
+pass 1.7.4-2
+patch 2.7.6-8
+pkgconf 1.8.0-1
+pkgfile 21-2
+postfix 3.7.2-1
+ranger 1.9.3-4
+rapidjson 1.1.0-5
+s-nail 14.9.24-1
+sharutils 4.15.2-4
+sudo 1.9.11.p2-1
+task 2.6.2-1
+tig-git 2.5.4.r18.gf92286a6-1
+tiv 2015-2
+tldr 3.1.0-1
+tmux 3.3_a-2
+tree 2.0.2-1
+ufw 0.36.1-1
+unzip 6.0-18
+vim 8.2.5046-2
+viu 1.4.0-1
+wget 1.21.3-1
+which 2.21-5
+words 2.1-6
+xsel 1.2.0.20200527-1
+yay 10.3.1-2
+yq 2.14.0-1
+zip 3.0-10
+zsh 5.9-1
