@@ -126,13 +126,13 @@ color index         brightblue      black         "~P"                        # 
 color index         cyan            black         "~p!~F"                     # messages to me
 color index         brightgreen     black         "~N~p!~F"                   # new messages to me
 color index         brightgreen     black         "~U~p!~F"                   # unread messages to me
-color index         green           black         "~R~p!~F"                   # messages to me
+color index         brightgreen     black         "~R~p!~F"                   # messages to me
 color index         red             black         "~F"                        # flagged messages
 color index         red             black         "~F~p"                      # flagged messages to me
 color index         red             black         "~N~F"                      # new flagged messages
 color index         red             black         "~N~F~p"                    # new flagged messages to me
 color index         red             black         "~U~F~p"                    # new flagged messages to me
-color index         brightgreen     black         "~T"                        # tagged messages
+color index         brightyellow    black         "~T"                        # tagged messages
 color index         black           brightmagenta "~D"                        # deleted messages
 color index         white           black         "~v~(!~N!~O)"               # collapsed thread with no unread
 color index         magenta         black         "~v~(~N|~O)"                # collapsed thread with some unread
