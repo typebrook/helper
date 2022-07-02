@@ -1,2 +1,2 @@
-source ./default
-source ./topo.tw.login
+source ~/.config/mutt/default
+source ~/.config/mutt/topo.tw.login

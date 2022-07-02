@@ -49,7 +49,8 @@ pass:
 	fi
 
 mutt:
-	ln -sf `pwd`/mutt/ ~/.config/mutt/
+	rm -rf ~/.config/mutt
+	ln -sf `pwd`/mutt ~/.config/mutt
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
