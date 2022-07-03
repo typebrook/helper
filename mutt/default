@@ -6,7 +6,6 @@ unset ssl_starttls
 set header_cache     = "~/.cache/mutt"
 set message_cachedir = "~/.cache/mutt"
 set edit_headers=yes
-macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.b97602041<enter><change-folder>!<enter>'
 
 # Interface
 set editor = "vim"
