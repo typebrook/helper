@@ -4,8 +4,8 @@
 <!-- ################################ General Settings ################################ -->
 <openbox_config xmlns="http://openbox.org/3.4/rc" xmlns:xi="http://www.w3.org/2001/XInclude">
   <resistance>
-    <strength>10</strength>
     <screen_edge_strength>20</screen_edge_strength>
+    <strength>10</strength>
   </resistance>
   <focus>
     <focusNew>yes</focusNew>
@@ -216,7 +216,7 @@
       <action name="UnmaximizeFull"/>
       <action name="MoveResizeTo">
         <width>60%</width>
-        <height>85%</height>
+        <height>60%</height>
       </action>
       <action name="MoveToCenter"/>
     </keybind>
