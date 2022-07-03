@@ -1,0 +1,11 @@
+source ./default
+
+set pop_host = "pops://ms97.ntu.edu.tw"
+set pop_user = b97602041
+set pop_pass = `pass misc/ntu | head -1`
+#set smtp_url="smtp://localhost:25"
+
+set ssl_starttls = yes 
+set ssl_force_tls = yes
+
+set folder = pops://b97602041:`pass misc/ntu | head -1`@ms97.ntu.edu.tw:995/
