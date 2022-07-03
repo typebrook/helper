@@ -9,3 +9,6 @@ set pop_checkinterval = 1
 set pop_delete = yes
 
 set spoolfile = pops://ms97.ntu.edu.tw/
+
+# Sidebar
+mailboxes $pop_host

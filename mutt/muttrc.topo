@@ -24,8 +24,15 @@ set trash = "+Trash"
 set postponed = "+Drafts"
 
 # Sidebar
+unmailboxes *
 mailboxes =INBOX =mbox "+------ Watch ------" =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
 
 # Keybinding
+macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.topo<enter><change-folder>!<enter>'
 macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.gmail<enter><change-folder>!<enter>'
 macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.b97602041<enter><change-folder>!<enter>'
+
+## ACCOUNT1
+folder-hook imaps://imap.gmail.com/ 'source ~/.config/mutt/muttrc.gmail'
+### ACCOUNT2
+folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'

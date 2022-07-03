@@ -6,12 +6,26 @@ set imap_pass = `pass google/imap_for_typebrook`
 set smtp_url = "smtps://$imap_user@smtp.gmail.com"
 set smtp_pass = "$imap_pass"
 
-set ssl_starttls = yes 
-set ssl_force_tls = yes
+# Identify meself
+set from = "typebrook@gmail.com"
+set realname = "謝晉凡 Hsieh Chin Fan"
+set signature="$SETTING_DIR/mutt/.signature"
+set pgp_use_gpg_agent=yes
+set crypt_use_gpgme=yes
+set pgp_timeout=300
+set pgp_sign_as=6DD8C14A # replace 6DD8C14A with your gpg key id
 
 # Set mailboxes
 set folder = "imaps://imap.gmail.com/"
+set move = no
 set spoolfile = "+INBOX"
-set record = "+[Gmail]/Sent"
-set postponed = "+[Gmail]/Drafts"
-set trash = "+[Gmail]/Trash"
+unset record
+unset postponed
+unset trash
+
+# Sidebar
+unmailboxes *
+mailboxes
+
+# Hook -- IMPORTANT!
+#account-hook $folder "set imap_user=$imap_user imap_pass=$imap_pass
