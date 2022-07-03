@@ -1,4 +1,4 @@
-source ./default
+source ~/.config/mutt/default
 
 # IMAP/SMTP settings
 set imap_user = "typebrook"
