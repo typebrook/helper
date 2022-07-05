@@ -2,23 +2,23 @@ export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export EDITOR=vim
 export TERM=xterm-256color
 
+trap 'exit.sh' EXIT
+
 # load custom aliases
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 
-# Config shell
-
-shell=$(</proc/$$/cmdline tr -d '\0' | tr -d '-')
+# Get current shell
+shell=$(</proc/$$/cmdline tr -d '[\0\-]')
 shell=${shell##*/}
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
 PATH=$BIN_DIR:$PATH
 mkdir -p $BIN_DIR
-find $BIN_DIR -xtype l | xargs rm 2>/dev/null || true
-
-find $SETTING_DIR/tools -type f -executable | \
-xargs realpath | xargs -I{} ln -sf {} $BIN_DIR
+find $BIN_DIR -xtype l -exec rm {} + 2>/dev/null
+find $SETTING_DIR/tools -type f -executable -exec realpath {} + | \
+xargs -I{} ln -sf {} $BIN_DIR
 
 # Mail
 MAIL=$HOME/Maildir
@@ -43,6 +43,7 @@ if which fzf &>/dev/null; then
   source ~/.fzf.${shell} &>/dev/null
 fi
 
+# Set zsh or bash
 if [[ $shell == zsh ]]; then
   setopt extended_glob
   fpath=($SETTING_DIR/zsh $fpath)
@@ -60,9 +61,7 @@ elif [[ $shell == bash ]]; then
   bind -m emacs-standard -x '"\ek": fzf_preview'
 fi
 
-# Run something after exit shell
-trap 'exit.sh' EXIT
-
+# Working DIR
 [[ `pwd` == $HOME ]] && cd ~/Downloads
 
 true
