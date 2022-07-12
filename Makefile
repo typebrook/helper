@@ -85,7 +85,7 @@ xkb:
 	#setxkbmap -option ctrl:nocaps 2>/dev/null
 	#EOF
 	setxkbmap -option ctrl:nocaps 2>/dev/null
-	setxkbmap -option altwin:swap_alt_win
+	#setxkbmap -option altwin:swap_alt_win
 
 urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
