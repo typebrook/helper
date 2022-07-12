@@ -1,0 +1,7 @@
+#compdef ssh.up
+
+function _ssh.up() {
+  compadd -S '' $(ssh vps find /home/pham/public -maxdepth 1 -type d | grep -o '[^/]*$')
+}
+
+_ssh.up
