@@ -79,14 +79,6 @@ openbox:
 archcraft:
 	ls -sf `pwd`/tools/desktop/takeshot /usr/local/bin/takeshot
 
-xkb:
-	#sudo cat >/etc/profile.d/xkb.sh <<EOF
-	##! /bin/env bash
-	#setxkbmap -option ctrl:nocaps 2>/dev/null
-	#EOF
-	setxkbmap -option ctrl:nocaps 2>/dev/null
-	#setxkbmap -option altwin:swap_alt_win
-
 urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
 
