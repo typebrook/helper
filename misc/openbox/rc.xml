@@ -28,37 +28,37 @@
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
       <name>Sans</name>
-      <size>16</size>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveWindow">
-      <name>Sans</name>
-      <size>16</size>
+      <name>Hack Nerd Font</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuHeader">
-      <name>Sans</name>
-      <size>16</size>
+      <name>Hack Nerd Font</name>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
-      <name>Sans</name>
-      <size>16</size>
+      <name>Hack Nerd Font</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="ActiveOnScreenDisplay">
-      <name>Sans</name>
-      <size>16</size>
+      <name>Hack Nerd Font</name>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveOnScreenDisplay">
-      <name>Sans</name>
-      <size>16</size>
+      <name>Hack Nerd Font</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
