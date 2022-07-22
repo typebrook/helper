@@ -157,6 +157,7 @@ cdg() {
 }
 alias cda='mkdir -p ~/data && cd ~/data'
 alias cdd='cd ~/Downloads'
+alias cdconfig='cd ~/.config'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
