@@ -84,3 +84,6 @@ urlview:
 
 alacritty:
 	ln -sf `pwd`/alacritty/* ~/.config/alacritty/
+
+console:
+	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf

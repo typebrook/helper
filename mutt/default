@@ -68,8 +68,8 @@ set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
 set sidebar_short_path = yes
 set sidebar_width = 20
 bind index,pager B sidebar-toggle-visible
-bind index,pager \Cp sidebar-prev
-bind index,pager \Cn sidebar-next
+bind index \Cp sidebar-prev
+bind index \Cn sidebar-next
 bind index,pager \Co sidebar-open
 bind index,pager <F5> sidebar-prev-new
 bind index,pager <F6> sidebar-next-new
