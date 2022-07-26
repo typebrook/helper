@@ -1,5 +1,10 @@
 #! /bin/bash
 
+if [[ ! $1 =~ '.md' ]]; then
+  echo markdown file is not given >&2
+  exit 1
+fi
+
 # Available themes:
 # beige black blood league moon night serif simple sky solarized white
 THEME=${THEME:-serif}
