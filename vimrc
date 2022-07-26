@@ -187,7 +187,7 @@ augroup END
 
 " Generate static pages
 augroup slideRebuild
-  autocmd BufWritePost ~/public/*/*.slide :!cd %:p:h && reveal %:t >/dev/null
+  autocmd BufWritePost ~/public/*/*.slide :!cd %:p:h && ~/helper/tools/markdown/reveal %:t >/dev/null
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
