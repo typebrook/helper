@@ -182,6 +182,15 @@ augroup blogRebuild
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Settings for Slides
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Generate static pages
+augroup slideRebuild
+  autocmd BufWritePost ~/public/*/*.slide :!cd %:p:h && reveal %:t >/dev/null
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Redirect the output of a Vim or external command into a scratch buffer 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Copy from : https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
