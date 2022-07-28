@@ -198,11 +198,13 @@ check_repo() {
   [[ -n $(git cherry origin) ]] 2>/dev/null && print "\e[31m[ahead]\e[0m"
 }
 check() {
+  DIR=`pwd`
   check_repo $SETTING_DIR
   check_repo $HOME/.password-store
   check_repo $HOME/vimwiki
   check_repo $HOME/.task
   check_repo $HOME/bean
+  cd $DIR
 }
 alias ch='check'
 
