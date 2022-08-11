@@ -5,8 +5,10 @@ pidof git >/dev/null && exit 0
 
 # my repo
 sync() {
-  { cd $1 && [[ -n $(git remote -v) ]] || return; } 2>/dev/null
-  git pull --quiet || echo Has trouble when syncing `pwd` >/dev/tty
+  {
+    cd $1 && [[ -n `git remote -v` ]] || return
+  } 2>/dev/null
+  GIT_SSH_COMMAND="ssh -o ControlMaster=no" git pull --quiet || echo Has trouble when syncing `pwd` >/dev/tty
 }
 sync $SETTING_DIR &
 sync ~/blog &
