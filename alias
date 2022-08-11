@@ -38,9 +38,15 @@ ssh.tar() {
 ssh.up() {
   set -o pipefail
   filename=`basename $1`
-  folder=${2%/}${2:+/}
-  cat $1 | ssh vps "mkdir -p ~/public/$folder; cat >~/public/${folder}${filename}" || return 1
-  echo https://topo.tw/p/${folder}${filename}
+  if [[ $2 =~ ^/ ]]; then
+    folder=${2%/}
+    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
+    echo Uploaded to ${folder}/${filename}
+  else
+    folder=~/public/${2%/}
+    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
+    echo https://topo.tw/p/${folder}/${filename}
+  fi
 }
 ssh.up.today() {
   DATE=$(date --iso-8601)
