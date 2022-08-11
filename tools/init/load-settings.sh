@@ -24,7 +24,7 @@ xargs -I{} ln -sf {} $BIN_DIR
 MAIL=$HOME/Maildir
 
 # sync with important git repos
-(sync.sh &)
+setsid sync.sh
 
 # local
 PATH=$PATH:$HOME/.local/bin
