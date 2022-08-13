@@ -535,7 +535,7 @@
     </keybind>
     <keybind key="W-i">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/network</command>
+        <command>alacritty -e nmtui</command>
       </action>
     </keybind>
     <keybind key="W-r">
