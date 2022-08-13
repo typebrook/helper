@@ -528,6 +528,14 @@
         <command>~/.config/openbox/rofi/bin/powermenu</command>
       </action>
     </keybind>
+    <keybind key="W-0">
+      <action name="ToggleDecorations"/>
+    </keybind>
+    <keybind key="W-S-P">
+      <action name="Execute">
+        <command>polybar-msg cmd toggle</command>
+      </action>
+    </keybind>
     <keybind key="C-A-Print">
       <action name="Execute">
         <command>~/.config/openbox/rofi/bin/screenshot</command>
