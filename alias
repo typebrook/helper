@@ -180,7 +180,7 @@ vp() {
   post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
 
   if [ -z "$post" ]; then
-    echo 'cd ~/blog && hugo new posts/$filename' | eval ${PREFIX:-sh}
+    echo "sh -c 'cd ~/blog && hugo new posts/$filename'" | eval ${PREFIX}
     post="~/blog/content/posts/$filename"
   fi
 
