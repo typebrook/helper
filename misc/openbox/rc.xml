@@ -925,6 +925,7 @@
   <!-- ################################ Applications Rules ################################ -->
   <applications>
     <application class="*">
+      <decor>no</decor>
       <focus>yes</focus>
       <decor>yes</decor>
       <position force="yes">
