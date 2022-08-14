@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [[ ! $1 =~ (.md|.slide)$ ]]; then
+if [[ ! $1 =~ (.md|.slide)$ || ! -e $1 ]]; then
   echo markdown file is not given >&2
   exit 1
 fi
@@ -26,12 +26,20 @@ THEME=${THEME:-serif}
 # tomorrow-night-bright vs2015 vs xcode xt256
 HIGHLIGHT_THEME=${HIGHLIGHT_THEME:-base16/zenburn}
 
+
+if [[ $1 =~ / ]]; then
+  DIR="`dirname $1`"
+else
+  DIR="`pwd`"
+fi
+
+set -x
 docker run --rm \
   -u `id -u`:`id -g` \
-  -v `pwd`:/slides \
+  -v "$DIR":/slides \
   -p 1948:1948 \
   webpronl/reveal-md:5.3.4 \
-    $1 \
+    `basename $1` \
     --static /slides \
     #--theme ${THEME} \
     #--highlight-theme ${HIGHLIGHT_THEME} \
