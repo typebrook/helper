@@ -1,6 +1,7 @@
 #! /bin/bash
 
 PS1='task '
-while read -r -p 'task ' line </dev/tty; do
+while true; do
+  read -r -p 'task ' line </dev/tty;
   task $line
 done
