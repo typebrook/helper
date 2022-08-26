@@ -37,10 +37,10 @@ fzf:
 		~/.fzf/install; 
 	fi
 
-wiki:
+log:
 	# vimwiki
 	if [ ! -d "$(HOME)/.vimwiki" ]; then 
-		git clone git@github.com:typebrook/wiki.git ~/vimwiki; 
+		git clone vps:~/log ~/log; 
 	fi
 
 pass:

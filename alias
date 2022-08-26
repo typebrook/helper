@@ -264,12 +264,12 @@ alias bean='vim $HOME/bean/main.bean'
 alias b='bean'
 
 # about vimwiki
-alias cdw='cd ~/vimwiki'
-alias chw='tig -C ~/vimwiki'
-ww() { entry="${1:-guideline}"; vim -c Goyo ~/vimwiki/${entry%%.md}.md; }
-wwd() { entry="${1:-guideline}"; vim -c Goyo ~/vimwiki/diary/${entry%%.md}.md; }
-wg() { grep -r "$@" --exclude-dir=logseq/ ~/vimwiki; }
-wi() { cat ~/vimwiki/${1%%.md}.md; }
+alias cdl='cd ~/log'
+alias chw='tig -C ~/log'
+ww() { entry="${1:-guideline}"; vim -c Goyo ~/log/${entry%%.md}.md; }
+wwd() { entry="${1:-guideline}"; vim -c Goyo ~/log/diary/${entry%%.md}.md; }
+wg() { grep -r "$@" --exclude-dir=logseq/ ~/log; }
+wi() { cat ~/log/${1%%.md}.md; }
 alias dia='diary'
 alias dias='diary specify'
 alias diaa='diary print'
@@ -521,7 +521,7 @@ alias thsr='curl -L google.com >/tmp/foo.html && xdg-open /tmp/foo.html'
 #        klakegg/hugo \
 #        $@
 #}
-todo() { cd ~/vimwiki && grep -R ' TODO ' --exclude-dir=logseq/; }
+todo() { cd ~/log && grep -R ' TODO ' --exclude-dir=logseq/; }
 fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias ffmpeg='ffmpeg -hide_banner'
 alias md='reveal'

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-today=~/vimwiki/diary/$(date --iso-8601).md
+today=~/log/diary/$(date --iso-8601).md
 
 specify_date() {
   YEAR=${YEAR:-22}
@@ -17,7 +17,7 @@ specify_date() {
     date -d $YEAR-$MONTH-$DAY &>/dev/null && break
   done
 
-  FILE=~/vimwiki/diary/20$YEAR-$MONTH-$DAY.md
+  FILE=~/log/diary/20$YEAR-$MONTH-$DAY.md
   vim -c 'Goyo' $FILE
 }
 

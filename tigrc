@@ -62,7 +62,7 @@ bind reflog  c  ?git checkout %(commit)
 # highlight diff without +/-
 # set diff-show-signs = false
 # set diff_column_highlight = ALL
-set diff-highlight = false
+set diff-highlight = true
 
 # misc settings
 set ignore-case = true
