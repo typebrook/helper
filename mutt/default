@@ -21,6 +21,13 @@ set pager_index_lines = 5
 set markers = no # Remove '+' for long links with limited terminal width
 set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
 
+# Preference
+alternative_order text/plain text/enriched text/html 
+# Auto convert text/html MIME type to text/plain
+auto_view text/html
+# Macro to open html with css
+macro index,pager h "<pipe-message>htmail-decode<return>" "render html mail using htmail-view"
+
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim风格键位绑定
 bind index <Return> sync-mailbox
@@ -51,6 +58,7 @@ bind pager \cd half-down
 bind pager \cu half-up
 bind pager \cj next-entry
 bind pager \ck previous-entry
+bind pager \ch display-toggle-weed
 bind attach x view-mailcap
 macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's configuration file"
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
