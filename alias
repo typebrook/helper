@@ -207,7 +207,7 @@ check() {
   DIR=`pwd`
   check_repo $SETTING_DIR
   check_repo $HOME/.password-store
-  check_repo $HOME/vimwiki
+  check_repo $HOME/log
   check_repo $HOME/.task
   check_repo $HOME/bean
   cd $DIR
