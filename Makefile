@@ -4,7 +4,7 @@
 all: git tig vim gpg
 	mkdir -p ~/git
 
-other: zsh fzf wiki pass mutt tmux
+other: zsh fzf log pass mutt tmux
 
 git:
 	rm -f ~/.gitconfig
