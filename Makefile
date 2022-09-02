@@ -65,7 +65,7 @@ task:
 	ln -sf $(HOME)/.task/taskrc $(HOME)/.taskrc
 	if [ ! -d "$(HOME)/.task/.git" ]; then 
 		if [ -d "$(HOME)/.task" ]; then rm -rf "$(HOME)/.task"; fi; 
-		git clone --depth 1 git@github.com:typebrook/task.git ~/.task;
+		git clone --depth 1 vps:~/.task ~/.task;
 	fi
 
 blog:
