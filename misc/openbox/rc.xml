@@ -502,11 +502,6 @@
         <command>firefox</command>
       </action>
     </keybind>
-    <keybind key="W-e">
-      <action name="Execute">
-        <command>geany</command>
-      </action>
-    </keybind>
     <!-- Rofi -->
     <keybind key="A-F1">
       <action name="Execute">
