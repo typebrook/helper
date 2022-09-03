@@ -31,8 +31,6 @@ vnoremap Y :!tee >(xsel -ib)<CR>
 nnoremap <leader>< :%terminal ++noclose<CR>
 nnoremap <leader>W :set wrap!<CR>
 nnoremap <leader>T :vertical terminal<CR>
-nnoremap <C-K> ddkP
-nnoremap <C-J> ddp
 nnoremap <leader>R :read !
 nnoremap <leader>P :r !xsel -ob<CR>
 nnoremap <leader>nn :NERDTree<CR>
@@ -99,6 +97,7 @@ vnoremap ~ <ESC>`<i~<ESC>`>la~<ESC>
 
 " abbrev
 iabbrev @@ typebrook@gmail.com
+
 
 " vim_markdown
 let g:vim_markdown_folding_disabled = 1
@@ -257,6 +256,7 @@ autocmd FileType rust nmap <leader>gd <Plug>(rust-doc)
 call plug#begin('~/.vim/plugged')
 
 " Add indent line
+
 Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
