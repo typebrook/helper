@@ -210,6 +210,7 @@ check() {
   check_repo $HOME/log
   check_repo $HOME/.task
   check_repo $HOME/bean
+  check_repo $HOME/.vim/vim-init
   cd $DIR
 }
 alias ch='check'
