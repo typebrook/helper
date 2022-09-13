@@ -18,14 +18,13 @@ alias digg='dig +noall +answer +multiline'
 # vim
 alias v='vim'
 alias vi='vim'
-alias sv='sudo vim'
 alias vl="vim -c 'norm '"
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
 alias ve="vim -c 'e! ~/.vim/vim-init/init.vim'"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
-alias cdvim='cd ~/.vim_runtime' # amix/vimrc repo
+alias cdvim='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
 
 # ssh
