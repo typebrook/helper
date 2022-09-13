@@ -380,6 +380,7 @@ alias data.taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/da
 
 # clipboard
 alias xi='xsel -ib'
+alias xii='`fc -ln -1` | head -1 | xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 
