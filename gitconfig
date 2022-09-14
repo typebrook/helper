@@ -1,7 +1,17 @@
 [user]
-    email = typebrook@gmail.com
+    email = pham@topo.tw
     name = Hsieh Chin Fan
     signingkey = 6DD8C14A
+
+[sendemail]
+	smtpserver = mail.topo.tw
+	smtpuser = pham
+	smtpencryption = tls
+	smtpserverport = 587
+	smtpPass = `pass pham@topo.tw`
+
+[gpg]
+	program = gpg2
 
 [alias]
     reorder = "!GIT_SEQUENCE_EDITOR=\"sed -i -n 'h;1n;2p;g;p'\" git rebase -i HEAD~2"
@@ -24,8 +34,7 @@
 
 [credential]
     helper = store
-[gpg]
-	program = gpg2
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
