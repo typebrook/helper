@@ -526,6 +526,9 @@
     <keybind key="W-0">
       <action name="ToggleDecorations"/>
     </keybind>
+    <keybind key="W-9">
+      <action name="ToggleAlwaysOnTop"/>
+    </keybind>
     <keybind key="W-S-P">
       <action name="Execute">
         <command>polybar-msg cmd toggle</command>
