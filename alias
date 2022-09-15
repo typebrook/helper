@@ -472,13 +472,14 @@ trash() { mv $@ ~/.local/share/Trash; }
 alias tk='task'
 alias tkn='task next'
 alias tkd='task done'
+alias tkm='task modify'
+alias tka='task annotate'
 tkw(){ task $1 mod wait:$2; }
 alias tkc='task context'
 alias tkcn='task context none'
 alias tkch='task context home'
 alias tkrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
-alias li='tasksh'
 alias tt='taskwarrior-tui'
 
 # upload with 0x0.st
