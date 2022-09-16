@@ -3,9 +3,10 @@ set ssl_force_tls = yes
 unset ssl_starttls
 
 # Default settings
-set header_cache     = "~/.cache/mutt"
-set message_cachedir = "~/.cache/mutt"
+set header_cache = ~/.cache/mutt
+set message_cachedir = ~/.cache/mutt
 set edit_headers=yes
+set mailcap_path = ~/.config/mutt/mailcap
 
 # Interface
 set editor = "vim"
