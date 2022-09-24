@@ -15,14 +15,9 @@ tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
 
 vim:
-	# amix-vimrc
-	if [ ! -d "$(HOME)/.vim_runtime" ]; then 
-		git clone --depth=1 --origin my https://github.com/amix/vimrc ~/.vim_runtime && 
-		cd ~/.vim_runtime && sh ~/.vim_runtime/install_awesome_vimrc.sh
-	fi
+	ln -sf `pwd`/vimrc ~/.vimrc
 	# vim-plug
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	ln -sf `pwd`/vimrc ~/.vim_runtime/my_configs.vim
 
 gpg:
 	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
