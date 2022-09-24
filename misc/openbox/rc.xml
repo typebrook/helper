@@ -562,7 +562,7 @@
     </keybind>
     <keybind key="W-v">
       <action name="Execute">
-        <command>tasks</command>
+        <command>alacritty --hold -o "window.padding.x=100" -o "window.padding.y=70" -o "window.dimensions.columns=64" -o "window.dimensions.lines=9" -e cal -3</command>
       </action>
     </keybind>
     <!-- CLI Apps -->
