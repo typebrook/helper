@@ -24,7 +24,7 @@
   <theme>
     <name>Arc-Dark</name>
     <titleLayout>DLIMC</titleLayout>
-    <keepBorder>no</keepBorder>
+    <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
       <name>Sans</name>

@@ -73,7 +73,10 @@ blog:
 		git clone ssh://vps/~/blog $(HOME)/blog;
 	fi
 
-openbox:
+theme:
+	ln -sf `pwd`/misc/themes ~/.themes
+
+openbox: theme
 	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
 
 archcraft:
