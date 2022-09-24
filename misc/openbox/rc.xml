@@ -557,7 +557,6 @@
     <keybind key="W-p">
       <action name="Execute">
         <command>color-gpick</command>
-        <!--<command>color-picker</command>-->
       </action>
     </keybind>
     <keybind key="W-v">
@@ -619,22 +618,11 @@
         <command>xkill</command>
       </action>
     </keybind>
-    <!--
-    <keybind key="W-c">
-      <action name="Close"/>
-    </keybind>
-    -->
     <keybind key="A-q">
       <action name="Close"/>
     </keybind>
-    <keybind key="A-F5">
+    <keybind key="A-w">
       <action name="Iconify"/>
-    </keybind>
-    <keybind key="A-F6">
-      <action name="ToggleMaximize"/>
-    </keybind>
-    <keybind key="A-F7">
-      <action name="ToggleDecorations"/>
     </keybind>
     <keybind key="W-d">
       <action name="ToggleShowDesktop"/>
