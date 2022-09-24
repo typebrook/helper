@@ -21,11 +21,11 @@ playlist_disable_highlight_delay = 2
 allow_for_physical_item_deletion = "no"
 
 ### Visualizer ###
-visualizer_data_source = /tmp/mpd.fifo
-visualizer_output_name = "mpd_visualizer"
-visualizer_in_stereo   = "yes"
-visualizer_look 	   = "  "
-visualizer_type 	   = "ellipse"
+#visualizer_data_source = /tmp/mpd.fifo
+#visualizer_output_name = "mpd_visualizer"
+#visualizer_in_stereo   = "yes"
+#visualizer_look 	   = "  "
+visualizer_type 	   = "spectrum"
 
 ### Appearance ###
 playlist_display_mode = "columns"
@@ -74,7 +74,7 @@ color2 = "red"
 startup_screen = visualizer
 startup_slave_screen = playlist  
 startup_slave_screen_focus = yes
-locked_screen_width_part = 41
+locked_screen_width_part = 25
 
 ### Misc ###
 default_place_to_search_in = "database"
