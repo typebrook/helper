@@ -24,7 +24,7 @@ alias ve="vim ~/.vimrc"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
-alias cdvim='cd ~/.vim/vim-init'
+alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
 
 # ssh
