@@ -104,7 +104,11 @@
   </dock>
   <!-- ################################ Keybindings ################################ -->
   <keyboard>
-    <chainQuitKey/>
+    <keybind key="W-o">
+      <action name="Execute">
+      	<command>alacritty -o "window.dimensions.lines=32" -o "window.dimensions.columns=90" -e vim ~/.config/openbox/rc.xml</command>
+        </action>
+    </keybind>
     <!-- Change Workspace/Desktop -->
     <keybind key="W-1">
       <action name="GoToDesktop">
@@ -515,7 +519,7 @@
     </keybind>
     <keybind key="W-m">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/music</command>
+        <command>alacritty -e ncmpcpp</command>
       </action>
     </keybind>
     <keybind key="W-x">
