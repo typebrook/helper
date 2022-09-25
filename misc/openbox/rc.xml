@@ -522,6 +522,11 @@
         <command>alacritty -e ncmpcpp</command>
       </action>
     </keybind>
+    <keybind key="W-S-m">
+      <action name="Execute">
+        <command>alacritty -o "window.dimensions.lines=32" -o "window.dimensions.columns=90" -e mutt</command>
+      </action>
+    </keybind>
     <keybind key="W-x">
       <action name="Execute">
         <command>~/.config/openbox/rofi/bin/powermenu</command>
@@ -558,7 +563,7 @@
         <command>~/.config/openbox/rofi/bin/runner</command>
       </action>
     </keybind>
-    <keybind key="W-p">
+    <keybind key="W-g">
       <action name="Execute">
         <command>color-gpick</command>
       </action>
@@ -566,6 +571,22 @@
     <keybind key="W-c">
       <action name="Execute">
         <command>alacritty --hold -o "window.padding.x=100" -o "window.padding.y=70" -o "window.dimensions.columns=64" -o "window.dimensions.lines=9" -e cal -3</command>
+      </action>
+    </keybind>
+    <keybind key="W-p">
+      <action name="Execute">
+		<command>
+		  alacritty --hold -e bash -c '
+			echo Use find or grep to search password
+		    echo
+			while read -e target extra; do 
+			  if [[ "$target" == "" || "$target" == "find" || "$target" == "grep" ]]; then
+				pass $target $extra >/dev/tty
+			  else
+				pass $target $extra &amp;&amp; break; 
+			  fi
+		  done | tee >(echo; sed 1d >/dev/tty) | head -1 | xsel -ib'
+		</command>
       </action>
     </keybind>
     <!-- CLI Apps -->

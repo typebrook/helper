@@ -505,7 +505,8 @@ alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
-alias pgc='pass generate -c'
+alias pgn='pass generate --in-place --clip'
+alias pgc='pass generate --clip'
 words() {
     cat /usr/share/dict/usa | egrep "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
 }
