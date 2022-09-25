@@ -29,6 +29,7 @@ alternative_order text/plain text/enriched text/html
 auto_view text/html
 # Macro to open html with css
 #macro index,pager h "<pipe-message>htmail-decode<return>" "render html mail using htmail-view"
+macro pager h "v/html<return>xq<return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim风格键位绑定
