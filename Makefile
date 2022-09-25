@@ -88,3 +88,4 @@ alacritty:
 
 mpd:
 	ln -sf `pwd`/mpd/ncmpcpp ~/.config/ncmpcpp
+	rm -rf ~/.ncmpcpp
