@@ -54,8 +54,8 @@ bind pager gg noop
 bind pager gg top
 bind pager j next-line
 bind pager k previous-line
-bind pager \cj next-entry
-bind pager \ck previous-entry
+bind pager \cn next-entry
+bind pager \cp previous-entry
 bind pager \ch display-toggle-weed
 bind attach x view-mailcap
 macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's configuration file"

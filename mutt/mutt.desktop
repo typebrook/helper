@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Mutt
+Comment=My beloved mail client
+Exec=alacritty -e mutt %u
+MimeType=x-scheme-handler/mailto
+Terminal=true
+Type=Application

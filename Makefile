@@ -46,9 +46,13 @@ pass:
 		git clone ssh://vps/~/.password-store ~/.password-store;
 	fi
 
-mutt:
+~/.local/share/application:
+	mkdir -p $@
+
+mutt: ~/.local/share/application
 	rm -rf ~/.config/mutt
 	ln -sf `pwd`/mutt ~/.config/mutt
+	ln -sf `pwd`/mutt/mutt.desktop $<
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
