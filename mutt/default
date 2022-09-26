@@ -34,7 +34,6 @@ macro pager h "v/html<return>xq<return>" "Open html file"
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim风格键位绑定
 bind index <Return> sync-mailbox
-bind index q browse-mailboxes
 bind index y edit-label
 bind index x tag-entry
 bind index t edit-label
@@ -45,20 +44,16 @@ bind index \ck previous-entry
 bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser gg first-entry
-bind index \cf next-page
-bind index \cb previous-page
-bind index \cd half-down
-bind index \cu half-up
+bind index,pager,browser \cf next-page
+bind index,pager,browser \cb previous-page
+bind index,pager,browser \cd half-down
+bind index,pager,browser \cu half-up
 bind index } bottom-page
 bind pager G bottom
-bind pager g noop
+bind pager gg noop
 bind pager gg top
 bind pager j next-line
 bind pager k previous-line
-bind pager \cf next-page
-bind pager \cb previous-page
-bind pager \cd half-down
-bind pager \cu half-up
 bind pager \cj next-entry
 bind pager \ck previous-entry
 bind pager \ch display-toggle-weed
@@ -70,6 +65,7 @@ macro index *n "\ctall\n" "Deselect All"
 macro index h "\\all\n" "All messages"
 macro index d '<tag-prefix><delete-message>' 'Delete'
 macro index s '<tag-prefix><save-message>' 'Saved'
+macro index q 'c?'
 
 # Sidebar
 set mail_check = 120
