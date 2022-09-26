@@ -106,8 +106,12 @@
   <keyboard>
     <keybind key="W-o">
       <action name="Execute">
-      	<command>alacritty -o "window.dimensions.lines=32" -o "window.dimensions.columns=90" -e vim ~/.config/openbox/rc.xml</command>
-        </action>
+		<command>alacritty 
+		  -o "window.dimensions.lines=32" 
+		  -o "window.dimensions.columns=90" 
+		  -e vim ~/.config/openbox/rc.xml
+	    </command>
+      </action>
     </keybind>
     <!-- Change Workspace/Desktop -->
     <keybind key="W-1">
