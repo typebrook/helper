@@ -528,7 +528,11 @@
     </keybind>
     <keybind key="W-m">
       <action name="Execute">
-        <command>alacritty -o "window.dimensions.lines=32" -o "window.dimensions.columns=90" -e mutt</command>
+		<command>alacritty --title Mutt
+		  -o "window.dimensions.lines=32" 
+		  -o "window.dimensions.columns=90" 
+		  -e mutt
+	    </command>
       </action>
     </keybind>
     <keybind key="W-x">
@@ -611,14 +615,14 @@
         <command>alacritty -e nvim</command>
       </action>
     </keybind>
-    <!--keybind key="C-A-r">
+	<keybind key="C-A-r">
       <action name="Execute">
-        <command>alacritty -e ranger</command>
+        <command>alacritty --title Ranger -e ranger</command>
       </action>
-    </keybind-->
+	</keybind>
     <keybind key="C-A-h">
       <action name="Execute">
-        <command>alacritty -e htop</command>
+        <command>alacritty --title htop -e htop</command>
       </action>
     </keybind>
     <keybind key="C-A-b">
