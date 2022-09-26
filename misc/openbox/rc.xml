@@ -517,12 +517,12 @@
         <command>networkmanager_dmenu</command>
       </action>
     </keybind>
-    <keybind key="W-m">
+    <keybind key="W-a">
       <action name="Execute">
         <command>alacritty -e ncmpcpp</command>
       </action>
     </keybind>
-    <keybind key="W-S-m">
+    <keybind key="W-m">
       <action name="Execute">
         <command>alacritty -o "window.dimensions.lines=32" -o "window.dimensions.columns=90" -e mutt</command>
       </action>
