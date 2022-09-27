@@ -19,7 +19,7 @@ menu.separator.padding.width: 0
 menu.separator.padding.height: 2
 
 #-- Border colors -------------------------------------------------
-window.active.border.color: #BB0000
+window.active.border.color: #FF79C6
 window.inactive.border.color: #2F343F
 window.active.client.color: #2F343F
 window.inactive.client.color: #2F343F
