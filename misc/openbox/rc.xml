@@ -583,18 +583,7 @@
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-		<command>
-		  alacritty --hold -e bash -c '
-			echo Use find or grep to search password
-		    echo
-			while read -e target extra; do 
-			  if [[ "$target" == "" || "$target" == "find" || "$target" == "grep" ]]; then
-				pass $target $extra >/dev/tty
-			  else
-				pass $target $extra &amp;&amp; break; 
-			  fi
-		  done | tee >(echo; sed 1d >/dev/tty) | head -1 | xsel -ib'
-		</command>
+		<command>~/helper/tools/desktop/password-store.sh</command>
       </action>
     </keybind>
     <!-- CLI Apps -->
@@ -622,7 +611,7 @@
 	</keybind>
     <keybind key="C-A-h">
       <action name="Execute">
-        <command>alacritty --title htop -e htop</command>
+        <command>alacritty --title htop -o "window.startup_mode=Maximized" -e htop</command>
       </action>
     </keybind>
     <keybind key="C-A-b">
