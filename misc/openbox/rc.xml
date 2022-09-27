@@ -583,7 +583,7 @@
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-		<command>~/helper/tools/desktop/password-store.sh</command>
+		<command>~/bin/password-store.sh</command>
       </action>
     </keybind>
     <!-- CLI Apps -->
