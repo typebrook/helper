@@ -64,14 +64,13 @@
     </font>
   </theme>
   <desktops>
-    <number>5</number>
+    <number>4</number>
     <firstdesk>0</firstdesk>
     <names>
       <name>1</name>
       <name>2</name>
       <name>3</name>
       <name>4</name>
-      <name>5</name>
     </names>
     <popupTime>0</popupTime>
   </desktops>
@@ -134,11 +133,6 @@
         <to>4</to>
       </action>
     </keybind>
-    <keybind key="W-5">
-      <action name="GoToDesktop">
-        <to>5</to>
-      </action>
-    </keybind>
     <!-- Move application to specific desktop -->
     <keybind key="S-W-1">
       <action name="SendToDesktop">
@@ -158,11 +152,6 @@
     <keybind key="S-W-4">
       <action name="SendToDesktop">
         <desktop>4</desktop>
-      </action>
-    </keybind>
-    <keybind key="S-W-5">
-      <action name="SendToDesktop">
-        <desktop>5</desktop>
       </action>
     </keybind>
     <!-- Switch b/w Applications -->
@@ -523,7 +512,7 @@
     </keybind>
     <keybind key="W-a">
       <action name="Execute">
-        <command>alacritty -e ncmpcpp</command>
+        <command>alacritty --title MPD -e ncmpcpp</command>
       </action>
     </keybind>
     <keybind key="W-m">
