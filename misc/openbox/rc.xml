@@ -530,7 +530,7 @@
       <action name="Execute">
 		<command>alacritty --title Mutt
 		  -o "window.dimensions.lines=32" 
-		  -o "window.dimensions.columns=90" 
+		  -o "window.dimensions.columns=110" 
 		  -e mutt
 	    </command>
       </action>
