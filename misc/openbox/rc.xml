@@ -535,6 +535,15 @@
 	    </command>
       </action>
     </keybind>
+    <keybind key="W-S-m">
+      <action name="Execute">
+		<command>alacritty --title Mutt
+		  -o "window.dimensions.lines=32" 
+		  -o "window.dimensions.columns=110" 
+		  -e mutt -F ~/helper/mutt/muttrc.gmail
+	    </command>
+      </action>
+    </keybind>
     <keybind key="W-x">
       <action name="Execute">
         <command>~/.config/openbox/rofi/bin/powermenu</command>
