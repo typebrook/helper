@@ -1,2 +1,7 @@
 text/html; firefox '%s' &; test=test -n "$DISPLAY"; needsterminal;
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
+application/pdf; firefox '%s'
+application/zip; unzip -p '%s' | less
+image/png; feh '%s'
+image/jpg; feh '%s'
+image/jpeg; feh '%s'
