@@ -190,7 +190,7 @@
       </action>
     </keybind>
     <!-- Window Tiling: Snap feature -->
-    <keybind key="W-Left">
+    <keybind key="W-h">
       <action name="UnmaximizeFull"/>
       <action name="MaximizeVert"/>
       <action name="MoveResizeTo">
@@ -198,7 +198,7 @@
       </action>
       <action name="MoveToEdgeWest"/>
     </keybind>
-    <keybind key="W-Right">
+    <keybind key="W-l">
       <action name="UnmaximizeFull"/>
       <action name="MaximizeVert"/>
       <action name="MoveResizeTo">
@@ -217,15 +217,27 @@
       </action>
       <action name="MoveToCenter"/>
     </keybind>
-    <!-- Top right-->
     <keybind key="W-k">
+      <action name="MaximizeFull"/>
+    </keybind>
+    <keybind key="W-S-k">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
-        <x>-5</x>
-        <y>5</y>
+        <x>20%</x>
+        <y>15</y>
+        <height>97%</height>
+        <width>65%</width>
       </action>
     </keybind>
-    <!-- Top left-->
+    <keybind key="W-j">
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+        <width>60%</width>
+        <height>60%</height>
+      </action>
+      <action name="MoveToCenter"/>
+    </keybind>
+	<!--
     <keybind key="W-h">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -233,15 +245,6 @@
         <y>5</y>
       </action>
     </keybind>
-    <!-- Bottom left-->
-    <keybind key="W-j">
-      <action name="Unmaximize"/>
-      <action name="MoveResizeTo">
-        <x>5</x>
-        <y>-5</y>
-      </action>
-    </keybind>
-    <!-- Bottom right-->
     <keybind key="W-l">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -249,6 +252,7 @@
         <y>-5</y>
       </action>
     </keybind>
+	-->
     <!--
     <keybind key="A-z">
       <action name="Unmaximize"/>
@@ -260,15 +264,6 @@
       </action>
     </keybind>
     -->
-    <keybind key="A-x">
-      <action name="Unmaximize"/>
-      <action name="MoveResizeTo">
-        <x>20%</x>
-        <y>15</y>
-        <height>97%</height>
-        <width>65%</width>
-      </action>
-    </keybind>
     <!--
     <keybind key="A-c">
       <action name="Unmaximize"/>
@@ -369,13 +364,13 @@
         <y>20</y>
       </action>
     </keybind>
-    <keybind key="W-A-Left">
+    <keybind key="W-A-h">
       <action name="MoveRelative">
         <x>-20</x>
         <y>0</y>
       </action>
     </keybind>
-    <keybind key="W-A-Right">
+    <keybind key="W-A-l">
       <action name="MoveRelative">
         <x>20</x>
         <y>0</y>
