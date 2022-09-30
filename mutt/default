@@ -21,7 +21,7 @@ set sort = reverse-threads
 set pager_index_lines = 5
 set markers = no # Remove '+' for long links with limited terminal width
 #set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
-set index_format = "%Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
+set index_format = "%Z %(%g.%b.%d) %-15.15L (%?l?%4l&%4c?) %s"
 
 # Preference
 alternative_order text/plain text/enriched text/html 
