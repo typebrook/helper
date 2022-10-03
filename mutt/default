@@ -140,6 +140,7 @@ color index         yellow          red           "~v~(~D)"                   # 
 
 # color header
 color header        green           black         "^(From)"
+color header        magenta         black         "^(To)"
 color header        brightyellow    black         "^(Subject)"
 
 # Set quote's starting symbol
