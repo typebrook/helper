@@ -1,0 +1,22 @@
+#! /bin/sh
+
+ROFI_ARGS=( '-font' 'Hack 22' )
+ENTRIES="$(find ~/.password-store -name '*gpg' -printf %P\\n | sed 's/.gpg$//')"
+
+# Give rofi available passwords and exit
+if [ $# -eq 0 ]; then
+	# Specify rofi prompt as 'Edit'
+	echo -e "\0prompt\x1fEdit"
+
+	echo "$ENTRIES"
+	exit 0
+fi
+
+# If password doesn't exist, just quit
+<<<"$ENTRIES" grep -q $1 || exit 0
+
+# Use alacritty to edit password
+coproc ( 
+	alacritty -e pass edit $1 && pass $1 --clip
+	rofi "${ROFI_ARGS[@]}" -e "Copied: $1" 
+)

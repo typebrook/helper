@@ -1,0 +1,54 @@
+#! /bin/sh
+
+ROFI_ARGS=( '-font' 'Hack 22' )
+OPTIONS_NEW=( 'NO' 'YES' 'YES, and edit it' )
+
+# Generate a new password
+if [ -n "${ROFI_DATA}" ]; then
+	[ "$1" == "${OPTIONS_NEW[1]}" ] && \
+		coproc ( 
+			export POST=false
+			pass generate ${ROFI_DATA} --clip
+			rofi "${ROFI_ARGS[@]}" -e "Generate and Copied: ${ROFI_DATA}" 
+		)
+
+	[ "$1" == "${OPTIONS_NEW[2]}" ]  && \
+		coproc (
+			export POST=false
+			pass generate ${ROFI_DATA} --clip
+			alacritty -e pass edit ${ROFI_DATA}; \
+		)
+
+	exit 0
+fi
+
+# Give rofi available passwords and exit
+if [ $# -eq 0 ]; then
+	# Specify rofi prompt as 'Get'
+	echo -e "\0prompt\x1fGet"
+
+	find ~/.password-store -name '*gpg' -printf %P\\n | \
+	sed 's/.gpg$//'
+
+	exit 0
+fi
+
+# Test password exists or not
+RESULT="$(pass $1)"
+if [ -n "$RESULT" ]; then
+	# Copy the given password into clipboard
+	echo "$RESULT" | head -1 | xsel -ib
+
+	# And show extra message
+	EXTRA="$(echo; echo; echo "$RESULT" | sed '1d; 1{/^$/d}')"
+    coproc ( rofi "${ROFI_ARGS[@]}" -e "Copied: $1$EXTRA" )
+# Password doesn't exist yet
+# Go to next rofi execution
+else
+	echo -e "\0prompt\x1f$1 doesn't exist, generate it?"
+	echo -e "\0data\x1f$1"
+
+	for i in "${OPTIONS_NEW[@]}"; do
+	  echo $i
+	done
+fi

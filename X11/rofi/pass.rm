@@ -1,0 +1,21 @@
+#! /bin/sh
+
+ROFI_ARGS=( '-font' 'Hack 22' )
+ENTRIES="$(find ~/.password-store -name '*gpg' -printf %P\\n | sed 's/.gpg$//')"
+
+# Give rofi available passwords and exit
+if [ $# -eq 0 ]; then
+	# Specify rofi prompt as 'Remove'
+	echo -e "\0prompt\x1fRemove"
+
+	echo "$ENTRIES"
+	exit 0
+fi
+
+# If password doesn't exist, just quit
+<<<"$ENTRIES" grep -q $1 && \
+	coproc ( 
+		pass rm $1 &>/dev/null && \
+		rofi "${ROFI_ARGS[@]}" -e "Removed: $1"  || \
+		rofi "${ROFI_ARGS[@]}" -e "Fail to remove $1"
+	)

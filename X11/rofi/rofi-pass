@@ -1,0 +1,7 @@
+#! /bin/bash
+
+cd $(dirname $0)
+
+rofi -show get\
+	 -modes get:./pass.get,edit:./pass.edit,rm:./pass.rm \
+	 -font 'Hack 22'

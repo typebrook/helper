@@ -576,7 +576,7 @@
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-		<command>~/bin/password-store.sh</command>
+		<command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
     <!-- CLI Apps -->

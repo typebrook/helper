@@ -76,10 +76,10 @@ blog:
 	fi
 
 theme:
-	ln -sf `pwd`/misc/themes ~/.themes
+	ln -sf `pwd`/X11/themes ~/.themes
 
 openbox: theme
-	ln -sf `pwd`/misc/openbox/rc.xml ~/.config/openbox/
+	ln -sf `pwd`/X11/openbox/rc.xml ~/.config/openbox/
 
 archcraft:
 	ls -sf `pwd`/tools/desktop/takeshot /usr/local/bin/takeshot
