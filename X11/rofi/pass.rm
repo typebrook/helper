@@ -1,6 +1,5 @@
 #! /bin/sh
 
-ROFI_ARGS=( '-font' 'Hack 22' )
 ENTRIES="$(find ~/.password-store -name '*gpg' -printf %P\\n | sed 's/.gpg$//')"
 
 # Give rofi available passwords and exit
@@ -16,6 +15,6 @@ fi
 <<<"$ENTRIES" grep -q $1 && \
 	coproc ( 
 		pass rm $1 &>/dev/null && \
-		rofi "${ROFI_ARGS[@]}" -e "Removed: $1"  || \
-		rofi "${ROFI_ARGS[@]}" -e "Fail to remove $1"
+		rofi -e "Removed: $1"  || \
+		rofi -e "Fail to remove $1"
 	)

@@ -1,6 +1,5 @@
 #! /bin/sh
 
-ROFI_ARGS=( '-font' 'Hack 22' )
 OPTIONS_NEW=( 'NO' 'YES' 'YES, and edit it' )
 
 # Generate a new password
@@ -9,14 +8,14 @@ if [ -n "${ROFI_DATA}" ]; then
 		coproc ( 
 			export POST=false
 			pass generate ${ROFI_DATA} --clip
-			rofi "${ROFI_ARGS[@]}" -e "Generate and Copied: ${ROFI_DATA}" 
+			rofi -e "Generate and Copied: ${ROFI_DATA}" 
 		)
 
 	[ "$1" == "${OPTIONS_NEW[2]}" ]  && \
 		coproc (
 			export POST=false
 			pass generate ${ROFI_DATA} --clip
-			alacritty -e pass edit ${ROFI_DATA}; \
+			rofi-sensible-terminal -e pass edit ${ROFI_DATA}; \
 		)
 
 	exit 0
@@ -40,8 +39,8 @@ if [ -n "$RESULT" ]; then
 	echo "$RESULT" | head -1 | xsel -ib
 
 	# And show extra message
-	EXTRA="$(echo; echo; echo "$RESULT" | sed '1d; 1{/^$/d}')"
-    coproc ( rofi "${ROFI_ARGS[@]}" -e "Copied: $1$EXTRA" )
+	EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
+    coproc ( rofi -e "Copied: $1$EXTRA" )
 # Password doesn't exist yet
 # Go to next rofi execution
 else
