@@ -1,17 +1,17 @@
+trap 'exit.sh' EXIT
+
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export EDITOR=vim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 
-trap 'exit.sh' EXIT
+# Get current shell
+export shell=$(</proc/$$/cmdline tr -d '[\0\-]')
+shell=${shell##*/}
 
 # load custom aliases
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
-
-# Get current shell
-shell=$(</proc/$$/cmdline tr -d '[\0\-]')
-shell=${shell##*/}
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
