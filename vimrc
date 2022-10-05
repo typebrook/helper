@@ -8,10 +8,9 @@ endif
 " Get current dir
 " let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let s:home = '~/.vim/vim-init'
-execute 'cd '.s:home
 
 " Load script in current dir
-command! -nargs=1 LoadScript exec 'so '.s:home.'/'.'<args>'
+" command! -nargs=1 LoadScript exec 'so '.s:home.'/'.'<args>'
 
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home
@@ -22,19 +21,19 @@ execute 'set runtimepath+='.s:home
 "----------------------------------------------------------------------
 
 " Basic configuration
-LoadScript init/init-basic.vim
+source ~/.vim/vim-init/init/init-basic.vim
 
 " Key mappings
-LoadScript init/init-keymaps.vim
+source ~/.vim/vim-init/init/init-keymaps.vim
 
 " UI
-" LoadScript init/init-style.vim
+" source ~/.vim/vim-init/init/init-style.vim
 
 " 加载扩展配置
-" LoadScript init/init-config.vim
+source ~/.vim/vim-init/init/init-config.vim
 
 " 设定 tabsize
-LoadScript init/init-tabsize.vim
+source ~/.vim/vim-init/init/init-tabsize.vim
 
 " Plugins
-LoadScript init/init-plugins.vim
+source ~/.vim/vim-init/init/init-plugins.vim
