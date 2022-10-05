@@ -72,8 +72,8 @@ alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
 alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 ps1.swap() { 
-	if [ -z $PS1_bak ]; then PS1_bak="$PS1"
-		PS1=${1:->}
+	if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
+		PS1="${1:->}"
 		PS1="${PS1%% } "
 	else PS1="$PS1_bak" 
 		unset PS1_bak
