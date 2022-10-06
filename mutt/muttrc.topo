@@ -25,7 +25,7 @@ set postponed = "+Drafts"
 
 # Sidebar
 unmailboxes *
-mailboxes =INBOX =mbox "+------ Watch ------" =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
+mailboxes =INBOX =mbox "+------ Watch ------" =hometeach =pay =osm =keep "+---- Processed ----" =Sent =Trash =Drafts
 
 # Keybinding
 macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.topo<enter><change-folder>!<enter>'
