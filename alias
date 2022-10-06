@@ -18,6 +18,7 @@ alias digg='dig +noall +answer +multiline'
 # vim
 alias v='vim'
 alias vi='vim'
+alias v2='vim -Nu ~/.vimrc2'
 alias vl="vim -c 'norm '"
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
 alias ve="vim ~/.vimrc"
