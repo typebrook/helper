@@ -1,0 +1,12 @@
+configuration {
+  show-icons:         true;
+  icon-theme:         "Zafiro";
+  terminal:           "alacritty";
+  cycle:              false;
+  hide-scrollbar:     true;
+  disable-history:    false;
+}
+window {
+  font:		"hacker 22";
+  children: [ inputbar, message, listview, mode-switcher ];
+}

@@ -81,6 +81,9 @@ theme:
 openbox: theme
 	ln -sf `pwd`/X11/openbox/rc.xml ~/.config/openbox/
 
+rofi:
+	ln -sf `pwd`/X11/rofi/config.rasi ~/.config/rofi/config.rasi
+
 archcraft:
 	ls -sf `pwd`/tools/desktop/takeshot /usr/local/bin/takeshot
 
