@@ -29,7 +29,7 @@ source ~/.vim/vim-init/init/init-keymaps.vim
 " UI
 " source ~/.vim/vim-init/init/init-style.vim
 
-" 加载扩展配置
+" Extra config for different contexts
 source ~/.vim/vim-init/init/init-config.vim
 
 " 设定 tabsize
