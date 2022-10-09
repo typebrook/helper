@@ -37,3 +37,7 @@ source ~/.vim/vim-init/init/init-tabsize.vim
 
 " Plugins
 source ~/.vim/vim-init/init/init-plugins.vim
+
+" Set UI theme
+colorscheme desert
+highlight MatchParen cterm=bold ctermbg=none ctermfg=magenta
