@@ -16,7 +16,7 @@ sync ~/blog &
 sync ~/git/vps &
 sync ~/.task &
 sync ~/.password-store &
-sync ~/.vim_runtime &
+sync ~/.vim-init &
 sync ~/bean &
 
 while true; do
