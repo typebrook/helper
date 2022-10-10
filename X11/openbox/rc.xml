@@ -238,11 +238,9 @@
       <action name="MoveToCenter"/>
     </keybind>
     <keybind key="W-S-l">
-      <action name="MoveToEdge">
-		<direction>east</direction>
-	  </action>
-      <action name="MoveToEdge">
-		<direction>south</direction>
+      <action name="MoveResizeTo">
+		<x>-0</x>
+		<y>-0</y>
 	  </action>
     </keybind>
 	<keybind key="W-F1">
