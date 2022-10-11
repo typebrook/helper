@@ -105,10 +105,10 @@
   <keyboard>
     <keybind key="W-o">
       <action name="Execute">
-        <command>alacritty 
-      -o "window.dimensions.lines=32" 
-      -o "window.dimensions.columns=90" 
-      -e vim ~/.config/openbox/rc.xml
+        <command>alacritty
+          -o "window.dimensions.lines=32"
+          -o "window.dimensions.columns=90"
+          -e vim ~/.config/openbox/rc.xml
       </command>
       </action>
     </keybind>
@@ -522,18 +522,18 @@
     <keybind key="W-m">
       <action name="Execute">
         <command>alacritty --title Mutt
-      -o "window.dimensions.lines=32" 
-      -o "window.dimensions.columns=110" 
-      -e mutt
+          -o "window.dimensions.lines=32"
+          -o "window.dimensions.columns=110"
+          -e mutt
       </command>
       </action>
     </keybind>
     <keybind key="W-S-m">
       <action name="Execute">
         <command>alacritty --title Mutt
-      -o "window.dimensions.lines=32" 
-      -o "window.dimensions.columns=110" 
-      -e mutt -F ~/helper/mutt/muttrc.gmail
+          -o "window.dimensions.lines=32"
+          -o "window.dimensions.columns=110"
+          -e mutt -F ~/helper/mutt/muttrc.gmail
       </command>
       </action>
     </keybind>
@@ -588,14 +588,6 @@
         <command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
-    <!-- CLI Apps -->
-    <!--
-    <keybind key="C-A-t">
-      <action name="Execute">
-        <command>xfce4-terminal</command>
-      </action>
-    </keybind>
-    -->
     <keybind key="C-A-v">
       <action name="Execute">
         <command>alacritty -e vim</command>
@@ -994,7 +986,7 @@
   # order that they appear in this list
 
 
-    # each rule element can be left out or set to 'default' to specify to not 
+    # each rule element can be left out or set to 'default' to specify to not
     # change that attribute of the window
 
     <decor>yes</decor>
