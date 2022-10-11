@@ -105,11 +105,11 @@
   <keyboard>
     <keybind key="W-o">
       <action name="Execute">
-		<command>alacritty 
-		  -o "window.dimensions.lines=32" 
-		  -o "window.dimensions.columns=90" 
-		  -e vim ~/.config/openbox/rc.xml
-	    </command>
+        <command>alacritty 
+      -o "window.dimensions.lines=32" 
+      -o "window.dimensions.columns=90" 
+      -e vim ~/.config/openbox/rc.xml
+      </command>
       </action>
     </keybind>
     <!-- Change Workspace/Desktop -->
@@ -239,15 +239,14 @@
     </keybind>
     <keybind key="W-S-l">
       <action name="MoveResizeTo">
-		<x>-0</x>
-		<y>-0</y>
-	  </action>
+        <x>-0</x>
+        <y>-0</y>
+      </action>
     </keybind>
-	<keybind key="W-F1">
-	    <action name="ToggleAlwaysOnTop"/>
-	</keybind>
-
-	<!--
+    <keybind key="W-F1">
+      <action name="ToggleAlwaysOnTop"/>
+    </keybind>
+    <!--
     <keybind key="W-h">
       <action name="Unmaximize"/>
       <action name="MoveResizeTo">
@@ -262,7 +261,7 @@
         <y>-5</y>
       </action>
     </keybind>
-	-->
+  -->
     <!--
     <keybind key="A-z">
       <action name="Unmaximize"/>
@@ -522,20 +521,20 @@
     </keybind>
     <keybind key="W-m">
       <action name="Execute">
-		<command>alacritty --title Mutt
-		  -o "window.dimensions.lines=32" 
-		  -o "window.dimensions.columns=110" 
-		  -e mutt
-	    </command>
+        <command>alacritty --title Mutt
+      -o "window.dimensions.lines=32" 
+      -o "window.dimensions.columns=110" 
+      -e mutt
+      </command>
       </action>
     </keybind>
     <keybind key="W-S-m">
       <action name="Execute">
-		<command>alacritty --title Mutt
-		  -o "window.dimensions.lines=32" 
-		  -o "window.dimensions.columns=110" 
-		  -e mutt -F ~/helper/mutt/muttrc.gmail
-	    </command>
+        <command>alacritty --title Mutt
+      -o "window.dimensions.lines=32" 
+      -o "window.dimensions.columns=110" 
+      -e mutt -F ~/helper/mutt/muttrc.gmail
+      </command>
       </action>
     </keybind>
     <keybind key="W-x">
@@ -586,7 +585,7 @@
     </keybind>
     <keybind key="W-p">
       <action name="Execute">
-		<command>~/helper/X11/rofi/rofi-pass</command>
+        <command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
     <!-- CLI Apps -->
@@ -607,11 +606,11 @@
         <command>alacritty -e nvim</command>
       </action>
     </keybind>
-	<keybind key="C-A-r">
+    <keybind key="C-A-r">
       <action name="Execute">
         <command>alacritty --title Ranger -e ranger</command>
       </action>
-	</keybind>
+    </keybind>
     <keybind key="C-A-h">
       <action name="Execute">
         <command>alacritty --title htop -o "window.startup_mode=Maximized" -e htop</command>
