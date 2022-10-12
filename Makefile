@@ -50,8 +50,7 @@ pass:
 	mkdir -p $@
 
 mutt: ~/.local/share/application
-	rm -rf ~/.config/mutt
-	ln -sf `pwd`/mutt ~/.config/mutt
+	ln -sf `pwd`/mutt -T ~/.config/mutt
 	ln -sf `pwd`/mutt/mutt.desktop $<
 
 tmux:
