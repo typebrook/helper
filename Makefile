@@ -76,7 +76,7 @@ blog:
 	fi
 
 theme:
-	ln -sf `pwd`/X11/themes ~/.themes
+	ln -sf `pwd`/X11/themes -T ~/.themes
 
 openbox: theme
 	ln -sf `pwd`/X11/openbox/rc.xml ~/.config/openbox/
