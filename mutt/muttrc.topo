@@ -1,4 +1,5 @@
 source ~/.config/mutt/default
+source ~/.config/mutt/alias.topo
 
 # IMAP/SMTP settings
 set folder = "imaps://pham@mail.topo.tw:993/"
