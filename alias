@@ -338,6 +338,7 @@ alias oo='ogr2ogr'
 alias oi='ogrinfo -al -so'
 
 # sample file
+alias sample.text='curl http://metaphorpsum.com/paragraphs/3/5'
 alias sample.gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample.geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
