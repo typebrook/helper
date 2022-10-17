@@ -236,6 +236,9 @@
       </action>
       <action name="MoveToCenter"/>
     </keybind>
+    <keybind key="W-S-j">
+      <action name="Iconify"/>
+    </keybind>
     <keybind key="W-S-l">
       <action name="MoveResizeTo">
         <x>-0</x>
