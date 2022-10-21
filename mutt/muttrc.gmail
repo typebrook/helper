@@ -9,7 +9,7 @@ set smtp_pass = "$imap_pass"
 # Identify meself
 set from = "typebrook@gmail.com"
 set realname = "謝晉凡 Hsieh Chin Fan"
-set signature="$SETTING_DIR/mutt/.signature"
+set signature="~/.config/mutt/.signature"
 set pgp_use_gpg_agent=yes
 set crypt_use_gpgme=yes
 set pgp_timeout=300
