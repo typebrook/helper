@@ -245,6 +245,9 @@
         <y>-0</y>
       </action>
     </keybind>
+    <keybind key="W-S-c">
+      <action name="MoveToCenter"/>
+    </keybind>
     <keybind key="W-F1">
       <action name="ToggleAlwaysOnTop"/>
     </keybind>
