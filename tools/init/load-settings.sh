@@ -6,7 +6,7 @@ export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 
 # Get current shell
-export shell=$(</proc/$$/cmdline tr -d '[\0\-]')
+export shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
 shell=${shell##*/}
 
 # load custom aliases
@@ -45,21 +45,23 @@ if which fzf &>/dev/null; then
 fi
 
 # Set zsh or bash
-if [[ $shell == zsh ]]; then
-  setopt extended_glob
-  fpath=($SETTING_DIR/zsh $fpath)
-  compinit
-  alias history='history -i'
+if [[ $- =~ i ]]; then
+    if [[ $shell == zsh ]]; then
+      setopt extended_glob
+      fpath=($SETTING_DIR/zsh $fpath)
+      compinit
+      alias history='history -i'
 
-  #autoload -U deer
-  #zle -N deer
-  #bindkey '\ek' deer
-  bindkey -s '\ek' 'fzf_preview'
-elif [[ $shell == bash ]]; then
-  shopt -s extglob
-  HISTTIMEFORMAT='%Y-%m-%d %T '
+      #autoload -U deer
+      #zle -N deer
+      #bindkey '\ek' deer
+      bindkey -s '\ek' 'fzf_preview'
+    elif [[ $shell == bash ]]; then
+      shopt -s extglob
+      HISTTIMEFORMAT='%Y-%m-%d %T '
 
-  bind -m emacs-standard -x '"\ek": fzf_preview'
+      bind -m emacs-standard -x '"\ek": fzf_preview'
+    fi
 fi
 
 # Working DIR
