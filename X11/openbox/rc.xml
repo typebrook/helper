@@ -541,7 +541,7 @@
     </keybind>
     <keybind key="W-x">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/powermenu</command>
+        <command>~/bin/launch_dashboard</command>
       </action>
     </keybind>
     <keybind key="W-0">
