@@ -96,6 +96,14 @@ color sidebar_divider color8 black
 color sidebar_flagged red black
 color sidebar_new green black
 
+bind index,pager g noop
+macro index,pager gi "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
+macro index,pager gm "<change-folder>+mbox<Return>" "Switch to INBOX folder"
+macro index,pager gs "<change-folder>+Sent<Return>" "Switch to Sent folder"
+macro index,pager gd "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
+macro index,pager gt "<change-folder>+Trash<Return>" "Switch to Trash folder"
+bind index,pager gv sidebar-toggle-visible
+
 # basic colors
 color normal        white           black
 color error         red             black
