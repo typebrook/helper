@@ -33,6 +33,8 @@ macro pager h "v/html<return>xq<return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
 # ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim风格键位绑定
+bind index o sort-reverse
+bind index O sort-mailbox
 bind index <Return> sync-mailbox
 bind index y edit-label
 bind index x tag-entry
