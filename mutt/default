@@ -32,9 +32,10 @@ auto_view text/html
 macro pager h "v/html<return>xq<return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
-# ref: https://fancyseeker.github.io/2015/08/19/mutt/#vim风格键位绑定
 bind index o sort-reverse
 bind index O sort-mailbox
+bind index E edit-type
+bind index,pager N search-opposite
 bind index <Return> sync-mailbox
 bind index y edit-label
 bind index x tag-entry
@@ -52,8 +53,6 @@ bind index,pager,browser \cd half-down
 bind index,pager,browser \cu half-up
 bind index } bottom-page
 bind pager G bottom
-bind pager gg noop
-bind pager gg top
 bind pager j next-line
 bind pager k previous-line
 bind pager \cn next-entry
@@ -75,6 +74,27 @@ macro pager U "\
 :set pipe_decode=\$my_tmp_pipe_decode\n\
 :unset my_tmp_pipe_decode\n"
 #macro pager U "<pipe-message>less<enter>" "CHECK"
+# Quick jump to other mailboxes
+bind index,pager            g       noop
+bind generic                gg      first-entry
+bind generic,index          G       last-entry
+bind pager                  gg      top
+bind pager                  G       bottom
+macro   index,pager         gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
+macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to INBOX folder"
+macro index,pager           gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
+macro index,pager           gd      "<change-folder>+DeltaChat<Return>" "Switch to Drafts folder"
+macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
+macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
+bind index,pager            gv      sidebar-toggle-visible
+bind generic                zt      current-top
+bind generic                zz      current-middle
+bind generic                zb      current-bottom
+bind index                  za      collapse-thread
+bind index                  zA      collapse-all
+bind generic,pager          \Cy     previous-line
+bind generic,index,pager    \Ce     next-line
+
 
 # Sidebar
 set mail_check = 120
@@ -95,14 +115,6 @@ color sidebar_highlight white color8
 color sidebar_divider color8 black
 color sidebar_flagged red black
 color sidebar_new green black
-
-bind index,pager g noop
-macro index,pager gi "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
-macro index,pager gm "<change-folder>+mbox<Return>" "Switch to INBOX folder"
-macro index,pager gs "<change-folder>+Sent<Return>" "Switch to Sent folder"
-macro index,pager gd "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
-macro index,pager gt "<change-folder>+Trash<Return>" "Switch to Trash folder"
-bind index,pager gv sidebar-toggle-visible
 
 # basic colors
 color normal        white           black
