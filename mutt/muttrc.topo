@@ -39,3 +39,14 @@ macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttr
 # Hooks for accounts
 folder-hook imaps://imap.gmail.com/ 'source ~/.config/mutt/muttrc.gmail'
 folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
+
+# Change mailboxes
+macro index,pager           gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
+macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to mbox folder"
+macro index,pager           gp      "<change-folder>+pay<Return>" "Switch to pay folder"
+macro index,pager           gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
+macro index,pager           gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
+macro index,pager           gS      "<change-folder>+spam<Return>" "Switch to spam folder"
+macro index,pager           gd      "<change-folder>+DeltaChat<Return>" "Switch to DeltaChat folder"
+macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
+macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"

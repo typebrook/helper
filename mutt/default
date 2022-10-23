@@ -80,12 +80,6 @@ bind generic                gg      first-entry
 bind generic,index          G       last-entry
 bind pager                  gg      top
 bind pager                  G       bottom
-macro   index,pager         gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
-macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to INBOX folder"
-macro index,pager           gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
-macro index,pager           gd      "<change-folder>+DeltaChat<Return>" "Switch to Drafts folder"
-macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
-macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
 bind index,pager            gv      sidebar-toggle-visible
 bind generic                zt      current-top
 bind generic                zz      current-middle
