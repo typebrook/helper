@@ -195,9 +195,14 @@ vp() {
   if [[ $HOST = vultr ]]; then
     vim $@ "$post"
   else
+    # Copy from vps
     tmpfile=$(mktemp)
     scp vps:"$post" $tmpfile
-    vim $tmpfile && scp $tmpfile vps:"$post" && rm $tmpfile
+
+    # Edit locally
+    vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
+    scp $tmpfile vps:"$post" && \
+    rm $tmpfile
   fi
 }
 
