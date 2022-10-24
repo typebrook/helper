@@ -192,7 +192,13 @@ vp() {
   fi
 
   shift
-  eval $PREFIX vim $@ "$post"
+  if [[ $HOST = vultr ]]; then
+    vim $@ "$post"
+  else
+    tmpfile=$(mktemp)
+    scp vps:"$post" $tmpfile
+    vim $tmpfile && scp $tmpfile vps:"$post" && rm $tmpfile
+  fi
 }
 
 # git
@@ -350,7 +356,7 @@ alias sample.mbtiles='curl -O https://docs.mapbox.com/help/data/trails.mbtiles'
 alias sample.kml='curl -O https://docs.mapbox.com/help/data/farmers_markets.kml'
 alias sample.osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 alias sample.poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
-alias sample.image='curl -O https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg'
+alias sample.image='curl -O https://file-examples.com/storage/fe4b4c6261634c76e91986b/2017/10/file_example_JPG_100kB.jpg'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
 alias sample.mvt='curl -O https://demotiles.maplibre.org/tiles/5/25/14.pbf'
 alias sample.mp4='curl -O https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-Download.mp4'
@@ -405,6 +411,12 @@ image.from_data_url() {
   [[ $1 == '' ]] && echo File name needed && return 1
   xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
   identify $1
+}
+image.upload() {
+  month=$(date +%Y-%m)
+  filename=$(date +"%d_%Hh%Mm%Ss").${1##*.}
+  scp $1 vps:~/data/s3.photos/$month/$filename
+  echo https://topo.tw/photos/$month/$filename
 }
 image.text() {
   convert \
