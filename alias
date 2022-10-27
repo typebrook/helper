@@ -419,7 +419,7 @@ image.from_data_url() {
 }
 image.upload() {
   month=$(date +%Y-%m)
-  filename=$(date +"%d_%Hh%Mm%Ss").${1##*.}
+  filename=${2:-$(date +"%d_%Hh%Mm%Ss").${1##*.}}
   scp $1 vps:~/data/s3.photos/$month/$filename
   echo https://topo.tw/photos/$month/$filename
 }
