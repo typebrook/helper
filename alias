@@ -38,14 +38,16 @@ ssh.tar() {
 ssh.up() {
   set -o pipefail
   filename=`basename $1`
-  if [[ $2 =~ ^/ ]]; then
+  # Upload to absolution path
+  if [[ $2 =~ '^/' ]]; then
     folder=${2%/}
     cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
     echo Uploaded to ${folder}/${filename}
+  # Upload to relative in ~/public/
   else
-    folder=~/public/${2%/}
+    folder='~/public/'${2%/}
     cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
-    echo https://topo.tw/p/${folder}/${filename}
+    echo https://topo.tw/p/${2%/}/${filename}
   fi
 }
 ssh.up.today() {
