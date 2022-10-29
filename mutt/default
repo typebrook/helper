@@ -17,6 +17,7 @@ set pager_stop
 set sleep_time = 0 # When changing folder
 set timeout = 10
 set quit = ask-no
+set delete = yes 
 set sort = reverse-threads
 set pager_index_lines = 5
 set markers = no # Remove '+' for long links with limited terminal width

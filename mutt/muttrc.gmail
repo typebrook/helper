@@ -19,9 +19,9 @@ set pgp_sign_as=6DD8C14A # replace 6DD8C14A with your gpg key id
 set folder = "imaps://imap.gmail.com/"
 set move = no
 set spoolfile = "+INBOX"
-unset record
-unset postponed
-unset trash
+set postponed = "=[Gmail]/Drafts"
+set record = "=[Gmail]/Sent Mail"
+set trash = "=[Gmail]/Trash"
 
 # Sidebar
 unmailboxes *
