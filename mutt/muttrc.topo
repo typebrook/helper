@@ -28,15 +28,14 @@ set trash = "+Trash"
 set postponed = "+Drafts"
 
 # Sidebar
-unmailboxes *
 mailboxes  =INBOX \
            =mbox \
-           =DeltaChat \
-           "+------ Watch ------" \
+           -label DC =DeltaChat \
+           "+---- Watch -----" \
            =hometeach \
            =osm \
            -label Arch =arch-general \
-           "+---- Permanent ----" \
+           "+-- Permanent ---" \
            =pay \
            =keep \
            =Sent \
