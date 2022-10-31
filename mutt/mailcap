@@ -4,6 +4,7 @@ text/plain; less -N %s; copiousoutput;
 application/json; jq . %s | less -N; copiousoutput;
 application/pdf; firefox '%s'
 application/zip; unzip -p '%s' | less -N
+application/gzip; gunzip -c '%s' | less -N
 image/png; feh '%s'
 image/jpg; feh '%s'
 image/jpeg; feh '%s'
