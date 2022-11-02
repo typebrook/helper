@@ -680,6 +680,7 @@
     <screenEdgeWarpTime>600</screenEdgeWarpTime>
     <screenEdgeWarpMouse>false</screenEdgeWarpMouse>
     <context name="Frame">
+      <!--
       <mousebind action="Press" button="A-Left">
         <action name="Focus"/>
         <action name="Raise"/>
@@ -923,6 +924,7 @@
           <menu>root-menu</menu>
         </action>
       </mousebind>
+      -->
     </context>
   </mouse>
   <!-- ################################ Menu Settings ################################ -->
