@@ -72,6 +72,8 @@ macro index *n "\ctall\n" "Deselect All"
 macro index h "\\all\n" "All messages"
 macro index d '<tag-prefix><delete-message>' 'Delete'
 macro index s '<tag-prefix><save-message>' 'Saved'
+macro index W '<tag-prefix><clear-flag>' 'Clear flag'
+macro index w '<tag-prefix><set-flag>' 'Set flag'
 macro index q 'c?'
 macro pager U "\
 :set my_tmp_pipe_decode=\$pipe_decode\n\
