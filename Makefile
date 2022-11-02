@@ -52,6 +52,7 @@ pass:
 mutt: ~/.local/share/application
 	ln -sf `pwd`/mutt -T ~/.config/mutt
 	ln -sf `pwd`/mutt/mutt.desktop $<
+	pass mail/mutt.hooks > mutt/hooks.topo
 
 tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf

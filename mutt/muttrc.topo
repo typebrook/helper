@@ -17,7 +17,7 @@ set pgp_sign_as=6DD8C14A # replace 6DD8C14A with your gpg key id
 
 # Tune contacts
 source ~/.config/mutt/alias.topo
-source ~/.config/mutt/hook.topo
+source ~/.config/mutt/hooks.topo
 
 # Basic Mailbox
 set spoolfile = "+INBOX"
