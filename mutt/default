@@ -24,7 +24,9 @@ set timeout = 10
 set quit = ask-no
 set delete = yes 
 set sort = reverse-threads
-set pager_index_lines = 5
+set my_keep_lines1 = 0
+set my_keep_lines2 = 12
+set pager_index_lines = $my_keep_lines1
 set markers = no # Remove '+' for long links with limited terminal width
 
 # Index format
@@ -82,6 +84,7 @@ macro index s '<tag-prefix><save-message>' 'Saved'
 macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
 macro index q 'c?'
+macro pager x ':set my_keep_lines1 = $my_keep_lines2<enter>:set my_keep_lines2 = $pager_index_lines<enter>:set pager_index_lines = $my_keep_lines1<enter>'
 macro pager U "\
 :set my_tmp_pipe_decode=\$pipe_decode\n\
 :set pipe_decode\n\
