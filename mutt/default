@@ -4,14 +4,14 @@ unset ssl_starttls
 
 # Default settings
 set header_cache = ~/.cache/mutt
-set message_cachedir = ~/.cache/mutt
+set message_cachedir = ~/.cache/mutt.message
 set edit_headers = yes
 set mailcap_path = ~/.config/mutt/mailcap
 
 # This allows to reply with "To: " in header
 set reverse_name = yes
 set reverse_realname = yes
-alternates = @topo.tw @gmail.com
+alternates = @topo.tw
 
 # Interface
 set editor = "vim"
