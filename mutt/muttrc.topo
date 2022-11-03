@@ -1,9 +1,10 @@
 source ~/.config/mutt/default
 
 # IMAP/SMTP settings
-set folder = "imaps://pham@mail.topo.tw:993/"
-set imap_pass = `pass pham@topo.tw`
-set smtp_url = "smtp://pham@mail.topo.tw:587"
+set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
+set folder = "imaps://$my_user:993/"
+set smtp_url = "smtp://$my_user:587"
+set imap_pass = `pass mail/$my_user`
 set smtp_pass = "$imap_pass"
 
 # Identify meself
