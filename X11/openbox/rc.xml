@@ -548,6 +548,11 @@
         <command>~/.config/openbox/rofi/bin/powermenu</command>
       </action>
     </keybind>
+    <keybind key="W-z">
+      <action name="Execute">
+        <command>~/.config/eww/dashboard/launch_dashboard</command>
+      </action>
+    </keybind>
     <keybind key="W-0">
       <action name="ToggleDecorations"/>
     </keybind>
