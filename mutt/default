@@ -1,3 +1,6 @@
+# Edit rc file and source it. This is the most important thing
+macro index \cv ":set wait_key=no<Return>!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
+
 # Connection options
 set ssl_force_tls = yes
 unset ssl_starttls
@@ -74,7 +77,7 @@ bind pager \cn next-entry
 bind pager \cp previous-entry
 bind pager \ch display-toggle-weed
 bind attach x view-mailcap
-macro generic,index,pager \cr ":source ~/.config/mutt/muttrc\n" "Reload mutt's configuration file"
+macro generic,index,pager \cr ":source ~/.config/mutt/muttrc<return>" "Reload mutt's configuration file"
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 macro index *a "Tall\n" "Select All"
 macro index *n "\ctall\n" "Deselect All"
@@ -104,8 +107,8 @@ bind generic                zz      current-middle
 bind generic                zb      current-bottom
 bind index                  za      collapse-thread
 bind index                  zA      collapse-all
-bind generic,pager          \Cy     previous-line
-bind generic,index,pager    \Ce     next-line
+#bind generic,pager          \Cy     previous-line
+#bind generic,index,pager    \Ce     next-line
 
 
 # Sidebar
