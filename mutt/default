@@ -150,15 +150,15 @@ color index         brightred       black         "~E"                        # 
 color index         brightcyan      black         "~N"                        # new messages
 color index         brightcyan      black         "~O"                        # old messages
 color index         brightmagenta   black         "~Q"                        # messages that have been replied to
-color index         white           black         "~R"                        # read messages
+color index         brightgreen     black         "~R"                        # read messages
 color index         brightblue      black         "~U"                        # unread messages
 color index         brightblue      black         "~U~$"                      # unread, unreferenced messages
 color index         brightblue      black         "~v"                        # messages part of a collapsed thread
-color index         brightblue      black         "~P"                        # messages from me
-color index         cyan            black         "~p!~F"                     # messages to me
-color index         brightgreen     black         "~N~p!~F"                   # new messages to me
-color index         brightgreen     black         "~U~p!~F"                   # unread messages to me
-color index         brightgreen     black         "~R~p!~F"                   # messages to me
+color index         yellow          black         "~P"                        # messages from me
+color index         white           black         "~p!~F"                     # messages to me
+color index         white           black         "~N~p!~F"                   # new messages to me
+color index         brightblue      black         "~U~p!~F"                   # unread messages to me
+color index         white           black         "~R~p!~F"                   # messages to me
 color index         red             black         "~F"                        # flagged messages
 color index         red             black         "~F~p"                      # flagged messages to me
 color index         red             black         "~N~F"                      # new flagged messages
@@ -166,13 +166,13 @@ color index         red             black         "~N~F~p"                    # 
 color index         red             black         "~U~F~p"                    # new flagged messages to me
 color index         brightyellow    black         "~T"                        # tagged messages
 color index         black           brightmagenta "~D"                        # deleted messages
-color index         white           black         "~v~(!~N!~O)"               # collapsed thread with no unread
-color index         magenta         black         "~v~(~N|~O)"                # collapsed thread with some unread
-color index         magenta         black         "~N~v~(~N)"                 # collapsed thread with unread parent
-color index         red             white         "~v~(~F)!~N"                # collapsed thread with flagged, no unread
-color index         yellow          white         "~v~(~F~N)"                 # collapsed thread with some unread & flagged
-color index         green           white         "~N~v~(~F~N)"               # collapsed thread with unread parent & flagged
-color index         green           white         "~N~v~(~F)"                 # collapsed thread with unread parent, no unread inside, but some flagged
+color index         black           green         "~v~(!~N!~O)"               # collapsed thread with no unread
+color index         magenta         green         "~v~(~N|~O)"                # collapsed thread with some unread
+color index         brightmagenta   green         "~N~v~(~N)"                 # collapsed thread with unread parent
+color index         brightred       green         "~v~(~F)!~N"                # collapsed thread with flagged, no unread
+color index         yellow          green         "~v~(~F~N)"                 # collapsed thread with some unread & flagged
+color index         blue            green         "~N~v~(~F~N)"               # collapsed thread with unread parent & flagged
+color index         blue            green         "~N~v~(~F)"                 # collapsed thread with unread parent, no unread inside, but some flagged
 color index         yellow          red           "~v~(~D)"                   # thread with deleted (doesn't differentiate between all or partial)
 
 # color header
