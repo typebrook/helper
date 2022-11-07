@@ -503,7 +503,7 @@ alias tkd='task done'
 alias tkm='task modify'
 alias tka='task annotate'
 alias tk10='task limit:10 \( status:completed or status:deleted \) rc.report.all.sort:end- all | tee >(sed -n 4p | cut -d" " -f5 | tee >(xargs -i echo Copied {}) | xsel -ib ) '
-tkw(){ task $1 mod wait:$2; }
+tkw(){ task $1 mod wait:${2##wait:}; }
 alias tkc='task context'
 alias tkcn='task context none'
 alias tkch='task context home'
