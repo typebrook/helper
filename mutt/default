@@ -1,5 +1,5 @@
 # Edit rc file and source it. This is the most important thing
-macro index \cv ":set wait_key=no<Return>!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
+macro index \cv "!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>"
 
 # Connection options
 set ssl_force_tls = yes
@@ -50,6 +50,8 @@ auto_view text/html
 macro pager h "v/html<return>xq<return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
+macro index c '<change-folder>+'
+macro index q '<change-folder>?'
 bind index o sort-reverse
 bind index O sort-mailbox
 bind index E edit-type
@@ -86,7 +88,6 @@ macro index d '<tag-prefix><delete-message>' 'Delete'
 macro index s '<tag-prefix><save-message>' 'Saved'
 macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
-macro index q 'c?'
 macro pager x ':set my_keep_lines1 = $my_keep_lines2<enter>:set my_keep_lines2 = $pager_index_lines<enter>:set pager_index_lines = $my_keep_lines1<enter>'
 macro pager U "\
 :set my_tmp_pipe_decode=\$pipe_decode\n\

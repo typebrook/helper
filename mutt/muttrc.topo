@@ -67,3 +67,4 @@ macro index,pager           gd      "<change-folder>+DeltaChat<Return>" "Switch 
 macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
 macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
 macro index,pager           gl      "<change-folder>+login<Return>" "Switch to INBOX folder"
+macro index,pager           ga      "<change-folder>+arch-general<Return>" "Switch to INBOX folder"
