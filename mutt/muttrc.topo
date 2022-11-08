@@ -68,3 +68,4 @@ macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to 
 macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
 macro index,pager           gl      "<change-folder>+login<Return>" "Switch to INBOX folder"
 macro index,pager           ga      "<change-folder>+arch-general<Return>" "Switch to INBOX folder"
+macro index,pager           gk      "<change-folder>+keep<Return>" "Switch to INBOX folder"
