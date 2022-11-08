@@ -50,7 +50,7 @@ auto_view text/html
 macro pager l "v/html<Return>xq<Return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
-macro index c '<change-folder>+'
+macro index c '<change-folder>='
 macro index q '<change-folder>?'
 bind index o sort-reverse
 bind index O sort-mailbox
