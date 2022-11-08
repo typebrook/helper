@@ -52,7 +52,7 @@ bind generic Uprf ?git fetch "%(prompt Fetch from which remote? )" pull/"%(promp
 bind generic UP !git swapProtocol
 
 # toggle case sensitive for search
-bind generic w :toggle ignore-case 
+bind generic w :toggle ignore-case
 
 # see reflog, reset refernece
 bind generic gl ?git checkout HEAD@{"%(prompt Enter HEAD@{} number: )"}
@@ -76,7 +76,7 @@ set main-view = \
     date:relative \
     author:abbreviated \
     id \
-    commit-title:graph=v2,refs=true 
+    commit-title:graph=v2,refs=true
 
 # override graph toggling
 bind main G move-last-line
@@ -148,12 +148,12 @@ bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Whic
 
 # fetch
 bind main <C-F> ?git fetch %(remote)
-bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote 
+bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote
 bind main gF ?git fetch '%(prompt Which remote? )' '%(prompt Which branch? )'
 bind main pu !git pull %(remote) %(branch)
 bind main pf !git pull '%(prompt Pull from witch remote? )' %(branch)
 bind main pU ?git pull --rebase
- 
+
 # reset/rebase/revert
 bind main uu ?git reset %(commit) --soft
 bind main uh ?git reset %(commit) --hard
@@ -221,7 +221,7 @@ set blame-view = author:abbreviated date:relative id:yes,color line-number:yes t
 #====================
 # blob view
 #====================
-bind blob m >tig --follow -- %(file) 
+bind blob m >tig --follow -- %(file)
 
 #====================
 # status view
@@ -240,7 +240,7 @@ bind status gn @sh -c "git ls-files -v | grep '^h ' | cut -d' ' -f2 | \
                        xargs git update-index --no-assume-unchanged" # resume ignored files
 
 # stash
-bind status s ?>git stash 
+bind status s ?>git stash
 bind status S @git stash push -m "%(prompt Enter stash name: )"
 bind status gs !git stash --keep-index
 bind status gS !git stashstaged
