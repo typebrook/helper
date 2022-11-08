@@ -67,10 +67,10 @@ bind index \ck previous-entry
 bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser gg first-entry
-bind index,pager,browser \cf next-page
-bind index,pager,browser \cb previous-page
-bind index,pager,browser \cd half-down
-bind index,pager,browser \cu half-up
+bind index,pager,browser,attach \cf next-page
+bind index,pager,browser,attach \cb previous-page
+bind index,pager,browser,attach \cd half-down
+bind index,pager,browser,attach \cu half-up
 bind index } bottom-page
 bind pager G bottom
 bind pager j next-line
