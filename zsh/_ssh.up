@@ -1,7 +1,3 @@
 #compdef ssh.up
 
-function _ssh.up() {
-  compadd -S '' $(ssh vps find /home/pham/public -maxdepth 1 -type d | grep -o '[^/]*$')
-}
-
-_ssh.up
+_arguments "1:filename:_files" "2:remote_paths:($(ssh vps find /home/pham/public -maxdepth 1 -type d | grep -o '[^/]*$'))"
