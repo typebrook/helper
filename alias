@@ -276,7 +276,7 @@ upload_tig() {
 }
 
 # about custom settings
-alias cdh="cd $SETTING_DIR"
+cdh() { cd $SETTING_DIR/$@; }
 alias chh="tig -C $SETTING_DIR status"
 
 # about beancount
