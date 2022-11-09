@@ -35,7 +35,7 @@ set markers = no # Remove '+' for long links with limited terminal width
 # Index format
 #set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
 #set index_format = "%Z %(%g.%m.%d) %-16.16L (%4c) %s"
-set index_format="%4C %-7@date@ %-15.15F %Z (%4c) %s"
+set index_format="%4C %7@date@ %-15.15F %Z (%4c) %s"
 index-format-hook  date  "~d<1d"    "%[%H:%M]"
 index-format-hook  date  "~d<1m"    "%[%a %d]"
 index-format-hook  date  "~d<1y"    "%[%b %d]"
