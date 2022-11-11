@@ -50,6 +50,7 @@ if [[ $- =~ i ]]; then
       setopt extended_glob
       fpath=($SETTING_DIR/zsh $fpath)
       alias history='history -i'
+      autoload compinit; compinit
 
       #autoload -U deer
       #zle -N deer
