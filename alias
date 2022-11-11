@@ -4,7 +4,7 @@
 alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
-  vim $RCFILE && source $RCFILE
+  vim \$RCFILE && source \$RCFILE
 }"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
@@ -16,6 +16,8 @@ alias sshauth='vim ~/.ssh/authorized_keys'
 alias sshknown='vim ~/.ssh/known_hosts'
 alias cdconfig='cd ~/config'
 alias tmuxconfig='vim ~/.tmux.conf'
+
+# network
 alias digg='dig +noall +answer +multiline'
 
 # vim
