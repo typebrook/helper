@@ -42,7 +42,7 @@ ssh.tar() {
 }
 ssh.up() {
   set -o pipefail
-  filename=`basename $1`
+  filename=${3:-`basename $1`}
   # Upload to absolution path
   if [[ $2 =~ '^/' ]]; then
     folder=${2%/}
