@@ -28,7 +28,7 @@ set move = yes
 set record = "+Sent"
 set trash = "+Trash"
 set postponed = "+Drafts"
-set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mutt-users|bash|STOCK|pay|keep|login|test|spam)" 
+set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mutt-users|bash|STOCK|pay|keep|login|update|test|spam)" 
 
 # Sidebar
 mailboxes  +INBOX \
@@ -45,6 +45,7 @@ mailboxes  +INBOX \
            +pay \
            +keep \
            +login \
+           +update \
            +Sent \
            +Drafts \
            -poll +Trash \

@@ -56,7 +56,7 @@ bind index o sort-reverse
 bind index O sort-mailbox
 bind index E edit-type
 bind index,pager N search-opposite
-bind index <Return> sync-mailbox
+bind index,pager <Return> sync-mailbox
 bind index y edit-label
 bind index x tag-entry
 bind index t edit-label
