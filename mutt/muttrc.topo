@@ -41,6 +41,7 @@ mailboxes  +INBOX \
            -label Mutt +mutt-users \
            -label Bash +bash \
            +STOCK \
+           +feedback \
            "+-- Permanent ---" \
            +pay \
            +keep \
