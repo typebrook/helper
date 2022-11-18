@@ -38,7 +38,7 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh ptt'
 alias sshv='ssh -t vps'
 ssh.tar() {
-  prompt "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+  prompt-vim "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
 }
 ssh.up() {
   set -o pipefail
@@ -110,7 +110,7 @@ cdp() {
   cd $1
 }
 _move_to_tmp() { mv $@ /tmp; }
-prompt() {
+prompt-vim() {
   TMPFILE=$(mktemp)
   echo -e "$@" >$TMPFILE \
   && vim $TMPFILE \
