@@ -44,3 +44,5 @@ done <$LIST
 
 # If '-n' is specified, print number of repos with changes/local-diff
 [[ $COUNT_ONLY == true ]] && echo $count
+
+exit 0
