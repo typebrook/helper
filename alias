@@ -72,6 +72,7 @@ alias gg='gist grep'
 
 # unix
 alias chx='chmod +x'
+alias chr='chmod +r'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xe'
 alias ju='sudo journalctl -u'
@@ -222,23 +223,7 @@ alias gls='git log -S'
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
-check_repo() {
-  cd $1 2>/dev/null || return 0
-  echo check $1
-  git status -s
-  [[ -n $(git cherry ${2:-origin}) ]] 2>/dev/null && print "\e[31m[ahead]\e[0m"
-}
-check() {
-  DIR=`pwd`
-  check_repo $SETTING_DIR
-  check_repo $HOME/.password-store
-  check_repo $HOME/log
-  check_repo $HOME/.task
-  check_repo $HOME/bean
-  check_repo $HOME/.vim/vim-init vps
-  cd $DIR
-}
-alias ch='check'
+alias ch="/home/pham/helper/tools/git/check-repos.sh"
 
 # github
 export GITHUB_API='https://api.github.com'
