@@ -1,0 +1,83 @@
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="archcraft"
+
+# typebrook/helper
+export SETTING_DIR=$HOME/helper
+source $SETTING_DIR/tools/init/load-settings.sh
+fpath=($SETTING_DIR/zsh $fpath)
+
+# Options
+setopt extended_glob
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+
+_comp_options+=(globdots) # With hidden files
+autoload -Uz compinit; compinit
+zstyle ':completion:*' menu select
+zstyle ':completion::complete:*' gain-privileges 1
+
+# PS1 with git status at right
+#autoload -U ps1; ps1
+alias ps1="vim $SETTING_DIR/zsh/ps1"
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd precmd
+function precmd() {
+  RIGHT=$(NUM=$($SETTING_DIR/tools/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
+  PROMPT='%B%(?:%F{green}%m%f:%F{red}%m%f)%f %F{cyan}  %c%f%b '
+  RPROMPT="%B${RIGHT}%b"
+}
+
+# Directory Stack
+#setopt AUTO_PUSHD           # Push the current directory visited on the stack.
+#setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+#setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+
+#alias d='dirs -v'
+#for index ({1..9}) alias "$index"="cd +${index}"; unset index
+
+# create a zkbd compatible hash;
+# to add other keys to this hash, see: man 5 terminfo
+typeset -g -A key
+
+key[Home]="${terminfo[khome]}"
+key[End]="${terminfo[kend]}"
+key[Insert]="${terminfo[kich1]}"
+key[Backspace]="${terminfo[kbs]}"
+key[Delete]="${terminfo[kdch1]}"
+key[Up]="${terminfo[kcuu1]}"
+key[Down]="${terminfo[kcud1]}"
+key[Left]="${terminfo[kcub1]}"
+key[Right]="${terminfo[kcuf1]}"
+key[PageUp]="${terminfo[kpp]}"
+key[PageDown]="${terminfo[knp]}"
+key[Shift-Tab]="${terminfo[kcbt]}"
+
+# setup key accordingly
+bindkey -- "\C-A"               beginning-of-line
+bindkey -- "\C-E"               end-of-line
+bindkey -- "${key[Insert]}"     overwrite-mode
+bindkey -- "\C-D"               delete-char
+bindkey -- "\C-H"               backward-delete-char
+bindkey -- "\M-D"               delete-word
+bindkey -- "\C-W"               backward-delete-word
+bindkey -- "\C-P"               up-line-or-history
+bindkey -- "\C-N"               down-line-or-history
+bindkey -- "\C-B"               backward-char
+bindkey -- "\C-F"               forward-char
+bindkey -- "\M-B"               backward-word
+bindkey -- "\M-F"               forward-word
+bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
+bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
+bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
+
+# Finally, make sure the terminal is in application mode, when zle is
+# active. Only then are the values from $terminfo valid.
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start { echoti smkx }
+	function zle_application_mode_stop { echoti rmkx }
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi
