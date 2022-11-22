@@ -1,5 +1,5 @@
 # Edit rc file and source it. This is the most important thing
-macro index \cv ":set wait_key=no<Return>!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
+macro index \Cv ":set wait_key=no<Return>!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
 
 # Connection options
 set ssl_force_tls = yes
@@ -47,7 +47,7 @@ alternative_order text/plain text/enriched text/html
 auto_view text/html
 # Macro to open html with css
 #macro index,pager h "<pipe-message>htmail-decode<Return>" "render html mail using htmail-view"
-macro pager l "v/html<Return>xq<Return>" "Open html file"
+macro pager l "v/(html|zip)<Return>xq<Return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
 macro index,pager c '<change-folder>='
