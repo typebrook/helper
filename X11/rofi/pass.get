@@ -36,7 +36,7 @@ fi
 RESULT="$(pass $1)"
 if [ -n "$RESULT" ]; then
 	# Copy the given password into clipboard
-	echo "$RESULT" | head -1 | tr -d '\n' | xsel -ib
+	echo "$RESULT" | head -1 | tr -d '\n' | xsel -i -t 30000
 
 	# And show extra message
 	EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
