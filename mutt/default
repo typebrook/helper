@@ -46,7 +46,6 @@ alternative_order text/plain text/enriched text/html
 # Auto convert text/html MIME type to text/plain
 auto_view text/html
 # Macro to open html with css
-#macro index,pager h "<pipe-message>htmail-decode<Return>" "render html mail using htmail-view"
 macro pager l "v/(html|zip)<Return>xq<Return>" "Open html file"
 
 # Vim-style key binding, \c means Ctrl
