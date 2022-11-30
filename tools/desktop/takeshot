@@ -7,7 +7,7 @@
 
 time=`date +%Y-%m-%d-%H-%M-%S`
 geometry=`xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current'`
-dir="`xdg-user-dir PICTURES`/Screenshots"
+dir="`xdg-user-dir PICTURES`"
 file="Screenshot_${time}_${geometry}.png"
 
 # notify and view screenshot
