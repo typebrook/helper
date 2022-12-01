@@ -1,6 +1,6 @@
 text/html;                  firefox '%s'; test=test -n "$DISPLAY"; needsterminal;
 text/html;                  w3m -I %{charset} -T text/html; copiousoutput;
-text/plain;                 less -N %s; copiousoutput;
+text/plain;                 firefox '%s'; test=test -n "$DISPLAY"; needsterminal;
 application/json;           jq . %s | less -N; copiousoutput;
 application/pdf;            firefox '%s'; test=test -n "$DISPLAY"; needsterminal;
 application/octet-stream;   firefox '%s'; test=test -n "$DISPLAY"; needsterminal;
