@@ -647,7 +647,7 @@
     </keybind>
     <keybind key="W-space">
       <action name="Execute">
-        <command>sh -c 'sleep 0.3; xdotool type $(xsel -oc)'</command>
+        <command>sh -c 'sleep 0.3; xdotool type "$(xsel -oc)"'</command>
       </action>
     </keybind>
     <keybind key="A-q">
