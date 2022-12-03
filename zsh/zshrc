@@ -71,6 +71,7 @@ bindkey -- "\eb"                backward-word
 bindkey -- "\ef"                forward-word
 bindkey -- "\C-x-\C-e"          edit-command-line
 bindkey -- "\C-v"               quoted-insert
+bindkey -- "\e."                insert-last-word
 bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
 bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
 bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
