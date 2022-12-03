@@ -67,7 +67,7 @@ bindkey -- "\C-p"               up-line-or-history
 bindkey -- "\C-n"               down-line-or-history
 bindkey -- "\C-b"               backward-char
 bindkey -- "\C-f"               forward-char
-bindkey -- "\M-b"               backward-word
+bindkey -- "\eb"                backward-word
 bindkey -- "\ef"                forward-word
 bindkey -- "\C-x-\C-e"          edit-command-line
 bindkey -- "\C-v"               quoted-insert
