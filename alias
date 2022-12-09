@@ -410,10 +410,12 @@ image.from_data_url() {
   identify $1
 }
 image.upload() {
-  month=$(date +%Y-%m)
-  filename=${2:-$(date +"%d_%Hh%Mm%Ss").${1##*.}}
-  scp $1 vps:~/data/s3.photos/$month/$filename
-  echo https://topo.tw/photos/$month/$filename
+  local month=$(date +%Y-%m)
+  local filename=${2:-$(date +"%d_%Hh%Mm%Ss").${1##*.}}
+  local fpath='$HOME/data/s3.photos/'$month
+  cat $1 | ssh vps "mkdir -p $fpath && cat >$fpath/$filename" && \
+  echo https://topo.tw/photos/$month/$filename || \
+  echo Fail to upload
 }
 image.text() {
   convert \
