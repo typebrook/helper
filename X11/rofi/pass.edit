@@ -16,6 +16,6 @@ fi
 
 # Use detected terminal emulator to edit password
 coproc ( 
-	rofi-sensible-terminal -e pass edit $1 && pass $1 --clip
+	alacritty -e pass edit $1 && pass $1 --clip
 	rofi -e "Copied: $1" 
 )
