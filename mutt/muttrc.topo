@@ -33,6 +33,7 @@ set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mu
 
 # Sidebar
 mailboxes  +INBOX \
+           -label JAPAN +japan \
            +mbox \
            -label DC +DeltaChat \
            "+---- Watch -----" \
@@ -65,6 +66,7 @@ folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
 
 # Change mailboxes
 macro index,pager           gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
+macro index,pager           gj      "<change-folder>+japan<Return>"
 macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to mbox folder"
 macro index,pager           gp      "<change-folder>+pay<Return>" "Switch to pay folder"
 macro index,pager           gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
