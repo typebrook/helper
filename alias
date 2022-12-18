@@ -205,12 +205,12 @@ vp() {
     vim $@ "$post"
   else
     # Copy from vps
-    tmpfile=$(mktemp)
+    tmpfile=$(mktemp --suffix .md)
     scp vps:"$post" $tmpfile
 
     # Edit locally
     vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
-    scp $tmpfile vps:"$post" && \
+    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'update'" && \
     rm $tmpfile
   fi
 }
