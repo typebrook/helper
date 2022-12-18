@@ -145,7 +145,7 @@ color tilde         white           black
 color message       cyan            black
 color markers       red             black
 color attachment    brightred       black
-color search        brightblack     white
+color search        black           red
 color status        brightwhite     black
 color indicator     white           blue
 color tree          magenta         black   # arrows in threads
