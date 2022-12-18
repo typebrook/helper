@@ -79,7 +79,7 @@ bind pager \cn next-entry
 bind pager \cp previous-entry
 bind pager \ch display-toggle-weed
 macro browser \cp "q\cp"
-macro browser \ch "q\cn"
+macro browser \cn "q\cn"
 macro browser g "qg"
 bind pager h skip-headers
 bind attach x view-mailcap
