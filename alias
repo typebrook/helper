@@ -210,7 +210,7 @@ vp() {
 
     # Edit locally
     vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
-    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'update'" && \
+    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'Update with vim'" && \
     rm $tmpfile
   fi
 }
