@@ -1,54 +1,56 @@
 #! /bin/sh
 
-OPTIONS_NEW=( 'NO' 'YES' 'YES, and edit it' )
+GENERATION_HINT="Generate with default config"
 
-# Generate a new password
+# Generate a new password if ROFI_DATA is given by last execution
 if [ -n "${ROFI_DATA}" ]; then
-	[ "$1" == "${OPTIONS_NEW[1]}" ] && \
-		coproc ( 
-			export POST=false
-			pass generate ${ROFI_DATA} --clip
-			rofi -e "Generate and Copied: ${ROFI_DATA}" 
-		)
+  PASSWORD="${ROFI_DATA}"
+  export ROFI_DATA=
 
-	[ "$1" == "${OPTIONS_NEW[2]}" ]  && \
-		coproc (
-			export POST=false
-			pass generate ${ROFI_DATA} --clip
-			rofi-sensible-terminal -e pass edit ${ROFI_DATA}; \
-		)
+  # If custom arguments for password generation is given
+  # Set environment variable
+  if [ ${ROFI_RETV} -eq 2 ]; then
+    extra_arguments="${1}"
+  fi
 
-	exit 0
+  # Generate password in a new process
+  # And Use current script to copy the values info X11 selections
+  coproc ( 
+    pass generate ${PASSWORD} ${extra_arguments}
+    $0 ${PASSWORD}
+  )
+
+  exit 0
 fi
 
 # Give rofi available passwords and exit
 if [ $# -eq 0 ]; then
-	# Specify rofi prompt as 'Get'
-	echo -e "\0prompt\x1fGet"
+  # Specify rofi prompt as 'Get'
+  echo -e "\0prompt\x1fGet"
 
-	find ~/.password-store -name '*gpg' -printf %P\\n | \
-	sed 's/.gpg$//'
+  find ~/.password-store -name '*gpg' -printf %P\\n | \
+    sed 's/.gpg$//'
 
-	exit 0
+  exit 0
 fi
 
 # Test password exists or not
 RESULT="$(pass $1)"
 if [ -n "$RESULT" ]; then
-	# Copy the given password into clipboard
-	echo "$RESULT" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
-	echo "$RESULT" | sed -n 2p | tr -d '\n' | xsel -ib
+  # Copy the given password into PRIMARY selection and kill it in 30s
+  echo "$RESULT" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
+  # Copy the second line (most of the time, account name) into CLIPBOARD selection
+  echo "$RESULT" | sed -n 2p | tr -d '\n' | xsel -ib
 
-	# And show extra message
-	EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
-    coproc ( rofi -e "Copied: $1$EXTRA" )
+  # And show extra message
+  EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
+  coproc ( rofi -e "Copied: $1$EXTRA" )
+
 # Password doesn't exist yet
 # Go to next rofi execution
 else
-	echo -e "\0prompt\x1f$1 doesn't exist, generate it?"
-	echo -e "\0data\x1f$1"
-
-	for i in "${OPTIONS_NEW[@]}"; do
-	  echo $i
-	done
+  echo -e "\0prompt\x1f$1"
+  echo -e "\0message\x1fThis password doesn't exist, generate with custom arguments?"
+  echo -e "\0data\x1f$1"
+  echo ${GENERATION_HINT}
 fi
