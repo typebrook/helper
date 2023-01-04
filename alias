@@ -504,18 +504,10 @@ alias tkrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
 alias tt='taskwarrior-tui'
 
-# upload with 0x0.st
-up() {
-  curl -F"file=@${1}" http://0x0.st
-  #curl -F "file=@${1}" https://api.anonfiles.com/upload
-}
-short() {
-  curl -F"shorten=${1}" http://0x0.st
-}
-
 # pass
 alias chp='tig -C ~/.password-store'
 alias cdpass='cd ~/.password-store'
+alias chpass='tig -C ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
