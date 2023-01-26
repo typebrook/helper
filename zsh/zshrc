@@ -4,19 +4,29 @@
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="archcraft"
 
+
 # helper repo
 export SETTING_DIR=$HOME/helper
 source $SETTING_DIR/tools/init/load-settings.sh
 fpath=($SETTING_DIR/zsh $fpath)
 
+
 # Options
 setopt extended_glob
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 
-_comp_options+=(globdots) # With hidden files
+
+# Edit Command Line
+autoload -Uz edit-command-line; zle -N edit-command-line
+bindkey -- "^X^E" edit-command-line
+
+
+# Enable completion
 autoload -Uz compinit; compinit
+_comp_options+=(globdots) # With hidden files
 zstyle ':completion:*' menu select
 zstyle ':completion::complete:*' gain-privileges 1
+
 
 # PS1 with git status at right
 autoload -Uz add-zsh-hook
@@ -27,13 +37,14 @@ function precmd() {
   RPROMPT="%B%K{red}%F{black}${RIGHT}%f%k%b"
 }
 
-# Directory Stack
-#setopt AUTO_PUSHD           # Push the current directory visited on the stack.
-#setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
-#setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
 
-#alias d='dirs -v'
-#for index ({1..9}) alias "$index"="cd +${index}"; unset index
+# Directory Stack
+setopt AUTO_PUSHD           # Push the current directory visited on the stack.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+alias d='dirs -v'
+for index ({1..9}) alias "$index"="cd +${index}"; unset index
+
 
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -66,13 +77,21 @@ bindkey -- "\C-b"               backward-char
 bindkey -- "\C-f"               forward-char
 bindkey -- "\Eb"                backward-word
 bindkey -- "\Ef"                forward-word
-bindkey -- "\C-x-\C-e"          edit-command-line
 bindkey -- "\C-v"               quoted-insert
 bindkey -- "\E."                insert-last-word
 bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
 bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
 bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
 #bindkey -- "${key[Insert]}"     overwrite-mode
+
+
+# Common shell options
+alias ls='ls --color'
+
+
+# Quick jump to parent folders
+source ~/helper/zsh/bd.zsh
+
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
