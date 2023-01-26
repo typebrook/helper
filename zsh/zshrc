@@ -2,9 +2,9 @@
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="archcraft"
+ZSH_THEME="archcraft"
 
-# typebrook/helper
+# helper repo
 export SETTING_DIR=$HOME/helper
 source $SETTING_DIR/tools/init/load-settings.sh
 fpath=($SETTING_DIR/zsh $fpath)
@@ -19,8 +19,6 @@ zstyle ':completion:*' menu select
 zstyle ':completion::complete:*' gain-privileges 1
 
 # PS1 with git status at right
-#autoload -U ps1; ps1
-alias ps1="vim $SETTING_DIR/zsh/ps1"
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd
 function precmd() {
@@ -57,7 +55,6 @@ key[Shift-Tab]="${terminfo[kcbt]}"
 # setup key accordingly
 bindkey -- "\C-A"               beginning-of-line
 bindkey -- "\C-E"               end-of-line
-bindkey -- "${key[Insert]}"     overwrite-mode
 bindkey -- "\C-d"               delete-char
 bindkey -- "\C-h"               backward-delete-char
 bindkey -- "\Ed"                delete-word
@@ -75,6 +72,7 @@ bindkey -- "\E."                insert-last-word
 bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
 bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
 bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
+#bindkey -- "${key[Insert]}"     overwrite-mode
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
