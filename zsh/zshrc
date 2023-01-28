@@ -80,6 +80,7 @@ bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
 
 # Common shell options
 alias ls='ls --color'
+alias grep='grep --color'
 
 
 # Quick jump to parent folders
