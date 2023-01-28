@@ -278,8 +278,7 @@ alias b='bean'
 # about vimwiki
 alias cdl='cd ~/log'
 alias chw='tig -C ~/log'
-ww() { entry="${1:-guideline}"; vim -c Goyo ~/log/${entry%%.md}.md; }
-wwd() { entry="${1:-guideline}"; vim -c Goyo ~/log/diary/${entry%%.md}.md; }
+ww() { entry="${1:-guideline}"; vim ~/log/${entry%%.md}.md; }
 wg() { grep -r "$@" --exclude-dir=logseq/ ~/log; }
 wi() { cat ~/log/${1%%.md}.md; }
 alias dia='diary'
