@@ -6,6 +6,10 @@ eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
+eval "${shell}env(){
+  local ENVFILE=~/.${shell}env
+  vim \$ENVFILE && source \$ENVFILE
+}"
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
