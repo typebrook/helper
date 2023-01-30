@@ -26,6 +26,11 @@ gpg:
 console:
 	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf
 
+zsh:
+	ln -sf `pwd`/zsh/zshenv ~/.zshenv
+	mkdir -p ~/.config/zsh
+	ln -sf `pwd`/zsh/zshrc ~/.config/zsh/.zshrc
+
 fzf:
 	if [ ! -d "$(HOME)/.fzf" ]; then 
 		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; 
