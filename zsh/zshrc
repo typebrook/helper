@@ -1,3 +1,6 @@
+# ZLE
+set -o emacs
+
 # helper repo
 export SETTING_DIR=$HOME/helper
 source $SETTING_DIR/tools/init/load-settings.sh
@@ -57,24 +60,24 @@ key[PageDown]="${terminfo[knp]}"
 key[Shift-Tab]="${terminfo[kcbt]}"
 
 # setup key accordingly
-bindkey -- "\C-A"               beginning-of-line
-bindkey -- "\C-E"               end-of-line
-bindkey -- "\C-d"               delete-char
-bindkey -- "\C-h"               backward-delete-char
-bindkey -- "\Ed"                delete-word
-bindkey -- "\C-w"               backward-delete-word
-bindkey -- "\C-k"               kill-line
-bindkey -- "\C-p"               up-line-or-history
-bindkey -- "\C-n"               down-line-or-history
-bindkey -- "\C-b"               backward-char
-bindkey -- "\C-f"               forward-char
-bindkey -- "\Eb"                backward-word
-bindkey -- "\Ef"                forward-word
-bindkey -- "\C-v"               quoted-insert
-bindkey -- "\E."                insert-last-word
-bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
-bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
-bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
+#bindkey -- "\C-A"               beginning-of-line
+#bindkey -- "\C-E"               end-of-line
+#bindkey -- "\C-d"               delete-char
+#bindkey -- "\C-h"               backward-delete-char
+#bindkey -- "\Ed"                delete-word
+#bindkey -- "\C-w"               backward-delete-word
+#bindkey -- "\C-k"               kill-line
+#bindkey -- "\C-p"               up-line-or-history
+#bindkey -- "\C-n"               down-line-or-history
+#bindkey -- "\C-b"               backward-char
+#bindkey -- "\C-f"               forward-char
+#bindkey -- "\Eb"                backward-word
+#bindkey -- "\Ef"                forward-word
+#bindkey -- "\C-v"               quoted-insert
+#bindkey -- "\E."                insert-last-word
+#bindkey -- "${key[PageUp]}"     beginning-of-buffer-or-history
+#bindkey -- "${key[PageDown]}"   end-of-buffer-or-history
+#bindkey -- "${key[Shift-Tab]}"  reverse-menu-complete
 #bindkey -- "${key[Insert]}"     overwrite-mode
 
 
