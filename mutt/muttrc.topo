@@ -33,7 +33,6 @@ set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mu
 
 # Sidebar
 mailboxes  +INBOX \
-           -label TRIP +trip \
            +mbox \
            -label DC +DeltaChat \
            "+---- Watch -----" \

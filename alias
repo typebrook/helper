@@ -64,6 +64,13 @@ ssh.down() {
   ssh -t vps rm -rf -i ~/public/"$1"
 }
 
+# imap
+curl.save_to_mail() {
+  curl imaps://mail.topo.tw/INBOX \
+      --user pham:`pass mail/pham@mail.topo.tw` \
+      -T $1
+}
+
 # Gist
 alias g='gist'
 alias gl='gist last'
