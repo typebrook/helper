@@ -501,6 +501,7 @@ alias tk10='task limit:10 \( status:completed or status:deleted \) rc.report.all
 tkw(){ task $1 mod wait:${2##wait:}; }
 alias tkrc='vim ~/.taskrc'
 alias cdtk='cd ~/.task'
+alias chtk='tig -C ~/.task status'
 alias tt='taskwarrior-tui'
 
 # pass
