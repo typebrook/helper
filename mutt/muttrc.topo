@@ -2,9 +2,8 @@ source ~/.config/mutt/default
 
 # IMAP/SMTP settings
 set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
-set folder = "imaps://$my_user:993/"
+set folder = ~/Maildir/
 set smtp_url = "smtp://$my_user:587"
-set imap_pass = `pass mail/$my_user`
 set smtp_pass = "$imap_pass"
 
 # Identify meself
@@ -33,6 +32,7 @@ set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mu
 
 # Sidebar
 mailboxes  +INBOX \
+           -label TRIP +trip \
            +mbox \
            -label DC +DeltaChat \
            "+---- Watch -----" \
