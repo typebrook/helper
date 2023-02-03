@@ -1,0 +1,15 @@
+javascript: (function() {
+  let domStyle = document.getElementById('domStylee');
+  if (domStyle) {
+    document.body.removeChild(domStyle);
+    return;
+  }
+  domStyle = document.createElement("style");
+  domStyle.setAttribute('id', 'domStylee');
+  color = Math.random() * (1<<24);
+  color = Math.floor(color).toString(16);
+  domStyle.append(
+    [`* { outline: 1px solid #${color}; outlineOffsset: -1px }`]
+  );
+  document.body.appendChild(domStyle);
+})();
