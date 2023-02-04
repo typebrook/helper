@@ -1,0 +1,9 @@
+javascript: (function() {
+  mapDiv = document.createElement("div");
+  mapDiv.setAttribute("class", 'map');
+  document.body.append(mapDiv);
+  script = document.createElement("script");
+  script.src = 'https://unpkg.com/mapclay@0.1.3/js/mapclay.js';
+  script.type = 'module';
+  document.body.append(script);
+})();
