@@ -72,6 +72,8 @@ bind index,pager,browser,attach \cd half-down
 bind index,pager,browser,attach \cu half-up
 bind index,pager <Tab> previous-new-then-unread
 bind index } bottom-page
+bind index p parent-message
+bind index P print-message
 bind pager G bottom
 bind pager j next-line
 bind pager k previous-line
