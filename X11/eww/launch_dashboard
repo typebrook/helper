@@ -2,7 +2,7 @@
 
 ## Files and cmd
 FILE="$HOME/.cache/eww_launch.dashboard"
-CFG="$HOME/.config/eww/dashboard"
+CFG="$HOME/helper/X11/eww"
 EWW=`which eww`
 
 ## Run eww daemon if not running already
