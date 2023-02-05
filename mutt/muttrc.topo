@@ -65,7 +65,6 @@ folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
 
 # Change mailboxes
 macro index,pager           gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
-macro index,pager           gj      "<change-folder>+japan<Return>"
 macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to mbox folder"
 macro index,pager           gp      "<change-folder>+pay<Return>" "Switch to pay folder"
 macro index,pager           gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
@@ -74,6 +73,7 @@ macro index,pager           gS      "<change-folder>+spam<Return>" "Switch to sp
 macro index,pager           gd      "<change-folder>+DeltaChat<Return>" "Switch to DeltaChat folder"
 macro index,pager           gD      "<change-folder>+Drafts<Return>" "Switch to Drafts folder"
 macro index,pager           gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
-macro index,pager           gl      "<change-folder>+login<Return>" "Switch to INBOX folder"
-macro index,pager           ga      "<change-folder>+arch-general<Return>" "Switch to INBOX folder"
-macro index,pager           gk      "<change-folder>+keep<Return>" "Switch to INBOX folder"
+macro index,pager           gl      "<change-folder>+login<Return>" "Switch to login folder"
+macro index,pager           ga      "<change-folder>+arch-general<Return>" "Switch to arch-general folder"
+macro index,pager           gk      "<change-folder>+keep<Return>" "Switch to keep folder"
+macro index,pager           gu      "<change-folder>+update<Return>" "Switch to update folder"

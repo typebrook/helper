@@ -494,6 +494,7 @@ bak() {
 wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
 alias cdtrash='cd ~/.local/share/Trash'
 trash() { mv $@ ~/.local/share/Trash; }
+alias ge='graph-easy --boxart'
 
 # task
 alias tk='task'
