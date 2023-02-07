@@ -28,7 +28,7 @@ while read repo remote; do
   changes="$(git -c color.status=always status --short)"
 
   # Diff between from local repo and remote
-  cherry="$([ -n "`git remote`" ] && git cherry)"
+  cherry="$([ -n "`git remote`" ] && git cherry 2>/dev/null)"
 
   if [[ $COUNT_ONLY == true ]]; then
     # If '-n' is specified, only count repo with changes/local-diff
