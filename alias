@@ -65,10 +65,19 @@ ssh.down() {
 }
 
 # imap
-curl.save_to_mail() {
+curl.save_as_mail() {
   curl imaps://mail.topo.tw/INBOX \
       --user pham:`pass mail/pham@mail.topo.tw` \
       -T $1
+}
+curl.save_as_mail_attachment() {
+  TEMPFILE=$(mktemp)
+  echo $TEMPFILE
+  trap 'rm $TEMPFILE' EXIT
+  mail -a $1 -Sexpandaddr $TEMPFILE
+  curl imaps://mail.topo.tw/INBOX \
+      --user pham:`pass mail/pham@mail.topo.tw` \
+      -T $TEMPFILE
 }
 
 # Gist
