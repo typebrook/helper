@@ -71,13 +71,12 @@ curl.save_as_mail() {
       -T $1
 }
 curl.save_as_mail_attachment() {
-  TEMPFILE=$(mktemp)
-  echo $TEMPFILE
+#TEMPFILE=$(mktemp)
   trap 'rm $TEMPFILE' EXIT
-  mail -a $1 -Sexpandaddr $TEMPFILE
+  mail -a $1 -Sexpandaddr /dev/stdout | \
   curl imaps://mail.topo.tw/INBOX \
       --user pham:`pass mail/pham@mail.topo.tw` \
-      -T $TEMPFILE
+      -T /dev/stdin
 }
 
 # Gist
