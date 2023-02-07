@@ -60,6 +60,7 @@ key[PageDown]="${terminfo[knp]}"
 key[Shift-Tab]="${terminfo[kcbt]}"
 
 # setup key accordingly
+bindkey --  '^[[Z'  reverse-menu-complete
 #bindkey -- "\C-A"               beginning-of-line
 #bindkey -- "\C-E"               end-of-line
 #bindkey -- "\C-d"               delete-char
