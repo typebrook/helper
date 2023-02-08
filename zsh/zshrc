@@ -6,11 +6,12 @@ export SETTING_DIR=$HOME/helper
 source $SETTING_DIR/tools/init/load-settings.sh
 fpath=($SETTING_DIR/zsh $fpath)
 
+# Reload zshrc
+alias .="source $0"
 
 # Options
 setopt extended_glob
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
-
 
 # Edit Command Line
 autoload -Uz edit-command-line; zle -N edit-command-line

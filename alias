@@ -106,9 +106,6 @@ ps1.swap() {
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
 alias ports='sudo lsof -i -Pn | grep LISTEN'
-.() {
-  source ${@:-$HOME/.$(basename $SHELL)rc}
-}
 alias ll='ls -lh'
 alias lla='ls -lha'
 llw() { which $1 | xargs ls -alh; }
