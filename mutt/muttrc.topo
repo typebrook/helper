@@ -42,6 +42,7 @@ mailboxes  +INBOX \
            -label Arch +arch-general \
            -label Mutt +mutt-users \
            -label Bash +bash \
+           -label Aerc +aerc \
            +STOCK \
            +feedback \
            "+-- Permanent ---" \
