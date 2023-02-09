@@ -3,11 +3,12 @@ set -o emacs
 
 # helper repo
 export SETTING_DIR=$HOME/helper
-source $SETTING_DIR/tools/init/load-settings.sh
 fpath=($SETTING_DIR/zsh $fpath)
+source $SETTING_DIR/zsh/completion.zsh
+source $SETTING_DIR/tools/init/load-settings.sh
 
 # Reload zshrc
-alias .="source $0"
+alias .="source $ZDOTDIR/.zshrc"
 
 # Options
 setopt extended_glob
