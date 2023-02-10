@@ -1,6 +1,12 @@
 # ZLE
 set -o emacs
 
+# Set cursor as blinking block
+# 1 blinging block          2 block
+# 3 blinking under score    4 under score
+# 5 blinking bar            6 bar
+echo '\e[1 q'
+
 # helper repo
 export SETTING_DIR=$HOME/helper
 fpath=($SETTING_DIR/zsh $fpath)
