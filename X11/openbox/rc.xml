@@ -599,6 +599,11 @@
         <command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
+    <keybind key="W-q">
+      <action name="Execute">
+        <command>alacritty -o "window.padding.x=100" -o "window.padding.y=70" -o "window.dimensions.columns=64" -o "window.dimensions.lines=15" -e ~/helper/tools/misc/flash.sh</command>
+      </action>
+    </keybind>
     <keybind key="C-A-v">
       <action name="Execute">
         <command>alacritty -e vim</command>
