@@ -28,6 +28,6 @@ while true; do
   fi
 
   echo
-  echo ----
-  echo
+  read
+  tput clear
 done

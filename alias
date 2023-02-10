@@ -472,7 +472,7 @@ alias p8='ping -c 3 8.8.8.8'
 pbf() {
   protoc --decode_raw
 }
-mvt_decode() {
+mvt.decode() {
   if [[ ! -t 0 ]]; then
     tmp=$(mktemp)
     cat >$tmp
