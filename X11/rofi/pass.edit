@@ -16,6 +16,5 @@ fi
 
 # Use detected terminal emulator to edit password
 coproc ( 
-	alacritty -e pass edit $1 && pass $1 --clip
-	rofi -e "Copied: $1" 
+    alacritty -e pass edit $1 && $(dirname $0)/pass.get $1
 )
