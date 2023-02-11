@@ -1,10 +1,16 @@
 #! /bin/bash
 
 while true; do
-  CARD="$(cat ~/log/flashcards.md | shuf | head -1)"
+  CARDS="$(cat ~/log/flashcards.md | shuf | head -5)"
+  CARD="$(<<<"$CARDS" sed -n 3p)"
 
   # Print the Question
   <<<"$CARD" tr -s '\t' | cut -f1
+  echo
+  tput bold; tput setaf 1
+  <<<"$CARDS" tr -s '\t' | cut -f2 | tr '\n' '\t'
+  tput sgr0
+  echo 
   echo
   echo ----
   echo
