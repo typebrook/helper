@@ -36,6 +36,7 @@ mailboxes  +INBOX \
            +mbox \
            -label DEV +dev \
            -label DC +DeltaChat \
+           -label CivilDEF +civildef \
            "+---- Watch -----" \
            +hometeach \
            +osm \
