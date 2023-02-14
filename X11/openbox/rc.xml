@@ -105,7 +105,7 @@
   <keyboard>
     <keybind key="W-o">
       <action name="Execute">
-        <command>alacritty
+        <command>alacritty --title OPENBOX-CONFIG
           -o "window.dimensions.lines=32"
           -o "window.dimensions.columns=90"
           -e vim ~/.config/openbox/rc.xml
@@ -591,7 +591,13 @@
     </keybind>
     <keybind key="W-v">
       <action name="Execute">
-        <command>alacritty --hold -o "window.padding.x=100" -o "window.padding.y=70" -o "window.dimensions.columns=64" -o "window.dimensions.lines=9" -e cal -3</command>
+        <command>alacritty --hold 
+          -o "window.padding.x=100" 
+          -o "window.padding.y=70" 
+          -o "window.dimensions.columns=64" 
+          -o "window.dimensions.lines=9" 
+          -e cal -3
+      </command>
       </action>
     </keybind>
     <keybind key="W-p">
@@ -601,7 +607,13 @@
     </keybind>
     <keybind key="W-q">
       <action name="Execute">
-        <command>alacritty -o "window.padding.x=100" -o "window.padding.y=70" -o "window.dimensions.columns=64" -o "window.dimensions.lines=15" -e ~/helper/tools/misc/flash.sh</command>
+        <command>alacritty --title FLASHCARDS
+          -o "window.padding.x=100" 
+          -o "window.padding.y=70" 
+          -o "window.dimensions.columns=64" 
+          -o "window.dimensions.lines=15" 
+          -e ~/helper/tools/misc/flash.sh
+      </command>
       </action>
     </keybind>
     <keybind key="C-A-v">
