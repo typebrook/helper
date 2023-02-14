@@ -11,7 +11,7 @@ echo '\e[1 q'
 export SETTING_DIR=$HOME/helper
 fpath=($SETTING_DIR/zsh $fpath)
 source $SETTING_DIR/zsh/completion.zsh
-source $SETTING_DIR/tools/init/load-settings.sh
+source $SETTING_DIR/bin/init/load-settings.sh
 
 # Reload zshrc
 alias .="source $ZDOTDIR/.zshrc"
@@ -36,7 +36,7 @@ zstyle ':completion::complete:*' gain-privileges 1
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd
 function precmd() {
-  RIGHT=$(NUM=$($SETTING_DIR/tools/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
+  RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   PROMPT='%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b '
   RPROMPT="%B%K{red}%F{black}${RIGHT}%f%k%b"
 }

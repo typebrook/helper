@@ -612,7 +612,7 @@
           -o "window.padding.y=70" 
           -o "window.dimensions.columns=64" 
           -o "window.dimensions.lines=15" 
-          -e ~/helper/tools/misc/flash.sh
+          -e ~/helper/bin/misc/flash.sh
       </command>
       </action>
     </keybind>

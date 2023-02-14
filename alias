@@ -236,7 +236,7 @@ alias gls='git log -S'
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
-alias ch="/home/pham/helper/tools/git/check-repos.sh"
+alias ch="/home/pham/helper/bin/git/check-repos.sh"
 
 # github
 export GITHUB_API='https://api.github.com'

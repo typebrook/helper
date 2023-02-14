@@ -60,7 +60,7 @@ tmux:
 	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
 
 crontab:
-	(crontab -l 2>/dev/null; cat tools/cron/* | sed '/^#/ d') | crontab -
+	(crontab -l 2>/dev/null; cat bin/cron/* | sed '/^#/ d') | crontab -
 
 libinput:
 	sudo ln -sf `pwd`/misc/libinput/* /etc/X11/xorg.conf.d/
@@ -87,7 +87,7 @@ rofi:
 	ln -sf `pwd`/X11/rofi/config.rasi ~/.config/rofi/config.rasi
 
 archcraft:
-	ls -sf `pwd`/tools/desktop/takeshot /usr/local/bin/takeshot
+	ls -sf `pwd`/bin/desktop/takeshot /usr/local/bin/takeshot
 
 urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview

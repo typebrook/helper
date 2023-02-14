@@ -22,7 +22,7 @@ cat >>$RCFILE <<EOF
 
 # $REPO
 export SETTING_DIR=$SETTING_DIR
-source \$SETTING_DIR/tools/init/load-settings.sh
+source \$SETTING_DIR/bin/init/load-settings.sh
 EOF
 
 cd "$SETTING_DIR" || exit 1
