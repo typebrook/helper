@@ -93,7 +93,7 @@ urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
 
 alacritty:
-	ln -sf `pwd`/alacritty/* ~/.config/alacritty/
+	ln -sf `pwd`/X11/alacritty/* ~/.config/alacritty/
 
 mpd:
 	ln -sf `pwd`/mpd/ncmpcpp ~/.config/ncmpcpp
