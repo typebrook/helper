@@ -1,9 +1,7 @@
 javascript: (function() {
-  mapDiv = document.createElement("div");
-  mapDiv.setAttribute("class", 'map');
-  document.body.append(mapDiv);
   script = document.createElement("script");
-  script.src = 'https://unpkg.com/mapclay@0.1.3/js/mapclay.js';
+  script.src = 'https://unpkg.com/mapclay@0.2.0/js/mapclay.js';
   script.type = 'module';
+  script.setAttribute('data-from', 'code');
   document.body.append(script);
 })();
