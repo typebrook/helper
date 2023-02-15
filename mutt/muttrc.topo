@@ -26,7 +26,7 @@ source ~/.config/mutt/hooks.topo
 set spoolfile = "+INBOX"
 set mbox= "+mbox"
 set move = yes
-set record = "+Sent"
+set record = "+INBOX"
 set trash = "+Trash"
 set postponed = "+Drafts"
 set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mutt-users|bash|STOCK|pay|keep|login|update|test|spam)" 
