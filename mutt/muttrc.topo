@@ -32,28 +32,28 @@ set postponed = "+Drafts"
 set mask="!(INBOX|mbox|Sent|Trash|Drafts|DeltaChat|hometeach|osm|arch-general|mutt-users|bash|STOCK|pay|keep|login|update|test|spam)" 
 
 # Sidebar
-mailboxes  +INBOX \
-           +mbox \
-           -label DEV +dev \
-           -label DC +DeltaChat \
-           -label CivilDEF +civildef \
+mailboxes  -label '📭 [i]' +INBOX \
+           -label '📥 [m]' +mbox \
+           -label '👀 [d]' +dev \
+           -label '💬 [D]' +DeltaChat \
            "+---- Watch -----" \
+           -label CivilDEF +civildef \
            +hometeach \
-           +osm \
+           -label OSM +osm \
            -label Arch +arch-general \
            -label Mutt +mutt-users \
            -label Bash +bash \
            -label Aerc +aerc \
            +STOCK \
-           +feedback \
+           -label '📢 [f]' +feedback \
            "+-- Permanent ---" \
-           +pay \
-           +keep \
+           -label '💲 [p]' +pay \
+           -label '🍺 [k]' +keep \
+           -label '📤 [s]' +Sent \
+           -label '🗑  [t]' -poll +Trash \
            +login \
            +update \
-           +Sent \
            +Drafts \
-           -poll +Trash \
            +test \
            +spam
 
@@ -80,4 +80,4 @@ macro index,pager           gl      "<change-folder>+login<Return>" "Switch to l
 macro index,pager           ga      "<change-folder>+arch-general<Return>" "Switch to arch-general folder"
 macro index,pager           gk      "<change-folder>+keep<Return>" "Switch to keep folder"
 macro index,pager           gu      "<change-folder>+update<Return>" "Switch to update folder"
-macro index,pager           gfe     "<change-folder>+feedback<Return>" "Switch to feedback folder"
+macro index,pager           gf      "<change-folder>+feedback<Return>" "Switch to feedback folder"
