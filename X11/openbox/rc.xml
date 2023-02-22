@@ -504,12 +504,23 @@
           -o "window.dimensions.lines=1" 
           -o "window.position.x=-0"
           -o "window.position.y=0"
+          -o "window.opacity=0.6"
           -o "font.size=40" 
           -e ~/helper/bin/unix/stopwatch.sh
         </command>
       </action>
     </keybind>
     <keybind key="W-S-t">
+      <action name="ForEach">
+        <query target="default">
+          <title type="exact">STOPWATCH</title>
+        </query>
+        <then>
+          <action name="Focus"/>
+        </then>
+      </action>
+    </keybind>
+    <keybind key="W-y">
       <action name="Execute">
         <command>
           alacritty --title COUNTDOWN --hold
@@ -517,9 +528,20 @@
           -o "window.dimensions.lines=1" 
           -o "window.position.x=-0"
           -o "window.position.y=0"
+          -o "window.opacity=0.6"
           -o "font.size=40" 
           -e ~/helper/bin/unix/countdown.sh
         </command>
+      </action>
+    </keybind>
+    <keybind key="W-S-y">
+      <action name="ForEach">
+        <query target="default">
+          <title type="exact">COUNTDOWN</title>
+        </query>
+        <then>
+          <action name="Focus"/>
+        </then>
       </action>
     </keybind>
     <keybind key="W-f">
@@ -1015,12 +1037,16 @@
         <x>-0</x>
         <y>-0</y>
       </position>
+      <layer>above</layer>
+      <skip_taskbar>yes</skip_taskbar>
     </application>
     <application title="COUNTDOWN">
       <position force="yes">
         <x>-0</x>
         <y>-0</y>
       </position>
+      <layer>above</layer>
+      <skip_taskbar>yes</skip_taskbar>
     </application>
     <!--
   # this is an example with comments through out. use these to make your
