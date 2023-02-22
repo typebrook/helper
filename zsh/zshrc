@@ -14,7 +14,13 @@ source $SETTING_DIR/zsh/completion.zsh
 source $SETTING_DIR/bin/init/load-settings.sh
 
 # Reload zshrc
-alias .="source $ZDOTDIR/.zshrc"
+function .() {
+    if [ $# -eq 0 ]; then
+      source $ZDOTDIR/.zshrc
+    else
+      source $@
+    fi
+}
 
 # Options
 setopt extended_glob
