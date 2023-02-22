@@ -499,7 +499,7 @@
     <keybind key="W-t">
       <action name="Execute">
         <command>
-          alacritty --hold
+          alacritty --title STOPWATCH --hold
           -o "window.dimensions.columns=8" 
           -o "window.dimensions.lines=1" 
           -o "window.position.x=-0"
@@ -508,7 +508,19 @@
           -e ~/helper/bin/unix/stopwatch.sh
         </command>
       </action>
-      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="W-S-t">
+      <action name="Execute">
+        <command>
+          alacritty --title COUNTDOWN --hold
+          -o "window.dimensions.columns=8" 
+          -o "window.dimensions.lines=1" 
+          -o "window.position.x=-0"
+          -o "window.position.y=0"
+          -o "font.size=40" 
+          -e ~/helper/bin/unix/countdown.sh
+        </command>
+      </action>
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
@@ -998,6 +1010,18 @@
         <width>50%</width>
       </size>
     </application>
+    <application title="STOPWATCH">
+      <position force="yes">
+        <x>-0</x>
+        <y>-0</y>
+      </position>
+    </application>
+    <application title="COUNTDOWN">
+      <position force="yes">
+        <x>-0</x>
+        <y>-0</y>
+      </position>
+    </application>
     <!--
   # this is an example with comments through out. use these to make your
   # own rules, but without the comments of course.
@@ -1087,8 +1111,8 @@
     # make the window in fullscreen mode when it appears
 
     <maximized>true</maximized>
-    # 'Horizontal', 'Vertical' or boolean (yes/no)
   </application>
+    # 'Horizontal', 'Vertical' or boolean (yes/no)
 
   # end of the example
 -->
