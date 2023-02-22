@@ -206,9 +206,6 @@
       </action>
       <action name="MoveToEdgeEast"/>
     </keybind>
-    <keybind key="W-Up">
-      <action name="MaximizeFull"/>
-    </keybind>
     <keybind key="W-Down">
       <action name="UnmaximizeFull"/>
       <action name="MoveResizeTo">
@@ -243,6 +240,12 @@
       <action name="MoveResizeTo">
         <x>-0</x>
         <y>-0</y>
+      </action>
+    </keybind>
+    <keybind key="W-S-h">
+      <action name="MoveResizeTo">
+        <x>0</x>
+        <y>0</y>
       </action>
     </keybind>
     <keybind key="W-c">
@@ -495,8 +498,17 @@
     </keybind>
     <keybind key="W-t">
       <action name="Execute">
-        <command>furminal</command>
+        <command>
+          alacritty --hold
+          -o "window.dimensions.columns=8" 
+          -o "window.dimensions.lines=1" 
+          -o "window.position.x=-0"
+          -o "window.position.y=0"
+          -o "font.size=40" 
+          -e ~/helper/bin/unix/stopwatch.sh
+        </command>
       </action>
+      <action name="NextWindow"/>
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
@@ -571,7 +583,11 @@
     </keybind>
     <keybind key="W-i">
       <action name="Execute">
-        <command>alacritty -e nmtui</command>
+        <command>
+          alacritty 
+          -o "window.dimensions.lines=30" 
+          -e nmtui
+        </command>
       </action>
     </keybind>
     <keybind key="W-b">
@@ -968,7 +984,7 @@
       <decor>no</decor>
       <focus>yes</focus>
       <decor>yes</decor>
-      <position force="yes">
+      <position>
         <x>center</x>
         <y>center</y>
       </position>
@@ -981,15 +997,6 @@
       <size>
         <width>50%</width>
       </size>
-    </application>
-    <application title="MPlayer">
-      <decor>no</decor>
-    </application>
-    <application title="Nitrogen">
-      <position force="yes">
-        <x>center</x>
-        <y>center</y>
-      </position>
     </application>
     <!--
   # this is an example with comments through out. use these to make your
