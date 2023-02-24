@@ -25,6 +25,10 @@ alias v='vim'
 alias vi='vim'
 alias v2='vim -Nu ~/.vimrc2'
 alias vl="vim -c 'norm '"
+vll() {
+  file=$(grep '^> ' ~/.viminfo | sed 's/^> //' | fzf);
+  eval vim $file;
+}
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
 alias ve="vim ~/.vimrc"
 alias vro='vim -R'
