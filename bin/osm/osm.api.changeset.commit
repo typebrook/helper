@@ -1,18 +1,26 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 shopt -s lastpipe
 
 OSM_SERVER=https://api.openstreetmap.org
 OSM_TEST_SERVER=https://master.apis.dev.openstreetmap.org
+
 if [[ $@ =~ '--serious' ]]; then
   SERVER=$OSM_SERVER
 else
+# Commit to test server unless user set --serious
   SERVER=$OSM_TEST_SERVER
 fi
 
 OSM_API=${SERVER}/api/0.6
-FILE=${@//--serious/}
+FILE="${@//--serious/}"
+
+if [ -z "$FILE" ]; then
+  echo No OSC file is given >&2
+  exit 1
+fi
 
 # Prompt for comment and User:Password
 if [[ ! -t 0 ]]; then
@@ -20,61 +28,98 @@ if [[ ! -t 0 ]]; then
 else
   read -e -p 'Type comment: ' -r comment </dev/tty
 fi
-if [ -z ${OSM_USER_PASSWD} ]; then
+if [ -z "${OSM_USER_PASSWD}" ]; then
   read -e -p 'Type USER:PASSWD: ' -r OSM_USER_PASSWD </dev/tty
 fi
 
+# API call for changeset create
+# If env SOURCE is set, add it as part of changeset:
+# <tag k='source' v='$SOURCE'/>
 create_changeset() {
   SOURCE_TAG="${SOURCE:+$(printf "<tag k='source' v='%s'/>" $SOURCE)}"
 
-  curl ${OSM_API}/changeset/create \
-    --user ${OSM_USER_PASSWD} \
-    --upload-file - \
+  # Create changeset with given information
+  response="$(curl ${OSM_API}/changeset/create \
+    --write-out "\n%{http_code}" \
+    --user "$OSM_USER_PASSWD" \
     --silent \
-    <<EOF | tail -1
-<osm>
-  <changeset>
-    ${SOURCE_TAG}
-    <tag k='comment' v='${comment}'/>
-    <tag k='created_by' v='bash script'/>
-    <tag k='bot' v='yes'/>
-  </changeset>
-</osm>
-EOF
-}
-
-# Return http code after uploading a file
-uploade_file_to_changeset() {
-  curl -X POST $OSM_API/changeset/${changeset_id}/upload \
-    --user ${OSM_USER_PASSWD} -i \
     --upload-file - \
-    --silent -o /dev/null -w "%{http_code}" 
+    <<'    EOF'
+    <osm>
+      <changeset>
+        ${SOURCE_TAG}
+        <tag k='comment' v='${comment}'/>
+        <tag k='created_by' v='bash script'/>
+        <tag k='bot' v='yes'/>
+      </changeset>
+    </osm>
+    EOF
+  )"
+
+  return_code=$(tail -1 <<<"$response")
+  changeset_id=$(head -1 <<<"$response")
+
+  # If return code is not 200, or the response is not a sequence number
+  # Exit with return code 1
+  if [[ ! "$return_code" == 200 ]] || [[ ! "$changeset_id" =~ ^[[:digit:]]+$ ]]; then
+    echo
+    echo Fail to create a new changeset: >&2
+    echo "$response" >&2
+    return 1
+  fi
 }
 
+# API call for uploading OSC file
+uploade_file_to_changeset() {
+  response="$(curl -X POST $OSM_API/changeset/$1/upload \
+    --user "$OSM_USER_PASSWD" \
+    --upload-file - \
+    --silent -w "%{http_code}" 
+  )"
+
+  return_code=$(tail -1 <<<"$response")
+
+  if [[ ! "$return_code" == 200 ]]; then
+    echo
+    echo Fail to upload OSC file: >&2
+    echo "$response" >&2
+    return 1
+  fi
+}
+
+# API call for closing changeset
 close_changeset() {
-  curl -X PUT ${OSM_API}/changeset/${changeset_id}/close \
-    --user ${OSM_USER_PASSWD} -i \
-    --silent -o /dev/null -w "%{http_code}" 
+  response="$(curl -X PUT ${OSM_API}/changeset/$1/close \
+    --user "$OSM_USER_PASSWD" \
+    --silent -w "%{http_code}" 
+  )"
+
+  return_code=$(tail -1 <<<"$response")
+
+  if [[ ! "$return_code" == 200 ]]; then
+    echo
+    echo Fail to close changeset: >&2
+    echo "$response" >&2
+    return 1
+  fi
 }
 
-# Create changeset with given information
-changeset_id=$(create_changeset)
-
-# Print created changeset id
-echo "Changeset created, check ${SERVER}/changeset/${changeset_id}" >/dev/tty
-echo ${changeset_id}
+# Create changeset when CHANGESET is not set
+if [ -z CHANGESET ]; then
+  create_changeset && \
+  echo "Changeset created, check ${SERVER}/changeset/${changeset_id}" || \
+  exit 1
+else 
+  changeset_id=$CHANGESET
+fi
 
 # Upload OSC file to Changeset
 sed -Ee "/<(node|way|relation)/ s/>/ changeset=\"${changeset_id}\">/" $FILE |\
-uploade_file_to_changeset | if [[ $(cat) == '200' ]]; then 
-  echo Upload file $FILE to changeset ${changeset_id} >/dev/tty
-else
-  exit 1
-fi
+uploade_file_to_changeset ${changeset_id} && \
+echo Upload file $FILE to changeset ${changeset_id} || \
+exit 1
 
 # Close Changeset
-close_changeset | if [[ $(cat) == '200' ]]; then 
-  echo Changeset ${changeset_id} closed >/dev/tty
-else
-  exit 1
-fi 
+close_changeset ${changeset_id} && \
+echo Changeset ${changeset_id} closed || \
+exit 1
