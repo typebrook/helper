@@ -48,7 +48,10 @@ if [ -n "$RESULT" ]; then
 
 # Password doesn't exist yet
 # Go to next rofi execution
-else
+elif pass find $1 &>/dev/null; then
+  echo -e "\0prompt\x1fGPG Issue"
+  echo Passphase is not chached
+else 
   echo -e "\0prompt\x1f$1"
   echo -e "\0message\x1fThis password doesn't exist, generate with custom arguments?"
   echo -e "\0data\x1f$1"
