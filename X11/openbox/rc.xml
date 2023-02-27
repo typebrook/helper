@@ -499,14 +499,23 @@
     <keybind key="W-t">
       <action name="Execute">
         <command>
-          alacritty --title TIMER --hold
-          -o "window.dimensions.columns=8" 
-          -o "window.dimensions.lines=1" 
-          -o "window.position.x=-0"
-          -o "window.position.y=0"
-          -o "window.opacity=0.6"
-          -o "font.size=40" 
-          -e ~/helper/bin/unix/timer.sh SIGINT
+          sh -c '
+            xdotool search --name "TIMER" windowactivate || \
+            alacritty --title TIMER --hold		\
+            -o "window.dimensions.columns=8" 	\
+            -o "window.dimensions.lines=1" 		\
+            -o "window.position.x=-0"		    \
+            -o "window.position.y=0"		    \
+            -o "window.opacity=0.6"		        \
+            -o "font.size=40" 	                \
+            -e ~/helper/bin/unix/timer.sh SIGINT
+          '
+        </command>
+      </action>
+    </keybind>
+    <keybind key="W-S-t">
+      <action name="Execute">
+        <command>
         </command>
       </action>
     </keybind>

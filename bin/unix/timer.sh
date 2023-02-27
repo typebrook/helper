@@ -6,6 +6,7 @@ SIGNAL=${1:-SIGTERM}
 # If SIGNAL is received, switch to next display
 trap 'next_display' "$SIGNAL"
 trap 'toggle_timer' SIGTSTP
+
 # Do not print "^C" when SIGINT caught
 stty -ctlecho
 
@@ -26,17 +27,19 @@ toggle_timer() {
 
 # Wait user input
 read -p '? ' -r input
+# Disable input on terminal
+stty -echo 
 
 # Modify input to fit the format that `date` can read
-# s -> sec
-# m -> min
-# h -> hour
-[[ "$input" =~ s && ! "$input" =~ sec  ]] && input="$(sed s/s/sec/  <<<"$input")"
-[[ "$input" =~ m && ! "$input" =~ min  ]] && input="$(sed s/m/min/  <<<"$input")"
-[[ "$input" =~ h && ! "$input" =~ hour ]] && input="$(sed s/h/hour/ <<<"$input")"
+hour=$(grep -o '[0-9.]\+h' <<<"$input" | tr -d h)
+min=$(grep -o '[0-9.]\+m'  <<<"$input" | tr -d m)
+sec=$(grep -o '[0-9.]\+s'  <<<"$input" | tr -d s)
 
 # seconds user set
-SET=$(( $(date +%s -d "$input") - $(date +%s) ))
+SET=$( echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc )
+# Make sure the value is integer, prevent fail in shell comparison
+SET=${SET%%.*}
+
 # seconds pass
 count=0
 
