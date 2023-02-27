@@ -499,25 +499,15 @@
     <keybind key="W-t">
       <action name="Execute">
         <command>
-          alacritty --title STOPWATCH --hold
+          alacritty --title TIMER --hold
           -o "window.dimensions.columns=8" 
           -o "window.dimensions.lines=1" 
           -o "window.position.x=-0"
           -o "window.position.y=0"
           -o "window.opacity=0.6"
           -o "font.size=40" 
-          -e ~/helper/bin/unix/stopwatch.sh
+          -e ~/helper/bin/unix/timer.sh SIGINT
         </command>
-      </action>
-    </keybind>
-    <keybind key="W-S-t">
-      <action name="ForEach">
-        <query target="default">
-          <title type="exact">STOPWATCH</title>
-        </query>
-        <then>
-          <action name="Focus"/>
-        </then>
       </action>
     </keybind>
     <keybind key="W-y">
@@ -1032,15 +1022,7 @@
         <width>50%</width>
       </size>
     </application>
-    <application title="STOPWATCH">
-      <position force="yes">
-        <x>-0</x>
-        <y>-0</y>
-      </position>
-      <layer>above</layer>
-      <skip_taskbar>yes</skip_taskbar>
-    </application>
-    <application title="COUNTDOWN">
+    <application title="TIMER">
       <position force="yes">
         <x>-0</x>
         <y>-0</y>
