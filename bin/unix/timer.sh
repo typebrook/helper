@@ -4,8 +4,8 @@
 SIGNAL=${1:-SIGTERM}
 
 # If SIGNAL is received, switch to next display
-trap 'next_display' $SIGNAL
-#trap 'toggle_timer' SIGTSTP
+trap 'next_display' "$SIGNAL"
+trap 'toggle_timer' SIGTSTP
 # Do not print "^C" when SIGINT caught
 stty -ctlecho
 
@@ -16,16 +16,16 @@ display_list=(STOPWATCH COUNTDOWN PERIOD)
 export DISPLAY=0
 
 next_display() {
-  export DISPLAY=$(( ($DISPLAY + 1) %${#display_list[@]} ))
+  export DISPLAY=$(( ("$DISPLAY" + 1) %${#display_list[@]} ))
 }
 
-export stop=
+export stop=0
 toggle_timer() {
-  [ "$stop" = true ] && export stop= || export stop=true
+  export stop=$(( ("$stop" + 1) %2 ))
 }
 
 # Wait user input
-read -p '? ' input
+read -p '? ' -r input
 
 # Modify input to fit the format that `date` can read
 # s -> sec
@@ -35,28 +35,41 @@ read -p '? ' input
 [[ "$input" =~ m && ! "$input" =~ min  ]] && input="$(sed s/m/min/  <<<"$input")"
 [[ "$input" =~ h && ! "$input" =~ hour ]] && input="$(sed s/h/hour/ <<<"$input")"
 
-start=$(date +%s)               # unix epoch of start
-given=$(date +%s -d "$input")   # unix epoch of end
-period=$(( $given - $start ))   # seconds for timer
+# seconds user set
+SET=$(( $(date +%s -d "$input") - $(date +%s) ))
+# seconds pass
+count=0
 
-time=0
-while [ $time -ne $period ]; do
-    [ "$stop" = true ] && sleep 0.3 && continue
+timer() {
+  start=$(date +%s)
+  count_from=$count
 
-    time="$(( $(date +%s) - $start ))"
+  while [ $count -lt $SET ]; do
+
+    # If signal for stop is receive, stop counting
+    [ $stop = 1 ] && sleep 0.3 && break
+
+    count=$(( count_from + $(date +%s) - start ))
     case ${display_list[$DISPLAY]} in
       STOPWATCH)
-        printf '%s\r' "$(date -u -d @$time +%H:%M:%S)"
+        printf '%s\r' "$(date -u -d @$count +%H:%M:%S)"
         ;;
       COUNTDOWN)
-        printf '%s\r' "$(date -u -d @$((period - $time)) +%H:%M:%S)"
+        printf '%s\r' "$(date -u -d @$((SET - count)) +%H:%M:%S)"
         ;;
       PERIOD)
-        printf '%s\r' "$(date -u -d @$period +%H:%M:%S)"
+        printf '%s\r' "$(date -u -d @$SET +%H:%M:%S)"
         ;;
     esac
 
     sleep 0.3
+  done
+}
+
+while [ $count -lt $SET ]; do
+  [ $stop = true ] && sleep 0.3 && continue
+  timer
 done
 
-printf "\e[1;31m$(date -u -d "@$time" +%H:%M:%S)"
+# Print bold red text of time that user set
+printf "\e[1;31m%s" "$(date -u -d "@$SET" +%H:%M:%S)"
