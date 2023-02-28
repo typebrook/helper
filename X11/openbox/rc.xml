@@ -516,6 +516,10 @@
     <keybind key="W-S-t">
       <action name="Execute">
         <command>
+          rofi 
+            -theme-str '#window { children: [inputbar]; }' 
+            -show rename 
+            -modes rename:~/helper/X11/rename_current_window.sh
         </command>
       </action>
     </keybind>
