@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 GENERATION_HINT="Generate with default config"
 

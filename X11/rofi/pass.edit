@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 ENTRIES="$(find ~/.password-store -name '*gpg' -printf %P\\n | sed 's/.gpg$//')"
 
