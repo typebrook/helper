@@ -16,6 +16,7 @@ alias sshauth='vim ~/.ssh/authorized_keys'
 alias sshknown='vim ~/.ssh/known_hosts'
 alias cdconfig='cd ~/config'
 alias tmuxconfig='vim ~/.tmux.conf'
+cde() { cd /etc/$@; }
 
 # network
 alias digg='dig +noall +answer +multiline'
