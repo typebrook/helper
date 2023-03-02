@@ -36,6 +36,7 @@ mailboxes  -label '📭 [i]' +INBOX \
            -label '📥 [m]' +mbox \
            -label '👀 [d]' +dev \
            -label '💬 [D]' +DeltaChat \
+           +promotion \
            "+---- Watch -----" \
            -label CivilDEF +civildef \
            +hometeach \
@@ -70,6 +71,7 @@ folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
 macro index,pager           gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
 macro index,pager           gm      "<change-folder>+mbox<Return>" "Switch to mbox folder"
 macro index,pager           gp      "<change-folder>+pay<Return>" "Switch to pay folder"
+macro index,pager           gP      "<change-folder>+promotion<Return>" "Switch to promotion folder"
 macro index,pager           gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
 macro index,pager           gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
 macro index,pager           gS      "<change-folder>+spam<Return>" "Switch to spam folder"

@@ -513,7 +513,7 @@
         </command>
       </action>
     </keybind>
-    <keybind key="W-S-t">
+    <keybind key="W-y">
       <action name="Execute">
         <command>
           rofi 
