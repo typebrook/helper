@@ -3,7 +3,7 @@
 today=~/log/`date +%y.w%W.md`
 
 specify_date() {
-  YEAR=${YEAR:-22}
+  YEAR=${YEAR:-23}
 
   while read -e -p 'Month? ' -r MONTH </dev/tty; do
     [ -z $MONTH ] && MONTH=$(date +%m)
@@ -17,7 +17,7 @@ specify_date() {
     date -d $YEAR-$MONTH-$DAY &>/dev/null && break
   done
 
-  FILE=~/log/diary/20$YEAR-$MONTH-$DAY.md
+  FILE=~/log/diary/`date -d $YEAR-$MONTH-$DAY +%y.w%W.md`
   vim -c 'Goyo' $FILE
 }
 
