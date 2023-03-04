@@ -28,14 +28,15 @@ if [ $# -eq 0 ]; then
   # Specify rofi prompt as 'Get'
   echo -e "\0prompt\x1fGet"
 
-  find ~/.password-store -name '*gpg' -printf %P\\n | \
-    sed 's/.gpg$//'
+  find $HOME/.password-store -name '*gpg' -printf %P\\n | \
+  sed 's/.gpg$//'
 
   exit 0
 fi
 
 # Test password exists or not
 RESULT="$(pass $1)"
+set -x
 if [ -n "$RESULT" ]; then
   # Copy the given password into PRIMARY selection and kill it in 30s
   echo "$RESULT" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
@@ -46,12 +47,11 @@ if [ -n "$RESULT" ]; then
   EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
   coproc ( rofi -e "Copied: $1$EXTRA" )
 
-# Password doesn't exist yet
-# Go to next rofi execution
-elif pass find $1 &>/dev/null; then
-  echo -e "\0prompt\x1fGPG Issue"
-  echo Passphase is not chached
+elif [ -f "$HOME/.password-store/$1.gpg" ]; then
+  coproc ( rofi -e "GPG passphase is not chached" )
 else 
+  # Password doesn't exist yet
+  # Go to next rofi execution
   echo -e "\0prompt\x1f$1"
   echo -e "\0message\x1fThis password doesn't exist, generate with custom arguments?"
   echo -e "\0data\x1f$1"
