@@ -512,6 +512,7 @@ tk() { task rc.context=`cat ~/.task/context` $@; }
 tkc(){ echo $1 >~/.task/context; }
 tkcn() { echo none >~/.task/context; }
 tkch() { echo home >~/.task/context; }
+[ $shell = zsh ] && compdef _task tk
 alias tka='tk annotate'
 alias tkd='tk done'
 alias tkD='tk delete'

@@ -7,7 +7,7 @@ export XDG_CONFIG_HOME=~/.config
 
 # Get current shell
 export shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
-shell=${shell##*/}
+export shell=${shell##*/}
 
 # load custom aliases
 source $SETTING_DIR/alias

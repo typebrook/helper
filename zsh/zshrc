@@ -11,7 +11,6 @@ echo '\e[1 q'
 export SETTING_DIR=$HOME/helper
 fpath=($SETTING_DIR/zsh $fpath)
 source $SETTING_DIR/zsh/completion.zsh
-source $SETTING_DIR/bin/init/load-settings.sh
 
 # Reload zshrc
 function .() {
@@ -103,6 +102,9 @@ alias grep='grep --color'
 
 # Quick jump to parent folders
 source ~/helper/zsh/bd.zsh
+
+# Load my general settings
+source $SETTING_DIR/bin/init/load-settings.sh
 
 
 # Finally, make sure the terminal is in application mode, when zle is
