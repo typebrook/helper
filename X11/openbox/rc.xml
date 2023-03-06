@@ -189,6 +189,12 @@
         </finalactions>
       </action>
     </keybind>
+    <keybind key="W-0">
+      <action name="ToggleDecorations"/>
+    </keybind>
+    <keybind key="W-9">
+      <action name="ToggleAlwaysOnTop"/>
+    </keybind>
     <!-- Window Tiling: Snap feature -->
     <keybind key="W-h">
       <action name="UnmaximizeFull"/>
@@ -595,12 +601,6 @@
         <command>~/helper/X11/eww/launch_dashboard</command>
       </action>
     </keybind>
-    <keybind key="W-0">
-      <action name="ToggleDecorations"/>
-    </keybind>
-    <keybind key="W-9">
-      <action name="ToggleAlwaysOnTop"/>
-    </keybind>
     <keybind key="W-S-p">
       <action name="Execute">
         <command>polybar-msg cmd toggle</command>
@@ -708,6 +708,7 @@
         <command>xkill</command>
       </action>
     </keybind>
+    <!-- Type content of Primary Selection, and clear it -->
     <keybind key="W-space">
       <action name="Execute">
         <command>sh -c 'sleep 0.3; xdotool type "$(xsel -oc)"'</command>
