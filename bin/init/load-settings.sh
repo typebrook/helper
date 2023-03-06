@@ -43,6 +43,7 @@ if which fzf &>/dev/null; then
   fzf_preview() { fzf --preview 'cat {}'; }
   source ~/.fzf.${shell} &>/dev/null
 fi
+export FZF_CTRL_T_OPTS="--no-multi"
 
 # Set zsh or bash
 if [[ $- =~ i ]]; then
