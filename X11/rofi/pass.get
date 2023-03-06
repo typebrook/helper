@@ -48,7 +48,10 @@ if [ -n "$RESULT" ]; then
   coproc ( rofi -e "Copied: $1$EXTRA" )
 
 elif [ -f "$HOME/.password-store/$1.gpg" ]; then
-  coproc ( rofi -e "GPG passphase is not chached" )
+  coproc ( 
+    rofi -e "GPG passphase is not chached" \
+         -theme-str '#window { font: "hacker 40"; }'
+  )
 else 
   # Password doesn't exist yet
   # Go to next rofi execution
