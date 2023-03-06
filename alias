@@ -112,6 +112,7 @@ port() { sudo lsof -i :$1; }
 alias ports='sudo lsof -i -Pn | grep LISTEN'
 alias ll='ls -lh'
 alias lla='ls -lha'
+alias lld='ls -lh -d */'
 llw() { which $1 | xargs ls -alh; }
 alias hg='history | grep'
 trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
