@@ -207,7 +207,6 @@
       <action name="MoveToEdgeEast"/>
     </keybind>
     <keybind key="W-Down">
-      <action name="UnmaximizeFull"/>
       <action name="MoveResizeTo">
         <width>60%</width>
         <height>60%</height>
@@ -373,12 +372,6 @@
       <action name="MoveRelative">
         <x>0</x>
         <y>-20</y>
-      </action>
-    </keybind>
-    <keybind key="W-A-Down">
-      <action name="MoveRelative">
-        <x>0</x>
-        <y>20</y>
       </action>
     </keybind>
     <keybind key="W-A-h">
