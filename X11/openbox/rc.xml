@@ -492,7 +492,7 @@
     <!-- Apps -->
     <keybind key="W-Return">
       <action name="Execute">
-        <command>alacritty</command>
+        <command>alacritty --title _untitled</command>
       </action>
     </keybind>
     <keybind key="W-t">
