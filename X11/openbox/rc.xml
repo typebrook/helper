@@ -715,7 +715,9 @@
       </action>
     </keybind>
     <keybind key="A-q">
-      <action name="Close"/>
+      <action name="Execute">
+        <command>~/helper/X11/ask_before_close.sh</command>
+      </action>
     </keybind>
     <keybind key="A-w">
       <action name="Iconify"/>
