@@ -574,11 +574,15 @@
     </keybind>
     <keybind key="W-m">
       <action name="Execute">
-        <command>alacritty --title Mutt
-          --working-directory=/home/pham/Downloads
-          -o "window.dimensions.lines=32"
-          -o "window.dimensions.columns=110"
-          -e mutt
+        <command>
+          sh -c '
+            xdotool search --name "Mutt" windowactivate || \
+            alacritty --title Mutt --class "CONFIRM_BEFORE_CLOSE" \
+            --working-directory=/home/pham/Downloads \
+            -o "window.dimensions.lines=32" \
+            -o "window.dimensions.columns=110" \
+            -e mutt
+          '
       </command>
       </action>
     </keybind>
@@ -716,7 +720,17 @@
     </keybind>
     <keybind key="A-q">
       <action name="Execute">
-        <command>~/helper/X11/ask_before_close.sh</command>
+        <command>
+          sh -c '
+            current_window=$(xdotool getwindowfocus);
+
+            if [ $(xdotool getwindowclassname $current_window) = CONFIRM_BEFORE_CLOSE ]; then
+              zenity --question --text "Are you sure you want to close this window?" || exit 1;
+            fi
+
+            xdotool windowkill $current_window;
+          '
+        </command>
       </action>
     </keybind>
     <keybind key="A-w">
@@ -1135,5 +1149,3 @@
 -->
   </applications>
 </openbox_config>
-<!-- vim:sw=2
--->
