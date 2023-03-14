@@ -725,10 +725,14 @@
             current_window=$(xdotool getwindowfocus);
 
             if [ $(xdotool getwindowclassname $current_window) = CONFIRM_BEFORE_CLOSE ]; then
-              zenity --question --text "Are you sure you want to close this window?" || exit 1;
+              zenity --question --text "Are you sure you want to close this window?" || \
+              {
+                xdotool windowminimize --sync $current_window;
+                exit 1;
+              }
             fi
 
-            xdotool windowkill $current_window;
+            xdotool windowquit $current_window;
           '
         </command>
       </action>
