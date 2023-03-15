@@ -522,28 +522,15 @@
         </command>
       </action>
     </keybind>
-    <keybind key="W-y">
+    <keybind key="W-S-y">
       <action name="Execute">
         <command>
-          alacritty --title COUNTDOWN --hold
-          -o "window.dimensions.columns=8" 
-          -o "window.dimensions.lines=1" 
-          -o "window.position.x=-0"
-          -o "window.position.y=0"
-          -o "window.opacity=0.6"
-          -o "font.size=40" 
-          -e ~/helper/bin/unix/countdown.sh
+          sh -c '
+            id=`xdotool getactivewindow`;
+            name=`xdotool getwindowname $id` ;
+            xdotool set_window --name ${name##@} $id
+          '
         </command>
-      </action>
-    </keybind>
-    <keybind key="W-S-y">
-      <action name="ForEach">
-        <query target="default">
-          <title type="exact">COUNTDOWN</title>
-        </query>
-        <then>
-          <action name="Focus"/>
-        </then>
       </action>
     </keybind>
     <keybind key="W-f">
@@ -572,26 +559,24 @@
         <command>alacritty --title MPD -e ncmpcpp</command>
       </action>
     </keybind>
+    <keybind key="W-S-m">
+      <action name="Execute">
+        <command>
+            alacritty --title YOO --class "CONFIRM_BEFORE_CLOSE"
+      </command>
+      </action>
+    </keybind>
     <keybind key="W-m">
       <action name="Execute">
         <command>
           sh -c '
-            xdotool search --name "Mutt" windowactivate || \
-            alacritty --title Mutt --class "CONFIRM_BEFORE_CLOSE" \
+            xdotool search --name "@Mutt" windowactivate || \
+            alacritty --title @Mutt \
             --working-directory=/home/pham/Downloads \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=110" \
             -e mutt
           '
-      </command>
-      </action>
-    </keybind>
-    <keybind key="W-S-m">
-      <action name="Execute">
-        <command>alacritty --title Mutt
-          -o "window.dimensions.lines=32"
-          -o "window.dimensions.columns=110"
-          -e mutt -F ~/helper/mutt/muttrc.gmail
       </command>
       </action>
     </keybind>
@@ -719,24 +704,35 @@
       </action>
     </keybind>
     <keybind key="A-q">
+      <action name="If">
+        <query target="default">
+          <title type="regex">^@</title>
+        </query>
+        <then>
+          <action name="Iconify"/>
+        </then>
+        <else>
+          <action name="Close"/>
+        </else>
+      </action>
+    </keybind>
+      <!--
       <action name="Execute">
         <command>
           sh -c '
             current_window=$(xdotool getwindowfocus);
 
             if [ $(xdotool getwindowclassname $current_window) = CONFIRM_BEFORE_CLOSE ]; then
-              zenity --question --text "Are you sure you want to close this window?" || \
+              zenity \-\-question \-\-text "Are you sure you want to close this window?" || \
               {
-                xdotool windowminimize --sync $current_window;
+                xdotool windowminimize \-\-sync $current_window;
                 exit 1;
               }
-            fi
-
+            fi;
             xdotool windowquit $current_window;
-          '
+        '
         </command>
-      </action>
-    </keybind>
+      -->
     <keybind key="A-w">
       <action name="Iconify"/>
     </keybind>
