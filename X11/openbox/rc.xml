@@ -515,10 +515,10 @@
     <keybind key="W-y">
       <action name="Execute">
         <command>
-          rofi 
-            -theme-str '#window { children: [inputbar]; }' 
-            -show rename 
-            -modes rename:~/helper/X11/rename_current_window.sh
+          sh -c '
+            zenity --entry --text "Window title" | \
+            xargs -i xdotool set_window --name @{} `xdotool getactivewindow` 
+          '
         </command>
       </action>
     </keybind>
