@@ -2,9 +2,11 @@
 # Ref: https://superuser.com/questions/611538/611582#611582
 
 SIGNAL=${1:-SIGTERM}
+COMMAND="$2"
 
 # If SIGNAL is received, switch to next display
 trap 'next_display' "$SIGNAL"
+# Use SIGTSTP (Ctrl-Z in most of the cases) to stop/restart timer
 trap 'toggle_timer' SIGTSTP
 
 # Do not print "^C" when SIGINT caught
@@ -14,10 +16,10 @@ stty -ctlecho
 tput civis
 
 display_list=(STOPWATCH COUNTDOWN PERIOD)
-export DISPLAY=0
+display=0
 
 next_display() {
-  export DISPLAY=$(( ("$DISPLAY" + 1) %${#display_list[@]} ))
+  display=$(( ("$display" + 1) %${#display_list[@]} ))
 }
 
 export stop=0
@@ -29,6 +31,10 @@ toggle_timer() {
 read -p '? ' -r input
 # Disable input on terminal
 stty -echo 
+# If COMMAND is given, run it after timer is set
+result="$([ -n "$COMMAND" ] && eval "$COMMAND" 2>&1)"
+notify-send "$result" &>/tmp/openbox
+
 
 # Modify input to fit the format that `date` can read
 hour=$(grep -o '[0-9.]\+h' <<<"$input" | tr -d h)
@@ -53,7 +59,7 @@ timer() {
     [ $stop = 1 ] && sleep 0.3 && break
 
     count=$(( count_from + $(date +%s) - start ))
-    case ${display_list[$DISPLAY]} in
+    case ${display_list[$display]} in
       STOPWATCH)
         printf '%s\r' "$(date -u -d @$count +%H:%M:%S)"
         ;;
