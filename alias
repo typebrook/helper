@@ -413,41 +413,6 @@ alias xii='`fc -ln -1` | head -1 | xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 
-# image
-image.vertical() { 
-  suffix=${1##*.}
-  convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
-}
-image.horizontal() { 
-  ext=${1##*.}
-  convert "$@" +append output.$ext
-}
-image.from_data_url() {
-  [[ $1 == '' ]] && echo File name needed && return 1
-  xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
-  identify $1
-}
-image.upload() {
-  local month=$(date +%Y-%m)
-  local filename=${2:-$(date +"%d_%Hh%Mm%Ss").${1##*.}}
-  local fpath='$HOME/data/s3.photos/'$month
-  cat $1 | ssh vps "mkdir -p $fpath && cat >$fpath/$filename" && \
-  echo https://topo.tw/photos/$month/$filename || \
-  echo Fail to upload
-}
-image.text() {
-  convert \
-    -size 230x130 \
-    -background lightblue \
-    -font Noto-Sans-Bold \
-    -pointsize 25 \
-    -fill black \
-    -gravity Center \
-    caption:"${1:=foo}" \
-    -flatten \
-    "${2:=foo}".jpg
-}
-
 # Reset clock
 date-reset() {
   sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
