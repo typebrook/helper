@@ -39,10 +39,12 @@ PATH=$PATH:$HOME/.yarn/bin
 
 # fzf
 if which fzf &>/dev/null; then
+  export FZF_COMPLETION_OPTS='--bind=ctrl-c:print-query'
+  export FZF_CTRL_T_OPTS='--no-multi --bind=ctrl-c:print-query'
+  export FZF_CTRL_R_OPTS='--bind=ctrl-c:print-query'
   fzf_preview() { fzf --preview 'cat {}'; }
-  source ~/.fzf.${shell} &>/dev/null
+  source ~/.fzf.${shell}
 fi
-export FZF_CTRL_T_OPTS="--no-multi"
 
 # Set zsh or bash
 if [[ $- =~ i ]]; then
