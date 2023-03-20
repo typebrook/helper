@@ -4,14 +4,16 @@ export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export EDITOR=vim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
+export MAIL=$HOME/Maildir
 
 # Get current shell
-export shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
+shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
 export shell=${shell##*/}
 
 # load custom aliases
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
+find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
 
 # Add custom scripts into PATH
 BIN_DIR=$HOME/bin
@@ -20,9 +22,6 @@ mkdir -p $BIN_DIR
 find $BIN_DIR -xtype l -exec rm {} + 2>/dev/null
 find $SETTING_DIR/bin -type f -executable -exec realpath {} + | \
 xargs -I{} ln -sf {} $BIN_DIR
-
-# Mail
-MAIL=$HOME/Maildir
 
 # sync with important git repos
 setsid sync.sh
@@ -66,6 +65,6 @@ if [[ $- =~ i ]]; then
 fi
 
 # Working DIR
-[[ `pwd` == $HOME ]] && cd ~/Downloads
+[[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
 
 true
