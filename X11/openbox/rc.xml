@@ -105,10 +105,14 @@
   <keyboard>
     <keybind key="W-o">
       <action name="Execute">
-        <command>alacritty --title OPENBOX-CONFIG
-          -o "window.dimensions.lines=32"
-          -o "window.dimensions.columns=90"
-          -e vim ~/.config/openbox/rc.xml
+        <command>
+          sh -c '
+            xdotool search --name @OPENBOX_CONFIG windowactivate || \
+            alacritty --title @OPENBOX_CONFIG \
+            -o "window.dimensions.lines=32" \
+            -o "window.dimensions.columns=90" \
+            -e vim ~/.config/openbox/rc.xml \
+          '
       </command>
       </action>
     </keybind>
@@ -485,7 +489,7 @@
     </keybind>
     <keybind key="W-s">
       <action name="Execute">
-        <command>takeshot --area</command>
+        <command>~/bin/takeshot --area</command>
       </action>
     </keybind>
     <!-- ################################ Launch Applications ################################ -->
@@ -558,14 +562,12 @@
     </keybind>
     <keybind key="W-a">
       <action name="Execute">
-        <command>alacritty --title MPD -e ncmpcpp</command>
-      </action>
-    </keybind>
-    <keybind key="W-S-m">
-      <action name="Execute">
         <command>
-            alacritty --title YOO --class "CONFIRM_BEFORE_CLOSE"
-      </command>
+          sh -c '
+            xdotool search --name MPD windowactivate || \
+            alacritty --title MPD -e ncmpcpp
+          '
+        </command>
       </action>
     </keybind>
     <keybind key="W-m">
@@ -605,9 +607,13 @@
     <keybind key="W-i">
       <action name="Execute">
         <command>
-          alacritty 
-          -o "window.dimensions.lines=30" 
-          -e nmtui
+          sh -c '
+            xdotool search --name "Network Manager" windowactivate || \
+            alacritty \
+            --title "Network Manager" \
+            -o "window.dimensions.lines=30" \
+            -e nmtui
+          '
         </command>
       </action>
     </keybind>

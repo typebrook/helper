@@ -53,7 +53,8 @@ shotwin () {
 }
 
 shotarea () {
-	cd ${dir} && maim -u -f png -s -b 2 -c 0.35,0.55,0.855 | tee "$file" | xclip -selection clipboard -t image/png
+    set -o pipefail
+	cd ${dir} && maim -u -f png -s -b 2 -c 0.35,0.55,0.855 | tee "$file" | xclip -selection clipboard -t image/png && \
 	notify_view
 }
 
