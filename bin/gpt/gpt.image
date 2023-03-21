@@ -59,7 +59,7 @@ response_format=${response_format:-url}
 n=${n:-1}
 
 # Read content from terminal
-[ -z "$prompt" ] && read -r -p "What image you want? " prompt </dev/tty
+[ -z "$prompt" ] && read -e -r -p "What image you want? " prompt </dev/tty
 
 # Create request body
 body="$(cat <<EOF
