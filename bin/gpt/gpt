@@ -1,32 +1,112 @@
 #! /bin/bash
 
-
 # TODO
-# 1. read arguments about model or system message
-# 2. Put previous response into tokens
+# - Put previous response into tokens
 
-OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && echo API KEY not specified && exit 1
+
+_print_helper_message() {
+  cat <<EOF
+Usage: gpt [-h] [-m MODEL] [-m4] [-b BEHAVIOR] [-t temperature]
+           [-n NUMBER] [MESSAGE]
+
+Options:
+  -h, --help        show this help message and exit
+
+  -m|--model        specify model, available:
+                    gpt-4, gpt-4-0314, gpt-4-32k, gpt-4-32k-0314, 
+                    gpt-3.5-turbo, gpt-3.5-turbo-0301
+                    (Defaults to gpt-3.5-turbo)
+
+  -m4               Use model gpt-4 
+                    
+  -b|--behavior     How model behave on response, for example:
+                      "You are a helpful assistant."
+                    (Defaults to "You are a helpful programming assistant")
+
+  -t|--temperature  Value between 0 and 2. Higher values like 0.8 will make the 
+                    output more random, while lower values like 0.2 will make it 
+                    more focused and deterministic.
+                    (Defaults to 0.7)
+
+  -n                How many chat completion choices to generate for each input message.
+                    (Defaults to 1)
+
+  *                 The other arguments would be treated as message content.
+                    If no message is specified, user should type it by hands.
+                    If STDIN is given, it would be append to the end of message.
+
+Reference: https://platform.openai.com/docs/api-reference/completions
+EOF
+}
+
+# Parse arguments
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -m|--model)
+      model="$2"
+      shift 2
+      ;;
+    -m4)
+      model="gpt-4"
+      shift 1
+      ;;
+    -b|--behavior)
+      behavior="$2"
+      shift 2
+      ;;
+    -t|--temperature)
+      temperature="$2"
+      shift 2
+      ;;
+    -n)
+      n="$2"
+      shift 2
+      ;;
+    -h|--help)
+      _print_helper_message
+      exit 0
+      ;;
+    *)
+      content="$1"
+      shift 1
+      ;;
+  esac
+done
 
 # Available:
 #   v1/models
 #   v1/chat/completions
 ROUTE=v1/chat/completions
 
-model=${model:-gpt-4}
-read content
+model=${model:-gpt-3.5-turbo}
+behavior="${behavior:-You are a helpful programming assistant}"
+temperature=${temperature:-0.7}
+n=${n:-1}
+
+# Read content from terminal
+[ -z "$content" ] && read -r -p "Let's Chat: " content </dev/tty
+[ -z "$content" ] && { echo -e "No message is given\n"; _print_helper_message; exit 1; }
+[ ! -t 0 ] && data="$(cat)"
+[ -n "$data" ] && content="$(printf "%s\\n\\n%s" "$content" "$data")"
+
+# Create request body
 body="$(cat <<EOF
 {
    "model": "$model",
    "messages": [
-     {"role": "system", "content": "You are a helpful assistant about programming"},
-     {"role": "user", "content": "$content"}
+     {"role": "system", "content": "$behavior"},
+     {"role": "user", "content": $(echo $content | jq -R .)}
    ],
-   "temperature": 0.7
+   "temperature": $temperature,
+   "n": $n
 }
 EOF
 )"
 
-echo 
+# Add an empty line between prompt and response
+echo
 
 # API call
 curl https://api.openai.com/$ROUTE \
