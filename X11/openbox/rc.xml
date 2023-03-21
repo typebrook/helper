@@ -474,22 +474,22 @@
     <!-- Screenshot Keys -->
     <keybind key="Print">
       <action name="Execute">
-        <command>takeshot --now</command>
+        <command>~/helper/X11/image/takeshot --now</command>
       </action>
     </keybind>
     <keybind key="W-5">
       <action name="Execute">
-        <command>takeshot --in5</command>
+        <command>~/helper/X11/image/takeshot --in5</command>
       </action>
     </keybind>
     <keybind key="C-Print">
       <action name="Execute">
-        <command>takeshot --win</command>
+        <command>~/helper/X11/image/takeshot --win</command>
       </action>
     </keybind>
     <keybind key="W-s">
       <action name="Execute">
-        <command>~/bin/takeshot --area</command>
+        <command>~/helper/X11/image/takeshot --area</command>
       </action>
     </keybind>
     <!-- ################################ Launch Applications ################################ -->
