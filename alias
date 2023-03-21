@@ -473,24 +473,6 @@ alias cdtrash='cd ~/.local/share/Trash'
 trash() { mv $@ ~/.local/share/Trash; }
 alias ge='graph-easy --boxart'
 
-# task
-tk() { task rc.context=`cat ~/.task/context` $@; }
-tkc(){ echo $1 >~/.task/context; }
-tkcn() { echo none >~/.task/context; }
-tkch() { echo home >~/.task/context; }
-[ $shell = zsh ] && compdef tk=task
-alias tka='tk annotate'
-alias tkd='tk done'
-alias tkD='tk delete'
-alias tkm='tk modify'
-alias tkn='tk next'
-alias tk10='tk limit:10 \( status:completed or status:deleted \) rc.report.all.sort:end- all | tee >(sed -n 4p | cut -d" " -f5 | tee >(xargs -i echo Copied {}) | xsel -ib ) '
-tkw(){ tk $1 mod wait:${2##wait:}; }
-alias tkrc='vim ~/.taskrc'
-alias cdtk='cd ~/.task'
-alias chtk='tig -C ~/.task status'
-alias tt='taskwarrior-tui'
-
 # pass
 alias chp='tig -C ~/.password-store'
 alias cdpass='cd ~/.password-store'
