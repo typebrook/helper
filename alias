@@ -37,6 +37,7 @@ alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
+[ "$shell" = zsh ] && compdef vs=which
 
 # ssh
 alias cdssh='cd ~/.ssh'
