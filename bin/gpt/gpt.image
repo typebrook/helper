@@ -1,0 +1,85 @@
+#! /bin/bash
+
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && echo API KEY not specified && exit 1
+
+_print_helper_message() {
+  cat <<EOF
+Usage: gpt [-h] [-s size] [-r RESPONSE] [-n NUMBER] [PROMPT]
+
+Options:
+  -h, --help        show this help message and exit
+
+  -s|--size         The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024.
+                    (Defaults to 1024x1024)
+
+  -r                The format in which the generated images are returned. Must be one of url or b64_json.
+  --response_format (Defaults to url)
+
+  -n                The number of images to generate. Must be between 1 and 10.
+                    (Defaults to 1)
+
+  *                 The other arguments would be treated as prompt.
+                    If no message is specified, user should type it by hands.
+
+Reference: https://platform.openai.com/docs/api-reference/images/create
+EOF
+}
+
+# Parse arguments
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -s|--size)
+      size="$2"
+      shift 2
+      ;;
+    -r|--response_format)
+      response_format="$2"
+      shift 2
+      ;;
+    -n)
+      n="$2"
+      shift 2
+      ;;
+    -h|--help)
+      _print_helper_message
+      exit 0
+      ;;
+    *)
+      content="$1"
+      shift 1
+      ;;
+  esac
+done
+
+ROUTE=v1/images/generations
+
+size=${size:-1024x1024}
+response_format=${response_format:-url}
+n=${n:-1}
+
+# Read content from terminal
+[ -z "$prompt" ] && read -r -p "What image you want? " prompt </dev/tty
+
+# Create request body
+body="$(cat <<EOF
+{
+  "prompt": "$prompt",
+  "size": "$size",
+  "response_format": "$response_format",
+  "n": 2
+}
+EOF
+)"
+
+# Add an empty line between prompt and response
+echo
+
+# API call
+curl https://api.openai.com/$ROUTE \
+  --silent \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d "$body" | \
+jq . | tee .gpt.image | \
+jq -r .data[0].url
