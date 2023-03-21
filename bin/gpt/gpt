@@ -1,0 +1,38 @@
+#! /bin/bash
+
+
+# TODO
+# 1. read arguments about model or system message
+# 2. Put previous response into tokens
+
+OPENAI_API_KEY=$(token openai)
+
+# Available:
+#   v1/models
+#   v1/chat/completions
+ROUTE=v1/chat/completions
+
+model=${model:-gpt-4}
+read content
+body="$(cat <<EOF
+{
+   "model": "$model",
+   "messages": [
+     {"role": "system", "content": "You are a helpful assistant about programming"},
+     {"role": "user", "content": "$content"}
+   ],
+   "temperature": 0.7
+}
+EOF
+)"
+
+echo 
+
+# API call
+curl https://api.openai.com/$ROUTE \
+  --silent \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d "$body" | \
+jq . | tee .gpt | \
+jq -r .choices[0].message.content
