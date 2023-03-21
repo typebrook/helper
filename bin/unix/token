@@ -1,0 +1,6 @@
+#! /bin/sh
+
+cd ~/helper/tokens
+
+cat $1 && exit 0
+ls -l && exit 1

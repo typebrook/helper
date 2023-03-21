@@ -423,9 +423,6 @@ alias clock-reset='hwclock --systohc'
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
-token() {
-  cd $SETTING_DIR/tokens && [[ -e $1 ]] && cat $1 || ls -l
-}
 unalias gr &>/dev/null
 gr() { 
   grep -IR $1 .  
