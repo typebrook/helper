@@ -22,7 +22,7 @@ window:
     lines: 18
 
   padding:
-    x: 12
+    x: 24
     y: 12
 
   decorations: full

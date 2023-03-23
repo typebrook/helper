@@ -1,6 +1,7 @@
 # task
 tk() { task rc.context=`cat ~/.task/context` $@; }
 tkc(){ echo $1 >~/.task/context; }
+alias tkcc='task context'
 tkcn() { echo none >~/.task/context; }
 tkch() { echo home >~/.task/context; }
 [ "$shell" = zsh ] && compdef tk=task
