@@ -2,10 +2,10 @@
 
 # TODO
 # - Put previous response into tokens
+# - Use suggested block to wrap data:
+#   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 
-[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
-[ -z "$OPENAI_API_KEY" ] && echo API KEY not specified && exit 1
-
+# Function for printing helper message
 _print_helper_message() {
   cat <<EOF
 Usage: gpt [-h] [-m MODEL] [-m4] [-b BEHAVIOR] [-t temperature]
@@ -41,6 +41,11 @@ Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
 }
 
+# Check OPENAI API KEY
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && { echo API KEY not specified; exit 1; }
+
+
 # Parse arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -75,28 +80,26 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-# Available:
-#   v1/models
-#   v1/chat/completions
+# Set variables
 ROUTE=v1/chat/completions
-
 model=${model:-gpt-3.5-turbo}
 behavior="${behavior:-You are a helpful programming assistant}"
 temperature=${temperature:-0.7}
 n=${n:-1}
 
-# Read content from terminal
+# Read prompt from terminal
 [ -z "$content" ] && read -e -r -p "Let's Chat: " content </dev/tty
 [ -z "$content" ] && { echo -e "No message is given\n"; _print_helper_message; exit 1; }
 [ ! -t 0 ] && data="$(cat)"
 [ -n "$data" ] && content="$(printf "%s\\n\\n%s" "$content" "$data")"
 
 # Create request body
+# Consider quotes, back slashes, use jq to ensure content texts are OK to put in JSON
 body="$(cat <<EOF
 {
    "model": "$model",
    "messages": [
-     {"role": "system", "content": "$behavior"},
+     {"role": "system", "content": $(echo $behavior | jq -R .)},
      {"role": "user", "content": $(echo $content | jq -R .)}
    ],
    "temperature": $temperature,
