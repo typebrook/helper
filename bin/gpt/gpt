@@ -3,11 +3,13 @@
 # TODO
 # - Use suggested block to wrap data:
 #   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
-# - Add signal trap for API parameters (like stop)
+# - Print token usage when exit
+
+# User can dynamically change these options for API call
+configurable_options=( behavior temperature max_tokens )
 
 # If script is interupt by SIGINT, simply print leave message
-trap 'echo -e "\nChat Finished, cached file: $cache"; exit 0' INT
-trap '_configure_completion' TSTP
+trap _print_leave_message INT
 
 # Function for printing helper message
 _print_helper_message() {
@@ -40,22 +42,72 @@ Options:
   -s|--skip         Skip message, STDIN would be treated as your message
 
   *                 The other arguments would be treated as message content.
-                    If no message is specified, user should type it by hands.
+                    If no message is specified, user should input content by hands.
                     If STDIN is given, it would be append to the end of message.
+
+Special prompt:
+  Options           If input starts with '.', then a prompt of options shows up. 
+                    User can modify option value for API calls.
 
 Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
 }
 
-_configure_completion() {
-  field="$(
-    dialog --form "Configure Completion" 10 50 3 \
-      --stdout \
-      'model:'        1 1 "$(eval 'echo $model')" 1 15 25 0 \
-      'temperature:'  2 1 "$(eval 'echo $temperature')" 2 15 25 0 \
-      'max_tokens:'   3 1 "$(eval 'echo $max_tokens')" 3 15 25 0
-    )"
-  
+_print_leave_message(){
+  echo -e "\nChat Finished, cached file: $cache"
+  exit 0
+}
+
+# A prompt for option configuration
+_configure_options() {
+  # Apply original trap action, and exit this prompt
+  trap 'trap _print_leave_message SIGINT; echo; return' INT
+  # Hint message
+  echo 'List of options: (Use Ctrl-C to exit)'
+
+  # Print all available options
+  index=0
+  for option in "${configurable_options[@]}"; do
+    echo -e "$index." "$option:\t" "$(eval "echo \$$option")"
+    (( index+=1 ))
+  done
+
+  # Prompt for user input
+  while true; do
+    echo
+    read -e -r -p "Modify which option? (0~$((index-1))) " selection
+    local field=${configurable_options[$selection]}
+    eval "read -e -r -p '$field: ' $field"
+  done
+}
+
+# Get latest content for completion
+_get_content() {
+
+  # Read data from STDIN
+  [ ! -t 0 ] && data="$(cat)"
+
+  if [ ! "$SKIP_INPUT" = true ] ; then
+    # Read content it from terminal
+    while true; do
+      read -e -r -p "Let's Chat: " content </dev/tty
+      [[ "$content" =~ ^\. ]] && echo && _configure_options && echo -e '\n------\n' && continue
+      [ -n "$content" ] && break
+    done
+  elif [[ "$count" -eq 0 && -z "$data" ]]; then
+    echo -e "No data from STDIN\n"
+    exit 1;
+  fi
+
+  # If it is the first round, append STDIN (If it exists) at the end
+  if [[ ! "$SKIP_INPUT" = true && -n "$data" ]] ; then
+    content="$(printf "%s\\n\\n%s" "$content" "$data")"
+    echo -e "\n$data"
+  # Or only use STDIN as content
+  elif [ -n "$data" ]; then
+    content="$data"
+    echo "$content"
+  fi
 }
 
 # Check OPENAI API KEY"Department:" 3 1 "" 3 15 25 0
@@ -82,15 +134,20 @@ while [ "$#" -gt 0 ]; do
       temperature="$2"
       shift 2
       ;;
-    -m|--max_tokens)
+    -M|--max_tokens)
       max_tokens="$2"
       shift 2
+      ;;
+    -s|--skip)
+      SKIP_INPUT=true
+      shift 1
       ;;
     -h|--help)
       _print_helper_message
       exit 0
       ;;
     *)
+      SKIP_INPUT=true
       content="$1"
       shift 1
       ;;
@@ -105,30 +162,21 @@ temperature=${temperature:-0.7}
 max_tokens=${max_tokens:-2048}
 
 # Prepare for chat session
-cache=`mktemp` && touch $cache # && trap "rm $cache" EXIT
+cache=$(mktemp) && touch "$cache" 
+#trap "rm $cache" EXIT
 session=()
 count=0
 
 # Use while to keep chat session
 while true; do
-  # Read prompt from terminal
-  # If content is not specified by argumment, read it from terminal
-  [[ -z "$content" || $count >=1 ]] && read -e -r -p "Let's Chat: " content </dev/tty
-  # If no user input, simple print helper message and exit with code 1
-  [ -z "$content" ] && { echo -e "No message is given\n"; _print_helper_message; exit 1; }
-  # Read data from STDIN
-  [ ! -t 0 ] && data="$(cat)"
-  # Append data to the end of content
-  # And print it out
-  if [ -n "$data" ]; then
-    content="$(printf "%s\\n\\n%s" "$content" "$data")"
-    echo
-    echo "$data"
-  fi
+  _get_content
+
+  # User must input by hands in the following rounds
+  SKIP_INPUT=false
 
   # Put user message into session
   user_message="$(cat <<EOF
-{"role": "user", "content": $(<<<"$content" jq -sR .)}
+{"role": "user", "content": $(printf '%s' "$content" | jq -sR .)}
 EOF
   )"
   session+=("$user_message")
@@ -139,8 +187,8 @@ EOF
 {
    "model": "$model",
    "messages": [
-     {"role": "system", "content": $(echo $behavior | jq -sR .)},
-     `IFS=',\n'; echo "${session[*]}"`
+     {"role": "system", "content": $(echo "$behavior" | jq -sR .)},
+     $(IFS=','; echo "${session[*]}")
    ],
    "temperature": $temperature,
    "max_tokens": $max_tokens
@@ -148,7 +196,7 @@ EOF
 EOF
   )"
   # Append request body into cache
-  echo "$body" >>$cache
+  echo "$body" >>"$cache"
 
   # Add an empty line between prompt and response
   echo -e '\n------\n'
@@ -156,15 +204,15 @@ EOF
   # API call
   # Save original response into cache file
   # And only print content of message
-  response="`
+  response="$(
     curl https://api.openai.com/$ROUTE \
       --silent \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OPENAI_API_KEY" \
       -d "$body" | \
-    jq . | tee -a $cache | \
+    jq . | tee -a "$cache" | \
     jq -r .choices[0].message.content
-  `"
+  )"
   echo -e "${response}\n\n------\n"
 
   # Append newest message into session
