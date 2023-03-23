@@ -31,8 +31,8 @@ Usage: gpt [-h] [-m MODEL] [-m4] [-b BEHAVIOR] [-t temperature]
            [-M MAX_TOKENS] [-s] [MESSAGE]
 
 Env:
-  OPENAI_API_KEY    (Required)
-                    Generate API key from https://platform.openai.com/account/api-keys
+  OPENAI_API_KEY    Generate API key from https://platform.openai.com/account/api-keys
+                    (Required)
 
 Options:
   -h, --help        show this help message and exit
@@ -232,7 +232,7 @@ EOF
     jq . | tee -a "$cache" | \
     jq -r .choices[0].message.content
   )"
-  echo -e "${response}\n\n------\n"
+  echo -e "${response}\n\n======\n"
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
