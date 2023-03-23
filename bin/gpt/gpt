@@ -1,11 +1,14 @@
 #! /bin/bash
 
 # TODO
-# - Put previous response into tokens
+# - Use suggested block to wrap data:
+#   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
+# - Add signal trap for API parameters (like stop)
 
-[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
-[ -z "$OPENAI_API_KEY" ] && echo API KEY not specified && exit 1
+# If script is interupt by SIGINT, simply print leave message
+trap 'echo -e "\nChat Finished, cached file: $cache"; exit 0' INT
 
+# Function for printing helper message
 _print_helper_message() {
   cat <<EOF
 Usage: gpt [-h] [-m MODEL] [-m4] [-b BEHAVIOR] [-t temperature]
@@ -41,6 +44,11 @@ Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
 }
 
+# Check OPENAI API KEY
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && { echo API KEY not specified; exit 1; }
+
+
 # Parse arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -75,44 +83,76 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-# Available:
-#   v1/models
-#   v1/chat/completions
+# Set variables
 ROUTE=v1/chat/completions
-
 model=${model:-gpt-3.5-turbo}
 behavior="${behavior:-You are a helpful programming assistant}"
 temperature=${temperature:-0.7}
 n=${n:-1}
+cache=`mktemp` && touch $cache # && trap "rm $cache" EXIT
+session=()
+count=0
 
-# Read content from terminal
-[ -z "$content" ] && read -e -r -p "Let's Chat: " content </dev/tty
-[ -z "$content" ] && { echo -e "No message is given\n"; _print_helper_message; exit 1; }
-[ ! -t 0 ] && data="$(cat)"
-[ -n "$data" ] && content="$(printf "%s\\n\\n%s" "$content" "$data")"
+# Use while to keep chat session
+while true; do
+  # Read prompt from terminal
+  # If content is not specified by argumment, read it from terminal
+  [[ -z "$content" || $count >=1 ]] && read -e -r -p "Let's Chat: " content </dev/tty
+  # If no user input, simple print helper message and exit with code 1
+  [ -z "$content" ] && { echo -e "No message is given\n"; _print_helper_message; exit 1; }
+  # Read data from STDIN
+  [ ! -t 0 ] && data="$(cat)"
+  # Append data to the end of content
+  [ -n "$data" ] && content="$(printf "%s\\n\\n%s" "$content" "$data")"
 
-# Create request body
-body="$(cat <<EOF
+  # Put user message into session
+  user_message="$(cat <<EOF
+{"role": "user", "content": $(<<<"$content" jq -sR .)}
+EOF
+  )"
+  session+=("$user_message")
+
+  # Create request body
+  # Consider quotes, back slashes, use jq to ensure content texts are OK to put in JSON
+  body="$(cat <<EOF
 {
    "model": "$model",
    "messages": [
-     {"role": "system", "content": "$behavior"},
-     {"role": "user", "content": $(echo $content | jq -R .)}
+     {"role": "system", "content": $(echo $behavior | jq -sR .)},
+     `IFS=',\n'; echo "${session[*]}"`
    ],
    "temperature": $temperature,
-   "n": $n
+   "n": $n,
+   "max_tokens": 50
 }
 EOF
-)"
+  )"
+  # Append request body into cache
+  echo "$body" >>$cache
 
-# Add an empty line between prompt and response
-echo
+  # Add an empty line between prompt and response
+  echo -e '\n------\n'
 
-# API call
-curl https://api.openai.com/$ROUTE \
-  --silent \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -d "$body" | \
-jq . | tee .gpt | \
-jq -r .choices[0].message.content
+  # API call
+  # Save original response into cache file
+  # And only print content of message
+  response="`
+    curl https://api.openai.com/$ROUTE \
+      --silent \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -d "$body" | \
+    jq . | tee -a $cache | \
+    jq -r .choices[0].message.content
+  `"
+  echo -e "${response}\n\n------\n"
+
+  # Append newest message into session
+  assistant_message="$(cat <<EOF
+{"role": "assistant", "content": $(<<<"$response" jq -sR .)}
+EOF
+  )"
+  session+=("$assistant_message")
+
+  (( count+=1 ))
+done
