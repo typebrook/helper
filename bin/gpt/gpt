@@ -4,6 +4,7 @@
 # - Use suggested block to wrap data:
 #   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 # - Print token usage when exit
+# - For the chat
 
 # Necessary commands
 stacks=( curl jq )
@@ -54,7 +55,7 @@ Options:
                     (Defaults to 0.7)
 
   -M|--max_tokens   The maximum number of tokens to generate in the completion.
-                    (Defaults to 2048)
+                    (Defaults to 1024)
 
   -s|--skip         Skip message, STDIN would be treated as your message
 
@@ -71,7 +72,8 @@ EOF
 }
 
 _print_leave_message(){
-  echo -e "\nChat Finished, cached file: $cache"
+  tokens=$(jq '.usage? // empty | .total_tokens' "$cache" | paste -sd+ | bc)
+  echo -e "\nChat Finished, ${tokens:-0} tokens used. Session is cached in: $cache"
   exit 0
 }
 
@@ -93,8 +95,13 @@ _configure_options() {
   while true; do
     echo
     read -e -r -p "Modify which option? (0~$((index-1))) " selection
-    local field=${configurable_options[$selection]}
-    eval "read -e -r -p '$field: ' $field"
+    if [[ "$selection" =~ ^[0-9]+$ ]] && \
+       (( "$selection" >= 0 && "$selection" < "$index" )); then
+      local field=${configurable_options[$selection]}
+      eval "read -e -r -p '$field: ' $field"
+    else
+      echo Wrong Input
+    fi
   done
 }
 
@@ -108,7 +115,7 @@ _get_content() {
     # Read content it from terminal
     while true; do
       read -e -r -p "Let's Chat: " content </dev/tty
-      [[ "$content" =~ ^\. ]] && echo && _configure_options && echo -e '\n------\n' && continue
+      [[ "$content" =~ ^\. ]] && echo && _configure_options && echo -e '\n======\n' && continue
       [ -n "$content" ] && break
     done
   elif [[ "$count" -eq 0 && -z "$data" ]]; then
@@ -178,7 +185,7 @@ ROUTE=v1/chat/completions
 model=${model:-gpt-3.5-turbo}
 behavior="${behavior:-You are a helpful programming assistant}"
 temperature=${temperature:-0.7}
-max_tokens=${max_tokens:-2048}
+max_tokens=${max_tokens:-1024}
 
 # Prepare for chat session
 cache=$(mktemp) && touch "$cache" 
