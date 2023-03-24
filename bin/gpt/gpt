@@ -4,6 +4,7 @@
 # - Use suggested block to wrap data:
 #   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 # - Cowork with https://github.com/openai/chatgpt-retrieval-plugin
+# - History for prompt
 
 # Necessary commands
 stacks=( curl jq )
@@ -229,20 +230,18 @@ EOF
   # API call
   # Save original response into cache file
   # And only print content of message
-  response="$(
-    curl https://api.openai.com/$ROUTE \
-      --silent \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OPENAI_API_KEY" \
-      -d "$body" | \
-    jq . | tee -a "$cache" | \
-    jq -r .choices[0].message.content
-  )"
+  curl https://api.openai.com/$ROUTE \
+    --silent \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -d "$body" | \
+  jq . | tee -a "$cache" | \
+  jq -r .choices[0].message.content
   echo -e "${response}\n\n======\n"
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
-{"role": "assistant", "content": $(<<<"$response" jq -sR .)}
+{"role": "assistant", "content": $(jq -sr '.[-1].choices[0].message.content' "$cache" | jq -sR .)}
 EOF
   )"
   session+=("$assistant_message")
