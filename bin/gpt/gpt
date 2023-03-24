@@ -16,8 +16,6 @@ configurable_options=( behavior temperature max_tokens )
 trap _print_leave_message INT
 
 _check_stacks() {
-  # Print all available options
-  index=0
   for command in "${stacks[@]}"; do
     which "$command" &>/dev/null && continue
     echo "$command" is needed
