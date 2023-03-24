@@ -3,8 +3,7 @@
 # TODO
 # - Use suggested block to wrap data:
 #   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
-# - Print token usage when exit
-# - For the chat
+# - Cowork with https://github.com/openai/chatgpt-retrieval-plugin
 
 # Necessary commands
 stacks=( curl jq )
@@ -118,7 +117,7 @@ _get_content() {
       [[ "$content" =~ ^\. ]] && echo && _configure_options && echo -e '\n======\n' && continue
       [ -n "$content" ] && break
     done
-  elif [[ "$count" -eq 0 && -z "$data" ]]; then
+  elif [[ "$count" -eq 0 && -z "${content}${data}" ]]; then
     echo -e "No data from STDIN\n"
     exit 1;
   fi
