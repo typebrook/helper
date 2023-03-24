@@ -7,10 +7,10 @@
 # - History for prompt
 
 # Necessary commands
-stacks=( curl jq )
+stacks=( curl jq sed )
 
 # User can dynamically change these options for API call
-configurable_options=( behavior temperature max_tokens )
+configurable_options=( model behavior temperature max_tokens stream )
 
 # If script is interupt by SIGINT, simply print leave message
 trap _print_leave_message INT
@@ -58,6 +58,8 @@ Options:
 
   -s|--skip         Skip message, STDIN would be treated as your message
 
+  -S|--stream       Use stream mode. If this is set, token usage would not be shown
+
   *                 The other arguments would be treated as message content.
                     If no message is specified, user should input content by hands.
                     If STDIN is given, it would be append to the end of message.
@@ -70,9 +72,14 @@ Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
 }
 
+# Message when user exit prompt
 _print_leave_message(){
-  tokens=$(jq '.usage? // empty | .total_tokens' "$cache" | paste -sd+ | bc)
-  echo -e "\nChat ends, ${tokens:-0} tokens used. Session is cached in: $cache"
+  echo -en "\nChat ends. " 
+  if [ "$stream" = false ]; then
+    tokens=$(jq '.usage? // empty | .total_tokens' "$cache" | paste -sd+ | bc)
+    echo -en "${tokens:-0} tokens used. "
+  fi
+  echo Session is cached in: "$cache"
   exit 0
 }
 
@@ -133,6 +140,25 @@ _get_content() {
   fi
 }
 
+_API_call() {
+  curl https://api.openai.com/$ROUTE \
+    --silent \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -d "$body"
+}
+
+_process_completion() {
+  if [ "$stream" = true ]; then
+    sed -E 's/data: (\[DONE\])?//g;/^$/d' | \
+    jq . | tee -a "$cache" | \
+    jq -jr '.choices?[0]?.delta?.content? // empty'
+  else
+    jq . | tee -a "$cache" | \
+    jq -r .choices[0].message.content
+  fi
+}
+
 # Check OPENAI API KEY in env
 # Exit with 6 (configuration issue) if it is not set
 [ -z "$OPENAI_API_KEY" ] && which token &>/dev/null && OPENAI_API_KEY=$(token openai)
@@ -165,6 +191,10 @@ while [ "$#" -gt 0 ]; do
       SKIP_INPUT=true
       shift 1
       ;;
+    -S|--stream)
+      stream=true
+      shift 1
+      ;;
     -h|--help)
       _print_helper_message
       exit 0
@@ -186,6 +216,7 @@ model=${model:-gpt-3.5-turbo}
 behavior="${behavior:-You are a helpful programming assistant}"
 temperature=${temperature:-0.7}
 max_tokens=${max_tokens:-1024}
+stream=${stream:-false}
 
 # Prepare for chat session
 cache=$(mktemp) && touch "$cache" 
@@ -217,7 +248,8 @@ EOF
      $(IFS=','; echo "${session[*]}")
    ],
    "temperature": $temperature,
-   "max_tokens": $max_tokens
+   "max_tokens": $max_tokens,
+   "stream": $stream
 }
 EOF
   )"
@@ -230,14 +262,8 @@ EOF
   # API call
   # Save original response into cache file
   # And only print content of message
-  curl https://api.openai.com/$ROUTE \
-    --silent \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d "$body" | \
-  jq . | tee -a "$cache" | \
-  jq -r .choices[0].message.content
-  echo -e "${response}\n\n======\n"
+  _API_call | _process_completion
+  echo -e "\n\n======\n"
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
