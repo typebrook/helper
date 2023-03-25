@@ -134,13 +134,14 @@ _get_content() {
         echo -e '\n======\n'
         continue
       elif [ "$content" = .h ]; then
-        content="What does the following script used for? how to use it?"
+        content="What does the following script used for? Show me how to use it?"
         echo -n "$content"
-        content="$content\n\n$(cat $0)"
+        content="$content\n\n$(cat "$0")"
+      elif [ -n "$content" ]; then
+        break
       else
         continue
       fi
-      [ -n "$content" ] && break
     done
   # Exit 1 when "--skip" is specified, but no STDIN and CONTENT is given
   elif [[ "$round" -eq 1 && -z "${content}${data}" ]]; then
@@ -148,14 +149,13 @@ _get_content() {
     exit 1;
   fi
 
-  # If it is the first round, append STDIN (If it exists) at the end
-  if [[ ! "$SKIP_INPUT" = true || -n "$data" ]] ; then
-    content="$(printf "%s\\n\\n%s" "$content" "$data")"
-    echo -e "\n$data"
-  # Or only use STDIN as content
-  else
+  # Use STDIN as content if "--skip" is given
+  if [ "$SKIP_INPUT" = true ] && [ -z "$content" ] ; then
     content="$data"
-    echo "$content"
+    echo -e "$content"
+  else
+    content="$(printf "%s${data:+\\n\\n}%s" "$content" "$data")"
+    [ -n "$data" ] && echo "$data"
   fi
 }
 
@@ -246,11 +246,12 @@ INDEX=
 cache=$(mktemp) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
-count=1
+round=1
 
 # Use while to keep chat session
 while true; do
   _get_content
+  echo
 
   # User must input by hands in the following rounds
   SKIP_INPUT=false
@@ -264,7 +265,7 @@ EOF
 
   # If context is specified, use INDEX to get specified range from session
   if [ -n "$context" ]; then
-    INDEX="-$([ "${#session[@]}" -le "$context" ] && echo ${#session[@]} || echo $(( $context + 1 )))"
+    INDEX="-$([ "${#session[@]}" -le "$context" ] && echo ${#session[@]} || echo $(( "$context" + 1 )))"
   fi
 
   # Create request body
@@ -286,7 +287,7 @@ EOF
   echo "$body" >>"$cache"
 
   # Use Yellow color to print completion from GPT
-  echo -en '\n\e[33m'
+  echo -en '\e[33m'
   _API_call | _process_completion
   echo -e '\e[0m\n'
 
