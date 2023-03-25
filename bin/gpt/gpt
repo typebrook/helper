@@ -74,7 +74,7 @@ EOF
 
 # Message when user exit prompt
 _print_leave_message(){
-  echo -en "\nChat ends. " 
+  echo -en "\n\nChat ends. " 
   if [ "$stream" = false ]; then
     tokens=$(jq '.usage? // empty | .total_tokens' "$cache" | paste -sd+ | bc)
     echo -en "${tokens:-0} tokens used. "
@@ -121,7 +121,12 @@ _get_content() {
     # Read content it from terminal
     while true; do
       read -e -r -p "Let's Chat: " content </dev/tty
-      [[ "$content" =~ ^\. ]] && echo && _configure_options && echo -e '\n======\n' && continue
+      if [[ "$content" =~ ^\. ]]; then
+        echo -e '\n======\n'
+        _configure_options
+        echo -e '\n======\n'
+        continue
+      fi
       [ -n "$content" ] && break
     done
   elif [[ "$count" -eq 0 && -z "${content}${data}" ]]; then
@@ -256,14 +261,10 @@ EOF
   # Append request body into cache
   echo "$body" >>"$cache"
 
-  # Add an empty line between prompt and response
-  echo -e '\n------\n'
-
-  # API call
-  # Save original response into cache file
-  # And only print content of message
+  # Use Yellow color to print completion from GPT
+  echo -en '\n\e[33m'
   _API_call | _process_completion
-  echo -e "\n\n======\n"
+  echo -e '\e[0m'
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
