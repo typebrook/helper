@@ -70,8 +70,10 @@ Options:
                     If STDIN is given, it would be append to the end of message.
 
 Special input:
-  .                 If input starts with '.', then a prompt of options shows up. 
-                    User can modify option value for API calls.
+  .c                A special prompt of options shows up. User can dynamically modify 
+                    option values for API calls.
+
+  .h                Ask gpt the usage of this script
 
 Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
@@ -123,28 +125,35 @@ _get_content() {
   [ ! -t 0 ] && data="$(cat)"
 
   if [ ! "$SKIP_INPUT" = true ] ; then
-    # Read content it from terminal
+    # Read content from terminal
     while true; do
       read -e -r -p "Let's Chat: " content </dev/tty
-      if [[ "$content" =~ ^\. ]]; then
+      if [ "$content" = .c ]; then
         echo -e '\n======\n'
         _configure_options
         echo -e '\n======\n'
         continue
+      elif [ "$content" = .h ]; then
+        content="What does the following script used for? how to use it?"
+        echo -n "$content"
+        content="$content\n\n$(cat $0)"
+      else
+        continue
       fi
       [ -n "$content" ] && break
     done
+  # Exit 1 when "--skip" is specified, but no STDIN and CONTENT is given
   elif [[ "$round" -eq 1 && -z "${content}${data}" ]]; then
     echo -e "No data from STDIN\n"
     exit 1;
   fi
 
   # If it is the first round, append STDIN (If it exists) at the end
-  if [[ ! "$SKIP_INPUT" = true && -n "$data" ]] ; then
+  if [[ ! "$SKIP_INPUT" = true || -n "$data" ]] ; then
     content="$(printf "%s\\n\\n%s" "$content" "$data")"
     echo -e "\n$data"
   # Or only use STDIN as content
-  elif [ -n "$data" ]; then
+  else
     content="$data"
     echo "$content"
   fi
