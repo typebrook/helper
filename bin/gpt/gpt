@@ -165,7 +165,7 @@ _process_completion() {
     jq -jr '.choices?[0]?.delta?.content? // empty'
   else
     jq . | tee -a "$cache" | \
-    jq -r .choices[0].message.content
+    jq -jr .choices[0].message.content
   fi
 }
 
@@ -254,8 +254,8 @@ EOF
   session+=("$user_message")
 
   # If context is specified, use INDEX to get specified range from session
-  if [ -n $context ]; then
-    INDEX="-$([ ${#session[@]} -le $context ] && echo ${#session[@]} || echo $(( $context + 1 )))"
+  if [ -n "$context" ]; then
+    INDEX="-$([ "${#session[@]}" -le "$context" ] && echo ${#session[@]} || echo $(( $context + 1 )))"
   fi
 
   # Create request body
@@ -279,7 +279,7 @@ EOF
   # Use Yellow color to print completion from GPT
   echo -en '\n\e[33m'
   _API_call | _process_completion
-  echo -e '\e[0m'
+  echo -e '\e[0m\n'
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
