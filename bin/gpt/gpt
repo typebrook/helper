@@ -10,7 +10,7 @@
 stacks=( curl jq sed )
 
 # User can dynamically change these options for API call
-configurable_options=( model behavior temperature max_tokens stream )
+configurable_options=( model behavior temperature max_tokens stream context )
 
 # If script is interupt by SIGINT, simply print leave message
 trap _print_leave_message INT
@@ -60,12 +60,17 @@ Options:
 
   -S|--stream       Use stream mode. If this is set, token usage would not be shown
 
+  -c|--context      Number of messages in session. If it is set, API calls only 
+                    contains limited previous chats. If it is 1, then GPT only get
+                    your latest prompt input. (By default, API calls use the 
+                    whole previous chats, which is not friendly to token usage)
+
   *                 The other arguments would be treated as message content.
                     If no message is specified, user should input content by hands.
                     If STDIN is given, it would be append to the end of message.
 
-Special prompt:
-  Options           If input starts with '.', then a prompt of options shows up. 
+Special input:
+  .                 If input starts with '.', then a prompt of options shows up. 
                     User can modify option value for API calls.
 
 Reference: https://platform.openai.com/docs/api-reference/completions
@@ -129,7 +134,7 @@ _get_content() {
       fi
       [ -n "$content" ] && break
     done
-  elif [[ "$count" -eq 0 && -z "${content}${data}" ]]; then
+  elif [[ "$round" -eq 1 && -z "${content}${data}" ]]; then
     echo -e "No data from STDIN\n"
     exit 1;
   fi
@@ -200,6 +205,10 @@ while [ "$#" -gt 0 ]; do
       stream=true
       shift 1
       ;;
+    -c|--context)
+      context=$2
+      shift 2
+      ;;
     -h|--help)
       _print_helper_message
       exit 0
@@ -222,12 +231,13 @@ behavior="${behavior:-You are a helpful programming assistant}"
 temperature=${temperature:-0.7}
 max_tokens=${max_tokens:-1024}
 stream=${stream:-false}
+INDEX=
 
 # Prepare for chat session
 cache=$(mktemp) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
-count=0
+count=1
 
 # Use while to keep chat session
 while true; do
@@ -243,6 +253,11 @@ EOF
   )"
   session+=("$user_message")
 
+  # If context is specified, use INDEX to get specified range from session
+  if [ -n $context ]; then
+    INDEX="-$([ ${#session[@]} -le $context ] && echo ${#session[@]} || echo $(( $context + 1 )))"
+  fi
+
   # Create request body
   # Consider quotes, back slashes, use jq to ensure content texts are OK to put in JSON
   body="$(cat <<EOF
@@ -250,7 +265,7 @@ EOF
    "model": "$model",
    "messages": [
      {"role": "system", "content": $(echo "$behavior" | jq -sR .)},
-     $(IFS=','; echo "${session[*]}")
+     $(IFS=','; echo "${session[*]: $INDEX}")
    ],
    "temperature": $temperature,
    "max_tokens": $max_tokens,
@@ -273,5 +288,5 @@ EOF
   )"
   session+=("$assistant_message")
 
-  (( count+=1 ))
+  (( round+=1 ))
 done
