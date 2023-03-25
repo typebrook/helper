@@ -69,7 +69,7 @@ Options:
                     If no message is specified, user should input content by hands.
                     If STDIN is given, it would be append to the end of message.
 
-Special input:
+Special Input:
   .c                A special prompt of options shows up. User can dynamically modify 
                     option values for API calls.
 
