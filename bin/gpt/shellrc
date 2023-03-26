@@ -3,4 +3,4 @@ h() {
   printf '%s\n\n%s' "$(fc -s 2>&1 >/dev/null)" "Tell me what's wrong with the command above" | \
   gpt --skip
 }
-trap 'echo -e "\e[31m---Error: press h to get help from AI---\e[0m"' ERR
+#trap 'echo -e "\e[31m---Error: press h to get help from AI---\e[0m"' ERR
