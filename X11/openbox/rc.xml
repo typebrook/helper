@@ -499,6 +499,19 @@
         <command>alacritty --title _untitled</command>
       </action>
     </keybind>
+    <keybind key="W-S-b">
+      <action name="Execute">
+        <command>
+            alacritty --title BANNER --hold		    
+            -o "window.padding.x=36"
+            -o "window.padding.y=36"
+            -o "window.dimensions.columns=35" 	    
+            -o "window.dimensions.lines=1" 		    
+            -o "font.size=60" 	                    
+            -e sh -c 'read'
+        </command>
+      </action>
+    </keybind>
     <keybind key="W-t">
       <action name="Execute">
         <command>
