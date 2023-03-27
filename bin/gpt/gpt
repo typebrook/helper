@@ -129,8 +129,7 @@ _get_content() {
   if [ ! "$SKIP_INPUT" = true ] ; then
     # Read content from terminal
     while true; do
-      echo -en "\e[1mLet's Chat: \e[0m"
-      read -e -r  content </dev/tty
+      read -e -r -p "Let's Chat: " content </dev/tty
       if [ "$content" = .c ]; then
         echo -e '\n======\n'
         _configure_options
@@ -233,6 +232,11 @@ while [ "$#" -gt 0 ]; do
       SKIP_INPUT=true
       content="$1"
       shift 1
+      ;;
+    --)
+      SKIP_INPUT=true
+      content="$@"
+      break
       ;;
   esac
 done
