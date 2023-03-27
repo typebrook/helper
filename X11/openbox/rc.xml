@@ -508,7 +508,7 @@
             -o "window.dimensions.columns=35" 	    
             -o "window.dimensions.lines=1" 		    
             -o "font.size=60" 	                    
-            -e sh -c 'read'
+            -e ~/helper/bin/unix/center_text.sh
         </command>
       </action>
     </keybind>
