@@ -1,11 +1,12 @@
 # My alias for bash and zsh
 
 # config
-alias al="vim $SETTING_DIR/alias && source $SETTING_DIR/alias"
+alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
+alias vim='nvim'
 alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
@@ -22,7 +23,8 @@ cde() { cd /etc/$@; }
 alias digg='dig +noall +answer +multiline'
 
 # vim
-alias v='vim'
+alias v='nvim'
+alias vim='nvim'
 alias vi='vim'
 alias v2='vim -Nu ~/.vimrc2'
 alias vl="vim -c 'norm '"
@@ -94,6 +96,7 @@ alias gg='gist grep'
 # unix
 alias chx='chmod +x'
 alias chr='chmod +r'
+alias k='kill %1'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 alias m='mutt'

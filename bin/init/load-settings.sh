@@ -1,7 +1,8 @@
 trap 'exit.sh' EXIT
 
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
-export EDITOR=vim
+export EDITOR=nvim
+export VISUAL=nvim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export MAIL=$HOME/Maildir
