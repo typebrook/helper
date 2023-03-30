@@ -277,7 +277,7 @@ stream=${stream:-false}
 INDEX=
 
 # Prepare for chat session
-cache=$(mktemp) && touch "$cache" 
+cache=$(mktemp -t gpt.XXXXXX) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
 round=1
