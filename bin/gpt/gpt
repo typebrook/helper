@@ -10,8 +10,8 @@
 stacks=( curl jq sed )
 
 # User can dynamically change these options for API call
-configurable_options=( model behavior temperature max_tokens stream context )
 
+configurable_options=( model behavior temperature max_tokens stream context )
 # If script is interupt by SIGINT, simply print leave message
 trap _print_leave_message INT
 
@@ -48,6 +48,9 @@ Options:
                       "You are a helpful assistant."
                     (Defaults to "You are a helpful programming assistant")
 
+  -B|--sys-message  Use prompt to set system message (How model behave).
+                    User can still modify it by special prompt '.c'
+
   -t|--temperature  Value between 0 and 2. Higher values like 0.8 will make the 
                     output more random, while lower values like 0.2 will make it 
                     more focused and deterministic.
@@ -74,6 +77,9 @@ Options:
 Special Input:
   .c                A special prompt of options shows up. User can dynamically modify 
                     option values for API calls.
+
+  .r                Rewind previous chats. This is useful when terminal is occupied by
+                    configuration or other jobs
 
   .h                Ask gpt the usage of this script
 
@@ -120,6 +126,17 @@ _configure_options() {
   done
 }
 
+_print_previous_chats() {
+  echo
+  jq -r '
+    def colors: { 
+      "white": "\u001b[37m", 
+      "yellow": "\u001b[33m", 
+    };
+    if .id|not then .messages[-1].content + "\n" else colors.yellow + .choices[0].message.content + colors.white + "\n" end
+  ' "$cache"
+}
+
 # Get latest content for completion
 _get_content() {
 
@@ -135,6 +152,8 @@ _get_content() {
         _configure_options
         echo -e '\n======\n'
         continue
+      elif [ "$content" = .r ]; then
+        _print_previous_chats
       elif [ "$content" = .h ]; then
         content="What does the following script used for? Show me how to use it?"
         echo -n "$content"
@@ -200,6 +219,10 @@ while [ "$#" -gt 0 ]; do
       behavior="$2"
       shift 2
       ;;
+    -B|--sys-message)
+      SYSTEM_PROMPT=true
+      shift 1
+      ;;
     -t|--temperature)
       temperature="$2"
       shift 2
@@ -258,6 +281,11 @@ cache=$(mktemp) && touch "$cache"
 #trap "rm $cache" EXIT
 session=()
 round=1
+
+# Allow user input system message
+if [ "$SYSTEM_PROMPT" = true ]; then
+  read -e -r -p "System Message: " behavior
+fi
 
 # Use while to keep chat session
 while true; do
