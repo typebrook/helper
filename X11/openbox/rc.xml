@@ -559,7 +559,12 @@
     </keybind>
     <keybind key="W-w">
       <action name="Execute">
-        <command>firefox</command>
+        <command>
+          sh -c '
+            xdotool search --onlyvisible --classname Navigator windowactivate || \
+            firefox
+          '
+        </command>
       </action>
     </keybind>
     <!-- Rofi -->
