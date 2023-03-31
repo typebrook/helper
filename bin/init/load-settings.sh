@@ -5,6 +5,7 @@ export EDITOR=nvim
 export VISUAL=nvim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
+export XDG_STATE_HOME=~/.local/share/
 export MAIL=$HOME/Maildir
 
 # Get current shell

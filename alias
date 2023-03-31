@@ -7,7 +7,6 @@ eval "${shell}rc(){
   vim \$RCFILE && source \$RCFILE
 }"
 alias vim='nvim'
-alias vimrc='vim ~/.vimrc'
 alias tigrc="vim ~/.tigrc"
 alias muttrc='vim ~/.config/mutt/muttrc'
 alias gitconfig='vim ~/.gitconfig'
@@ -25,15 +24,13 @@ alias digg='dig +noall +answer +multiline'
 # vim
 alias v='nvim'
 alias vim='nvim'
-alias vi='vim'
-alias v2='vim -Nu ~/.vimrc2'
 alias vl="vim -c 'norm '"
 vll() {
   file=$(grep '^> ' ~/.viminfo | sed 's/^> //' | fzf);
   eval vim $file;
 }
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
-alias ve="vim ~/.vimrc"
+alias ve="vim ~/.config/nvim/init.vim"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
