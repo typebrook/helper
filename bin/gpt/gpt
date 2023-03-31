@@ -176,7 +176,7 @@ _get_content() {
     echo -e "$content"
   else
     content="$(printf "%s${data:+\\n\\n}%s" "$content" "$data")"
-    [ -n "$data" ] && echo "$data"
+    [ -n "$data" ] && echo -e "\n$data"
   fi
 }
 
@@ -198,6 +198,11 @@ _process_completion() {
     jq -jr .choices[0].message.content
   fi
 }
+
+
+#=====================================================
+# Main Function starts here
+#=====================================================
 
 # Check OPENAI API KEY in env
 # Exit with 6 (configuration issue) if it is not set
@@ -251,21 +256,23 @@ while [ "$#" -gt 0 ]; do
       _print_helper_message
       exit 0
       ;;
-    *)
-      SKIP_INPUT=true
-      content="$1"
-      shift 1
-      ;;
     --)
       SKIP_INPUT=true
       shift 1
       content="$@"
       break
       ;;
+    *)
+      SKIP_INPUT=true
+      content="$1"
+      shift 1
+      ;;
   esac
 done
 
 # Make sure necessary commands exist
+# Since printing helper message doesn't need these
+# So Check stacks after parsing arguments
 _check_stacks
 
 # Set variables in API calls
