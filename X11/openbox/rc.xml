@@ -111,7 +111,7 @@
             alacritty --title @OPENBOX_CONFIG \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=90" \
-            -e vim ~/.config/openbox/rc.xml \
+            -e $EDITOR ~/.config/openbox/rc.xml \
           '
       </command>
       </action>
@@ -528,6 +528,13 @@
             -e ~/helper/bin/unix/timer.sh SIGINT    \
                "xdotool windowactivate $origin"
           '
+        </command>
+      </action>
+    </keybind>
+    <keybind key="W-e">
+      <action name="Execute">
+        <command>
+          sh -c 'PRE_POPULATE="tk " alacritty'
         </command>
       </action>
     </keybind>
