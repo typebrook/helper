@@ -18,7 +18,7 @@ specify_date() {
   done
 
   FILE=~/log/diary/`date -d $YEAR-$MONTH-$DAY +%y.w%W.md`
-  vim -c 'Goyo' $FILE
+  $EDITOR -c 'Goyo' $FILE
 }
 
 print_today() {
@@ -27,7 +27,7 @@ print_today() {
 }
 
 edit_today() {
-  vim -c Goyo $today
+  $EDITOR -c Goyo $today
 }
 
 add_entry() {
