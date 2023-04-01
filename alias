@@ -7,16 +7,17 @@ eval "${shell}rc(){
   vim \$RCFILE && source \$RCFILE
 }"
 alias vim='nvim'
-alias tigrc="vim ~/.tigrc"
-alias muttrc='vim ~/.config/mutt/muttrc'
-alias gitconfig='vim ~/.gitconfig'
-alias gpgconfig='vim ~/.gnupg/gpg-agent.conf'
-alias sshconfig='vim ~/.ssh/config'
-alias sshauth='vim ~/.ssh/authorized_keys'
-alias sshknown='vim ~/.ssh/known_hosts'
-alias cdconfig='cd ~/config'
-alias tmuxconfig='vim ~/.tmux.conf'
+alias tigrc="$EDITOR ~/.tigrc"
+alias muttrc="$EDITOR ~/.config/mutt/muttrc"
+alias gitconfig="$EDITOR ~/.gitconfig"
+alias gpgconfig="$EDITOR ~/.gnupg/gpg-agent.conf"
+alias sshconfig="$EDITOR ~/.ssh/config"
+alias sshauth="$EDITOR ~/.ssh/authorized_keys"
+alias sshknown="$EDITOR ~/.ssh/known_hosts"
+alias cdconfig="cd ~/config"
+alias tmuxconfig="$EDITOR ~/.tmux.conf"
 cde() { cd /etc/$@; }
+alias cdetc='cde'
 
 # network
 alias digg='dig +noall +answer +multiline'
