@@ -333,11 +333,24 @@ EOF
   # Append request body into cache
   echo "$body" >>"$cache"
 
-  # Use Yellow color to print completion from GPT
-  echo -en '\e[33m'
-  _API_call | _process_completion
-  echo -e '\e[0m\n'
+  # Run API call in coprocess
+  coproc API {
+    _API_call | _process_completion
+  }
 
+  # While API call does not end, print indicator onto terminal
+  while ps ${API_PID} &>/dev/null; do
+    printf '.'
+    sleep 1
+  done &
+
+  # Read response of API call from coprocess
+  response=$( cat <&"${API[0]}" )
+
+  # Use Yellow color to print response
+  echo -e "\r\e[K\e[33m$response\e[0m\n"
+
+  # Print how many tokens used (if VERBOSE is set)
   if [ "$VERBOSE" = true ]; then
     tokens=$(jq -s '.[-1].usage? // empty | .total_tokens' "$cache")
     echo -e "$tokens token used.\n"
