@@ -44,6 +44,7 @@ function precmd() {
   RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   PROMPT='%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b '
   RPROMPT="%B%K{red}%F{black}${RIGHT}%f%k%b"
+  [ -n "$PRE_POPULATE" ] && print -z "$PRE_POPULATE"
 }
 
 
