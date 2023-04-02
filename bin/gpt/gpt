@@ -338,6 +338,7 @@ EOF
   _API_call | _process_completion
   echo -e '\e[0m\n'
 
+  # Print token use for each chat (if --verbose is set)
   if [ "$VERBOSE" = true ]; then
     tokens=$(jq -s '.[-1].usage? // empty | .total_tokens' "$cache")
     echo -e "$tokens token used.\n"
