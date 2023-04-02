@@ -698,7 +698,7 @@
         <command>alacritty -e nvim</command>
       </action>
     </keybind>
-    <keybind key="C-A-S-r">
+    <keybind key="W-S-r">
       <action name="Execute">
         <command>alacritty --title Ranger -e ranger</command>
       </action>
