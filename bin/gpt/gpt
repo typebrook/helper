@@ -5,6 +5,7 @@
 #   https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 # - Cowork with https://github.com/openai/chatgpt-retrieval-plugin
 # - History for prompt
+# - Mac/BSD compatible
 
 # Necessary commands
 stacks=( curl jq sed )
@@ -29,6 +30,7 @@ _print_helper_message() {
   cat <<EOF
 Usage: gpt [-h] [-m MODEL] [-m4] [-b BEHAVIOR] [-t temperature]
            [-M MAX_TOKENS] [-s] [MESSAGE]
+       gpt <SUBCOMMAND>
 
 Env:
   OPENAI_API_KEY    Generate API key from https://platform.openai.com/account/api-keys
@@ -206,7 +208,7 @@ _process_completion() {
 
 # Check OPENAI API KEY in env
 # Exit with 6 (configuration issue) if it is not set
-[ -z "$OPENAI_API_KEY" ] && which token &>/dev/null && OPENAI_API_KEY=$(token openai)
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(cat $XDG_CONFIG_HOME/openai/key)
 [ -z "$OPENAI_API_KEY" ] && { echo API KEY not specified; exit 6; }
 
 # Parse arguments
@@ -285,7 +287,8 @@ stream=${stream:-false}
 INDEX=
 
 # Prepare for chat session
-cache=$(mktemp -t gpt.XXXXXX) && touch "$cache" 
+CACHE_DIR=${CACHE_DIR:-/tmp}
+cache=$(mktemp -t gpt.XXXXXX -p ${CACHE_DIR}) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
 
