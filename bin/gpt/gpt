@@ -165,7 +165,7 @@ _get_content() {
       fi
     done
   # Exit 1 when "--skip" is specified, but no STDIN and CONTENT is given
-  elif [[ "$round" -eq 1 && -z "${content}${data}" ]]; then
+  elif [[ ! -s "$cache" && -z "${content}${data}" ]]; then
     echo -e "No data from STDIN\n"
     exit 1;
   fi
@@ -288,7 +288,6 @@ INDEX=
 cache=$(mktemp -t gpt.XXXXXX) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
-round=1
 
 # Allow user input system message
 if [ "$SYSTEM_PROMPT" = true ]; then
@@ -346,10 +345,12 @@ EOF
 
   # Append newest message into session
   assistant_message="$(cat <<EOF
-{"role": "assistant", "content": $(jq -sr '.[-1].choices[0].message.content' "$cache" | jq -sR .)}
+{
+  "role": "assistant", 
+  "content": $(jq -sr '.[-1].choices[0].message.content' "$cache" | jq -sR .)
+}
 EOF
   )"
   session+=("$assistant_message")
 
-  (( round+=1 ))
 done
