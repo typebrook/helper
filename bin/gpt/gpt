@@ -6,15 +6,19 @@
 # - Cowork with https://github.com/openai/chatgpt-retrieval-plugin
 # - History for prompt
 # - Mac/BSD compatible
+# - Generate completions for bash/zsh
 
 # Necessary commands
 stacks=( curl jq sed )
 
 # User can dynamically change these options for API call
-
 configurable_options=( model behavior temperature max_tokens stream context )
+
 # If script is interupt by SIGINT, simply print leave message
 trap _print_leave_message INT
+
+# Where to cache dir
+CACHE_DIR=${CACHE_DIR:-/tmp}
 
 # If any stack is missing, exit with 2
 _check_stacks() {
@@ -85,6 +89,9 @@ Special Input:
 
   .h                Ask gpt the usage of this script
 
+Sub Commands:
+  last              Use fzf to choose previous inputs
+
 Reference: https://platform.openai.com/docs/api-reference/completions
 EOF
 }
@@ -148,7 +155,8 @@ _get_content() {
   if [ ! "$SKIP_INPUT" = true ] ; then
     # Read content from terminal
     while true; do
-      read -e -r -p "Let's Chat: " content </dev/tty
+      read -e -r -p "Let's Chat: " ${PREFILL:+-i "$PREFILL"} content </dev/tty
+      unset PREFILL
       if [ "$content" = .c ]; then
         echo -e '\n======\n'
         _configure_options
@@ -201,6 +209,14 @@ _process_completion() {
   fi
 }
 
+_get_input_by_fzf() {
+  PREFILL=$(
+    find "$CACHE_DIR" -name 'gpt.*' 2>/dev/null | \
+      while read -r file; do jq -sr '.[0].messages[1].content' "$file" | head -1; done | \
+      sed -E '/^null$/d' | sort -u | \
+      fzf
+    )
+}
 
 #=====================================================
 # Main Function starts here
@@ -208,7 +224,7 @@ _process_completion() {
 
 # Check OPENAI API KEY in env
 # Exit with 6 (configuration issue) if it is not set
-[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(cat $XDG_CONFIG_HOME/openai/key)
+[ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(cat "$XDG_CONFIG_HOME"/openai/key)
 [ -z "$OPENAI_API_KEY" ] && { echo API KEY not specified; exit 6; }
 
 # Parse arguments
@@ -258,6 +274,10 @@ while [ "$#" -gt 0 ]; do
       _print_helper_message
       exit 0
       ;;
+    last)
+      _get_input_by_fzf
+      break
+      ;;
     --)
       SKIP_INPUT=true
       shift 1
@@ -287,7 +307,6 @@ stream=${stream:-false}
 INDEX=
 
 # Prepare for chat session
-CACHE_DIR=${CACHE_DIR:-/tmp}
 cache=$(mktemp -t gpt.XXXXXX -p ${CACHE_DIR}) && touch "$cache" 
 #trap "rm $cache" EXIT
 session=()
