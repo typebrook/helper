@@ -66,8 +66,8 @@ alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
 
-# create a zkbd compatible hash;
-# to add other keys to this hash, see: man 5 terminfo
+# Create a zkbd compatible hash
+# To add other keys to this hash, see: man 5 terminfo
 typeset -g -A key
 
 key[Home]="${terminfo[khome]}"
@@ -83,8 +83,11 @@ key[PageUp]="${terminfo[kpp]}"
 key[PageDown]="${terminfo[knp]}"
 key[Shift-Tab]="${terminfo[kcbt]}"
 
-# setup key accordingly
 bindkey --  ${key[Shift-Tab]}  reverse-menu-complete
+
+insert-first-word () { zle insert-last-word -- -1 1 }
+zle -N insert-first-word
+bindkey '^[,' insert-first-word
 #bindkey -- "\C-A"               beginning-of-line
 #bindkey -- "\C-E"               end-of-line
 #bindkey -- "\C-d"               delete-char
