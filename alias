@@ -493,7 +493,7 @@ alias cdngx='cd /etc/nginx'
 
 # tmp
 alias cdS='cd ~/git/StreetComplete'
-alias cdm='cd ~/git/mapstew'
+alias cdm='cd ~/git/mapclay'
 alias cdma='cd ~/git/mapstew-android'
 alias cdT='cd ~/git/tilemaker'
 alias stew='cd ~/git/mapstew'
