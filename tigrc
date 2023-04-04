@@ -85,7 +85,7 @@ bind main F none
 bind generic <C-T> :toggle commit-title-refs
 
 # edit tigrc
-bind main e >sh -c "vim ~/.tigrc"
+bind main e >sh -c "$EDITOR ~/.tigrc"
 
 # move
 bind main <C-J> :move-next-merge
@@ -357,7 +357,7 @@ bind diff u @git checkout %(commit)^ -- %(file)
 #====================
 
 # edit tigrc
-bind help e >sh -c "vim ~/.tigrc"
+bind help e >sh -c "$EDITOR ~/.tigrc"
 
 #====================
 # color
