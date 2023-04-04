@@ -46,14 +46,14 @@ _get_context() {
     CONTEXT=$(cat "$CONTEXT_FILE")
     MODIFY_TIME="$LAST_MODIFY_TIME"
   fi
-  echo $CONTEXT
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd
 function precmd() {
-  RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   PROMPT='%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b '
-  RPROMPT="%K{blue}%F{yellow}$(_get_context)%f%k %B%K{red}%F{black}${RIGHT}%f%k%b"
+  RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
+  _get_context
+  RPROMPT="%K{blue}%F{yellow}${CONTEXT}%f%k${RIGHT:+ }%B%K{red}%F{black}${RIGHT}%f%k%b"
   [ -n "$PRE_POPULATE" ] && print -z "$PRE_POPULATE"
 }
 
