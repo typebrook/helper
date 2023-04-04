@@ -18,6 +18,8 @@ alias cdconfig="cd ~/config"
 alias tmuxconfig="$EDITOR ~/.tmux.conf"
 cde() { cd /etc/$@; }
 alias cdetc='cde'
+alias ls='ls --color'
+alias grep='grep --color'
 
 # network
 alias digg='dig +noall +answer +multiline'

@@ -38,12 +38,22 @@ zstyle ':completion::complete:*' gain-privileges 1
 
 
 # PS1 with git status at right
+_get_context() {
+  CONTEXT_FILE=${CONTEXT_FILE:-~/.task/context}
+
+  LAST_MODIFY_TIME=$(stat -c %y "$CONTEXT_FILE")
+  if [ ! "$MODIFY_TIME" = "$LAST_MODIFY_TIME" ]; then
+    CONTEXT=$(cat "$CONTEXT_FILE")
+    MODIFY_TIME="$LAST_MODIFY_TIME"
+  fi
+  echo $CONTEXT
+}
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd
 function precmd() {
   RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   PROMPT='%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b '
-  RPROMPT="%B%K{red}%F{black}${RIGHT}%f%k%b"
+  RPROMPT="%K{blue}%F{yellow}$(_get_context)%f%k %B%K{red}%F{black}${RIGHT}%f%k%b"
   [ -n "$PRE_POPULATE" ] && print -z "$PRE_POPULATE"
 }
 
@@ -74,7 +84,7 @@ key[PageDown]="${terminfo[knp]}"
 key[Shift-Tab]="${terminfo[kcbt]}"
 
 # setup key accordingly
-bindkey --  '^[[Z'  reverse-menu-complete
+bindkey --  ${key[Shift-Tab]}  reverse-menu-complete
 #bindkey -- "\C-A"               beginning-of-line
 #bindkey -- "\C-E"               end-of-line
 #bindkey -- "\C-d"               delete-char
@@ -96,13 +106,9 @@ bindkey --  '^[[Z'  reverse-menu-complete
 #bindkey -- "${key[Insert]}"     overwrite-mode
 
 
-# Common shell options
-alias ls='ls --color'
-alias grep='grep --color'
-
-
 # Quick jump to parent folders
-source ~/helper/zsh/bd.zsh
+source $SETTING_DIR/zsh/bd.zsh
+
 
 # Load my general settings
 source $SETTING_DIR/bin/init/load-settings.sh
