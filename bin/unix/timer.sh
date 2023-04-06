@@ -1,6 +1,9 @@
 #! /bin/bash
 # Ref: https://superuser.com/questions/611538/611582#611582
 
+exec 3>&1
+exec 1>/dev/tty
+
 SIGNAL=${1:-SIGTERM}
 COMMAND="$2"
 
@@ -74,6 +77,8 @@ timer() {
     sleep 0.3
   done
 }
+
+trap 'exec 1>&3; echo $count; send-notify foo' EXIT KILL TERM STOP
 
 while [ $count -lt $SET ]; do
   [ $stop = true ] && sleep 0.3 && continue
