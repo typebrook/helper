@@ -29,7 +29,7 @@ alias v='nvim'
 alias vim='nvim'
 alias vl="vim -c 'norm '"
 vll() {
-  file=$(strings $XDG_STATE_HOME/nvim/shada/main.shada | sed -E '1,7d;/^[^/]/d;s/^[-("!]//' | awk '!x[$0]++' | fzf);
+  file=$(strings $XDG_STATE_HOME/nvim/shada/main.shada | sed -E '1,7d;s/^[#-("!]//;/^[^/]/d' | awk '!x[$0]++' | fzf);
   [ -n "$file" ] && eval vim $file;
 }
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
