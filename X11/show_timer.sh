@@ -18,4 +18,4 @@ alacritty --title TIMER --hold      \
   -e "$HOME"/helper/bin/unix/timer.sh \
         SIGINT \
         "xdotool windowactivate $origin" \
-        'echo $count | ~/helper/bin/task/context_spend_time.sh'
+        '~/helper/bin/task/context_spend_time.sh $count'

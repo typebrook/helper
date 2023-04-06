@@ -1,6 +1,6 @@
 #! /bin/bash
 
-LOG_FILE=~/log/context
+LOG_FILE=~/log/context && touch $LOG_FILE
 context="$(cat ~/.task/context)"
 count="$1"
 
@@ -20,7 +20,7 @@ if [ -n "$1" ]; then
   if [ "$update" = true ]; then
     sed -i -E "s/^$context.*/$context\t$summary" $LOG_FILE
   else
-    echo -e "$context\t$summary" >>$LOG_FILE
+    echo -e "$context\t$count" >>$LOG_FILE
   fi
 else
   # Print times for each context
