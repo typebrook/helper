@@ -1,6 +1,6 @@
 #! /bin/bash
 
-LOG_FILE=~/log/context && touch $LOG_FILE
+LOG_FILE=~/log/.context && touch $LOG_FILE
 context="$(cat ~/.task/context)"
 count="$1"
 
