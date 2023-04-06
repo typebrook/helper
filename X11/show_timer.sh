@@ -3,11 +3,13 @@
 origin="$(xdotool getactivewindow)"
 export origin
 
-# If timer is set, focus to it
+# If timer is set, focus to it and exit
 xdotool search --name "TIMER" windowactivate && exit 0
 
 # Add new window for a timer
-# Use SIGINT
+# Use SIGINT to toggle each mode
+# Use xdotool to reactivate original window user focus
+# After timer is closed or finished, append time into context file
 alacritty --title TIMER --hold      \
   -o "window.dimensions.columns=8" 	\
   -o "window.dimensions.lines=1" 	\

@@ -26,6 +26,6 @@ else
   # Print times for each context
   while read -r ctx sec; do
     echo -ne "$ctx\t"
-    date -u -d @"$sec" +%H:%M:%S
+    date -u -d @"$sec" +%H:%M
   done <$LOG_FILE
 fi
