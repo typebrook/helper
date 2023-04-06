@@ -113,7 +113,7 @@
             -o "window.dimensions.columns=90" \
             -e $EDITOR ~/.config/openbox/rc.xml \
           '
-      </command>
+        </command>
       </action>
     </keybind>
     <!-- Change Workspace/Desktop -->
