@@ -5,7 +5,8 @@ exec 3>&1
 exec 1>/dev/tty
 
 SIGNAL=${1:-SIGTERM}
-COMMAND="$2"
+COMMAND_START="$2"
+COMMAND_EXIT="$3"
 
 # If SIGNAL is received, switch to next display
 trap 'next_display' "$SIGNAL"
@@ -34,8 +35,8 @@ toggle_timer() {
 read -p '? ' -r input
 # Disable input on terminal
 stty -echo 
-# If COMMAND is given, run it after timer is set
-result="$([ -n "$COMMAND" ] && eval "$COMMAND" 2>&1)"
+# If COMMAND_START is given, run it after timer is set
+result="$([ -n "$COMMAND_START" ] && eval "$COMMAND_START" 2>&1)"
 notify-send "$result" &>/tmp/openbox
 
 
@@ -78,7 +79,7 @@ timer() {
   done
 }
 
-trap 'exec 1>&3; echo $count; send-notify foo' EXIT KILL TERM STOP
+trap 'exec 1>&3; [ -n "COMMAND_EXIT" ] && eval "$COMMAND_EXIT"' EXIT QUIT HUP
 
 while [ $count -lt $SET ]; do
   [ $stop = true ] && sleep 0.3 && continue

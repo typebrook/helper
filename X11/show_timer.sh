@@ -1,6 +1,7 @@
 #! /bin/sh
 
-export origin=`xdotool getactivewindow`; \
+origin="$(xdotool getactivewindow)"
+export origin
 
 # If timer is set, focus to it
 xdotool search --name "TIMER" windowactivate && exit 0
@@ -14,4 +15,7 @@ alacritty --title TIMER --hold      \
   -o "window.position.y=0"		    \
   -o "window.opacity=0.6"		    \
   -o "font.size=40" 	            \
-  -e sh -c '~/helper/bin/unix/timer.sh SIGINT "xdotool windowactivate $origin"'
+  -e "$HOME"/helper/bin/unix/timer.sh \
+        SIGINT \
+        "xdotool windowactivate $origin" \
+        'echo $count | ~/helper/bin/task/context_spend_time.sh'
