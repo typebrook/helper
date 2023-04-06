@@ -23,7 +23,7 @@ window:
 
   padding:
     x: 24
-    y: 4 
+    y: 12 
 
   decorations: full
   startup_mode: Windowed

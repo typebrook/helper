@@ -5,7 +5,7 @@ set -o emacs
 # 1 blinging block          2 block
 # 3 blinking under score    4 under score
 # 5 blinking bar            6 bar
-echo '\e[1 q'
+echo -n '\e[1 q'
 
 # helper repo
 export SETTING_DIR=$HOME/helper
