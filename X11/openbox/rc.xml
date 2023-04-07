@@ -514,6 +514,11 @@
     </keybind>
     <keybind key="W-t">
       <action name="Execute">
+        <command>~/helper/X11/show_timer.sh --context</command>
+      </action>
+    </keybind>
+    <keybind key="W-S-t">
+      <action name="Execute">
         <command>~/helper/X11/show_timer.sh</command>
       </action>
     </keybind>

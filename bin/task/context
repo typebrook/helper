@@ -18,7 +18,7 @@ if [ -n "$1" ]; then
     fi
   done <$LOG_FILE
   if [ "$update" = true ]; then
-    sed -i -E "s/^$context.*/$context\t$summary" $LOG_FILE
+    sed -i -E "s/^$context.*/$context\t$summary/" $LOG_FILE
   else
     echo -e "$context\t$count" >>$LOG_FILE
   fi

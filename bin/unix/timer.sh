@@ -8,6 +8,8 @@ SIGNAL=${1:-SIGTERM}
 COMMAND_START="$2"
 COMMAND_EXIT="$3"
 
+[ -n "$COLOR" ] && echo -en "\e[${COLOR}m"
+
 # If SIGNAL is received, switch to next display
 trap 'next_display' "$SIGNAL"
 # Use SIGTSTP (Ctrl-Z in most of the cases) to stop/restart timer

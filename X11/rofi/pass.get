@@ -40,8 +40,8 @@ set -x
 if [ -n "$RESULT" ]; then
   # Copy the given password into PRIMARY selection and kill it in 30s
   echo "$RESULT" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
-  # Copy the second line (most of the time, account name) into CLIPBOARD selection
-  echo "$RESULT" | sed -n 2p | tr -d '\n' | xsel -ib
+  # Copy the second non-empty line (most of the time, account name) into CLIPBOARD selection
+  echo "$RESULT" | sed -n '1d;/^./{p;q}' | tr -d '\n' | xsel -ib
 
   # And show extra message
   EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"

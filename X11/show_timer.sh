@@ -3,6 +3,12 @@
 origin="$(xdotool getactivewindow)"
 export origin
 
+# If --context is set, apply exit command and different color
+if echo "$@" | grep -qs '\--context'; then
+  COMMAND_EXIT='~/helper/bin/task/context $count'
+  export COLOR=33
+fi
+
 # If timer is set, focus to it and exit
 xdotool search --name "TIMER" windowactivate && exit 0
 
@@ -11,13 +17,13 @@ xdotool search --name "TIMER" windowactivate && exit 0
 # Use xdotool to reactivate original window user focus
 # After timer is closed or finished, append time into context file
 alacritty --title TIMER --hold      \
-  -o "window.dimensions.columns=8" 	\
-  -o "window.dimensions.lines=1" 	\
-  -o "window.position.x=-0"		    \
-  -o "window.position.y=0"		    \
-  -o "window.opacity=0.6"		    \
-  -o "font.size=40" 	            \
-  -e "$HOME"/helper/bin/unix/timer.sh \
+  -o window.dimensions.columns=8 	\
+  -o window.dimensions.lines=1 	    \
+  -o window.position.x=-0		    \
+  -o window.position.y=0		    \
+  -o window.opacity=0.6		        \
+  -o font.size=40 	                \
+  -e ~/helper/bin/unix/timer.sh \
         SIGINT \
         "xdotool windowactivate $origin" \
-        '~/helper/bin/task/context_spend_time.sh $count'
+        "$COMMAND_EXIT"
