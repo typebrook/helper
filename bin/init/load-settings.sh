@@ -3,6 +3,7 @@ trap 'exit.sh' EXIT
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export EDITOR=nvim
 export VISUAL=nvim
+export TIG_EDITOR=nvim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
