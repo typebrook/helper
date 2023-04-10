@@ -84,7 +84,7 @@ macro index <Space> "Wn"
 macro browser \cp "q\cp"
 macro browser \cn "q\cn"
 macro browser g "qg"
-macro index,browser i ':toggle sidebar_new_mail_only<enter>'
+macro index,browser,pager i ':toggle sidebar_new_mail_only<enter>'
 bind pager h skip-headers
 bind attach x view-mailcap
 macro generic,index,pager \cr ":source ~/.config/mutt/muttrc<Return>" "Reload mutt's configuration file"

@@ -646,7 +646,7 @@
     <keybind key="W-g">
       <action name="Execute">
         <command>
-          alacritty --hold --title GPT \
+          alacritty --hold --title @GPT \
             -o "window.dimensions.columns=70" \
             -o "window.dimensions.lines=30" \
             -e ~/helper/bin/gpt/gpt
