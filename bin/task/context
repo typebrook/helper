@@ -1,29 +1,44 @@
 #! /bin/bash
 
+# Usage:
+#   context 1h2m30s (Update current context with given time)
+#   context         (Check total time of each context)
+
 LOG_FILE=~/log/.context && touch $LOG_FILE
 context="$(cat ~/.task/context)"
-count="$1"
+time="$1"
 
-if [ -z "$context" ] || [ "$context" = none ]; then 
-  exit 1
-fi
+# Get seconds from given string
+_get_seconds() {
+  # Modify input to fit the format that `date` can read
+  hour=$(grep -o '[0-9.]\+h' <<<"$1" | tr -d h)
+  min=$(grep -o '[0-9.]\+m'  <<<"$1" | tr -d m)
+  sec=$(grep -o '[0-9.]\+s'  <<<"$1" | tr -d s)
+  echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc
+}
 
+# Update time of current context
 if [ -n "$1" ]; then
-  # Update Log file
+  # If current conetxt is not given, exit with 1
+  if [ -z "$context" ] || [ "$context" = none ]; then 
+    exit 1
+  fi
+
+  given_seconds="$(_get_seconds "$time")"
+
+  # Get total time of given time and current context time
   while read -r ctx sec; do
     if [ "$ctx" = "$context" ]; then
-      summary=$(( "$sec" + "$count" ))
-      update=true
-      break
+      total=$(( "$sec" + "$given_seconds" ))
+      sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
+      exit 0
     fi
   done <$LOG_FILE
-  if [ "$update" = true ]; then
-    sed -i -E "s/^$context.*/$context\t$summary/" $LOG_FILE
-  else
-    echo -e "$context\t$count" >>$LOG_FILE
-  fi
+
+  # Update Log file
+  echo -e "$context\t${given_seconds}" >>$LOG_FILE
+# Print times for each context
 else
-  # Print times for each context
   while read -r ctx sec; do
     echo -ne "$ctx\t"
     date -u -d @"$sec" +%H:%M
