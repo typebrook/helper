@@ -36,8 +36,8 @@ _set_context_plan() {
   done <~/log/plan.context.md
 }
 
-# Update time of current context
-if [ -n "$1" ]; then
+# Update spend time on current context
+_update_spend_time() {
   # If current conetxt is not given, exit with 1
   if [ -z "$context" ] || [ "$context" = none ]; then 
     exit 1
@@ -56,8 +56,10 @@ if [ -n "$1" ]; then
 
   # Update Log file
   echo -e "$context\t${given_seconds}" >>$LOG_FILE
-# Print times for each context
-else
+}
+
+# Print spend for each context
+_print_spend_time() {
   _set_context_plan
   while read -r ctx sec; do
     # Print context and time I spend
@@ -90,4 +92,10 @@ else
     fi
     echo
   done <$LOG_FILE
+}
+
+if [ -n "$1" ]; then
+  _update_spend_time
+else
+  _print_spend_time
 fi
