@@ -5,7 +5,7 @@ export origin
 
 # If --context is set, apply exit command and different color
 if echo "$@" | grep -qs '\--context'; then
-  COMMAND_EXIT='~/helper/bin/task/context $count'
+  COMMAND_EXIT='~/helper/bin/task/context ${count}s'
   export COLOR=33
 fi
 

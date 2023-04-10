@@ -8,7 +8,7 @@
 LOG_FILE=~/log/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
 context="$(cat ~/.task/context)"
-[[ "$@" =~ '-s' ]] && SET=true && shift
+[[ "$*" =~ '-s' ]] && SET=true && shift
 time="$1"
 
 # The unit of time display. For example:
@@ -76,6 +76,8 @@ _print_spend_time() {
     # Print context and time I spend
     echo -ne "$ctx\t\t"
     date -u -d @"$sec" +%H:%M | tr -d '\n'
+    echo -n "/"
+    date -u -d @"$seconds_of_plan" +%H:%M | tr -d '\n'
 
     number_of_spend=$(( $sec / $UNIT ))
     # Print block of time spend (green)
