@@ -1,4 +1,5 @@
 # task
+alias c='context'
 tk() { task rc.context=`cat ~/.task/context` $@; }
 tkc(){ echo $1 >~/.task/context; }
 alias tkcc='task context'
