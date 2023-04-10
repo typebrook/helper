@@ -8,13 +8,32 @@ LOG_FILE=~/log/.context && touch $LOG_FILE
 context="$(cat ~/.task/context)"
 time="$1"
 
+# The unit of time display. For example:
+# If it is 900(seconds), then the minimal symbol of 
+# time display is 15min
+UNIT=900
+BLOCK_CHAR=▊
+# This dictionary store the valid contexts and the time I plan to spend on
+declare -A PLAN
+
 # Get seconds from given string
 _get_seconds() {
   # Modify input to fit the format that `date` can read
-  hour=$(grep -o '[0-9.]\+h' <<<"$1" | tr -d h)
-  min=$(grep -o '[0-9.]\+m'  <<<"$1" | tr -d m)
-  sec=$(grep -o '[0-9.]\+s'  <<<"$1" | tr -d s)
-  echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc
+  hour=$(grep -o '[0-9.]\+h' <<<"$1" | tr -d '[:alpha:]')
+  min=$(grep -o '[0-9.]\+m'  <<<"$1" | tr -d '[:alpha:]')
+  sec=$(grep -o '[0-9.]\+s'  <<<"$1" | tr -d '[:alpha:]')
+  echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc | xargs printf '%.0f\n'
+}
+
+_set_context_plan() {
+  while read line; do
+    [ -z "$line" ] && break
+
+    ctx=$(awk '{print $1}' <<<"$line")
+    time=$(awk '{print $2}' <<<"$line")
+
+    PLAN[$ctx]=$(_get_seconds $time)
+  done <~/log/plan.context.md
 }
 
 # Update time of current context
@@ -39,8 +58,36 @@ if [ -n "$1" ]; then
   echo -e "$context\t${given_seconds}" >>$LOG_FILE
 # Print times for each context
 else
+  _set_context_plan
   while read -r ctx sec; do
-    echo -ne "$ctx\t"
-    date -u -d @"$sec" +%H:%M
+    # Print context and time I spend
+    echo -ne "$ctx\t\t"
+    date -u -d @"$sec" +%H:%M | tr -d '\n'
+
+    number_of_spend=$(( $sec / $UNIT ))
+    # Print block of time spend (green)
+    echo -ne "\t\t\e[32m"
+    [ ! "$number_of_spend" = 0 ] && printf "%0.s$BLOCK_CHAR" $(seq $number_of_spend)
+    echo -en "\e[0m"
+
+    seconds_of_plan=${PLAN[$ctx]}
+    if [ -n "$seconds_of_plan" ]; then
+      number_of_plan=$(( ${seconds_of_plan} / $UNIT ))
+      [ "$(( $seconds_of_plan % $UNIT ))" = 0 ] || (( number_of_plan++ ))
+      number_of_remaining=$(( $number_of_plan - $number_of_spend ))
+
+      # Print block of remaining time (normal)
+      if (( "$number_of_remaining" > 0 )); then
+        printf "%0.s$BLOCK_CHAR" $(seq $number_of_remaining)
+      # Print block of exceed time (red)
+      elif (( "$number_of_remaining" < 0 )); then
+        number_of_exceed=${number_of_remaining#-}
+        printf "%0.s\b" $(seq $number_of_exceed)
+        echo -ne "\e[31m"
+        printf "%0.s$BLOCK_CHAR" $(seq $number_of_exceed)
+        echo -en "\e[0m"
+      fi
+    fi
+    echo
   done <$LOG_FILE
 fi

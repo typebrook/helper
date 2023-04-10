@@ -1,7 +1,7 @@
 #compdef tkc
 
 function _tkc() {
-    compadd -S '' $(cut -d' ' -f1 ~/log/plan.context.md)
+  compadd -S '' $(sed -E '/^$/q' ~/log/plan.context.md | cut -d' ' -f1)
 }
 
 _tkc
