@@ -1,8 +1,9 @@
 #! /bin/bash
 
 # Usage:
-#   context 1h2m30s (Update current context with given time)
-#   context         (Check total time of each context)
+#   context 1h2m30s     (Update current context with given time)
+#   context -s 1h20m    (Set current context with given time)
+#   context             (Check total time of each context)
 
 LOG_FILE=~/log/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
@@ -14,7 +15,9 @@ time="$1"
 # If it is 900(seconds), then the minimal symbol of 
 # time display is 15min
 UNIT=900
-BLOCK_CHAR=▊
+#BLOCK_CHAR=
+BLOCK_CHAR=▮ #▊◼
+
 # This dictionary store the valid contexts and the time I plan to spend on
 declare -A SPEND
 
