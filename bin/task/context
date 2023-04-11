@@ -7,6 +7,9 @@
 
 LOG_FILE=~/log/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
+PROC=$$
+trap 'exit 1' 10
+
 context="$(cat ~/.task/context)"
 [[ "$*" =~ '-s' ]] && SET=true && shift
 time="$1"
@@ -27,6 +30,8 @@ _get_seconds() {
   hour=$(grep -o '[0-9.]\+h' <<<"$1" | tr -d '[:alpha:]')
   min=$(grep -o '[0-9.]\+m'  <<<"$1" | tr -d '[:alpha:]')
   sec=$(grep -o '[0-9.]\+s'  <<<"$1" | tr -d '[:alpha:]')
+
+  [ -z "$hour$min$sec" ] && kill -10 $PROC
   echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc | xargs printf '%.0f\n'
 }
 
