@@ -79,6 +79,7 @@ _print_spend_time() {
     sec=${SPEND[$ctx]}; sec=${sec:-0}
 
     # Print context and time I spend
+    [ "$context" = "$ctx" ] && echo -ne '\e[33;1m'
     echo -ne "$ctx\t\t"
     date -u -d @"$sec" +%H:%M | tr -d '\n'
     echo -n "/"
