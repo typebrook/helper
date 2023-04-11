@@ -37,12 +37,25 @@ _get_seconds() {
   echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc | xargs printf '%.0f\n'
 }
 
+# Get formated string from given seconds
+_format_seconds() {
+  hour=$(( $1 / 3600 ))
+  min=$(( ($1 % 3600) / 60 ))
+  sec=$(( $1 % 60 ))
+
+  echo ${hour}h${min}m${sec}s
+}
+
 _save_spend_time_to_dic() {
   while read -r ctx sec; do
-    [ -z "$ctx" ] && continue
 
+    [ -z "$ctx" ] && continue
     SPEND[$ctx]=$sec
   done <$LOG_FILE
+}
+
+_desktop_notify() {
+  which notify-send &>/dev/null && notify-send "$context +$1"
 }
 
 # Update spend time on current context
@@ -64,12 +77,14 @@ _update_spend_time() {
       [ "$SET" = true ] && break
 
       sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
+      _desktop_notify "$(_format_seconds ${total})"
       exit 0
     fi
   # Update Log file
   done <"$LOG_FILE"
 
   echo -e "$context\t${given_seconds}" >>$LOG_FILE
+  _desktop_notify "$(_format_seconds "${given_seconds}")"
 }
 
 # Print spend for each context
