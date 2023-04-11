@@ -4,11 +4,13 @@
 #   context 1h2m30s     (Update current context with given time)
 #   context -s 1h20m    (Set current context with given time)
 #   context             (Check total time of each context)
+#
+# TODO support minus time
 
 LOG_FILE=~/log/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
-trap 'exit 1' 10
+trap 'exit 1' SIGUSR1
 
 context="$(cat ~/.task/context)"
 [[ "$*" =~ '-s' ]] && SET=true && shift
@@ -36,7 +38,7 @@ _get_seconds() {
 }
 
 _save_spend_time_to_dic() {
-  while read ctx sec; do
+  while read -r ctx sec; do
     [ -z "$ctx" ] && continue
 
     SPEND[$ctx]=$sec
@@ -52,6 +54,9 @@ _update_spend_time() {
 
   given_seconds="$(_get_seconds "$time")"
 
+  date >>/tmp/context
+  echo "$given_seconds" >>/tmp/context
+
   # Get total time of given time and current context time
   while read -r ctx sec; do
     if [ "$ctx" = "$context" ]; then
@@ -62,7 +67,7 @@ _update_spend_time() {
       exit 0
     fi
   # Update Log file
-  done <$LOG_FILE
+  done <"$LOG_FILE"
 
   echo -e "$context\t${given_seconds}" >>$LOG_FILE
 }
@@ -75,7 +80,7 @@ _print_spend_time() {
 
     ctx=$(awk '{print $1}' <<<"$line")
     time=$(awk '{print $2}' <<<"$line")
-    seconds_of_plan=$(_get_seconds $time)
+    seconds_of_plan=$(_get_seconds "$time")
     sec=${SPEND[$ctx]}; sec=${sec:-0}
 
     # Print context and time I spend
@@ -85,26 +90,26 @@ _print_spend_time() {
     echo -n "/"
     date -u -d @"$seconds_of_plan" +%H:%M | tr -d '\n'
 
-    number_of_spend=$(( $sec / $UNIT ))
+    number_of_spend=$(( sec / UNIT ))
     # Print block of time spend (green)
     echo -ne "\t\t\e[32m"
     [ ! "$number_of_spend" = 0 ] && printf "%0.s$BLOCK_CHAR" $(seq $number_of_spend)
     echo -en "\e[0m"
 
     if [ -n "$seconds_of_plan" ]; then
-      number_of_plan=$(( ${seconds_of_plan} / $UNIT ))
-      [ "$(( $seconds_of_plan % $UNIT ))" = 0 ] || (( number_of_plan++ ))
-      number_of_remaining=$(( $number_of_plan - $number_of_spend ))
+      number_of_plan=$(( seconds_of_plan / UNIT ))
+      [ "$(( seconds_of_plan % UNIT ))" = 0 ] || (( number_of_plan++ ))
+      number_of_remaining=$(( number_of_plan - number_of_spend ))
 
       # Print block of remaining time (normal)
       if (( "$number_of_remaining" > 0 )); then
         printf "%0.s$BLOCK_CHAR" $(seq $number_of_remaining)
       # Print block of exceed time (red)
       elif (( "$number_of_remaining" < 0 )); then
-        number_of_exceed=${number_of_remaining#-}
-        printf "%0.s\b" $(seq $number_of_exceed)
         echo -ne "\e[31m"
-        printf "%0.s$BLOCK_CHAR" $(seq $number_of_exceed)
+        number_of_exceed=${number_of_remaining#-}
+        printf "%0.s\b" $(seq "$number_of_exceed")
+        printf "%0.s$BLOCK_CHAR" $(seq "$number_of_exceed")
         echo -en "\e[0m"
       fi
     fi
