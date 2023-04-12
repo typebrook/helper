@@ -7,10 +7,11 @@
 #
 # TODO support minus time
 
-LOG_FILE=~/log/.context && touch $LOG_FILE
+LOG_FILE=~/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
 trap 'exit 1' SIGUSR1
+trap 'rsync_retry $0' EXIT
 
 context="$(cat ~/.task/context)"
 [[ "$*" =~ '-s' ]] && SET=true && shift
