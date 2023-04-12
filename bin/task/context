@@ -6,12 +6,13 @@
 #   context             (Check total time of each context)
 #
 # TODO support minus time
+#
+trap 'exit 1' SIGUSR1
+trap 'which rsync_retry.sh &>/dev/null && setsid rsync_retry.sh $LOG_FILE &>/dev/null &' EXIT
 
 LOG_FILE=~/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
-trap 'exit 1' SIGUSR1
-trap 'rsync_retry $0' EXIT
 
 context="$(cat ~/.task/context)"
 [[ "$*" =~ '-s' ]] && SET=true && shift
@@ -75,11 +76,14 @@ _update_spend_time() {
   while read -r ctx sec; do
     if [ "$ctx" = "$context" ]; then
       total=$(( "$sec" + "$given_seconds" ))
-      [ "$SET" = true ] && break
-
-      sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
-      _desktop_notify "$(_format_seconds ${total})"
-      exit 0
+      if [ "$SET" = true ]; then
+        sed -i -E "/^${context}.*/d" $LOG_FILE
+        break
+      else
+        sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
+        _desktop_notify "$(_format_seconds ${total})"
+        exit 0
+      fi
     fi
   # Update Log file
   done <"$LOG_FILE"
