@@ -57,7 +57,7 @@ _save_spend_time_to_dic() {
 }
 
 _desktop_notify() {
-  which notify-send &>/dev/null && notify-send "$context +$1"
+  which notify-send &>/dev/null && notify-send "$context +$time"
 }
 
 # Update spend time on current context
