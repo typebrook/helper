@@ -36,8 +36,8 @@ _comp_options+=(globdots) # With hidden files
 zstyle ':completion:*' menu select
 zstyle ':completion::complete:*' gain-privileges 1
 
-
-_get_context() {
+# Set variable CONTEXT
+function _get_context() {
   CONTEXT_FILE=${CONTEXT_FILE:-~/.task/context}
 
   LAST_MODIFY_TIME=$(stat -c %y "$CONTEXT_FILE")
@@ -46,6 +46,7 @@ _get_context() {
     MODIFY_TIME="$LAST_MODIFY_TIME"
   fi
 }
+
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd
 function precmd() {
