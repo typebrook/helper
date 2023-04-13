@@ -57,7 +57,7 @@ _save_spend_time_to_dic() {
 }
 
 _desktop_notify() {
-  which notify-send &>/dev/null && notify-send "$context +$time"
+  which notify-send &>/dev/null && notify-send "$context +$1"
 }
 
 # Update spend time on current context
@@ -68,9 +68,7 @@ _update_spend_time() {
   fi
 
   given_seconds="$(_get_seconds "$time")"
-
-  date >>/tmp/context
-  echo "$given_seconds" >>/tmp/context
+  _desktop_notify "$(_format_seconds "${given_seconds}")"
 
   # Get total time of given time and current context time
   while read -r ctx sec; do
@@ -81,7 +79,6 @@ _update_spend_time() {
         break
       else
         sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
-        _desktop_notify "$(_format_seconds ${total})"
         exit 0
       fi
     fi
@@ -89,7 +86,6 @@ _update_spend_time() {
   done <"$LOG_FILE"
 
   echo -e "$context\t${given_seconds}" >>$LOG_FILE
-  _desktop_notify "$(_format_seconds "${given_seconds}")"
 }
 
 # Print spend for each context
