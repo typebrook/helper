@@ -12,7 +12,7 @@ NUMBER=$(
 if [[ -n "$NUMBER" && $NUMBER -gt 0 ]]; then
   DISPLAY=:0 \
   DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/`id -u`/bus \
-  notify-send "New Mail: $NUMBER"
+  notify-send "New Mail: $NUMBER" --expire-time=20000
 else
   date
 fi
