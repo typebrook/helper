@@ -2,6 +2,6 @@ javascript: (function() {
   script = document.createElement("script");
   script.src = 'https://unpkg.com/mapclay@0.2.0/js/mapclay.js';
   script.type = 'module';
-  script.setAttribute('data-from', 'code');
+  //script.setAttribute('data-from', 'code');
   document.body.append(script);
 })();
