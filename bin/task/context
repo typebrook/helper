@@ -40,6 +40,7 @@ _get_seconds() {
   sec=$(grep -o '[0-9.]\+s'  <<<"$1" | tr -d '[:alpha:]')
 
   [ -z "$hour$min$sec" ] && kill -10 $PROC
+  [[ "$time" =~ ^- ]] && echo -n -
   echo "${hour:-0}*3600 + ${min:-0}*60 + ${sec:-0}" | bc | xargs printf '%.0f\n'
 }
 
