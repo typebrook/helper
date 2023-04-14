@@ -16,6 +16,10 @@ PROC=$$
 
 context="$(cat ~/.task/context)"
 [[ "$*" =~ '-s' ]] && SET=true && shift
+[[ "$1" =~ ^[a-zA-Z] ]] && { 
+  echo "$1" > ~/.task/context
+  exit 0
+}
 time="$1"
 
 # The unit of time display. For example:
