@@ -5,7 +5,8 @@ alias tkcc='task context'
 tkcn() { echo none >~/.task/context; }
 tkcp() { echo plan >~/.task/context; }
 [ "$shell" = zsh ] && compdef tk=task
-alias tka='tk annotate'
+alias tka='tk active'
+alias tkan='tk anno'
 alias tkd='tk done'
 alias tkD='tk delete'
 alias tkm='tk modify'
