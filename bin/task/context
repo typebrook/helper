@@ -14,12 +14,15 @@ LOG_FILE=~/.context && touch $LOG_FILE
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
 
-context="$(cat ~/.task/context)"
-[[ "$*" =~ '-s' ]] && SET=true && shift
-[[ "$1" =~ ^[a-zA-Z] ]] && { 
+if [[ "$1" =~ ^e ]]; then
+  $EDITOR $LOG_FILE
+  exit 0
+elif [[ "$1" =~ ^[a-zA-Z] ]]; then
   echo "$1" > ~/.task/context
   exit 0
-}
+fi
+
+context="$(cat ~/.task/context)"
 time="$1"
 
 # The unit of time display. For example:
@@ -54,11 +57,9 @@ _format_seconds() {
 }
 
 _save_spend_time_to_dic() {
-  while read -r ctx sec; do
-
-    [ -z "$ctx" ] && continue
-    SPEND[$ctx]=$sec
-  done <$LOG_FILE
+  while read -r date time ctx sec; do
+    SPEND[$ctx]=$(( SPEND[$ctx] + $sec ))
+  done < <(sed -n "/^$(date +%Y%m%d)/p" $LOG_FILE) 
 }
 
 _desktop_notify() {
@@ -75,22 +76,7 @@ _update_spend_time() {
   given_seconds="$(_get_seconds "$time")"
   _desktop_notify "$(_format_seconds "${given_seconds}")"
 
-  # Get total time of given time and current context time
-  while read -r ctx sec; do
-    if [ "$ctx" = "$context" ]; then
-      total=$(( "$sec" + "$given_seconds" ))
-      if [ "$SET" = true ]; then
-        sed -i -E "/^${context}.*/d" $LOG_FILE
-        break
-      else
-        sed -i -E "s/^${context}.*/${context}\t${total}/" $LOG_FILE
-        exit 0
-      fi
-    fi
-  # Update Log file
-  done <"$LOG_FILE"
-
-  echo -e "$context\t${given_seconds}" >>$LOG_FILE
+  echo -e "$(date +'%Y%m%d %H:%m:%S')\t$context\t${given_seconds}" >>$LOG_FILE
 }
 
 # Print spend for each context
