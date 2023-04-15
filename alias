@@ -73,18 +73,27 @@ ssh.down() {
 }
 
 # imap
-curl.save_as_mail() {
-  curl imaps://mail.topo.tw/INBOX \
+curl.mail.save() {
+  curl "imaps://mail.topo.tw/$1" \
       --user pham:`pass mail/pham@mail.topo.tw` \
-      -T $1
+      -T $2
 }
-curl.save_as_mail_attachment() {
+curl.mail.save_attachment() {
 #TEMPFILE=$(mktemp)
   trap 'rm $TEMPFILE' EXIT
   mail -a $1 -Sexpandaddr /dev/stdout | \
   curl imaps://mail.topo.tw/INBOX \
       --user pham:`pass mail/pham@mail.topo.tw` \
       -T /dev/stdin
+}
+curl.mail.search.subject() {
+  curl "imaps://mail.topo.tw/$1" \
+    --user pham:`pass mail/pham@mail.topo.tw` \
+    --request "SEARCH SUBJECT $2"
+}
+curl.mail.fetch() {
+  curl "imaps://mail.topo.tw/$1;MAILINDEX=$2" \
+    --user pham:`pass mail/pham@mail.topo.tw` \
 }
 
 # Gist
