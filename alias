@@ -93,7 +93,9 @@ curl.mail.search.subject() {
 }
 curl.mail.fetch() {
   curl "imaps://mail.topo.tw/$1;MAILINDEX=$2" \
-    --user pham:`pass mail/pham@mail.topo.tw` \
+    --user pham:`pass mail/pham@mail.topo.tw` | \
+    dos2unix | \
+    sed -E '0,/^ *$/d'
 }
 
 # Gist
