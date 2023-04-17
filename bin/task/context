@@ -76,7 +76,7 @@ _update_spend_time() {
   given_seconds="$(_get_seconds "$time")"
   _desktop_notify "$(_format_seconds "${given_seconds}")"
 
-  echo -e "$(date +'%Y%m%d %H:%m:%S')\t$context\t${given_seconds}" >>$LOG_FILE
+  echo -e "$(date +'%Y%m%d %H:%M:%S')\t$context\t${given_seconds}" >>$LOG_FILE
 }
 
 # Print spend for each context

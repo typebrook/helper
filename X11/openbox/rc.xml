@@ -552,7 +552,12 @@
     </keybind>
     <keybind key="W-f">
       <action name="Execute">
-        <command>thunar ~/Downloads</command>
+        <command>
+          sh -c '
+            xdotool search --onlyvisible --classname thunar windowactivate || \
+            thunar ~/Downloads
+          '
+        </command>
       </action>
     </keybind>
     <keybind key="W-w">
