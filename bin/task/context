@@ -18,12 +18,18 @@ if [[ "$1" =~ ^e ]]; then
   $EDITOR $LOG_FILE
   exit 0
 elif [[ "$1" =~ ^[a-zA-Z] ]]; then
-  echo "$1" > ~/.task/context
-  exit 0
+  if [ -z "$2" ]; then
+    echo "$1" > ~/.task/context
+    exit 0
+  else
+    context="$1"
+    time="$2"
+  fi
+else
+  context="$(cat ~/.task/context)"
+  time="$1"
 fi
 
-context="$(cat ~/.task/context)"
-time="$1"
 
 # The unit of time display. For example:
 # If it is 900(seconds), then the minimal symbol of 
