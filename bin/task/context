@@ -10,7 +10,7 @@
 trap 'exit 1' SIGUSR1
 trap 'which rsync_retry.sh &>/dev/null && setsid rsync_retry.sh $LOG_FILE &>/dev/null &' EXIT
 
-LOG_FILE=~/.context && touch $LOG_FILE
+LOG_FILE=~/.context
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
 

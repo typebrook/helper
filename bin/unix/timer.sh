@@ -81,7 +81,7 @@ timer() {
   done
 }
 
-trap 'exec 1>&3; [ -n "COMMAND_EXIT" ] && eval "$COMMAND_EXIT" && unset COMMAND_EXIT' EXIT QUIT HUP
+trap 'exec 1>&3; [ -n "COMMAND_EXIT" ] && eval "$COMMAND_EXIT" && unset COMMAND_EXIT' EXIT HUP
 
 while [ $count -lt $SET ]; do
   [ $stop = true ] && sleep 0.3 && continue
