@@ -73,12 +73,12 @@ ssh.down() {
 }
 
 # imap
-curl.mail.save() {
+imap.save() {
   curl "imaps://mail.topo.tw/$1" \
       --user pham:`pass mail/pham@mail.topo.tw` \
       -T $2
 }
-curl.mail.save_attachment() {
+imap.save_attachment() {
 #TEMPFILE=$(mktemp)
   trap 'rm $TEMPFILE' EXIT
   mail -a $1 -Sexpandaddr /dev/stdout | \
@@ -86,12 +86,12 @@ curl.mail.save_attachment() {
       --user pham:`pass mail/pham@mail.topo.tw` \
       -T /dev/stdin
 }
-curl.mail.search.subject() {
+imap.search.subject() {
   curl "imaps://mail.topo.tw/$1" \
     --user pham:`pass mail/pham@mail.topo.tw` \
     --request "SEARCH SUBJECT $2"
 }
-curl.mail.fetch() {
+imap.fetch() {
   curl "imaps://mail.topo.tw/$1;MAILINDEX=$2" \
     --user pham:`pass mail/pham@mail.topo.tw` | \
     dos2unix | \

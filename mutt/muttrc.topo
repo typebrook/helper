@@ -29,7 +29,7 @@ set move = yes
 set record = "+INBOX"
 set trash = "+Trash"
 set postponed = "+Drafts"
-set mask="!(INBOX|mbox|dev|Sent|Trash|Drafts|DeltaChat|civildef|hometeach|osm|arch-general|mutt-users|bash|STOCK|pay|keep|login|update|test|spam)" 
+set mask="!(INBOX|mbox|dev|Sent|Trash|Drafts|DeltaChat|civildef|hometeach|osm|STOCK|pay|keep|login|update|test|spam)" 
 
 # Sidebar
 mailboxes  -label '📭 [i]' +INBOX \
@@ -41,10 +41,10 @@ mailboxes  -label '📭 [i]' +INBOX \
            -label CivilDEF +civildef \
            +hometeach \
            -label OSM +osm \
-           -label Arch +arch-general \
-           -label Mutt +mutt-users \
-           -label Bash +bash \
-           -label Aerc +aerc \
+           -label Arch +mailing_list.arch-general \
+           -label Mutt +mailing_list.mutt-users \
+           -label Bash +mailing_list.bash \
+           -label Aerc +mailing_list.aerc \
            +STOCK \
            -label '📢 [f]' +feedback \
            "+-- Permanent ---" \
