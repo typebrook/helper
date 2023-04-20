@@ -48,9 +48,17 @@ function _get_context() {
 }
 
 autoload -Uz add-zsh-hook
+autoload -Uz parameter
 add-zsh-hook precmd precmd
 function precmd() {
-  PROMPT='%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b '
+  jobstring="$#jobstates";
+  if [ "$jobstring" = 0 ]; then
+    unset jobstring
+  else
+    jobstring="%K{white}%F{black}$jobstring%f%k "
+  fi
+  PROMPT="${jobstring}%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b "
+
   # Show context and git status of tracking repos at right
   RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   _get_context
