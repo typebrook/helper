@@ -56,10 +56,13 @@ _get_seconds() {
 # Get formated string from given seconds
 _format_seconds() {
   hour=$(( $1 / 3600 ))
+  [ "$hour" = 0 ] && unset hour
   min=$(( ($1 % 3600) / 60 ))
+  [ "$min" = 0 ] && unset min
   sec=$(( $1 % 60 ))
+  [ "$sec" = 0 ] && unset sec
 
-  echo ${hour}h${min}m${sec}s
+  echo ${hour:+${hour}h}${min:+${min}m}${sec:+${sec}s}
 }
 
 _save_spend_time_to_dic() {
@@ -70,7 +73,7 @@ _save_spend_time_to_dic() {
 
 _desktop_notify() {
   which notify-send &>/dev/null || return 1
-  if [[ "$1" =~ ^[+-] ]]; then
+  if [[ "$1" =~ ^- ]]; then
     local time="$1"
   else
     local time=+"$1"
@@ -86,7 +89,7 @@ _update_spend_time() {
   fi
 
   given_seconds="$(_get_seconds "$time")"
-  _desktop_notify "$time"
+  _desktop_notify "$(_format_seconds "$given_seconds")"
 
   echo -e "$(date +'%Y%m%d %H:%M:%S')\t$context\t${given_seconds}" >>$LOG_FILE
 }
