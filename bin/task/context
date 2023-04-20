@@ -69,7 +69,13 @@ _save_spend_time_to_dic() {
 }
 
 _desktop_notify() {
-  which notify-send &>/dev/null && notify-send "$context +$1"
+  which notify-send &>/dev/null || return 1
+  if [[ "$1" =~ ^[+-] ]]; then
+    local time="$1"
+  else
+    local time=+"$1"
+  fi
+  notify-send "$context $time"
 }
 
 # Update spend time on current context
@@ -80,7 +86,7 @@ _update_spend_time() {
   fi
 
   given_seconds="$(_get_seconds "$time")"
-  _desktop_notify "$(_format_seconds "${given_seconds}")"
+  _desktop_notify "$time"
 
   echo -e "$(date +'%Y%m%d %H:%M:%S')\t$context\t${given_seconds}" >>$LOG_FILE
 }
