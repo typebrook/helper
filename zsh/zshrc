@@ -55,9 +55,9 @@ function precmd() {
   if [ "$jobstring" = 0 ]; then
     unset jobstring
   else
-    jobstring="%K{white}%F{black}$jobstring%f%k "
+    jobstring="($jobstring)"
   fi
-  PROMPT="${jobstring}%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b "
+  PROMPT="%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b${jobstring} "
 
   # Show context and git status of tracking repos at right
   RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
