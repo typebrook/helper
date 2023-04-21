@@ -34,7 +34,7 @@ fi
 # The unit of time display. For example:
 # If it is 900(seconds), then the minimal symbol of 
 # time display is 15min
-UNIT=900
+UNIT="${UNIT:-900}"
 #BLOCK_CHAR=
 BLOCK_CHAR=▮ #▊◼
 
