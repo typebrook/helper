@@ -1,0 +1,12 @@
+[Unit]
+Description=Run my_user_script
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/pham/helper/bin/wakeup.sh
+User=pham
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
