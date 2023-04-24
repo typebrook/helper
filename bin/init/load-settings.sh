@@ -1,6 +1,8 @@
 trap 'exit.sh' EXIT
 
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
+export BIN_DIR=~/bin
+export PATH=$PATH:$BIN_DIR
 export EDITOR=nvim
 export VISUAL=nvim
 export TIG_EDITOR=nvim
@@ -17,17 +19,6 @@ export shell=${shell##*/}
 source $SETTING_DIR/alias
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
-
-# Add custom scripts into PATH
-BIN_DIR=$HOME/bin
-PATH=$BIN_DIR:$PATH
-mkdir -p $BIN_DIR
-find $BIN_DIR -xtype l -exec rm {} + 2>/dev/null
-find $SETTING_DIR/bin -type f -executable -exec realpath {} + | \
-xargs -I{} ln -sf {} $BIN_DIR
-
-# sync with important git repos
-setsid sync.sh
 
 # local
 PATH=$PATH:$HOME/.local/bin
