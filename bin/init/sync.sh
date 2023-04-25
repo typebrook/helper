@@ -10,14 +10,10 @@ sync() {
   } 2>/dev/null
   GIT_SSH_COMMAND="ssh -o ControlMaster=no" git pull --quiet || echo Has trouble when syncing `pwd`
 }
-sync $SETTING_DIR &
-sync ~/log &
-sync ~/blog &
-sync ~/git/vps &
-sync ~/.task &
-sync ~/.password-store &
-sync ~/.vim/vim-init &
-sync ~/bean &
+
+while read repo; do
+  sync $repo &
+done <~/.repos 
 
 while true; do
   if test $(jobs -r | wc -l) -gt 0; then
