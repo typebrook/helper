@@ -1,7 +1,5 @@
 #! /bin/bash
 
-set -x
-
 # Add custom scripts into PATH
 export SETTING_DIR=~/helper
 export BIN_DIR=$HOME/bin
@@ -14,3 +12,6 @@ xargs -I{} ln -sf {} $BIN_DIR
 
 # sync with important git repos
 setsid ~/bin/check-repos.sh
+
+# Copy context file from vps
+rsync -au vps:~/.context ~/.context

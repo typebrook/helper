@@ -2,7 +2,7 @@ trap 'exit.sh' EXIT
 
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export BIN_DIR=~/bin
-export PATH=$PATH:$BIN_DIR
+export PATH=$BIN_DIR:$PATH
 export EDITOR=nvim
 export VISUAL=nvim
 export TIG_EDITOR=nvim
