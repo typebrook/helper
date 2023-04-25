@@ -141,6 +141,7 @@ _print_spend_time() {
 
 if [ -n "$1" ]; then
   _update_spend_time
+  { date; echo update with arg "$1"; } >>/tmp/context
 else
   _print_spend_time
 fi
