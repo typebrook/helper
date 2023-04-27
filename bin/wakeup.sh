@@ -17,3 +17,5 @@ notify-send 'Repos synced'
 
 # Copy context file from vps
 rsync -au vps:~/.context ~/.context
+
+date >>/tmp/wakeup
