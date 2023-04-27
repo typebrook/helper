@@ -81,7 +81,7 @@ timer() {
   done
 }
 
-trap 'exec 1>&3; [ -n "COMMAND_EXIT" ] && eval "$COMMAND_EXIT" && unset COMMAND_EXIT; date >>/tmp/context' EXIT HUP
+trap 'exec 1>&3; [ -n "COMMAND_EXIT" ] && eval "$COMMAND_EXIT" && unset COMMAND_EXIT; date >>/tmp/timer.sh; echo $(trap -l $1 | cut -f 2 -d" ") >>/tmp/timer.sh' EXIT HUP
 
 while [ $count -lt $SET ]; do
   [ $stop = true ] && sleep 0.3 && continue
