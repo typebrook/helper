@@ -5,15 +5,16 @@ pidof git >/dev/null && exit 0
 
 # my repo
 sync() {
-  {
-    cd $1 && [[ -n `git remote -v` ]] || return
-  } 2>/dev/null
+  cd "$1" || return
+  [ -z "$(git remote -v)" ] && return
+
+  pwd
   GIT_SSH_COMMAND="ssh -o ControlMaster=no" git pull --quiet || echo Has trouble when syncing `pwd`
 }
 
-while read repo; do
-  sync $repo &
-done <~/.repos 
+sed /^#/d ~/.repos | while read -r repo; do
+  eval "sync $repo &"
+done
 
 while true; do
   if test $(jobs -r | wc -l) -gt 0; then
@@ -26,8 +27,3 @@ done &
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
-
-# thunderbird
-#if [[ `cat /etc/hostname` != 'vultr' ]]; then
-#  rsync -a pham@topo.tw:~/.thunderbird/ ~/.thunderbird &
-#fi
