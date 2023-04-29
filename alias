@@ -33,7 +33,7 @@ vll() {
   [ -n "$file" ] && eval vim $file;
 }
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
-alias ve="vim ~/.config/nvim/init.vim"
+alias ve="vim ~/.config/nvim/init.lua"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
