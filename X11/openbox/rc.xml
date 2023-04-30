@@ -654,7 +654,7 @@
           alacritty --hold --title GPT \
             -o "window.dimensions.columns=70" \
             -o "window.dimensions.lines=30" \
-            -e ~/helper/bin/gpt/gpt
+            -e ~/helper/bin/gpt/gpt --model gpt-4
         </command>
       </action>
     </keybind>
