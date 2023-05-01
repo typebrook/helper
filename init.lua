@@ -36,14 +36,10 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now :)
 --]]
 
-vim.cmd('source ' .. '~/helper/vimrc')
+-- [[ General Config ]]
+vim.cmd('source ' .. '~/.vim/vim-init/init/init-basic.vim')
+vim.cmd('source ' .. '~/.vim/vim-init/init/init-keymaps.vim')
 
-
--- Set comma as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ','
-vim.g.maplocalleader = ','
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -130,7 +126,7 @@ require('lazy').setup({
     -- See `:help indent_blankline.txt`
     opts = {
       char = '┊',
-      show_trailing_blankline_indent = false,
+      show_trailing_blankline_indent = true,
     },
   },
 
@@ -223,7 +219,6 @@ vim.o.termguicolors = true
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
