@@ -4,8 +4,8 @@
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
 
-Kickstart.nvim is *not* a distribution.
-
+-- Kickstart.nvim is *not* a distribution.
+--
 Kickstart.nvim is a template for your own configuration.
   The goal is that you can read every line of code, top-to-bottom, and understand
   what your configuration is doing.
@@ -86,7 +86,7 @@ require('lazy').setup({
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
-     },
+    },
   },
 
   { -- Autocompletion
@@ -120,7 +120,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'wombat',
         component_separators = '|',
         section_separators = '',
       },
@@ -138,7 +138,14 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim', opts = {
+    opleader = {
+      ---Line-comment keymap
+      line = '<C-_>',
+      ---Block-comment keymap
+      block = 'gb',
+    },
+  } },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -181,6 +188,7 @@ require('lazy').setup({
   --{ import = 'custom.plugins' },
 }, {})
 
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -207,7 +215,7 @@ vim.o.timeoutlen = 300
 vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
+-- vim.o.termguicolors = true
 
 
 -- [[ Basic Keymaps ]]
@@ -230,6 +238,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
