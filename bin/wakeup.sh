@@ -11,7 +11,7 @@ find $SETTING_DIR/bin -type f -executable -exec realpath {} + | \
 xargs -I{} ln -sf {} $BIN_DIR
 
 # sync with important git repos
-~/bin/sync.sh
+setsid ~/bin/sync.sh &>>/tmp/sync
 
 # Copy context file from vps
 rsync -au vps:~/.context ~/.context

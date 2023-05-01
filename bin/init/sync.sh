@@ -23,7 +23,7 @@ while true; do
     which notify-send &>/dev/null && notify-send 'Repos synced'
     break
   fi
-done &
+done
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
