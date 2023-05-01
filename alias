@@ -14,7 +14,7 @@ alias gpgconfig="$EDITOR ~/.gnupg/gpg-agent.conf"
 alias sshconfig="$EDITOR ~/.ssh/config"
 alias sshauth="$EDITOR ~/.ssh/authorized_keys"
 alias sshknown="$EDITOR ~/.ssh/known_hosts"
-alias cdconfig="cd ~/config"
+cdconfig(){ cd ~/.config/$1; }
 alias tmuxconfig="$EDITOR ~/.tmux.conf"
 cde() { cd /etc/$@; }
 alias cdetc='cde'
@@ -213,7 +213,6 @@ cdg() {
 }
 alias cda='mkdir -p ~/data && cd ~/data'
 alias cdd='cd ~/Downloads'
-alias cdconfig='cd ~/.config'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
