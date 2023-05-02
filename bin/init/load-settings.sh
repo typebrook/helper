@@ -17,6 +17,8 @@ export shell=${shell##*/}
 
 # load custom aliases
 source $SETTING_DIR/alias
+
+# sourcr rc files
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
 
