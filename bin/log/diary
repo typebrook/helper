@@ -18,7 +18,7 @@ specify_date() {
   done
 
   FILE=~/log/diary/`date -d $YEAR-$MONTH-$DAY +%y.w%W.md`
-  $EDITOR -c 'Goyo' $FILE
+  $EDITOR $FILE
 }
 
 print_today() {
