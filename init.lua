@@ -120,9 +120,8 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'wombat',
         component_separators = '|',
-        section_separators = '',
+        section_separators = { left = '', right = '' },
       },
     },
   },
@@ -238,6 +237,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+
+-- [[ Configure lualine ]]
+-- Change the background of lualine_b section for normal mode
+local custom_wombat = require'lualine.themes.wombat'
+custom_wombat.normal.b.bg = '#a8a8a8'
+custom_wombat.normal.b.fg = '#444444'
+require('lualine').setup {
+  options = { theme  = custom_wombat },
+}
 
 
 -- [[ Configure Telescope ]]
