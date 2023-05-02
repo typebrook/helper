@@ -4,13 +4,12 @@
 #   context 1h2m30s     (Update current context with given time)
 #   context -s 1h20m    (Set current context with given time)
 #   context             (Check total time of each context)
-#
-# TODO support minus time
-#
-trap 'exit 1' SIGUSR1
-trap 'which rsync_retry.sh &>/dev/null && setsid rsync_retry.sh $LOG_FILE &>/dev/null &' EXIT
 
-LOG_FILE=~/.context
+trap 'exit 1' SIGUSR1
+trap '' EXIT
+
+# Name of log file is like: ~/log/context/23.w18
+LOG_FILE=~/log/context/`date +%y.w%W`
 PLAN_FILE=~/log/plan.context.md
 PROC=$$
 
