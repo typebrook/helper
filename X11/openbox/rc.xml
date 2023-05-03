@@ -111,7 +111,7 @@
             alacritty --title @OPENBOX_CONFIG \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=90" \
-            -e $EDITOR ~/.config/openbox/rc.xml \
+            -e nvim ~/.config/openbox/rc.xml \
           '
         </command>
       </action>
@@ -502,12 +502,12 @@
     <keybind key="W-S-b">
       <action name="Execute">
         <command>
-            alacritty --title BANNER --hold		    
+            alacritty --title BANNER --hold
             -o "window.padding.x=36"
             -o "window.padding.y=36"
-            -o "window.dimensions.columns=35" 	    
-            -o "window.dimensions.lines=1" 		    
-            -o "font.size=60" 	                    
+            -o "window.dimensions.columns=35"
+            -o "window.dimensions.lines=1"
+            -o "font.size=60"
             -e ~/helper/bin/unix/center_text.sh
         </command>
       </action>
@@ -534,7 +534,7 @@
         <command>
           sh -c '
             zenity --entry --text "Window title" | \
-            xargs -i xdotool set_window --name @{} `xdotool getactivewindow` 
+            xargs -i xdotool set_window --name @{} `xdotool getactivewindow`
           '
         </command>
       </action>
@@ -583,7 +583,7 @@
     </keybind>
     <keybind key="W-S-n">
       <action name="Execute">
-        <command>nmcli device wifi rescan</command>
+        <command>sh -c 'nmcli device wifi rescan; networkmanager_dmenu'</command>
       </action>
     </keybind>
     <keybind key="W-a">
@@ -691,10 +691,10 @@
     <keybind key="W-q">
       <action name="Execute">
         <command>alacritty --title FLASHCARDS
-          -o "window.padding.x=100" 
-          -o "window.padding.y=70" 
-          -o "window.dimensions.columns=64" 
-          -o "window.dimensions.lines=15" 
+          -o "window.padding.x=100"
+          -o "window.padding.y=70"
+          -o "window.dimensions.columns=64"
+          -o "window.dimensions.lines=15"
           -e ~/helper/bin/misc/flash.sh
       </command>
       </action>
