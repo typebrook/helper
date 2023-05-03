@@ -311,6 +311,7 @@ alias b='bean'
 alias cdl='cd ~/log'
 alias chw='tig -C ~/log'
 ww() { entry="${1:-plan.context}"; vim ~/log/${entry%%.md}.md; }
+wj() { echo "$@" >>~/log/buffer.md; }
 wg() { grep -r "$@" --color --exclude-dir={logseq,.git,.obsidian} ~/log; }
 wi() { cat ~/log/${1%%.md}.md; }
 wD() { rm ~/log/${1%%.md}.md; }
@@ -389,6 +390,7 @@ alias sample.poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
 alias sample.mvt='curl -O https://demotiles.maplibre.org/tiles/5/25/14.pbf'
 alias sample.lorem='curl -o lorem http://metaphorpsum.com/paragraphs/4/16'
+alias sample.wmts='curl -O https://gis.sinica.edu.tw/tileserver/wmts'
 sample.image() { curl -Lo random.png https://picsum.photos/seed/`date +%s`/${1:-500}/${2:-500}; }
 alias proto.mvt='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
 alias proto.osm='curl -O https://raw.githubusercontent.com/openstreetmap/OSM-binary/master/src/osmformat.proto'
