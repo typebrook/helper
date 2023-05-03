@@ -581,6 +581,11 @@
         <command>networkmanager_dmenu</command>
       </action>
     </keybind>
+    <keybind key="W-S-n">
+      <action name="Execute">
+        <command>nmcli device wifi rescan</command>
+      </action>
+    </keybind>
     <keybind key="W-a">
       <action name="Execute">
         <command>
