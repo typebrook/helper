@@ -111,7 +111,7 @@
             alacritty --title @OPENBOX_CONFIG \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=90" \
-            -e nvim ~/.config/openbox/rc.xml \
+            -e $EDITOR ~/.config/openbox/rc.xml \
           '
         </command>
       </action>
