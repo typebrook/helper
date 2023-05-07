@@ -1,5 +1,7 @@
 #! /bin/bash
 
+export terminal=${terminal:-alacritty}
+
 cd $(dirname $0)
 
-rofi -show get -modes get:./pass.get,edit:./pass.edit,rm:./pass.rm
+rofi -show get -modes get:./pass.get,edit:./pass.edit,replace:./pass.replace,rm:./pass.rm

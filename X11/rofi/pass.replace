@@ -1,0 +1,43 @@
+#! /bin/bash
+
+ENTRIES="$(find ~/.password-store -name '*gpg' -printf %P\\n | sed 's/.gpg$//')"
+GENERATION_HINT="Generate with default config"
+
+# Generate a new password if ROFI_DATA is given by last execution
+if [ -n "${ROFI_DATA}" ]; then
+  PASSWORD="${ROFI_DATA}"
+  export ROFI_DATA=
+
+  # If custom arguments for password generation is given
+  # Set environment variable
+  if [ ${ROFI_RETV} -eq 2 ]; then
+    extra_arguments="${1}"
+  fi
+
+  # Generate password in a new process
+  # And Use current script to copy the values info X11 selections
+  coproc (
+    pass generate -i ${PASSWORD} ${extra_arguments}
+    $(dirname $0)/pass.get ${PASSWORD}
+  )
+
+  exit 0
+fi
+
+# Give rofi available passwords and exit
+if [ $# -eq 0 ]; then
+    # Specify rofi prompt as 'Replace'
+    echo -e "\0prompt\x1fReplace"
+
+    echo "$ENTRIES"
+    exit 0
+fi
+
+# If password doesn't exist, just quit
+<<<"$ENTRIES" grep -q $1 || exit 0
+
+# Show message for password options
+echo -e "\0prompt\x1f$1"
+echo -e "\0message\x1f\"NUMBER\" for length, \"-n\" to exclude spcecial chars"
+echo -e "\0data\x1f$1"
+echo ${GENERATION_HINT}

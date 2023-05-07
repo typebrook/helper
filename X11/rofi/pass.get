@@ -15,8 +15,9 @@ if [ -n "${ROFI_DATA}" ]; then
 
   # Generate password in a new process
   # And Use current script to copy the values info X11 selections
-  coproc ( 
+  coproc (
     pass generate ${PASSWORD} ${extra_arguments}
+    $terminal -e pass edit ${PASSWORD}
     $0 ${PASSWORD}
   )
 
@@ -48,15 +49,17 @@ if [ -n "$RESULT" ]; then
   coproc ( rofi -e "Copied: $1$EXTRA" )
 
 elif [ -f "$HOME/.password-store/$1.gpg" ]; then
-  coproc ( 
+  # Password exist but command fails
+  # Must be something wrong with GPG decryption
+  coproc (
     rofi -e "GPG passphase is not chached" \
          -theme-str '#window { font: "hacker 40"; }'
   )
-else 
+else
   # Password doesn't exist yet
   # Go to next rofi execution
   echo -e "\0prompt\x1f$1"
-  echo -e "\0message\x1fThis password doesn't exist, generate with custom arguments?"
+  echo -e "\0message\x1f\"NUMBER\" for length, \"-n\" to exclude spcecial chars"
   echo -e "\0data\x1f$1"
   echo ${GENERATION_HINT}
 fi
