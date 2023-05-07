@@ -224,8 +224,7 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- Use suda.vim to run sudo, or terminal prompt fails
 -- See more details at https://github.com/neovim/neovim/issues/1716
-vim.keymap.set('n', ':W', "SudaWrite %<CR>")
-
+vim.cmd("command! W execute 'SudaWrite %'")
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -400,16 +399,18 @@ local on_attach = function(_, bufnr)
 end
 
 -- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+-- Read Doc page for more configuration:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+--   Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
+--   Add any additional override configuration in the following tables. They will be passed to
+--   the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
+  pyright = {},
+  rust_analyzer = {},
+  tsserver = {},
 
   lua_ls = {
     Lua = {
