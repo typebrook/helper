@@ -46,3 +46,7 @@ cursor:
 
 ## Live config reload
 live_config_reload: true
+
+key_bindings:
+  - { key: W, mods: None, action: SemanticRight, mode: Vi }
+  - { key: B, mods: None, action: SemanticLeft, mode: Vi }
