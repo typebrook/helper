@@ -408,6 +408,8 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
+  bashls = {},
+  html = {},
   pyright = {},
   rust_analyzer = {},
   tsserver = {},
