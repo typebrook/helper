@@ -1,5 +1,5 @@
 # Edit rc file and source it. This is the most important thing
-macro index \Cv ":set wait_key=no<Return>!vim ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
+macro index \Cv ":set wait_key=no<Return>!$EDITOR ~/.config/mutt/muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
 
 # Connection options
 set ssl_force_tls = yes
