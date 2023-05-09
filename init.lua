@@ -409,6 +409,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   bashls = {},
+  marksman = {},
   html = {},
   pyright = {},
   rust_analyzer = {},

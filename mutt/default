@@ -17,7 +17,7 @@ set reverse_realname = yes
 alternates = @topo.tw
 
 # Interface
-set editor = "vim"
+set editor = "nvim"
 set charset = "utf-8"
 set send_charset = "us-ascii:utf-8"
 set header = no
@@ -83,7 +83,6 @@ bind pager \ch display-toggle-weed
 macro index <Space> "Wn"
 macro browser \cp "q\cp"
 macro browser \cn "q\cn"
-macro browser g "qg"
 macro index,browser,pager i ':toggle sidebar_new_mail_only<enter>'
 bind pager h skip-headers
 bind attach x view-mailcap
