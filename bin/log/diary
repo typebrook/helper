@@ -27,7 +27,7 @@ print_today() {
 }
 
 edit_today() {
-  $EDITOR -c Goyo $today
+  $EDITOR $today
 }
 
 add_entry() {
