@@ -625,7 +625,7 @@
         <command>~/.config/openbox/rofi/bin/screenshot</command>
       </action>
     </keybind>
-    <keybind key="W-i">
+    <keybind key="W-S-n">
       <action name="Execute">
         <command>
           sh -c '
