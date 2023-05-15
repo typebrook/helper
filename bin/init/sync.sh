@@ -9,7 +9,8 @@ sync() {
   [ -z "$(git remote -v)" ] && return
 
   pwd
-  GIT_SSH_COMMAND="ssh -o ControlMaster=no" git pull --quiet || echo Has trouble when syncing `pwd`
+  GIT_SSH_COMMAND="ssh -o ControlMaster=no" git pull --quiet || \
+    echo "Has trouble when syncing $(pwd)"
 }
 
 sed /^#/d ~/.repos | while read -r repo; do
@@ -17,7 +18,7 @@ sed /^#/d ~/.repos | while read -r repo; do
 done
 
 while true; do
-  if test $(jobs -r | wc -l) -gt 0; then
+  if test "$(jobs -r | wc -l)" -gt 0; then
     sleep 1;
   else
     which notify-send &>/dev/null && notify-send 'Repos synced'
