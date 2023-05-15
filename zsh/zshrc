@@ -47,10 +47,18 @@ function _get_context() {
   fi
 }
 
+function _sync_after_wakeup() {
+  latest=$(date -d @`stat -c %Y ~/.wakeup` --iso-8601=minutes)
+  test ! "$latest" = "$(cat ~/.wakeup)"
+}
+
 autoload -Uz add-zsh-hook
 autoload -Uz parameter
 add-zsh-hook precmd precmd
 function precmd() {
+
+  # LEFT PROMPT
+  # jobstring shows how many jobs in current shell
   jobstring="$#jobstates";
   if [ "$jobstring" = 0 ]; then
     unset jobstring
@@ -59,10 +67,14 @@ function precmd() {
   fi
   PROMPT="%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b${jobstring} "
 
+  # RIGHT PROMPT
   # Show context and git status of tracking repos at right
-  RIGHT=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
+  UNSYNC_REPOS=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   _get_context
-  RPROMPT="%B%K{blue}%F{yellow}${CONTEXT:+ $CONTEXT }%f%k%K{red}%F{black}${RIGHT}%f%k%b"
+  NEED_SYNC=$(_sync_after_wakeup || echo S)
+  RPROMPT="%B%K{blue}%F{yellow}${CONTEXT:+ $CONTEXT }%f%k%K{red}%F{black}${UNSYNC_REPOS}${NEED_SYNC}%f%k%b"
+
+
   [ -n "$PRE_POPULATE" ] && print -z "$PRE_POPULATE"
 }
 

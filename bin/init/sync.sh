@@ -25,5 +25,7 @@ while true; do
   fi
 done
 
+touch ~/.wakeup
+
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
