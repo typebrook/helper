@@ -114,13 +114,13 @@ alias m='mutt'
 alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
 alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
-ps1.swap() { 
+ps1.swap() {
 	if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
 		PS1="${1:->}"
 		PS1="${PS1%% } "
-	else PS1="$PS1_bak" 
+	else PS1="$PS1_bak"
 		unset PS1_bak
-	fi 
+	fi
 }
 fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
 port() { sudo lsof -i :$1; }
@@ -176,6 +176,11 @@ file.size() {
 highlight() { grep --color -E "$1|\$"; }
 alias iso8601='date --iso-8601=minutes'
 alias lock='sudo chattr +i'
+# Reset clock
+date.reset() {
+  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+}
+alias clock.reset='hwclock --systohc'
 
 
 # pacman
@@ -189,7 +194,7 @@ alias pss='pacman -Ss'
 alias yss='yay -Ss'
 alias pqi='pacman -Qi'
 alias pql='pacman -Qlq'
-pqlb() { 
+pqlb() {
     pacman -Qlq $1 | grep bin
 }
 alias yql='yay -Ql'
@@ -207,9 +212,9 @@ pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 # cd to DIRs
 alias ..='cd ..'
 alias ld='cd -' # last directory
-cdg() { 
+cdg() {
   target=$(sed 's# #/#g' <<<"$@")
-  cd ~/git/$target || cd ~/git 
+  cd ~/git/$target || cd ~/git
 }
 alias cda='mkdir -p ~/data && cd ~/data'
 alias cdd='cd ~/Downloads'
@@ -221,7 +226,7 @@ alias cdM='cd ~/Music'
 
 # blog
 alias cdb='cd ~/blog'
-vp() { 
+vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
 
   filename="${1%.md}.md"
@@ -359,8 +364,8 @@ alias adb.screenshot='DIR=/sdcard/Pictures/Screenshots/; adb pull $DIR/`adb shel
 alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
 alias adb.camera='DIR=/sdcard/DCIM/Camera; adb pull $DIR/`adb shell ls -t $DIR | head -1` .'
 alias adb.input='adb shell input text'
-adb.push() { 
-  adb push $1 /sdcard/Download 
+adb.push() {
+  adb push $1 /sdcard/Download
 }
 
 # curl
@@ -430,18 +435,12 @@ alias xii='`fc -ln -1` | head -1 | xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 
-# Reset clock
-date-reset() {
-  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
-}
-alias clock-reset='hwclock --systohc'
-
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 unalias gr &>/dev/null
-gr() { 
-  grep -IR $1 .  
+gr() {
+  grep -IR $1 .
 }
 alias wcl='wc -l'
 alias findn='find . -iname'
@@ -468,11 +467,11 @@ mvt.decode() {
   fi
   mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g' | jq .
 }
-big52utf8() { 
-  iconv -f BIG-5 -t UTF-8 
+big52utf8() {
+  iconv -f BIG-5 -t UTF-8
 }
-utf82big5() { 
-  iconv -t BIG-5 -f UTF-8 
+utf82big5() {
+  iconv -t BIG-5 -f UTF-8
 }
 urlencode() {
   perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg'
