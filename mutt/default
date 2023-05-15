@@ -25,7 +25,7 @@ set pager_stop
 set sleep_time = 0 # When changing folder
 set timeout = 10
 set quit = ask-no
-set delete = yes 
+set delete = yes
 set sort = reverse-threads
 set my_keep_lines1 = 0
 set my_keep_lines2 = 12
