@@ -185,7 +185,7 @@ bind generic pT ?git push %(remote) %(tag)
 
 # search in history
 bind main S none
-bind main Sl >sh -c 'git log -G --pretty=raw  "%(prompt Lines contains: )" | tig --pretty=raw'
+bind main Sl >sh -c 'git log --pretty=raw -G "%(prompt Lines contains: )" | tig --pretty=raw'
 bind main Sf >sh -c 'git log --pretty=raw -- "*%(prompt Filename: )*" --pretty=raw | tig --pretty=raw'
 
 # submodule
