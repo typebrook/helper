@@ -29,7 +29,7 @@ set move = yes
 set record = "+INBOX"
 set trash = "+Trash"
 set postponed = "+Drafts"
-set mask="!(INBOX|mbox|dev|Sent|Trash|Drafts|DeltaChat|civildef|hometeach|osm|STOCK|pay|keep|login|update|test|spam)" 
+set mask="!(INBOX|mbox|dev|Sent|Trash|Drafts|DeltaChat|civildef|hometeach|osm|STOCK|pay|keep|login|update|test|spam)"
 
 # Sidebar
 mailboxes  -label '📭 [i]' +INBOX \
