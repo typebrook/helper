@@ -1,13 +1,13 @@
 # Image Utilities
 
-# Concatenate image vertically 
-image.vertical() { 
-  suffix=${1##*.}
-  convert "$@" -append $(basename -s .$suffix $1)-$(basename -s .$suffix ${@: -1}).${format:-$suffix}
+# Concatenate image vertically
+image.vertical() {
+  ext=${1##*.}
+  convert "$@" -append $(basename -s .$ext $1)-$(basename -s .$ext ${@: -1}).${format:-$ext}
 }
 
 # Concatenate image horizontally
-image.horizontal() { 
+image.horizontal() {
   ext=${1##*.}
   convert "$@" +append output.$ext
 }
@@ -17,6 +17,12 @@ image.from_data_url() {
   [ -z "$1" ] && echo File name needed && return 1
   xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
   identify $1
+}
+
+# Resize image
+image.resize() {
+  ext=${1##*.}
+  convert -resize $2 $1 output.$ext
 }
 
 # Upload image to vps
