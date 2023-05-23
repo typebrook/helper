@@ -223,6 +223,7 @@ alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
+alias cdmn='cd ~/git/maplibre-native/'
 
 # blog
 alias cdb='cd ~/blog'
