@@ -23,7 +23,7 @@ window:
 
   padding:
     x: 24
-    y: 12 
+    y: 12
 
   decorations: full
   startup_mode: Windowed
@@ -64,7 +64,7 @@ hints:
       binding:
         key: U
         mods: Control|Shift
-    - regex: "([-0-9\u0040-\u005A\u0061-\u007A]{4,})"
+    - regex: "([-_./0-9\u0040-\u005A\u0061-\u007A]{4,})"
       action: Copy
       post_processing: true
       binding:
