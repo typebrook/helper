@@ -564,7 +564,7 @@
       <action name="Execute">
         <command>
           sh -c '
-            xdotool search --onlyvisible --classname Navigator windowactivate || \
+            xdotool search --classname Navigator windowactivate || \
             firefox
           '
         </command>
