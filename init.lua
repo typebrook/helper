@@ -414,6 +414,9 @@ local servers = {
   pyright = {},
   rust_analyzer = {},
   tsserver = {},
+  beancount = {
+    filetypes = { "beancount", "bean" },
+  },
 
   lua_ls = {
     Lua = {
