@@ -73,7 +73,7 @@ color2 = "red"
 
 ### Layout ###
 startup_screen = visualizer
-startup_slave_screen = playlist  
+startup_slave_screen = playlist
 startup_slave_screen_focus = yes
 locked_screen_width_part = 25
 
