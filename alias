@@ -311,7 +311,7 @@ alias chh="tig -C $SETTING_DIR status"
 
 # about beancount
 alias cdB='cd $HOME/bean'
-alias b='vim $HOME/bean/main.beancount'
+alias b='vim $HOME/bean/main.bean'
 
 # about vimwiki
 alias cdl='cd ~/log'
