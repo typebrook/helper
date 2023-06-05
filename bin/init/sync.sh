@@ -3,7 +3,11 @@
 # If git is working in other process, then don't sync again
 pidof git >/dev/null && exit 0
 
-# my repo
+# Print information about ~/.wakeup
+echo 'latest:    ' $(date -d @`stat -c %Y ~/.wakeup` --iso-8601=minutes)
+echo 'wakeup at: ' $(cat ~/.wakeup | xargs -i date -d @{} --iso-8601=minutes)
+
+# Sync a repo
 sync() {
   cd "$1" || return
   [ -z "$(git remote -v)" ] && return
@@ -13,6 +17,7 @@ sync() {
     echo "Has trouble when syncing $(pwd)"
 }
 
+# Read file ~/.repos, and sync
 sed /^#/d ~/.repos | while read -r repo; do
   eval "sync $repo &"
 done
@@ -27,6 +32,7 @@ while true; do
 done
 
 touch ~/.wakeup
+
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
