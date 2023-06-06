@@ -71,6 +71,9 @@ require('lazy').setup({
   -- Use sudo in command mode
   'lambdalisue/suda.vim',
 
+  -- For beancount
+  'nathangrigg/vim-beancount',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   { -- LSP Configuration & Plugins
