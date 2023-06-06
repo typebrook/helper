@@ -225,6 +225,7 @@ alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 alias cdmn='cd ~/git/maplibre-native/'
 alias cdmj='cd ~/git/maplibre-gl-js/'
+alias cdmx='cd ~/git/mapbox-gl-js/'
 
 # blog
 alias cdb='cd ~/blog'
