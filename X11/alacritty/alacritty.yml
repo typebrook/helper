@@ -62,7 +62,7 @@ hints:
         enabled: true
         mods: None
       binding:
-        key: U
+        key: K
         mods: Control|Shift
     - regex: "([-_./0-9\u0040-\u005A\u0061-\u007A]{4,})"
       action: Copy
