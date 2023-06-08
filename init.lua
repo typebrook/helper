@@ -261,6 +261,10 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+    layout_config = {
+      vertical = { height = 0.8 }
+      -- other layout configuration here
+    },
   },
   pickers = {
     buffers = {
