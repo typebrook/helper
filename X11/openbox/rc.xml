@@ -638,6 +638,11 @@
         </command>
       </action>
     </keybind>
+    <keybind key="W-i">
+      <action name="Execute">
+        <command>nm-connection-editor</command>
+      </action>
+    </keybind>
     <keybind key="W-b">
       <action name="Execute">
         <command>blueman-manager</command>
@@ -1098,6 +1103,12 @@
       </position>
       <layer>above</layer>
       <skip_taskbar>yes</skip_taskbar>
+    </application>
+    <application title="Network Connections">
+      <size>
+        <width>50%</width>
+        <height>50%</height>
+      </size>
     </application>
     <!--
   # this is an example with comments through out. use these to make your
