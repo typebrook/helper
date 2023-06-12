@@ -47,9 +47,13 @@ function _get_context() {
   fi
 }
 
-function _need_sync_after_wakeup() {
+function _already_sync_after_wakeup() {
   latest=$(date -d @`stat -c %Y ~/.wakeup` +%s)
-  test "$latest" -ge "$(cat ~/.wakeup)"
+  if [ $latest -ge $(cat ~/.wakeup) ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 autoload -Uz add-zsh-hook
@@ -71,7 +75,7 @@ function precmd() {
   # Show context and git status of tracking repos at right
   UNSYNC_REPOS=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
   _get_context
-  NEED_SYNC=$(_need_sync_after_wakeup || echo S)
+  NEED_SYNC=$(_already_sync_after_wakeup || echo S)
   RPROMPT="%B%K{blue}%F{yellow}${CONTEXT:+ $CONTEXT }%f%k%K{red}%F{black}${UNSYNC_REPOS}${NEED_SYNC}%f%k%b"
 
 
