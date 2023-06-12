@@ -314,19 +314,6 @@ alias chh="tig -C $SETTING_DIR status"
 alias cdB='cd $HOME/bean'
 alias b='vim $HOME/bean/main.bean'
 
-# about vimwiki
-alias cdl='cd ~/log'
-alias chw='tig -C ~/log'
-ww() { entry="${1:-plan.context}"; vim ~/log/${entry%%.md}.md; }
-wj() { echo "$@" >>~/log/buffer.md; }
-wg() { grep -r "$@" --color --exclude-dir={logseq,.git,.obsidian} ~/log; }
-wi() { cat ~/log/${1%%.md}.md; }
-wD() { rm ~/log/${1%%.md}.md; }
-alias dia='diary'
-alias dias='diary specify'
-alias diaa='diary print'
-alias diat='diary today'
-
 # crontab
 alias ce='crontab -e'
 alias cl='crontab -l'
