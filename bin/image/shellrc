@@ -2,12 +2,22 @@
 
 # Concatenate image vertically
 image.vertical() {
+  if [ ! $# = 0 ]; then
+    echo 'Usage: image.vertical input1.jpg input2.jpg'
+    return 0
+  fi
+
   ext=${1##*.}
   convert "$@" -append $(basename -s .$ext $1)-$(basename -s .$ext ${@: -1}).${format:-$ext}
 }
 
 # Concatenate image horizontally
 image.horizontal() {
+  if [ ! $# = 0 ]; then
+    echo 'Usage: image.horizontal input1.jpg input2.jpg'
+    return 0
+  fi
+
   ext=${1##*.}
   convert "$@" +append output.$ext
 }
@@ -21,7 +31,13 @@ image.from_data_url() {
 
 # Resize image
 image.resize() {
+  if [ ! $# = 2 ]; then
+    echo 'Usage: image.resize INPUT.jpg 80%'
+    return 0
+  fi
+
   ext=${1##*.}
+  echo OUTPUT: output.$ext
   convert -resize $2 $1 output.$ext
 }
 
