@@ -41,10 +41,6 @@ mailboxes  -label '📭 [i]' +INBOX \
            -label CivilDEF +civildef \
            +hometeach \
            -label OSM +osm \
-           -label Arch +mailing_list.arch-general \
-           -label Mutt +mailing_list.mutt-users \
-           -label Bash +mailing_list.bash \
-           -label Aerc +mailing_list.aerc \
            +STOCK \
            -label '📢 [f]' +feedback \
            "+-- Permanent ---" \
