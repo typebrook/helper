@@ -11,7 +11,7 @@ mpd_crossfade_time 	= "2"
 
 ### Script ###
 #execute_on_song_change="~/.config/ncmpcpp/scripts/album-art"
-execute_on_song_change = "~/.ncmpcpp/cover_obs.sh"
+#execute_on_song_change = "~/.ncmpcpp/cover_obs.sh"
 
 ### Behaviour ###
 message_delay_time 				 = 1
