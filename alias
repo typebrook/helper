@@ -435,6 +435,9 @@ alias findn='find . -iname'
 alias x='xdg-open'
 alias yl='youtube-dl'
 alias yla='youtube-dl -x --audio-format mp3'
+yt.audio() {
+  yt-dlp --verbose -x --audio-format mp3 --add-metadata $1
+}
 alias editor='select-editor'
 alias hp='http-prompt'
 alias clocg='cloc --vcs=git'
