@@ -446,6 +446,7 @@ alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
 alias we='weechat'
 alias p8='ping -c 3 8.8.8.8'
 alias curl.google='curl -v google.com'
+alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'
 pbf() {
   protoc --decode_raw
 }

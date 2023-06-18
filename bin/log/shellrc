@@ -10,3 +10,12 @@ alias dia='diary'
 alias dias='diary specify'
 alias diaa='diary print'
 alias diat='diary today'
+
+# Filter frontmatter
+wf() {
+  grep -m1 --include='*md' -n -o "$@" -R ~/log | \
+  while IFS=: read file number pattern; do
+    end_of_frontmatter=$(grep -m2 -n -P '\-\-\-' $file | sed -n 2p | cut -d: -f1)
+    [ $number -lt "${end_of_frontmatter:-0}" ] && echo $file
+  done
+}
