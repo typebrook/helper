@@ -49,7 +49,7 @@ function _get_context() {
 
 function _already_sync_after_wakeup() {
   latest=$(date -d @`stat -c %Y ~/.wakeup` +%s)
-  if [ $latest -ge $(cat ~/.wakeup) ]; then
+  if [ $latest -gt $(cat ~/.wakeup) ]; then
     return 0
   else
     return 1

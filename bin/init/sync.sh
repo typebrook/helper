@@ -4,8 +4,8 @@
 pidof git >/dev/null && exit 0
 
 # Print information about ~/.wakeup
-echo 'latest:    ' $(date -d @`stat -c %Y ~/.wakeup` --iso-8601=minutes)
-echo 'wakeup at: ' $(cat ~/.wakeup | xargs -i date -d @{} --iso-8601=minutes)
+echo 'latest:    ' $(date -d @`stat -c %Y ~/.wakeup` --iso-8601=seconds)
+echo 'wakeup at: ' $(cat ~/.wakeup | xargs -i date -d @{} --iso-8601=seconds)
 
 # Sync a repo
 sync() {
