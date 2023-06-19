@@ -63,7 +63,7 @@ if [[ $- =~ i ]]; then
 fi
 
 # Apply nvm
-source "$HOME/.config/nvm/nvm.sh"
+[ -e $HOME/.config/nvm/nvm.sh ] && source "$HOME/.config/nvm/nvm.sh"
 
 # Working DIR
 [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
