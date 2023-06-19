@@ -588,6 +588,11 @@
         <command>networkmanager_dmenu</command>
       </action>
     </keybind>
+    <keybind key="W-S-n">
+      <action name="Execute">
+        <command>sh -c 'curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'</command>
+      </action>
+    </keybind>
     <keybind key="W-a">
       <action name="Execute">
         <command>
@@ -632,7 +637,12 @@
         <command>~/.config/openbox/rofi/bin/screenshot</command>
       </action>
     </keybind>
-    <keybind key="W-S-n">
+    <keybind key="W-i">
+      <action name="Execute">
+        <command>nm-connection-editor</command>
+      </action>
+    </keybind>
+    <keybind key="W-S-i">
       <action name="Execute">
         <command>
           sh -c '
@@ -643,11 +653,6 @@
             -e nmtui
           '
         </command>
-      </action>
-    </keybind>
-    <keybind key="W-i">
-      <action name="Execute">
-        <command>nm-connection-editor</command>
       </action>
     </keybind>
     <keybind key="W-b">
