@@ -259,6 +259,8 @@ require('telescope').setup {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
+        ["<c-j>"] = "move_selection_next",
+        ["<c-k>"] = "move_selection_previous",
       },
     },
     layout_config = {
