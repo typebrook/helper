@@ -31,7 +31,7 @@ set my_keep_lines1 = 0
 set my_keep_lines2 = 12
 set pager_index_lines = $my_keep_lines1
 set markers = no # Remove '+' for long links with limited terminal width
-set reply_with_xorig = true
+# set reply_with_xorig = true
 
 # Index format
 #set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
