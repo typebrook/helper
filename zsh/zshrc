@@ -48,7 +48,7 @@ function _get_context() {
 }
 
 function _already_sync_after_wakeup() {
-  WAKEUP=~/.wakeup
+  WAKEUP="~/.wakeup"
   [ ! -e "$WAKEUP" ] && return 0
 
   latest=$(date -d @`stat -c %Y "$WAKEUP` +%s)
