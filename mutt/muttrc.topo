@@ -17,7 +17,7 @@ set pgp_timeout = 300
 set pgp_sign_as = 6DD8C14A # replace 6DD8C14A with your gpg key id
 set autocrypt = yes
 
-# Tune contacts
+# For contacts
 set display_filter = ~/.config/mutt/message_filter.sh
 source ~/.config/mutt/alias.topo
 source ~/.config/mutt/hooks.topo
