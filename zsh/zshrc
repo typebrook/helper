@@ -48,10 +48,11 @@ function _get_context() {
 }
 
 function _already_sync_after_wakeup() {
-  WAKEUP="~/.wakeup"
+  WAKEUP="$HOME/.wakeup"
   [ ! -e "$WAKEUP" ] && return 0
 
-  latest=$(date -d @`stat -c %Y "$WAKEUP` +%s)
+  latest=$(date -d @`stat -c %X "$WAKEUP"` +%s)
+  # If sync time is older than wakeup time (timestamp in file), then return false
   if [ $latest -gt $(cat "$WAKEUP") ]; then
     return 0
   else
