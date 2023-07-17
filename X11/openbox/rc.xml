@@ -159,7 +159,7 @@
       </action>
     </keybind>
     <!-- Switch b/w Applications -->
-    <keybind key="W-Tab">
+    <keybind key="A-Tab">
       <action name="NextWindow">
         <allDesktops>no</allDesktops>
         <raise>yes</raise>
@@ -171,7 +171,7 @@
         </finalactions>
       </action>
     </keybind>
-    <keybind key="A-Tab">
+    <keybind key="W-Tab">
       <action name="NextWindow">
         <allDesktops>yes</allDesktops>
         <!-- Hide black border around windows -->
@@ -259,6 +259,14 @@
     </keybind>
     <keybind key="W-c">
       <action name="MoveToCenter"/>
+    </keybind>
+    <keybind key="W-c">
+      <action name="MoveResizeTo">
+        <!-- center the window on the first monitor -->
+        <x>center</x>
+        <y>center</y>
+        <monitor>2</monitor>
+      </action>
     </keybind>
     <keybind key="W-F1">
       <action name="ToggleAlwaysOnTop"/>
@@ -597,7 +605,7 @@
       <action name="Execute">
         <command>
           sh -c '
-            xdotool search --name MPD windowactivate || \
+            xdotool search --name MPD windowquit || \
             alacritty --title MPD -e ncmpcpp
           '
         </command>
