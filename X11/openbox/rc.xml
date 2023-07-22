@@ -257,7 +257,7 @@
         <y>0</y>
       </action>
     </keybind>
-    <keybind key="W-c">
+    <keybind key="W-z">
       <action name="MoveToCenter"/>
     </keybind>
     <keybind key="W-c">
