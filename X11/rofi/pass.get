@@ -2,6 +2,20 @@
 
 GENERATION_HINT="Generate with default config"
 
+_save_to_clipboard() {
+  # Copy the given password into PRIMARY selection and kill it in 30s
+  echo "$1" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
+  # Copy the second non-empty line (most of the time, account name) into CLIPBOARD selection
+  echo "$1" | sed -n '1d;/^./{p;q}' | tr -d '\n' | xsel -ib
+}
+
+# Show extra message
+_show_extra() {
+  EXTRA="$(echo; echo; echo "$1" | sed '1d' | sed '1{/^$/d}')"
+  coproc ( rofi -e "Copied: $2$EXTRA" )
+}
+
+
 # Generate a new password if ROFI_DATA is given by last execution
 if [ -n "${ROFI_DATA}" ]; then
   PASSWORD="${ROFI_DATA}"
@@ -38,22 +52,20 @@ fi
 # Test password exists or not
 RESULT="$(pass $1)"
 set -x
-if [ -n "$RESULT" ]; then
-  # Copy the given password into PRIMARY selection and kill it in 30s
-  echo "$RESULT" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
-  # Copy the second non-empty line (most of the time, account name) into CLIPBOARD selection
-  echo "$RESULT" | sed -n '1d;/^./{p;q}' | tr -d '\n' | xsel -ib
 
-  # And show extra message
-  EXTRA="$(echo; echo; echo "$RESULT" | sed '1d' | sed '1{/^$/d}')"
-  coproc ( rofi -e "Copied: $1$EXTRA" )
+if [ -n "$RESULT" ]; then
+  _save_to_clipboard "$RESULT"
+  _show_extra "$RESULT" "$1"
 
 elif [ -f "$HOME/.password-store/$1.gpg" ]; then
-  # Password exist but command fails
-  # Must be something wrong with GPG decryption
-  coproc (
-    rofi -e "GPG passphase is not chached" \
-         -theme-str '#window { font: "hacker 40"; }'
+  # Password exist but command fails, must be something wrong with GPG decryption
+  # Most of the time it is because passphrase is not cached by gpg-agent
+
+  # Use zenity for passphrase input
+  coproc(
+    RESULT="$( zenity --password | gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
+    _save_to_clipboard "$RESULT"
+    _show_extra "$RESULT" "$1"
   )
 else
   # Password doesn't exist yet
