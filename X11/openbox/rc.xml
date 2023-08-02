@@ -575,6 +575,13 @@
         </command>
       </action>
     </keybind>
+    <keybind key="C-A-f">
+      <action name="Execute">
+        <command>
+          alacritty -e ranger
+        </command>
+      </action>
+    </keybind>
     <keybind key="W-w">
       <action name="Execute">
         <command>
