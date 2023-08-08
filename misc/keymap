@@ -52,3 +52,4 @@ keycode  57 = space
 keycode  58 = Control
 keycode  86 = less             greater          bar
 keycode  97 = Control
+keycode 105 = Menu
