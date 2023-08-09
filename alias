@@ -180,7 +180,10 @@ date.reset() {
   sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
 }
 alias clock.reset='hwclock --systohc'
-
+gr() {
+  grep -IR $1 .
+}
+alias findn='find . -iname'
 
 # pacman
 alias pac='sudo pacman -S' # pacman install
@@ -222,9 +225,6 @@ alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
-alias cdmn='cd ~/git/maplibre-native/'
-alias cdmj='cd ~/git/maplibre-gl-js/'
-alias cdmx='cd ~/git/mapbox-gl-js/'
 
 # blog
 alias cdb='cd ~/blog'
@@ -423,42 +423,7 @@ alias xii='`fc -ln -1` | head -1 | xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 
-# misc
-alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
-alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
-unalias gr &>/dev/null
-gr() {
-  grep -IR $1 .
-}
-alias wcl='wc -l'
-alias findn='find . -iname'
-alias x='xdg-open'
-alias yl='youtube-dl'
-alias yla='youtube-dl -x --audio-format mp3'
-yt.audio() {
-  yt-dlp --verbose -x --audio-format mp3 --add-metadata $1
-}
-alias editor='select-editor'
-alias hp='http-prompt'
-alias clocg='cloc --vcs=git'
-alias tma='tmux a'
-alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
-alias we='weechat'
-alias p8='ping -c 3 8.8.8.8'
-alias curl.google='curl -v google.com'
-alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'
-pbf() {
-  protoc --decode_raw
-}
-mvt.decode() {
-  if [[ ! -t 0 ]]; then
-    tmp=$(mktemp)
-    cat >$tmp
-  else
-    tmp=$1
-  fi
-  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g' | jq .
-}
+# Text Encode/Decode
 big52utf8() {
   iconv -f BIG-5 -t UTF-8
 }
@@ -470,6 +435,39 @@ urlencode() {
   # Alternative:
   # curl -Gso /dev/null -w %{url_effective} --data-urlencode @- ""
 }
+
+# Network
+alias p8='ping -c 3 8.8.8.8'
+alias curl.google='curl -v google.com'
+alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'
+
+# misc
+alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
+alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
+unalias gr &>/dev/null
+alias wcl='wc -l'
+alias x='xdg-open'
+alias yl='youtube-dl'
+alias yla='youtube-dl -x --audio-format mp3'
+yt.audio() {
+  yt-dlp --verbose -x --audio-format mp3 --add-metadata $1
+}
+alias editor='select-editor'
+alias hp='http-prompt'
+alias clocg='cloc --vcs=git'
+alias tma='tmux a'
+pbf() {
+  protoc --decode_raw
+}
+mvt.decode() {
+  if [[ ! -t 0 ]]; then
+    cat >$tmp
+    tmp=$(mktemp)
+  else
+    tmp=$1
+  fi
+  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g' | jq .
+}
 bak() {
   cp $1 $1.bak
 }
@@ -480,8 +478,8 @@ alias ge='graph-easy --boxart'
 
 # pass
 alias chp='tig -C ~/.password-store'
-alias cdpass='cd ~/.password-store'
 alias chpass='tig -C ~/.password-store'
+alias cdpass='cd ~/.password-store'
 alias p='pass'
 alias pc='pass -c'
 alias pe='pass edit'
@@ -496,22 +494,10 @@ alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo system
 alias cdngx='cd /etc/nginx'
 
 # tmp
-alias cdS='cd ~/git/StreetComplete'
-alias cdm='cd ~/git/mapclay'
-alias cdma='cd ~/git/mapstew-android'
-alias cdT='cd ~/git/tilemaker'
 alias stew='cd ~/git/mapstew'
 alias vc='vultr-cli'
 alias xkb='cd $SETTING_DIR && make xkb'
 alias thsr='curl -L google.com >/tmp/foo.html && xdg-open /tmp/foo.html'
-#hugo(){
-#    docker run --rm \
-#        -u `id -u`:`id -g` \
-#        -v `pwd`:/src \
-#        $EXTRA \
-#        klakegg/hugo \
-#        $@
-#}
 todo() { cd ~/log && grep -R ' TODO ' --exclude-dir=logseq/; }
 fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias ffmpeg='ffmpeg -hide_banner'
@@ -519,8 +505,18 @@ alias md='reveal'
 alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
 alias gpg.bye='gpg-connect-agent reloadagent /bye'
 
-
+# GIS
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
 TAIPEI_BBOX='121.346,24.926,121.676,25.209'
 TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
+
+# Comment out
+#alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
+#alias we='weechat'
+
+LOCAL_ALIAS=~/.config/local.alias
+alias allo="$EDITOR $LOCAL_ALIAS && source $LOCAL_ALIAS"
+if [ -e $LOCAL_ALIAS ]; then
+  source $LOCAL_ALIAS
+fi
