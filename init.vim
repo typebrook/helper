@@ -1,8 +1,8 @@
 " Avoid load this script twice
 if get(s:, 'loaded', 0) != 0
-	finish
+  finish
 else
-	let s:loaded = 1
+  let s:loaded = 1
 endif
 
 " Get current dir
@@ -30,13 +30,19 @@ source ~/.vim/vim-init/init/init-keymaps.vim
 " source ~/.vim/vim-init/init/init-style.vim
 
 " Extra config for different contexts
-source ~/.vim/vim-init/init/init-config.vim
+" source ~/.vim/vim-init/init/init-config.vim
 
 " 设定 tabsize
-source ~/.vim/vim-init/init/init-tabsize.vim
+" source ~/.vim/vim-init/init/init-tabsize.vim
 
 " Plugins
-source ~/.vim/vim-init/init/init-plugins.vim
+
+" Neovim
+if has('nvim')
+  source ~/.config/nvim/nvim.lua
+else
+  source ~/.vim/vim-init/init/init-plugins.vim
+endif
 
 " Set UI theme
 colorscheme desert

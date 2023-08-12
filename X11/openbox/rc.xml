@@ -471,17 +471,17 @@
     <!-- Brightness Control -->
     <keybind key="XF86MonBrightnessUp">
       <action name="Execute">
-        <command>brightness --inc</command>
+        <command>ob-brightness --inc</command>
       </action>
     </keybind>
     <keybind key="S-XF86MonBrightnessUp">
       <action name="Execute">
-        <command>brightness --inc 1</command>
+        <command>ob-brightness --inc 1</command>
       </action>
     </keybind>
     <keybind key="XF86MonBrightnessDown">
       <action name="Execute">
-        <command>brightness --dec</command>
+        <command>ob-brightness --dec</command>
       </action>
     </keybind>
     <keybind key="S-XF86MonBrightnessDown">

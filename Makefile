@@ -15,9 +15,9 @@ tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
 
 vim:
-	ln -sf `pwd`/vimrc ~/.vimrc
+	ln -sf `pwd`/init.vim ~/.vimrc
 	# vim-plug
-	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 gpg:
 	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
