@@ -224,6 +224,7 @@ _get_input_by_fzf() {
 
 # Check OPENAI API KEY in env
 # Exit with 6 (configuration issue) if it is not set
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
 [ -z "$OPENAI_API_KEY" ] && OPENAI_API_KEY=$(cat "$XDG_CONFIG_HOME"/openai/key)
 [ -z "$OPENAI_API_KEY" ] && { echo API KEY not specified; exit 6; }
 

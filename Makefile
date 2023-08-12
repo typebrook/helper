@@ -23,9 +23,6 @@ gpg:
 	ln -sf `pwd`/misc/gpg-agent ~/.gnupg/gpg-agent.conf
 	gpgconf --reload gpg-agent
 
-console:
-	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf
-
 zsh:
 	ln -sf `pwd`/zsh/zshenv ~/.zshenv
 	mkdir -p ~/.config/zsh
@@ -62,8 +59,15 @@ tmux:
 crontab:
 	(crontab -l 2>/dev/null; cat bin/cron/* | sed '/^#/ d') | crontab -
 
+# Swap Ctrl-Caps in X11
 libinput:
 	sudo ln -sf `pwd`/misc/libinput/* /etc/X11/xorg.conf.d/
+
+# Swap Ctrl-Caps in tty2~6
+console:
+	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf
+	sudo systemctl restart systemd-vconsole-setup.service
+
 
 task:
 	ln -sf $(HOME)/.task/taskrc $(HOME)/.taskrc
@@ -93,7 +97,7 @@ urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
 
 alacritty:
-	ln -sf `pwd`/X11/alacritty/ ~/.config/alacritty
+	ln -sf `pwd`/X11/alacritty ~/.config/alacritty
 
 mpd:
 	ln -sf `pwd`/mpd/ncmpcpp ~/.config/ncmpcpp

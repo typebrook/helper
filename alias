@@ -32,7 +32,7 @@ vll() {
   nvim -c 'Telescope oldfiles'
 }
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
-alias ve="vim ~/.config/nvim/init.lua"
+alias ve="vim ~/.config/nvim/nvim.lua"
 alias vro='vim -R'
 alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
@@ -180,6 +180,7 @@ date.reset() {
   sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
 }
 alias clock.reset='hwclock --systohc'
+unalias gr
 gr() {
   grep -IR $1 .
 }

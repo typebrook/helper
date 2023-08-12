@@ -28,37 +28,37 @@
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
       <name>Sans</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveWindow">
       <name>Hack Nerd Font</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuHeader">
       <name>Hack Nerd Font</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
       <name>Hack Nerd Font</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="ActiveOnScreenDisplay">
       <name>Hack Nerd Font</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveOnScreenDisplay">
       <name>Hack Nerd Font</name>
-      <size>18</size>
+      <size>20</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
@@ -111,7 +111,7 @@
             alacritty --title @OPENBOX_CONFIG \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=90" \
-            -e $EDITOR ~/.config/openbox/rc.xml \
+            -e nvim ~/.config/openbox/rc.xml \
           '
         </command>
       </action>
@@ -435,17 +435,17 @@
     <!-- Media Controls-->
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
-        <command>volume --inc</command>
+        <command>ob-volume --inc</command>
       </action>
     </keybind>
     <keybind key="XF86AudioLowerVolume">
       <action name="Execute">
-        <command>volume --dec</command>
+        <command>ob-volume --dec</command>
       </action>
     </keybind>
     <keybind key="XF86AudioMute">
       <action name="Execute">
-        <command>volume --toggle</command>
+        <command>ob-volume --toggle</command>
       </action>
     </keybind>
     <keybind key="XF86AudioStop">
@@ -605,7 +605,7 @@
     <!-- Rofi -->
     <keybind key="A-F1">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/launcher</command>
+        <command>launcher</command>
       </action>
     </keybind>
     <keybind key="W-n">
@@ -620,12 +620,13 @@
     </keybind>
     <keybind key="W-a">
       <action name="Execute">
-        <command>
-          sh -c '
-            xdotool search --name MPD windowquit || \
-            alacritty --title MPD -e ncmpcpp
-          '
-        </command>
+      <command>ob-music</command>
+	<backup>
+	  sh -c '
+	    xdotool search --name MPD windowquit || \
+	    alacritty --title MPD -e ncmpcpp
+	  '
+	</backup>
       </action>
     </keybind>
     <keybind key="W-m">
@@ -644,7 +645,7 @@
     </keybind>
     <keybind key="W-x">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/powermenu</command>
+        <command>powermenu</command>
       </action>
     </keybind>
     <keybind key="W-z">
@@ -659,7 +660,7 @@
     </keybind>
     <keybind key="C-A-Print">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/screenshot</command>
+        <command>screenshot</command>
       </action>
     </keybind>
     <keybind key="W-i">
@@ -687,7 +688,7 @@
     </keybind>
     <keybind key="W-r">
       <action name="Execute">
-        <command>~/.config/openbox/rofi/bin/runner</command>
+        <command>runner</command>
       </action>
     </keybind>
     <keybind key="W-g">
@@ -804,7 +805,7 @@
     <keybind key="A-S-q">
       <action name="Close"/>
     </keybind>
-      <!--
+    <!--
       <action name="Execute">
         <command>
           sh -c '

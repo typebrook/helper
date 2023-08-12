@@ -26,5 +26,5 @@ source \$SETTING_DIR/bin/init/load-settings.sh
 EOF
 
 cd "$SETTING_DIR" || exit 1
-git swapprotocol
 make
+EOF
