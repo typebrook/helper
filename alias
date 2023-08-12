@@ -180,7 +180,7 @@ date.reset() {
   sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
 }
 alias clock.reset='hwclock --systohc'
-unalias gr
+unalias gr &>/dev/null
 gr() {
   grep -IR $1 .
 }
