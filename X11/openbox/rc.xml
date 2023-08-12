@@ -486,7 +486,7 @@
     </keybind>
     <keybind key="S-XF86MonBrightnessDown">
       <action name="Execute">
-        <command>brightness --dec 1</command>
+        <command>ob-brightness --dec 1</command>
       </action>
     </keybind>
     <!-- Screenshot Keys -->
@@ -703,7 +703,7 @@
     </keybind>
     <keybind key="W-S-g">
       <action name="Execute">
-        <command>color-gpick</command>
+        <command>ob-colorpicker</command>
       </action>
     </keybind>
     <keybind key="W-v">
