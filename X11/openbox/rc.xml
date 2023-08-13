@@ -636,7 +636,7 @@
             xdotool search --name "@Mutt" windowactivate || \
             alacritty --title @Mutt \
             --working-directory=/home/pham/Downloads \
-            -o "window.dimensions.lines=32" \
+            -o "window.dimensions.lines=30" \
             -o "window.dimensions.columns=110" \
             -e mutt
           '

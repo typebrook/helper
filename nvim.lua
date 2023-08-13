@@ -301,21 +301,18 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
         ["<c-j>"] = "move_selection_next",
         ["<c-k>"] = "move_selection_previous",
+        ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
       },
     },
     layout_config = {
-      vertical = { height = 0.8 }
+      vertical = { height = 0.8 },
       -- other layout configuration here
+      preview_cutoff = 0,
     },
   },
   pickers = {
-    oldfile = {
-      previewer = true,
-    },
     buffers = {
       show_all_buffers = true,
       sort_lastused = true,
