@@ -495,9 +495,6 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  stylelint_lsp = {
-    rootPatterns = {'.stylelintrc'},
-  },
 }
 
 -- Setup neovim lua configuration
