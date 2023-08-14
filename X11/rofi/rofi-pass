@@ -1,6 +1,7 @@
 #! /bin/bash
 
 export terminal=${terminal:-alacritty}
+export EDITOR=${EDITOR:-vim}
 
 cd $(dirname $0)
 

@@ -1,4 +1,4 @@
-trap 'exit.sh' EXIT
+# trap 'exit.sh' EXIT
 
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export BIN_DIR=~/bin

@@ -35,15 +35,13 @@ source ~/.vim/vim-init/init/init-keymaps.vim
 " 设定 tabsize
 " source ~/.vim/vim-init/init/init-tabsize.vim
 
-" Plugins
+" Set UI theme
+colorscheme desert
 
 " Neovim
 if has('nvim')
   source ~/.config/nvim/nvim.lua
 else
+" Plugin
   source ~/.vim/vim-init/init/init-plugins.vim
 endif
-
-" Set UI theme
-colorscheme desert
-highlight MatchParen cterm=bold ctermbg=none ctermfg=magenta

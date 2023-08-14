@@ -16,5 +16,5 @@ fi
 
 # Use detected terminal emulator to edit password
 coproc (
-    $terminal -e pass edit $1 && $(dirname $0)/pass.get $1
+    EDITOR=nvim $terminal -e pass edit $1 && $(dirname $0)/pass.get $1
 )

@@ -778,7 +778,7 @@
     <keybind key="C-S-R">
       <action name="Reconfigure"/>
     </keybind>
-    <keybind key="W-Escape">
+    <keybind key="W-S-Escape">
       <action name="Execute">
         <command>xkill</command>
       </action>

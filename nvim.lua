@@ -142,7 +142,7 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      -- vim.cmd.colorscheme 'onedark'
     end,
   },
 
@@ -494,6 +494,9 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
     },
+  },
+  stylelint_lsp = {
+    rootPatterns = {'.stylelintrc'},
   },
 }
 
