@@ -10,7 +10,7 @@ endif
 let s:home = '~/.vim/vim-init'
 
 " Load script in current dir
-" command! -nargs=1 LoadScript exec 'so '.s:home.'/'.'<args>'
+" command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
 
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home
@@ -32,14 +32,11 @@ source ~/.vim/vim-init/init/init-keymaps.vim
 " Extra config for different contexts
 " source ~/.vim/vim-init/init/init-config.vim
 
-" 设定 tabsize
-" source ~/.vim/vim-init/init/init-tabsize.vim
+" Set tabsize
+source ~/.vim/vim-init/init/init-tabsize.vim
 
-" Set UI theme
-colorscheme desert
-
-" Neovim
 if has('nvim')
+  " Neovim
   source ~/.config/nvim/nvim.lua
 else
 " Plugin

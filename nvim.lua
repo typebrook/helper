@@ -77,6 +77,7 @@ require('lazy').setup({
 
   -- For surrounding
   'machakann/vim-sandwich',
+  
 
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -115,7 +116,14 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim',  opts = {
+    plugins = {
+      spelling = {
+        enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+        suggestions = 20, -- how many suggestions should be shown in the list?
+      },
+    }}
+  },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
