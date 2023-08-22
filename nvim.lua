@@ -150,7 +150,7 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
-      -- vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'onedark'
     end,
   },
 
@@ -276,7 +276,7 @@ vim.o.termguicolors = true
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+-- vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Use suda.vim to run sudo, or terminal prompt fails
 -- See more details at https://github.com/neovim/neovim/issue
