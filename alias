@@ -7,6 +7,7 @@ eval "${shell}rc(){
   vim \$RCFILE && source \$RCFILE
 }"
 alias vim='nvim'
+alias vimrc='vim ~/.vimrc'
 alias tigrc="$EDITOR ~/.tigrc"
 alias muttrc="$EDITOR ~/.config/mutt/muttrc"
 alias gitconfig="$EDITOR ~/.gitconfig"
