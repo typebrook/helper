@@ -28,14 +28,18 @@ alias digg='dig +noall +answer +multiline'
 # vim
 alias v='nvim'
 alias vim='nvim'
+alias vu='vim -u NONE'
+alias vr='vim -R'
+# Edit last file
 alias vl="vim -c 'norm '"
+# Use Telescope to select recent files
 vll() {
   nvim -c 'Telescope oldfiles'
 }
+# Apply defaut session
+alias vv="vim -S ~/.vim.session"
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
 alias ve="vim ~/.config/nvim/nvim.lua"
-alias vro='vim -R'
-alias vu='vim -u NONE'
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
