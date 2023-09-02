@@ -10,6 +10,7 @@ alias vim='nvim'
 alias vimrc='vim ~/.vimrc'
 alias tigrc="$EDITOR ~/.tigrc"
 alias muttrc="$EDITOR ~/.config/mutt/muttrc"
+alias alarc="$EDITOR ~/.config/alacritty/alacritty.yml"
 alias gitconfig="$EDITOR ~/.gitconfig"
 alias gpgconfig="$EDITOR ~/.gnupg/gpg-agent.conf"
 alias sshconfig="$EDITOR ~/.ssh/config"
