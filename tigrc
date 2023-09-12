@@ -117,7 +117,7 @@ bind main bm @git branch -m %(branch) "%(prompt New branch name: )"
 bind main bM @git branch --force "%(prompt Move which branch to here? )" %(commit)
 bind main c @sh -c "git branch --points-at=%(commit) | \
                     sed -n '/^*/ {n;p}' | \
-                    { cat -; echo %(commit); } | \
+                    { cat; echo %(commit); } | \
                     head -1 | \
                     xargs git checkout"
 bind main bo >tig %(branch)
