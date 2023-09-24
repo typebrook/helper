@@ -1,8 +1,10 @@
 #! /usr/bin/env bash
-# Get the first remote URL within git/https protocol on github.com
-# Swap the protocol, and apply new protocol to every remaining remotes
 
-target=''
+# Swap protocol for every git remotes, for example:
+#   git@gitlab.com:me/repo ->
+#   https://gitlab.com/me/repo
+
+login=${1:-git}
 extra=''
 
 # For each remote
@@ -11,15 +13,14 @@ git remote -v \
   # Set fetch/push URL seperately
   [[ $etc =~ push ]] && extra='--push' || extra=''
 
-  if [[ $url =~ git@.*github.com ]]; then
-    target=${target:-https}
+  if [[ $url =~ : ]]; then
     # git@ -> https://
-    [[ $target == https ]] && sed -E 's#^git@(.+):(.+)$#https://\1/\2#' <<<$url | xargs git remote set-url $extra $remote
-  elif [[ $url =~ https://.*github.com ]]; then
-    target=${target:-git}
-    # https:// -> git@
-    [[ $target == git ]] && sed -E 's#^https://([^/]+)/(.+)$#git@\1:\2#' <<<$url | xargs git remote set-url $extra $remote
+    <<<$url sed -E 's#^.+@(.+):(.+)$#https://\1/\2#' | xargs git remote set-url ${extra} ${remote}
+  elif [[ $url =~ ^http ]]; then
+    # http[s]:// -> git@
+    <<<$url sed -E "s#^https?://([^/]+)/(.+)\$#${login}@\1:\2#" | xargs git remote set-url ${extra} ${remote}
   fi
 done
 
+# Print current remotes
 git remote -v
