@@ -36,7 +36,7 @@ mailboxes  -label '📭 [i]' +INBOX \
            -label '📥 [m]' +mbox \
            -label '👀 [d]' +dev \
            -label '💬 [D]' +DeltaChat \
-           +hawaii \
+           +github \
            +JOB \
            +promotion \
            "+---- Watch -----" \
