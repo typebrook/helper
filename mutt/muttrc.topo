@@ -52,6 +52,7 @@ mailboxes  -label '📭 [i]' +INBOX \
            -label '🗑  [t]' -poll +Trash \
            +login \
            +update \
+           +service \
            +Drafts \
            +test \
            +spam

@@ -48,9 +48,8 @@ cursor:
 live_config_reload: true
 
 key_bindings:
-  - { key: W, mods: None, action: SemanticRight, mode: Vi }
-  - { key: B, mods: None, action: SemanticLeft, mode: Vi }
-  - { key: 5, mods: Shift, action: Last, mode: Vi }
+  - { key: W, mods: None, action: SemanticRight, mode: Vi|~Search }
+  - { key: B, mods: None, action: SemanticLeft, mode: Vi|~Search }
   - { key: D, mods: Control, mode: Vi|~Search, action: ScrollHalfPageDown }
   - { key: U, mods: Control, mode: Vi|~Search, action: ScrollHalfPageUp }
 

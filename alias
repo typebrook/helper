@@ -1,6 +1,20 @@
 # My alias for bash and zsh
 
-# config
+# __CONFIG__
+# __NETWORK__
+# __VIM__
+# __SSH__
+# __IMAP__
+# __GIST__
+# __UNIX__
+# __PACMAN__
+# __CD__
+# __BLOG__
+# __GIT__
+# __GITHUB__
+# __TIG__
+
+# __CONFIG__
 alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
@@ -23,10 +37,10 @@ alias cdetc='cde'
 alias ls='ls --color'
 alias grep='grep --color'
 
-# network
+# __NETWORK__
 alias digg='dig +noall +answer +multiline'
 
-# vim
+# __VIM__
 alias v='nvim'
 alias vim='nvim'
 alias vu='vim -u NONE'
@@ -44,9 +58,10 @@ alias ve="vim ~/.config/nvim/nvim.lua"
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
+alias vS='vim -S ~/.vim.session'
 [ "$shell" = zsh ] && compdef vs=which
 
-# ssh
+# __SSH__
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh ptt'
 alias sshv='ssh -t vps'
@@ -77,14 +92,14 @@ ssh.down() {
   ssh -t vps rm -rf -i ~/public/"$1"
 }
 
-# imap
+# __IMAP__
 imap.save() {
   curl "imaps://mail.topo.tw/$1" \
       --user pham:`pass mail/pham@mail.topo.tw` \
       -T $2
 }
 imap.save_attachment() {
-#TEMPFILE=$(mktemp)
+  #TEMPFILE=$(mktemp)
   trap 'rm $TEMPFILE' EXIT
   mail -a $1 -Sexpandaddr /dev/stdout | \
   curl imaps://mail.topo.tw/INBOX \
@@ -103,13 +118,13 @@ imap.fetch() {
     sed -E '0,/^ *$/d'
 }
 
-# Gist
+# __GIST__
 alias g='gist'
 alias gl='gist last'
 unalias gg &>/dev/null
 alias gg='gist grep'
 
-# unix
+# __UNIX__
 alias chx='chmod +x'
 alias chr='chmod +r'
 alias k='kill %1'
@@ -192,7 +207,7 @@ gr() {
 }
 alias findn='find . -iname'
 
-# pacman
+# __PACMAN__
 alias pac='sudo pacman -S' # pacman install
 alias psy='sudo pacman -Syy'
 alias ys='yay -S'
@@ -218,7 +233,7 @@ psi() {
 }
 pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
-# cd to DIRs
+# __CD__
 alias ..='cd ..'
 alias ld='cd -' # last directory
 cdg() {
@@ -233,7 +248,7 @@ alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 
-# blog
+# __BLOG__
 alias cdb='cd ~/blog'
 vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
@@ -261,7 +276,7 @@ vp() {
   fi
 }
 
-# git
+# __GIT__
 unalias gc &> /dev/null # override zsh plugin alias
 gc() { git clone $1 && cd $(basename ${1%.git}); }
 gc1() { git clone --depth=1 $1 && cd $(basename $1); }
@@ -272,7 +287,7 @@ alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 alias ch="/home/pham/helper/bin/git/check-repos.sh"
 
-# github
+# __GITHUB__
 export GITHUB_API='https://api.github.com'
 export GITHUB_API_TOKEN="~/.ssh/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
@@ -297,7 +312,7 @@ github.raw() {
   curl -O https://raw.githubusercontent.com/$1/$2/$3
 }
 
-# tig
+# __TIG__
 alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
@@ -389,7 +404,8 @@ alias sample.osm='curl https://api.openstreetmap.org/api/0.6/node/3428095932'
 alias sample.poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
 alias sample.mvt='curl -O https://demotiles.maplibre.org/tiles/5/25/14.pbf'
-alias sample.lorem='curl -o lorem http://metaphorpsum.com/paragraphs/4/16'
+alias sample.lorem='curl http://metaphorpsum.com/paragraphs/4/16'
+alias lorem='curl http://metaphorpsum.com/paragraphs/4/16'
 alias sample.wmts='curl -O https://gis.sinica.edu.tw/tileserver/wmts'
 sample.image() { curl -Lo random.png https://picsum.photos/seed/`date +%s`/${1:-500}/${2:-500}; }
 alias proto.mvt='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
@@ -473,7 +489,7 @@ mvt.decode() {
   else
     tmp=$1
   fi
-  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g' | jq .
+  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
 }
 bak() {
   cp $1 $1.bak
