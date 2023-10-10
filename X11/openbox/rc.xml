@@ -547,7 +547,10 @@
     <keybind key="W-F1">
       <action name="Execute">
         <command>
-          alacritty -e nvim ~/log/inbox
+	  sh -c '
+            xdotool search --name "@inbox" windowactivate || \
+            alacritty --title "@inbox" -e nvim ~/log/inbox.md
+	  '
         </command>
       </action>
     </keybind>
