@@ -60,6 +60,7 @@ alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
 alias vS='vim -S ~/.vim.session'
 [ "$shell" = zsh ] && compdef vs=which
+alias vim.dos2unix="vim '+set ff=unix' '+x'"
 
 # __SSH__
 alias cdssh='cd ~/.ssh'
