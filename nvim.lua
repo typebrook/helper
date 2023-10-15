@@ -154,6 +154,8 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'onedark'
+      vim.api.nvim_command('highlight ExtraWhitespaces ctermbg=red guibg=red')
+      vim.fn.matchadd('ExtraWhitespaces', '\\s\\+$')
     end,
   },
 
