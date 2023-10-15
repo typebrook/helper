@@ -13,7 +13,8 @@ date >>~/Downloads/log.log
 echo $$ >>~/Downloads/log.log
 awk -v RS= 'NR>1' <<<"$MAIL"  >>~/Downloads/log.log
 
-LOG=~/log/`date +%y.w%W.md`
+#LOG=~/log/`date +%y.w%W.md`
+LOG=~/log/inbox.md
 TODAY="`date '+%a %b.%d'`"
 
 # If header of today doesn't exist
