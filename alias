@@ -406,7 +406,11 @@ alias sample.poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
 alias sample.mvt='curl -O https://demotiles.maplibre.org/tiles/5/25/14.pbf'
 alias sample.lorem='curl http://metaphorpsum.com/paragraphs/4/16'
-alias lorem='curl http://metaphorpsum.com/paragraphs/4/16'
+lorem() {
+  paragraph=${1:-4}
+  sentences=${2:-6}
+  curl http://metaphorpsum.com/paragraphs/$paragraph/$sentences
+}
 alias sample.wmts='curl -O https://gis.sinica.edu.tw/tileserver/wmts'
 sample.image() { curl -Lo random.png https://picsum.photos/seed/`date +%s`/${1:-500}/${2:-500}; }
 alias proto.mvt='curl -O https://raw.githubusercontent.com/mapbox/vector-tile-spec/master/2.1/vector_tile.proto'
