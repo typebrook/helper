@@ -21,10 +21,6 @@
                    git stash drop stash@{1}
     swapprotocol = !swap-protocol.bash
 
-[core]
-    editor = vim
-    pager =
-
 [merge]
     tool = vimdiff
 
