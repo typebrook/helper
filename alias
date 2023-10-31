@@ -20,7 +20,7 @@ eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
-alias vim='nvim'
+which nvim && alias vim='nvim'
 alias vimrc='vim ~/.vimrc'
 alias tigrc="$EDITOR ~/.tigrc"
 alias muttrc="$EDITOR ~/.config/mutt/muttrc"
