@@ -3,14 +3,21 @@
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export BIN_DIR=~/bin
 export PATH=$BIN_DIR:$PATH
-export EDITOR=nvim
-export VISUAL=nvim
-export TIG_EDITOR=nvim
-export GIT_EDITOR=nvim
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
 export MAIL=$HOME/Maildir
+if which nvim; then
+  export EDITOR=nvim
+  export VISUAL=nvim
+  export TIG_EDITOR=nvim
+  export GIT_EDITOR=nvim
+else
+  export EDITOR=vim
+  export VISUAL=vim
+  export TIG_EDITOR=vim
+  export GIT_EDITOR=vim
+fi
 
 # Get current shell
 shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
