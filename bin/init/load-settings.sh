@@ -7,7 +7,7 @@ export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
 export MAIL=$HOME/Maildir
-if which nvim; then
+if which nvim &>/dev/null; then
   export EDITOR=nvim
   export VISUAL=nvim
   export TIG_EDITOR=nvim
