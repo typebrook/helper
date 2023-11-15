@@ -554,6 +554,16 @@
         </command>
       </action>
     </keybind>
+    <keybind key="W-F2">
+      <action name="Execute">
+        <command>
+	  sh -c '
+            xdotool search --name "@log" windowactivate || \
+            alacritty --title "@log" --working-directory ~/log
+	  '
+        </command>
+      </action>
+    </keybind>
     <keybind key="W-S-e">
       <action name="Execute">
         <command>

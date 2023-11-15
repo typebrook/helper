@@ -40,6 +40,8 @@ PATH=$PATH:$HOME/android-studio/bin
 PATH=$PATH:$HOME/.cargo/bin
 # yarn
 PATH=$PATH:$HOME/.yarn/bin
+# gem
+PATH=$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin
 
 # fzf
 if which fzf &>/dev/null; then
