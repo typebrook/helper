@@ -236,6 +236,7 @@ pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
 # __CD__
 alias ..='cd ..'
+alias ...='cd ../..'
 alias ld='cd -' # last directory
 cdg() {
   target=$(sed 's# #/#g' <<<"$@")
