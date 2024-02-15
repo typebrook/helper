@@ -33,12 +33,14 @@ alias sshknown="$EDITOR ~/.ssh/known_hosts"
 cdconfig(){ cd ~/.config/$1; }
 alias tmuxconfig="$EDITOR ~/.tmux.conf"
 cde() { cd /etc/$@; }
+
 alias cdetc='cde'
 alias ls='ls --color'
 alias grep='grep --color'
+alias eof='IGNOREEOF=10'
 
 # __NETWORK__
-alias digg='dig +noall +answer +multiline'
+alias dig.detail='dig +noall +answer +multiline'
 
 # __VIM__
 alias v='nvim'
