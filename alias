@@ -36,6 +36,7 @@ cde() { cd /etc/$@; }
 
 alias cdetc='cde'
 alias ls='ls --color'
+alias lsd='ls -d */'
 alias grep='grep --color'
 alias eof='IGNOREEOF=10'
 
@@ -282,7 +283,7 @@ vp() {
 
 # __GIT__
 unalias gc &> /dev/null # override zsh plugin alias
-gc() { git clone $1 && cd $(basename ${1%.git}); }
+gc() { git clone $@ && cd $(basename ${1%.git}); }
 gc1() { git clone --depth=1 $1 && cd $(basename $1); }
 gcv() { gc vps:$1; }
 alias gls='git log -S'
