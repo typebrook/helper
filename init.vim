@@ -30,7 +30,7 @@ source ~/.vim/vim-init/init/init-keymaps.vim
 " source ~/.vim/vim-init/init/init-style.vim
 
 " Extra config for different contexts
-" source ~/.vim/vim-init/init/init-config.vim
+source ~/.vim/vim-init/init/init-config.vim
 
 " Set tabsize
 source ~/.vim/vim-init/init/init-tabsize.vim
