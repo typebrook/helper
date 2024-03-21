@@ -44,12 +44,12 @@ Options:
   -h, --help        show this help message and exit
 
   -m|--model        specify model, available:
-                    gpt-4, gpt-4-0314, gpt-4-32k, gpt-4-32k-0314, 
+                    gpt-4, gpt-4-0314, gpt-4-32k, gpt-4-32k-0314,
                     gpt-3.5-turbo, gpt-3.5-turbo-0301
                     (Defaults to gpt-3.5-turbo)
 
-  -m4               Use model gpt-4 
-                    
+  -m4               Use model gpt-4
+
   -b|--behavior     How model behave on response, for example:
                       "You are a helpful assistant."
                     (Defaults to "You are a helpful programming assistant")
@@ -57,8 +57,8 @@ Options:
   -B|--sys-message  Use prompt to set system message (How model behave).
                     User can still modify it by special prompt '.c'
 
-  -t|--temperature  Value between 0 and 2. Higher values like 0.8 will make the 
-                    output more random, while lower values like 0.2 will make it 
+  -t|--temperature  Value between 0 and 2. Higher values like 0.8 will make the
+                    output more random, while lower values like 0.2 will make it
                     more focused and deterministic.
                     (Defaults to 0.7)
 
@@ -69,9 +69,9 @@ Options:
 
   -S|--stream       Use stream mode. If this is set, token usage would not be shown
 
-  -c|--context      Number of messages in session. If it is set, API calls only 
+  -c|--context      Number of messages in session. If it is set, API calls only
                     contains limited previous chats. If it is 1, then GPT only get
-                    your latest prompt input. (By default, API calls use the 
+                    your latest prompt input. (By default, API calls use the
                     whole previous chats, which is not friendly to token usage)
 
   -v|--verbose      If set, print token usage after each completion.
@@ -81,7 +81,7 @@ Options:
                     If STDIN is given, it would be append to the end of message.
 
 Special Input:
-  .c                A special prompt of options shows up. User can dynamically modify 
+  .c                A special prompt of options shows up. User can dynamically modify
                     option values for API calls.
 
   .r                Rewind previous chats. This is useful when terminal is occupied by
@@ -98,7 +98,7 @@ EOF
 
 # Message when user exit prompt
 _print_leave_message(){
-  echo -en "\n\nChat ends. " 
+  echo -en "\n\nChat ends. "
   if [ "$stream" = false ]; then
     tokens=$(jq '.usage? // empty | .total_tokens' "$cache" | paste -sd+ | bc)
     echo -en "${tokens:-0} tokens used. "
@@ -138,9 +138,9 @@ _configure_options() {
 _print_previous_chats() {
   echo
   jq -r '
-    def colors: { 
-      "white": "\u001b[37m", 
-      "yellow": "\u001b[33m", 
+    def colors: {
+      "white": "\u001b[37m",
+      "yellow": "\u001b[33m",
     };
     if .id|not then .messages[-1].content + "\n" else colors.yellow + .choices[0].message.content + colors.white + "\n" end
   ' "$cache"
@@ -308,7 +308,7 @@ stream=${stream:-false}
 INDEX=
 
 # Prepare for chat session
-cache=$(mktemp -t gpt.XXXXXX -p ${CACHE_DIR}) && touch "$cache" 
+cache=$(mktemp -t gpt.XXXXXX -p ${CACHE_DIR}) && touch "$cache"
 #trap "rm $cache" EXIT
 session=()
 
@@ -369,7 +369,7 @@ EOF
   # Append newest message into session
   assistant_message="$(cat <<EOF
 {
-  "role": "assistant", 
+  "role": "assistant",
   "content": $(jq -sr '.[-1].choices[0].message.content' "$cache" | jq -sR .)
 }
 EOF
