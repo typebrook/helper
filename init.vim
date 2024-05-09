@@ -39,16 +39,6 @@ if has('nvim')
   " Neovim
   source ~/.config/nvim/nvim.lua
 else
-" Plugin
+  " Plugin
   source ~/.vim/vim-init/init/init-plugins.vim
 endif
-
-" Temp
-let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=0
-let NERDTreeQuitOnOpen=1
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-let g:NERDTreeWinSize=35
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>nb :NERDTreeFromBookmark<Space>
-map <leader>nf :NERDTreeFind<cr>

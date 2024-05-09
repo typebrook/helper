@@ -61,7 +61,6 @@ vim.opt.runtimepath:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
-
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -76,9 +75,11 @@ require('lazy').setup({
   'nathangrigg/vim-beancount',
 
   -- For surrounding
-  'machakann/vim-sandwich',
+  'tpope/vim-surround',
 
-
+  -- From vim plugin
+  'junegunn/goyo.vim',
+  'itchyny/lightline.vim',
 
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -160,19 +161,19 @@ require('lazy').setup({
     end,
   },
 
-  {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'onedark',
-        component_separators = '|',
-        section_separators = { left = '', right = '' },
-      },
-    },
-  },
+  --{
+  --  -- Set lualine as statusline
+  --  'nvim-lualine/lualine.nvim',
+  --  -- See `:help lualine.txt`
+  --  opts = {
+  --    options = {
+  --      icons_enabled = false,
+  --      theme = 'onedark',
+  --      component_separators = '|',
+  --      section_separators = { left = '', right = '' },
+  --    },
+  --  },
+  --},
 
   {
     -- Add indentation guides even on blank lines
@@ -303,12 +304,26 @@ vim.cmd("command! W execute 'SudaWrite %'")
 
 -- [[ Configure lualine ]]
 -- Change the background of lualine_b section for normal mode
-local custom_wombat = require 'lualine.themes.wombat'
-custom_wombat.normal.b.bg = '#a8a8a8'
-custom_wombat.normal.b.fg = '#444444'
-require('lualine').setup {
-  options = { theme = custom_wombat },
-}
+-- local custom_wombat = require 'lualine.themes.wombat'
+-- custom_wombat.normal.b.bg = '#a8a8a8'
+-- custom_wombat.normal.b.fg = '#444444'
+-- require('lualine').setup {
+--   options = { theme = custom_wombat },
+-- }
+-- [[ Configure lightline ]]
+vim.cmd("let g:lightline = { 'colorscheme': 'wombat' }")
+
+-- [[ Configure Goyo ]]
+vim.cmd("nnoremap <silent> <leader>z :Goyo<CR>")
+
+-- [[ Configure NERDTree ]]
+vim.cmd('let g:NERDTreeWinPos = "left"')
+vim.cmd("let NERDTreeShowHidden=0")
+vim.cmd("let NERDTreeQuitOnOpen=1")
+vim.api.nvim_set_var('NERDTreeWinSize', 35)
+vim.cmd("map <C-n> :NERDTreeToggle<cr>")
+vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
+vim.cmd("map <leader>nf :NERDTreeFind<cr>")
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
