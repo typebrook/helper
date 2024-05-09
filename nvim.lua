@@ -80,6 +80,7 @@ require('lazy').setup({
   -- From vim plugin
   'junegunn/goyo.vim',
   'itchyny/lightline.vim',
+  'preservim/nerdtree',
 
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -188,18 +189,19 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  --{ 'numToStr/Comment.nvim', opts = {} },
   -- Another config
-  -- {
-  -- 'numToStr/Comment.nvim',
-  -- opts = {
-  --   opleader = {
-  --     ---Line-comment keymap
-  --     line = '<C-_>',
-  --     ---Block-comment keymap
-  --     block = 'gb',
-  --   },
-  -- },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+      opleader = {
+        ---Line-comment keymap
+        line = 'gc',
+        ---Block-comment keymap
+        block = 'gb',
+      },
+    }
+  },
 
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -230,10 +232,6 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
-  },
-
-  {
-    'preservim/nerdtree'
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -324,6 +322,7 @@ vim.api.nvim_set_var('NERDTreeWinSize', 35)
 vim.cmd("map <C-n> :NERDTreeToggle<cr>")
 vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
 vim.cmd("map <leader>nf :NERDTreeFind<cr>")
+-- vim.cmd("autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif")
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
