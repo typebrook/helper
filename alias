@@ -31,7 +31,7 @@ alias gpgconfig="$EDITOR ~/.gnupg/gpg-agent.conf"
 alias sshconfig="$EDITOR ~/.ssh/config"
 alias sshauth="$EDITOR ~/.ssh/authorized_keys"
 alias sshknown="$EDITOR ~/.ssh/known_hosts"
-cdconfig(){ cd ~/.config/$1; }
+config(){ cd ~/.config/$1; }
 alias tmuxconfig="$EDITOR ~/.tmux.conf"
 cde() { cd /etc/$@; }
 
