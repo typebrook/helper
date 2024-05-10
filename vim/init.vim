@@ -36,8 +36,8 @@ source ~/.vim/vim-init/init/init-config.vim
 source ~/.vim/vim-init/init/init-tabsize.vim
 
 if has('nvim')
-  " Neovim
-  source ~/.config/nvim/nvim.lua
+  " For nvim
+  source ~/.config/nvim/kickstarter.lua
 else
   " Plugin
   source ~/.vim/vim-init/init/init-plugins.vim
