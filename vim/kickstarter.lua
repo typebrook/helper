@@ -313,6 +313,9 @@ require('lazy').setup({
 
 -- vim.o.clipboard = 'unnamedplus'
 
+-- Let cursor be line in insert mode
+vim.opt.guicursor = "i-ci-ve:ver25"
+
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -369,6 +372,7 @@ vim.api.nvim_set_var('NERDTreeWinSize', 35)
 vim.cmd("map <C-n> :NERDTreeToggle<cr>")
 vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
 vim.cmd("map <leader>nf :NERDTreeFind<cr>")
+vim.o.autochdir = 1
 -- vim.cmd("autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif")
 
 -- [[ Highlight on yank ]]
@@ -445,12 +449,12 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'html', 'css', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'html', 'css', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
-  highlight = { enable = true },
+  -- highlight = { enable = true },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -636,7 +640,7 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
