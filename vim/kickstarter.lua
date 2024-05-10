@@ -365,7 +365,6 @@ vim.cmd("nnoremap <silent> <leader>z :Goyo<CR>")
 -- [[ Configure NERDTree ]]
 vim.g.NERDTreeWinPos = 'left'
 vim.g.NERDTreeShowHidden = 0
-vim.g.NERDTreeQuitOnOpen = 1
 vim.api.nvim_set_var('NERDTreeWinSize', 35)
 vim.cmd("map <C-n> :NERDTreeToggle<cr>")
 vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
