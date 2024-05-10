@@ -20,7 +20,7 @@ eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
-which nvim &>/dev/null && alias vim='nvim'
+which nvim &>/dev/null && { alias vim='nvim'; alias v='nvim' }
 alias vimrc='vim ~/.vimrc'
 alias tigrc="$EDITOR ~/.tigrc"
 alias muttrc="$EDITOR ~/.config/mutt/muttrc"
@@ -45,8 +45,6 @@ alias eof='IGNOREEOF=10'
 alias dig.detail='dig +noall +answer +multiline'
 
 # __VIM__
-alias v='nvim'
-alias vim='nvim'
 alias vu='vim -u NONE'
 alias vr='vim -R'
 # Edit last file
