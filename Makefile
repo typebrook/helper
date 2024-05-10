@@ -16,6 +16,7 @@ tig:
 
 vim:
 	ln -sf `pwd`/vim/init.vim ~/.vimrc
+	mkdir -p ~/.config/nvim
 	ln -sf `pwd`/vim/init.vim ~/.config/nvim/init.vim
 	ln -sf `pwd`/vim/kickstarter.lua ~/.config/nvim/kickstarter.lua
 	# vim-plug
