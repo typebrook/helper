@@ -202,9 +202,10 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
-      -- vim.cmd.colorscheme 'onedark'
-      vim.cmd.colorscheme 'koehler'
-      vim.api.nvim_command('highlight ExtraWhitespaces ctermbg=red guibg=red')
+      vim.cmd.colorscheme 'onedark'
+      -- vim.cmd.colorscheme 'koehler'
+      vim.cmd('highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black guifg=Black')
+      vim.cmd('highlight ExtraWhitespaces ctermbg=red guibg=red')
       vim.fn.matchadd('ExtraWhitespaces', '\\s\\+$')
     end,
   },
