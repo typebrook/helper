@@ -244,7 +244,7 @@ require('lazy').setup({
     opts = {
       opleader = {
         ---Line-comment keymap
-        line = 'gc',
+        line = '<C-/>',
         ---Block-comment keymap
         block = 'gb',
       },
@@ -381,6 +381,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+-- [[ Configure Comment.nvim ]]
+vim.cmd('nmap <C-/> V<C-/>')
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
