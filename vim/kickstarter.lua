@@ -203,10 +203,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'onedark'
-      -- vim.cmd.colorscheme 'koehler'
-      vim.cmd('highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black guifg=Black')
-      vim.cmd('highlight ExtraWhitespaces ctermbg=red guibg=red')
-      vim.fn.matchadd('ExtraWhitespaces', '\\s\\+$')
+      -- vim.cmd('source ~/.vim/vim-init/init/init-basic.vim')
     end,
   },
 
