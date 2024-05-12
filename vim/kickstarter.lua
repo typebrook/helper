@@ -133,7 +133,7 @@ require('lazy').setup({
     'smoka7/hop.nvim',
     version = "*",
     opts = {
-        keys = 'etovxqpdygfblzhckisuran'
+      keys = 'etovxqpdygfblzhckisuran'
     }
   },
 
@@ -355,6 +355,8 @@ vim.o.termguicolors = true
 -- See more details at https://github.com/neovim/neovim/issue
 vim.cmd("command! W execute 'SudaWrite %'")
 
+-- [[ Configure vim.surround ]]
+vim.cmd('vmap s S')
 
 -- [[ Configure lualine ]]
 -- Change the background of lualine_b section for normal mode
@@ -377,12 +379,12 @@ vim.api.nvim_set_var('NERDTreeWinSize', 35)
 vim.cmd("map <C-n> :NERDTreeToggle<cr>")
 vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
 vim.cmd("map <leader>nf :NERDTreeFind<cr>")
-vim.o.autochdir = 1
+vim.o.autochdir = 0
 -- vim.cmd("autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif")
 
 -- [ Configure Hop ]
-vim.keymap.set('n', 't', ':HopWord<CR>')
-vim.keymap.set('n', 'T', ':HopChar<CR>')
+vim.keymap.set('n', '<C-.>', ':HopWord<CR>')
+vim.keymap.set('n', '<C-,>', ':HopWord<CR>')
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
