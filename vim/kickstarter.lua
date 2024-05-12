@@ -128,6 +128,14 @@ require('lazy').setup({
   'itchyny/lightline.vim',
   'preservim/nerdtree',
 
+  -- hop.nvim
+  {
+    'smoka7/hop.nvim',
+    version = "*",
+    opts = {
+        keys = 'etovxqpdygfblzhckisuran'
+    }
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -371,6 +379,10 @@ vim.cmd("map <leader>nb :NERDTreeFromBookmark<Space>")
 vim.cmd("map <leader>nf :NERDTreeFind<cr>")
 vim.o.autochdir = 1
 -- vim.cmd("autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif")
+
+-- [ Configure Hop ]
+vim.keymap.set('n', 't', ':HopWord<CR>')
+vim.keymap.set('n', 'T', ':HopChar<CR>')
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`

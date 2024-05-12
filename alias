@@ -552,3 +552,13 @@ alias allo="$EDITOR $LOCAL_ALIAS && source $LOCAL_ALIAS"
 if [ -e $LOCAL_ALIAS ]; then
   source $LOCAL_ALIAS
 fi
+
+vvv() {
+  while true; do
+    vim -c 'norm '
+    if [ $? -ne 0 ]; then
+      break
+    fi
+    echo "restarting nvim...";
+  done
+}
