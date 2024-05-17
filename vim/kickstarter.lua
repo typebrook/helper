@@ -201,6 +201,8 @@ require('lazy').setup({
           { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis)
+        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end)
       end,
     },
   },
@@ -319,7 +321,7 @@ require('lazy').setup({
 -- vim.o.clipboard = 'unnamedplus'
 
 -- Let cursor be line in insert mode
-vim.opt.guicursor="n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 
 -- Enable break indent
 vim.o.breakindent = true
