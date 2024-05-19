@@ -123,10 +123,21 @@ require('lazy').setup({
   -- For surrounding
   'tpope/vim-surround',
 
+
   -- From vim plugin
   'junegunn/goyo.vim',
   'itchyny/lightline.vim',
   'preservim/nerdtree',
+
+  {
+    -- onedark.nvim: Theme inspired by Atom
+    'navarasu/onedark.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'onedark'
+      -- vim.cmd('source ~/.vim/vim-init/init/init-basic.vim')
+    end,
+  },
 
   -- hop.nvim
   {
@@ -135,6 +146,57 @@ require('lazy').setup({
     opts = {
       keys = 'etovxqpdygfblzhckisuran'
     }
+  },
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*", -- recommended, use latest release instead of latest commit
+    lazy = true,
+    ft = "markdown",
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    -- event = {
+    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+    --   "BufReadPre path/to/my-vault/**.md",
+    --   "BufNewFile path/to/my-vault/**.md",
+    -- },
+    dependencies = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+
+      -- see below for full list of optional dependencies 👇
+    },
+    opts = {
+      workspaces = {
+        {
+          name = "log",
+          path = "~/log",
+        },
+      },
+      completion = {
+        -- Set to false to disable completion.
+        nvim_cmp = true,
+        -- Trigger completion at 2 chars.
+        min_chars = 2,
+      },
+      mapping = {
+        -- Toggle check-boxes.
+        ["<leader>ch"] = {
+          action = function()
+            return require("obsidian").util.toggle_checkbox()
+          end,
+          opts = { buffer = true },
+        },
+        -- Smart action depending on context, either follow link or toggle checkbox.
+        ["<cr>"] = {
+          action = function()
+            return require("obsidian").util.smart_action()
+          end,
+          opts = { buffer = true, expr = true },
+        }
+      }
+
+      -- see below for full list of options 👇
+    },
   },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -206,16 +268,17 @@ require('lazy').setup({
       end,
     },
   },
-
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-      -- vim.cmd('source ~/.vim/vim-init/init/init-basic.vim')
-    end,
+    'stevearc/aerial.nvim',
+    enable = false,
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
+    },
   },
+
 
   --{
   --  -- Set lualine as statusline
@@ -368,6 +431,7 @@ vim.cmd('vmap s S')
 -- require('lualine').setup {
 --   options = { theme = custom_wombat },
 -- }
+
 -- [[ Configure lightline ]]
 vim.cmd("let g:lightline = { 'colorscheme': 'wombat' }")
 
@@ -385,7 +449,7 @@ vim.o.autochdir = 0
 -- vim.cmd("autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif")
 
 -- [ Configure Hop ]
-vim.keymap.set('n', '.', ':HopWord<CR>')
+vim.keymap.set('n', "<space>", ':HopWord<CR>')
 vim.keymap.set('n', '<C-.>', ':HopChar1<CR>')
 
 -- [[ Highlight on yank ]]
@@ -434,7 +498,17 @@ require('telescope').setup {
         }
       }
     }
-  }
+  },
+  extensions = {
+    aerial = {
+      -- Display symbols as <root>.<parent>.<symbol>
+      show_nesting = {
+        ["_"] = false, -- This key will be the default
+        json = true, -- You can set the option for specific filetypes
+        yaml = true,
+      },
+    },
+  },
 }
 
 -- Enable telescope fzf native, if installed
@@ -532,6 +606,18 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+-- [[ Configure Aerial ]]
+require("aerial").setup({
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+  end,
+})
+vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
+vim.keymap.set("n", "<leader><leader>A", "<cmd>AerialToggle!left<CR>")
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
