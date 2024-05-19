@@ -54,13 +54,12 @@ vll() {
   nvim -c 'Telescope oldfiles'
 }
 # Apply defaut session
-alias vv="vim -S ~/.vim.session"
+alias vS="vim -S /tmp/vim.session"
 #alias vl="vim $(sed -n '/^[^#]/{p;q}' ~/.vim_mru_files)"
 alias ve="vim ~/.config/nvim/nvim.lua"
 alias vq='vim ~/buffer'
 alias cdv='cd ~/.vim/vim-init'
 vs() { which $1 && vim $(which $1); }
-alias vS='vim -S ~/.vim.session'
 [ "$shell" = zsh ] && compdef vs=which
 alias vim.dos2unix="vim '+set ff=unix' '+x'"
 

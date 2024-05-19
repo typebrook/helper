@@ -193,9 +193,27 @@ require('lazy').setup({
           end,
           opts = { buffer = true, expr = true },
         }
-      }
-
+      },
       -- see below for full list of options 👇
+      note_id_func = function(title)
+        return title
+        -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+        -- In this case a note with the title 'My new note' will be given an ID that looks
+        -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
+        -- local suffix = ""
+        -- title = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+        -- if title ~= nil and title ~= "" then
+        --   -- If title is given, transform it into valid file name.
+        --   suffix = "-" .. title
+        -- else
+        --   -- If title is nil, just add 4 random uppercase letters to the suffix.
+        --   for _ = 1, 4 do
+        --     suffix = suffix .. string.char(math.random(65, 90))
+        --   end
+        --   suffix = "-" .. title
+        -- end
+        -- return tostring(os.time()) .. suffix
+      end,
     },
   },
 
@@ -470,6 +488,8 @@ vim.cmd('nmap <C-/> V<C-/>')
 vim.keymap.set('n', "<leader>oo", ':Obsidian')
 vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>')
 vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>')
+vim.keymap.set('n', "<leader>oq", ':ObsidianQuickSwitch<CR>')
+vim.keymap.set('v', "<leader>on", ':ObsidianLinkNew<CR>')
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -509,7 +529,7 @@ require('telescope').setup {
       -- Display symbols as <root>.<parent>.<symbol>
       show_nesting = {
         ["_"] = false, -- This key will be the default
-        json = true, -- You can set the option for specific filetypes
+        json = true,   -- You can set the option for specific filetypes
         yaml = true,
       },
     },
