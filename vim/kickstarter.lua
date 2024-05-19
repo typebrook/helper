@@ -180,7 +180,7 @@ require('lazy').setup({
       },
       mapping = {
         -- Toggle check-boxes.
-        ["<leader>ch"] = {
+        ["<leader>oc"] = {
           action = function()
             return require("obsidian").util.toggle_checkbox()
           end,
@@ -465,6 +465,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Comment.nvim ]]
 vim.cmd('nmap <C-/> V<C-/>')
+
+-- [[ Configure Comment.nvim ]]
+vim.keymap.set('n', "<leader>oo", ':Obsidian')
+vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>')
+vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>')
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
