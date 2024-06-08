@@ -214,8 +214,9 @@ require('lazy').setup({
           { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis)
-        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end)
+        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
+        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+        vim.keymap.set('v', 'hr', ":Gitsigns reset_hunk<CR>", { buffer = bufnr, desc = '[h]unk [r]eset' })
       end,
     },
   },
