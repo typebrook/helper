@@ -42,16 +42,13 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+  -- 'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
   -- Use sudo in command mode
   'lambdalisue/suda.vim',
-
-  -- For beancount
-  'nathangrigg/vim-beancount',
 
   -- For surrounding
   'tpope/vim-surround',
@@ -62,6 +59,32 @@ require('lazy').setup({
   'itchyny/lightline.vim',
   'preservim/nerdtree',
 
+  -- Adds git related signs to the gutter, as well as utilities for managing changes
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      -- See `:help gitsigns.txt`
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+      on_attach = function(bufnr)
+
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
+        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+        vim.keymap.set('v', 'hr', ":Gitsigns reset_hunk<CR>", { buffer = bufnr, desc = '[h]unk [r]eset' })
+      end,
+    },
+  },
+
+  -- colorscheme
   {
     -- onedark.nvim: Theme inspired by Atom
     'navarasu/onedark.nvim',
@@ -72,7 +95,7 @@ require('lazy').setup({
     end,
   },
 
-  -- hop.nvim
+  -- hop.nvim for quick jump
   {
     'smoka7/hop.nvim',
     version = "*",
@@ -80,6 +103,21 @@ require('lazy').setup({
       keys = 'etovxqpdygfblzhckisuran'
     }
   },
+
+  -- Useful plugin to show you pending keybinds.
+  {
+    'folke/which-key.nvim',
+    opts = {
+      plugins = {
+        spelling = {
+          enabled = true,   -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+          suggestions = 20, -- how many suggestions should be shown in the list?
+        },
+      }
+    }
+  },
+
+  -- For obsidian
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
@@ -150,6 +188,9 @@ require('lazy').setup({
     },
   },
 
+  -- For beancount
+  'nathangrigg/vim-beancount',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -185,41 +226,6 @@ require('lazy').setup({
     },
   },
 
-  -- Useful plugin to show you pending keybinds.
-  {
-    'folke/which-key.nvim',
-    opts = {
-      plugins = {
-        spelling = {
-          enabled = true,   -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-          suggestions = 20, -- how many suggestions should be shown in the list?
-        },
-      }
-    }
-  },
-  {
-    -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-      on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
-        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
-        vim.keymap.set('v', 'hr', ":Gitsigns reset_hunk<CR>", { buffer = bufnr, desc = '[h]unk [r]eset' })
-      end,
-    },
-  },
   {
     'stevearc/aerial.nvim',
     enable = false,
