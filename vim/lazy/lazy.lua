@@ -197,7 +197,10 @@ require('lazy').setup({
   },
 
   -- For beancount
-  'nathangrigg/vim-beancount',
+  {
+    'nathangrigg/vim-beancount',
+    ft = { "beancount" },
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.

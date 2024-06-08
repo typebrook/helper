@@ -189,7 +189,7 @@ endif
 "----------------------------------------------------------------------
 set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
-set foldlevel=99        " Expand all by default
+set foldlevel=2         " Expand all by default
 
 
 "----------------------------------------------------------------------

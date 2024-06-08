@@ -71,7 +71,7 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- For neovim config files
 vim.keymap.set('n', '<leader>sn', function()
-  require('telescope.builtin').find_files { 
+  require('telescope.builtin').find_files {
     cwd = vim.fn.stdpath 'config',
     follow = true
   }
