@@ -72,13 +72,13 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-
         vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
           { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
         vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
-        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end,
+          { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
         vim.keymap.set('v', 'hr', ":Gitsigns reset_hunk<CR>", { buffer = bufnr, desc = '[h]unk [r]eset' })
       end,
     },
@@ -186,6 +186,14 @@ require('lazy').setup({
         -- return tostring(os.time()) .. suffix
       end,
     },
+  },
+
+  -- install without yarn or npm
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
   },
 
   -- For beancount
@@ -310,12 +318,6 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
-
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -323,13 +325,6 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
-  -- install without yarn or npm
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
-  },
 }, {})
 
 -- [[ Setting options ]]
@@ -441,7 +436,8 @@ require('telescope').setup {
           ["<c-d>"] = "delete_buffer",
         }
       }
-    }
+    },
+
   },
   extensions = {
     aerial = {
@@ -459,8 +455,9 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>f', require('telescope.builtin').oldfiles, { desc = '[f] Find recently opened files' })
-vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[b] Find existing buffers' })
+vim.keymap.set('n', '<leader>f', require('telescope.builtin').oldfiles, { desc = '[F] Find recently opened files' })
+vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[B] Find existing buffers' })
+vim.keymap.set('n', '<leader>st', require('telescope.builtin').builtin, { desc = '[S]earch [T]elescope for builtin' })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
@@ -479,6 +476,29 @@ end, { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>sn', function()
   require('telescope.builtin').find_files { cwd = vim.fn.stdpath 'config' }
 end, { desc = '[S]earch [N]eovim files' })
+-- Get snippets from ~/helper/snippets
+vim.keymap.set('n', '<leader>ss', function()
+  local current_filetype = vim.bo.filetype
+  local cwd = '/home/pham/helper/snippets/' .. current_filetype
+  require('telescope.builtin').find_files {
+    prompt_title = 'Select a snippet for ' .. current_filetype,
+    cwd = cwd,
+    attach_mappings = function(prompt_bufnr, map)
+      local insert_selected_snippet = function()
+        local file = require('telescope.actions.state').get_selected_entry()[1]
+        local snippet_content = vim.fn.readfile(cwd .. "/" .. file)
+        require('telescope.actions').close(prompt_bufnr)
+        vim.api.nvim_command('normal! h')
+        vim.api.nvim_put(snippet_content, '', false, true)
+      end
+
+      map('i', '<CR>', insert_selected_snippet)
+      map('n', '<CR>', insert_selected_snippet)
+
+      return true
+    end,
+  }
+end, { desc = '[S]earch [S]nippets' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`

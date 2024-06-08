@@ -1,0 +1,6 @@
+vim.keymap.set(
+  'n', 
+  '<leader>gp', 
+  require('gitsigns').prev_hunk,
+  { buffer = bufnr, desc = '[G]o to [P]revious Hunk' }
+)
