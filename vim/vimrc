@@ -26,9 +26,6 @@ source ~/helper/vim/init/basic.vim
 " Key mappings
 source ~/helper/vim/init/keymaps.vim
 
-" UI
-source ~/helper/vim/init/style.vim
-
 " Extra config for different contexts
 source ~/helper/vim/init/config.vim
 
@@ -36,9 +33,12 @@ source ~/helper/vim/init/config.vim
 source ~/helper/vim/init/tabsize.vim
 
 if has('nvim')
-  " For nvim
+  " For neovim
   source ~/.config/nvim/lazy.lua
 else
-  " Plugin
+  " For vim
   source ~/helper/vim/init/plugins.vim
+  source ~/helper/vim/init/style.vim
 endif
+
+source ~/helper/vim/init/special_highlight.vim

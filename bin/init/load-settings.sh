@@ -12,7 +12,6 @@ if which nvim &>/dev/null; then
   export VISUAL=nvim
   export TIG_EDITOR=nvim
   export GIT_EDITOR=nvim
-  export VIMRUNTIME=/usr/share/nvim/runtime
 else
   export EDITOR=vim
   export VISUAL=vim
