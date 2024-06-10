@@ -5,6 +5,7 @@
 "   - COMMON_MAPPING
 "   - LINKS
 "   - MOVING_WITH_READLINE
+"   - INSERT_SURROUNDING
 "   - JUMP_TO_TABS_WITH_ALT
 "   - MANAGE_TABS
 "   - MANAGE_BUFFERS
@@ -166,6 +167,14 @@ noremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 
+"----------------------------------------------------------------------
+" INSERT_SURROUNDING
+"----------------------------------------------------------------------
+inoremap ' ''<Left>
+inoremap " ""<Left>
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
 
 "----------------------------------------------------------------------
 " JUMP_TO_TABS_WITH_ALT
@@ -209,7 +218,7 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>
 
 " Tab move functions
 function! Tab_MoveLeft()

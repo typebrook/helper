@@ -80,17 +80,6 @@ require("aerial").setup({
 })
 vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
 vim.keymap.set("n", "<leader><leader>A", "<cmd>AerialToggle!left<CR>")
--- [[ Configure Aerial ]]
-require("aerial").setup({
-  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-  on_attach = function(bufnr)
-    -- Jump forwards/backwards with '{' and '}'
-    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
-    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
-  end,
-})
-vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
-vim.keymap.set("n", "<leader><leader>A", "<cmd>AerialToggle!left<CR>")
 
 
 -- [[ Configure LSP ]]

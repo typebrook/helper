@@ -4,9 +4,10 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ["<c-j>"] = "move_selection_next",
-        ["<c-k>"] = "move_selection_previous",
+        -- ["<c-j>"] = "move_selection_next",
+        -- ["<c-k>"] = "move_selection_previous",
         ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
+        ["<C-u>"] = false,
       },
     },
     layout_config = {
@@ -46,8 +47,10 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+pcall(require('telescope').load_extension, 'repo')
 
 -- See `:help telescope.builtin`
+vim.keymap.set('n', '<leader>T', ':Telescope<CR>', { desc = '[T]elescope' })
 vim.keymap.set('n', '<leader>f', require('telescope.builtin').oldfiles, { desc = '[F] Find recently opened files' })
 vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[B] Find existing buffers' })
 vim.keymap.set('n', '<leader>st', require('telescope.builtin').builtin, { desc = '[S]earch [T]elescope for builtin' })

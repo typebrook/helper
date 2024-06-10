@@ -59,7 +59,7 @@ require('lazy').setup({
   'itchyny/lightline.vim',
   'preservim/nerdtree',
 
-  -- Adds git related signs to the gutter, as well as utilities for managing changes
+  -- gitsigns.nvim: Adds git related signs to the gutter, as well as utilities for managing changes
   {
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -84,7 +84,7 @@ require('lazy').setup({
     },
   },
 
-  -- colorscheme
+  -- onedark: colorscheme
   {
     -- onedark.nvim: Theme inspired by Atom
     'navarasu/onedark.nvim',
@@ -95,7 +95,7 @@ require('lazy').setup({
     end,
   },
 
-  -- hop.nvim for quick jump
+  -- hop.nvim: For quick jump
   {
     'smoka7/hop.nvim',
     version = "*",
@@ -104,7 +104,7 @@ require('lazy').setup({
     }
   },
 
-  -- Useful plugin to show you pending keybinds.
+  -- which-key.nvim: Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
     opts = {
@@ -117,7 +117,7 @@ require('lazy').setup({
     }
   },
 
-  -- For obsidian
+  -- obsidian.nvim: For obsidian
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
@@ -188,7 +188,7 @@ require('lazy').setup({
     },
   },
 
-  -- install without yarn or npm
+  -- markdown-preview: Install without yarn or npm
   {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -196,7 +196,7 @@ require('lazy').setup({
     build = function() vim.fn["mkdp#util#install"]() end,
   },
 
-  -- For beancount
+  -- vim-beancount: For beancount
   {
     'nathangrigg/vim-beancount',
     ft = { "beancount" },
@@ -309,6 +309,7 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      'cljoly/telescope-repo.nvim',
     },
   },
 
@@ -407,6 +408,17 @@ vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>')
 vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>')
 vim.keymap.set('n', "<leader>oq", ':ObsidianQuickSwitch<CR>')
 vim.keymap.set('v', "<leader>on", ':ObsidianLinkNew<CR>')
+
+-- vim.cmd("let g:mkdp_browser = 'surf'")
+vim.cmd("let g:mkdp_browser = 'firefox'")
+vim.g.mkdp_preview_options = {
+  mkit = { breaks = true },
+   toc= {
+     containerClass = "toc",
+     format = 'function format(x, htmlencode) { return `<span>${htmlencode(x)}</span>`; }',
+     callback = "console.log('foo')",
+ }
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
