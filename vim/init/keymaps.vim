@@ -46,7 +46,7 @@ nnoremap <C-p> "0p
 nmap <leader>w :w!<cr>
 
 " Fast quit with error
-nmap <leader>cq :cq<cr>
+nmap <leader>q :cq<cr>
 
 " Switch wrap
 nmap <leader>W :set wrap!<cr>
