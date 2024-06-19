@@ -46,7 +46,7 @@ nnoremap <C-p> "0p
 nmap <leader>w :w!<cr>
 
 " Fast quit with error
-nmap <leader>cq :cc<cr>
+nmap <leader>cq :cq<cr>
 
 " Switch wrap
 nmap <leader>W :set wrap!<cr>
@@ -73,7 +73,7 @@ augroup vimrc_CRfix
 augroup END
 
 " Open terminal
-nnoremap <leader>, :.terminal ++noclose<CR>
+nnoremap <leader>, :terminal ++noclose<CR>
 vnoremap <leader>, :terminal<CR>
 
 " Toggle paste mode on and off
@@ -245,6 +245,9 @@ nmap <leader>O :e /tmp/buffer<CR>
 " Next buffer
 noremap <leader>l :bn<CR>
 
+" set filetype
+noremap <leader><leader>ft :set filetype=
+
 " Let <leader>l toggle between this and the last accessed buffer
 let g:lastbuffer = 1
 noremap <Tab> :exe "buffer ".g:lastbuffer<CR>
@@ -298,11 +301,11 @@ nnoremap <leader>rr :Redir
 "----------------------------------------------------------------------
 
 " Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
-autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
-autocmd FileType markdown          nnoremap <buffer> <leader>I V:!sed -E 's/^( *)/\1- [ ] /'<CR><CR>
+" autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
+" autocmd FileType markdown          nnoremap <buffer> <leader>I V:!sed -E 's/^( *)/\1- [ ] /'<CR><CR>
 
 " Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
-nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
+" nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
 
 
 "----------------------------------------------------------------------
