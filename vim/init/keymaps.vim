@@ -3,7 +3,7 @@
 " Only for key mapping
 "
 "   - COMMON_MAPPING
-"   - LINKS
+"   - MANAGE_VIMRC
 "   - MOVING_WITH_READLINE
 "   - INSERT_SURROUNDING
 "   - JUMP_TO_TABS_WITH_ALT
@@ -51,15 +51,13 @@ nmap <leader>q :cq<cr>
 " Switch wrap
 nmap <leader>W :set wrap!<cr>
 
+" Show fold level when it changes
+nnoremap zm zm:set foldlevel<CR>
+nnoremap zr zr:set foldlevel<CR>
+
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W execute 'w !sudo -S tee %' <bar> edit!
-
-" New tab like browser
-nmap <C-t>n :tabnew<CR>
-nmap <C-t>c :tabclose<CR>
-nmap <C-t>m :tabmove
-nmap <C-t>o :tabonly
 
 " Enter to open file
 nnoremap <CR> gf
@@ -126,7 +124,7 @@ vnoremap so :source<CR>
 
 
 "----------------------------------------------------------------------
-" => Fast editing and reloading of vimrc configs
+" MANAGE_VIMRC
 "----------------------------------------------------------------------
 nnoremap <leader>e :edit $MYVIMRC<CR>
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
@@ -205,9 +203,14 @@ inoremap <silent><M-9> <Esc>:tablast<CR>
 
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<CR>
-map <leader>to :tabonly<CR>
 map <leader>tc :tabclose<CR>
 map <leader>tm :tabmove<SPACE>
+map <leader>to :tabonly<CR>
+nmap <C-t>n :tabnew<CR>
+nmap <C-t>c :tabclose<CR>
+nmap <C-t>m :tabmove
+nmap <C-t>o :tabonly
+
 noremap <silent><m-h> :call Tab_MoveLeft()<cr>
 noremap <silent><m-l> :call Tab_MoveRight()<cr>
 

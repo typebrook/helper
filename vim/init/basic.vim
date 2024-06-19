@@ -109,19 +109,19 @@ nnoremap gl :call ToggleQuit()<CR>
 " Simply exit when closing the last buffer
 
 function! Bye()
-    " Delete current buffer if working on special filetype
-    let specialFileTypes = ['help', 'netrw', 'vim-plug', 'nerdtree']
-    if index(specialFileTypes, &filetype) != -1
-	:bdelete
-    " Delete current buffer if more than one buffers
-    elseif len(getbufinfo(bufnr())[0].windows) == 1 && len(getwininfo()) > 1
-	:bdelete
-    elseif g:quitVimWhenPressingCtrlC
-	" Otherwise, quit vim
-	:silent! quit
+  let specialFileTypes = ['help', 'netrw', 'vim-plug', 'nerdtree']
+  let bufIsSpecial = index(specialFileTypes, &filetype) != -1
+  let bufInMultipleWindow = len(getbufinfo(bufnr())[0].windows) > 1
+
+  if len(getbufinfo({'buflisted': 1})) == 1 && len(getwininfo()) == 1
+    if g:quitVimWhenPressingCtrlC
+      :silent! quit
     else
-	:echo "Press gl to allow quit with <C-c>"
+      :echo "Press gl to allow quit with <C-c>"
     endif
+  else
+    :bdelete
+  endif
 endfunction
 
 " Ctrl-C rules!!!
