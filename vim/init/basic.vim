@@ -23,11 +23,11 @@
 
 let mapleader = ","	    " Always use comma as leader key
 set nocompatible	    " Disable vi compatible, today is 20XX
-set autochdir		    " Automatically cd to current file
 set path=.,**		    " Allow :find with completion
 set mouse=		    " Disable mouse selection
 set winaltkeys=no	    " Allow alt key for mapping
 set cursorline
+" set autochdir		    " Automatically cd to current file
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
