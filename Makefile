@@ -20,6 +20,7 @@ vim:
 	ln -sf `pwd`/vim/vimrc ~/.config/nvim/init.vim
 	ln -sf `pwd`/vim/lazy/lazy.lua ~/.config/nvim/lazy.lua
 	ln -sf `pwd`/vim/lazy/plugin/ ~/.config/nvim/plugin
+	ln -sf `pwd`/snippets ~/snippets
 	# vim-plug
 	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
