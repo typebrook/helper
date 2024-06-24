@@ -43,7 +43,7 @@ filetype plugin indent on
 " VISUAL
 "----------------------------------------------------------------------
 
-colorscheme desert	        " I like desert!
+" colorscheme desert	        " I like desert!
 " In most of the cases, it is overrides by lightline.vim
 set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 set showmatch		        " Show pairing brackets
