@@ -71,16 +71,16 @@ augroup vimrc_CRfix
 augroup END
 
 " Open terminal
-nnoremap <leader>, :terminal ++noclose<CR>
+" nnoremap <leader>, :terminal ++noclose<CR>
 vnoremap <leader>, :terminal<CR>
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
 
 " Switch CDW to root git directory
-nnoremap <Leader>cd :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+nnoremap <Leader>cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " Switch CWD to the directory of the open buffer
-map <leader>cD :cd %:p:h<cr>:pwd<cr>
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Move one line up and down
 nnoremap <C-j> ddp
@@ -252,6 +252,7 @@ noremap <leader>l :bn<CR>
 
 " set filetype
 noremap <leader><leader>ft :set filetype=
+noremap <leader><leader>fm :set foldmethod=
 
 " Let <leader>l toggle between this and the last accessed buffer
 let g:lastbuffer = 1

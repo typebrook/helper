@@ -6,7 +6,6 @@
 " Last Modified: 2018/05/30 19:20:46
 "
 "======================================================================
-" vim: set ts=4 sw=4 tw=78 noet :
 
 " Open help page in a new tab
 autocmd BufEnter *.txt if &filetype == 'help' | wincmd T | endif
@@ -158,6 +157,20 @@ augroup InitFileTypesGroup
 
 	" markdown 允许自动换行
 	au FileType markdown setlocal wrap
+	au FileType markdown set sw=2
+	au FileType markdown set ts=2
+
+  " Fold markdown by heading level
+  function MarkdownLevel()
+    let h = matchstr(getline(v:lnum), '^#\+')
+    if empty(h)
+      return "="
+    else
+      return ">" . len(h)
+    endif
+  endfunction
+  au FileType markdown setlocal foldexpr=MarkdownLevel()
+  au FileType markdown setlocal foldmethod=expr
 
 	" lisp 进行微调
 	au FileType lisp setlocal ts=8 sts=2 sw=2 et

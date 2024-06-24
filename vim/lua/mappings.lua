@@ -168,3 +168,9 @@ vim.g.mkdp_preview_options = {
 -- [ Configure Hop ]
 vim.keymap.set('n', "<space>", ':HopWord<CR>')
 vim.keymap.set('n', '<C-.>', ':HopChar1<CR>')
+
+-- [ Aerial ]
+vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
+vim.keymap.set("n", "<leader><leader>A", "<cmd>AerialToggle!left<CR>")

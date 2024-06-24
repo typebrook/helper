@@ -27,6 +27,7 @@ set path=.,**		    " Allow :find with completion
 set mouse=		    " Disable mouse selection
 set winaltkeys=no	    " Allow alt key for mapping
 set cursorline
+set whichwrap=b,s
 " set autochdir		    " Automatically cd to current file
 
 " Turn persistent undo on

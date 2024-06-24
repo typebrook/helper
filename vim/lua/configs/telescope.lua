@@ -45,4 +45,7 @@ return {
       },
     },
   },
+  on_attach = function ()
+    require("telescope").load_extension("aerial")
+  end
 }

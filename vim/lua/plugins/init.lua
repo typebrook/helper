@@ -166,8 +166,6 @@ return {
 
   {
     'stevearc/aerial.nvim',
-    lazy = false,
-    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     opts = {
       on_attach = function(bufnr)
         -- Jump forwards/backwards with '{' and '}'
@@ -206,13 +204,36 @@ return {
   --   end,
   -- },
   --
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "lua-language-server", "stylua",
+        "html-lsp", "css-lsp", "prettier"
+      },
+    },
+  },
+
+  {
+    'numToStr/Comment.nvim',
+    lazy = false,
+    opts = {
+      toggler = {
+        line = '<C-/>',
+        block = 'gb',
+      },
+      opleader = {
+        line = '<C-/>',
+        block = 'gb',
+      },
+    },
+  },
+
+
   -- {
-  -- 	"williamboman/mason.nvim",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"lua-language-server", "stylua",
-  -- 			"html-lsp", "css-lsp" , "prettier"
-  -- 		},
-  -- 	},
-  -- },
+  --   'akinsho/bufferline.nvim',
+  --   lazy = false,
+  --   version = "*",
+  --   dependencies = 'nvim-tree/nvim-web-devicons'
+  -- }
 }
