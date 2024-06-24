@@ -15,12 +15,8 @@ tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
 
 vim:
-	ln -sf `pwd`/vim/vimrc ~/.vimrc
-	mkdir -p ~/.config/nvim
-	ln -sf `pwd`/vim/vimrc ~/.config/nvim/init.vim
-	ln -sf `pwd`/vim/lazy/lazy.lua ~/.config/nvim/lazy.lua
-	ln -sf `pwd`/vim/lazy/plugin/ ~/.config/nvim/plugin
-	ln -sf `pwd`/snippets ~/snippets
+	ln -sf `pwd`/vim/init.vim ~/.vimrc
+	ln -sf `pwd`/vim ~/.config/nvim
 	# vim-plug
 	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
