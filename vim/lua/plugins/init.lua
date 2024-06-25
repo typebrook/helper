@@ -194,22 +194,25 @@ return {
   --   }
   -- },
 
-  -- These are some examples, uncomment them if you want to see them work!
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   config = function()
-  --     require("nvchad.configs.lspconfig").defaults()
-  --     require "configs.lspconfig"
-  --   end,
-  -- },
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    config = function()
+      require("nvchad.configs.lspconfig").defaults()
+      require "configs.lspconfig"
+    end,
+  },
   --
   {
     "williamboman/mason.nvim",
     opts = {
       automatically_installation = true,
       ensure_installed = {
-        "lua-language-server", "stylua",
-        "html-lsp", "css-lsp", "prettier"
+        "css-lsp",
+        "html-lsp",
+        "lua-language-server",
+        "prettier",
+        "stylua",
       },
     },
   },
