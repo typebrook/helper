@@ -78,7 +78,7 @@ vnoremap <leader>, :terminal<CR>
 map <leader>pp :setlocal paste!<cr>
 
 " Switch CDW to root git directory
-nnoremap <Leader>cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+nnoremap <Leader>cg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
@@ -450,17 +450,17 @@ endfunc
 " 下面进行 grep，这样能方便的对相关项目进行搜索
 "----------------------------------------------------------------------
 if executable('rg')
-	noremap <silent><F2> :AsyncRun! -cwd=<root> rg -n --no-heading 
-				\ --color never -g *.h -g *.c* -g *.py -g *.js -g *.vim 
+	noremap <silent><F2> :AsyncRun! -cwd=<root> rg -n --no-heading
+				\ --color never -g *.h -g *.c* -g *.py -g *.js -g *.vim
 				\ <C-R><C-W> "<root>" <cr>
 elseif has('win32') || has('win64')
-	noremap <silent><F2> :AsyncRun! -cwd=<root> findstr /n /s /C:"<C-R><C-W>" 
+	noremap <silent><F2> :AsyncRun! -cwd=<root> findstr /n /s /C:"<C-R><C-W>"
 				\ "\%CD\%\*.h" "\%CD\%\*.c*" "\%CD\%\*.py" "\%CD\%\*.js"
 				\ "\%CD\%\*.vim"
 				\ <cr>
 else
-	noremap <silent><F2> :AsyncRun! -cwd=<root> grep -n -s -R <C-R><C-W> 
-				\ --include='*.h' --include='*.c*' --include='*.py' 
+	noremap <silent><F2> :AsyncRun! -cwd=<root> grep -n -s -R <C-R><C-W>
+				\ --include='*.h' --include='*.c*' --include='*.py'
 				\ --include='*.js' --include='*.vim'
 				\ '<root>' <cr>
 endif

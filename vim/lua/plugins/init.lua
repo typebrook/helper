@@ -40,7 +40,7 @@ return {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- See `:help ibl`
-    enabled = false,
+    enabled = true,
     main = "ibl",
     opts = {
       indent = { char = "┊" },
@@ -173,13 +173,6 @@ return {
   {
     'stevearc/aerial.nvim',
     opts = {
-      on_attach = function(bufnr)
-        -- Jump forwards/backwards with '{' and '}'
-        vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
-        vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
-        vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
-        vim.keymap.set("n", "<leader><leader>A", "<cmd>AerialToggle!left<CR>")
-      end,
     },
     -- Optional dependencies
     dependencies = {
@@ -213,6 +206,7 @@ return {
   {
     "williamboman/mason.nvim",
     opts = {
+      automatically_installation = true,
       ensure_installed = {
         "lua-language-server", "stylua",
         "html-lsp", "css-lsp", "prettier"

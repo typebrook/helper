@@ -145,7 +145,7 @@ let g:ale_set_quickfix = 1
 "
 "
 ""----------------------------------------------------------------------
-"" 默认插件 
+"" 默认插件
 ""----------------------------------------------------------------------
 "
 "" 全文快速移动，<leader><leader>f{char} 即可触发
@@ -276,7 +276,7 @@ let g:ale_set_quickfix = 1
 "
 "	" 提供 gist 接口
 "	Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
-"	
+"
 "	" ALT_+/- 用于按分隔符扩大缩小 v 选区
 "	map <m-=> <Plug>(expand_region_expand)
 "	map <m--> <Plug>(expand_region_shrink)
@@ -305,7 +305,7 @@ let g:ale_set_quickfix = 1
 "	let g:gutentags_cache_dir = expand('~/.cache/tags')
 "
 "	" 默认禁用自动生成
-"	let g:gutentags_modules = [] 
+"	let g:gutentags_modules = []
 "
 "	" 如果有 ctags 可执行就允许动态生成 ctags 文件
 "	if executable('ctags')
@@ -382,7 +382,7 @@ let g:ale_set_quickfix = 1
 "	" rust 语法增强
 "	Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 "
-"	" vim org-mode 
+"	" vim org-mode
 "	Plug 'jceb/vim-orgmode', { 'for': 'org' }
 "endif
 "
@@ -469,13 +469,13 @@ let g:ale_set_quickfix = 1
 "
 "	" 编辑不同文件类型需要的语法检查器
 "	let g:ale_linters = {
-"				\ 'c': ['gcc', 'cppcheck'], 
-"				\ 'cpp': ['gcc', 'cppcheck'], 
-"				\ 'python': ['flake8', 'pylint'], 
-"				\ 'lua': ['luac'], 
+"				\ 'c': ['gcc', 'cppcheck'],
+"				\ 'cpp': ['gcc', 'cppcheck'],
+"				\ 'python': ['flake8', 'pylint'],
+"				\ 'lua': ['luac'],
 "				\ 'go': ['go build', 'gofmt'],
 "				\ 'java': ['javac'],
-"				\ 'javascript': ['eslint'], 
+"				\ 'javascript': ['eslint'],
 "				\ }
 "
 "
@@ -660,16 +660,16 @@ let g:ale_set_quickfix = 1
 ""----------------------------------------------------------------------
 "" Ycm 白名单（非名单内文件不启用 YCM），避免打开个 1MB 的 txt 分析半天
 ""----------------------------------------------------------------------
-"let g:ycm_filetype_whitelist = { 
+"let g:ycm_filetype_whitelist = {
 "			\ "c":1,
-"			\ "cpp":1, 
+"			\ "cpp":1,
 "			\ "objc":1,
 "			\ "objcpp":1,
 "			\ "python":1,
 "			\ "java":1,
 "			\ "javascript":1,
 "			\ "coffee":1,
-"			\ "vim":1, 
+"			\ "vim":1,
 "			\ "go":1,
 "			\ "cs":1,
 "			\ "lua":1,

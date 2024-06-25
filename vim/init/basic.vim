@@ -66,7 +66,8 @@ set autoindent		    " If current line has indent, automatically set indent for n
 set cindent
 set ttimeout
 set ttimeoutlen=50
-set updatetime=250
+set updatetime=500
+autocmd CursorHold * normal! m'
 
 imap <C-c> <Esc>l
 " Change IM to US when exit to Normal mode
