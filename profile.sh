@@ -9,15 +9,12 @@ export XDG_STATE_HOME=~/.local/share/
 export MAIL=$HOME/Maildir
 if which nvim &>/dev/null; then
   export EDITOR=nvim
-  export VISUAL=nvim
-  export TIG_EDITOR=nvim
-  export GIT_EDITOR=nvim
 else
   export EDITOR=vim
-  export VISUAL=vim
-  export TIG_EDITOR=vim
-  export GIT_EDITOR=vim
 fi
+export VISUAL=$EDITOR
+export TIG_EDITOR=$EDITOR
+export GIT_EDITOR=$EDITOR
 
 # Get current shell
 shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')

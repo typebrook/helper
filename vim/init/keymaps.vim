@@ -78,9 +78,9 @@ vnoremap <leader>, :terminal<CR>
 map <leader>pp :setlocal paste!<cr>
 
 " Switch CDW to root git directory
-nnoremap <Leader>cg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+nnoremap cd :cd %:p:h<cr>:pwd<cr>
 
 " Move one line up and down
 nnoremap <C-j> ddp

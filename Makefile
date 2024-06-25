@@ -1,6 +1,9 @@
 .ONESHELL:
 .PHONY: *
 
+help:
+	@echo Use make all for git tig vim settings
+
 all: git tig vim gpg
 	mkdir -p ~/git
 

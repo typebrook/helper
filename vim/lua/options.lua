@@ -18,3 +18,5 @@ o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 o.termguicolors = true
+
+o.whichwrap = "b,s"

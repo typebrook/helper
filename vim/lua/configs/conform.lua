@@ -5,6 +5,8 @@ local options = {
     html = { "prettier" },
     markdown = { "prettier" },
     sh = {"shfmt"},
+    bash = {"shfmt"},
+    zsh = {"shfmt"},
   },
 
   -- format_on_save = {
