@@ -54,9 +54,10 @@ vim.keymap.set("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescop
 
 vim.keymap.set('n', '<leader>ss', function()
   local current_filetype = vim.bo.filetype
-  local cwd = os.getenv("HOME") .. '/snippets/' .. current_filetype
+  local cwd = os.getenv("HOME") .. '/snippets'
   require('telescope.builtin').find_files {
     prompt_title = 'Select a snippet for ' .. current_filetype,
+    default_text = current_filetype .. "_",
     cwd = cwd,
     attach_mappings = function(prompt_bufnr, map)
       local insert_selected_snippet = function()
@@ -95,20 +96,10 @@ vim.keymap.set('n', '<leader>sd', function()
 end, { desc = 'Search Directory' })
 
 vim.keymap.set('n', '<leader>sn', function()
-  vim.ui.input({ prompt = 'Snippet Name: ' }, function(snippet_path)
-    local current_filetype
-    local snippet
-    if string.find(snippet_path, "/") then
-      current_filetype = string.match(snippet_path, "^(.-)/")
-      snippet = string.match(snippet_path, "/(.-)$")
-    else
-      current_filetype = vim.bo.filetype
-      snippet = snippet_path
-    end
-    local dir = os.getenv("HOME") .. '/snippets/' .. current_filetype
-    local path = dir .. '/' .. snippet
-    vim.cmd("!mkdir -p" .. dir)
-    vim.cmd("e " .. path)
+  local current_filetype = vim.bo.filetype
+  vim.ui.input({ prompt = 'Snippet Name: ', default = current_filetype .. "_"  }, function(snippet)
+    vim.cmd("cd ~/snippets")
+    vim.cmd("e " .. snippet)
     vim.cmd("set filetype=" .. current_filetype)
     vim.cmd("set filetype?")
   end)
