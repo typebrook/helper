@@ -246,6 +246,7 @@ endfunc
 
 " Open a new buffer
 nmap <leader><leader>b :enew<CR>
+nmap <leader>B :enew<CR>
 nmap <leader>O :e /tmp/buffer<CR>
 
 " Next buffer
@@ -254,7 +255,7 @@ noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
 
 " set filetype
 noremap <leader><leader>ft :set filetype=
-noremap <leader><leader>f  :set foldmetho =
+noremap <leader><leader>fm :set foldmethod=
 
 " Let <leader>l toggle between this and the last accessed buffer
 let g:lastbuffer = 1

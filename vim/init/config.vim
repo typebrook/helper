@@ -10,6 +10,29 @@
 " Open help page in a new tab
 autocmd BufEnter *.txt if &filetype == 'help' | wincmd T | endif
 
+" Quickly edit html tag class
+function! s:ChangeAttr(pattern)
+
+    let l:attr = matchstr(getline('.'), a:pattern.'="')
+    if l:attr == ''
+      let l:all_attrs = matchstr(getline('.'), '<[[:alnum:]]\+\zs\s\?[^>]*>\ze')
+      execute 's/'.l:all_attrs.'/ '.a:pattern.'=""'.l:all_attrs.'/'
+      noh
+      normal! 0f"l
+      startinsert
+    else
+      normal! 0
+      call search(l:attr)
+      normal! f"l
+      noh
+      startinsert
+    endif
+endfunction
+
+autocmd FileType html nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
+autocmd BufLeave nunmap <leader>cl
+autocmd FileType html nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
+autocmd BufLeave nunmap <leader>id
 
 "----------------------------------------------------------------------
 " 有 tmux 何没有的功能键超时（毫秒）

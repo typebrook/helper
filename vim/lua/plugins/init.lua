@@ -233,6 +233,11 @@ return {
     },
   },
 
+  {
+    'tpope/vim-surround',
+    lazy = false,
+  }
+
 
   -- {
   --   'akinsho/bufferline.nvim',
