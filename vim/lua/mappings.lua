@@ -23,11 +23,6 @@ end, { desc = "format files" })
 -- global lsp mappings
 vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
--- tabufline
-vim.keymap.set("n", "<leader>x", function()
-  require("nvchad.tabufline").close_buffer()
-end, { desc = "buffer close" })
-
 -- Comment
 vim.keymap.set("n", "<leader>/", "gcc", { desc = "comment toggle", remap = true })
 vim.keymap.set("v", "<leader>/", "gc", { desc = "comment toggle", remap = true })
@@ -66,8 +61,14 @@ vim.keymap.set('n', '<leader>ss', function()
         require('telescope.actions').close(prompt_bufnr)
         vim.api.nvim_put(snippet_content, '', false, true)
       end
+      local edit_selected_snippet = function()
+        local file = require('telescope.actions.state').get_selected_entry()[1]
+        require('telescope.actions').close(prompt_bufnr)
+        vim.cmd(":e " .. cwd .. "/" .. file)
+      end
 
       map('i', '<CR>', insert_selected_snippet)
+      map('i', '<C-T>', edit_selected_snippet)
       map('n', '<CR>', insert_selected_snippet)
 
       return true
@@ -115,17 +116,12 @@ end, { desc = "Create a new snippet" })
 -- map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 -- new terminals
-vim.keymap.set("n", "<leader><leader>h", function() require("nvchad.term").new { pos = "sp" } end,
-  { desc = "terminal new horizontal term" })
-vim.keymap.set("n", "<leader>v", function() require("nvchad.term").new { pos = "vsp" } end,
-  { desc = "terminal new vertical window" })
+vim.keymap.set("n", "<leader><leader>h", function() require("nvchad.term").new { pos = "sp" } end, { desc = "terminal new horizontal term" })
+vim.keymap.set("n", "<leader>v", function() require("nvchad.term").new { pos = "vsp" } end, { desc = "terminal new vertical window" })
 -- toggleable
-vim.keymap.set({ "n", "t" }, "<A-v>", function() require("nvchad.term").toggle { pos = "vsp", id = "vtoggleTerm" } end,
-  { desc = "terminal toggleable vertical term" })
-vim.keymap.set({ "n", "t" }, "<A-t>", function() require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" } end,
-  { desc = "terminal new horizontal term" })
-vim.keymap.set({ "n", "t" }, "<A-i>", function() require("nvchad.term").toggle { pos = "float", id = "floatTerm" } end,
-  { desc = "terminal toggle floating term" })
+vim.keymap.set({ "n", "t" }, "<A-v>", function() require("nvchad.term").toggle { pos = "vsp", id = "vtoggleTerm" } end, { desc = "terminal toggleable vertical term" })
+vim.keymap.set({ "n", "t" }, "<A-t>", function() require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" } end, { desc = "terminal new horizontal term" })
+vim.keymap.set({ "n", "t" }, "<A-i>", function() require("nvchad.term").toggle { pos = "float", id = "floatTerm" } end, { desc = "terminal toggle floating term" })
 
 -- whichkey
 vim.keymap.set("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
@@ -176,5 +172,5 @@ vim.keymap.set('n', '<C-.>', ':HopChar1<CR>')
 -- [ Aerial ]
 vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", {})
 vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", {})
-vim.keymap.set("n", "<leader><leader>a", "<cmd>Telescope aerial<CR>")
-vim.keymap.set("n", "<leader><leader>A", function() require("aerial").toggle({ direction = "left" }) end)
+vim.keymap.set("n", "gN", "<cmd>Telescope aerial<CR>")
+vim.keymap.set("n", "gn", function() require("aerial").toggle({ direction = "left" }) end)

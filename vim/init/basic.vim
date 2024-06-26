@@ -170,7 +170,10 @@ autocmd BufRead /dev/shm/*.txt call SetPasswordFile()
 function SetPasswordFile()
     setlocal foldminlines=0
     setlocal foldmethod=manual
-    setlocal foldtext=
+    function s:custom()
+      return "Password"
+    endfunction
+    setlocal foldtext=s:custom()
     norm! ggzfl
 endfunction
 

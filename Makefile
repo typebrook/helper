@@ -106,3 +106,7 @@ alacritty:
 mpd:
 	ln -sf `pwd`/mpd/ncmpcpp ~/.config/ncmpcpp
 	rm -rf ~/.ncmpcpp
+
+snippets:
+	rm -rf ~/snippets
+	ln -sf `pwd`/snippets ~/snippets

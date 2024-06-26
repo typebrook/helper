@@ -41,6 +41,8 @@ if M.ui.tabufline.enabled then
   vim.keymap.set("n", "<A-l>", function() require("nvchad.tabufline").move_buf(1) end)
   vim.keymap.set("n", "<A-H>", function() vim.cmd("tabprevious") end)
   vim.keymap.set("n", "<A-L>", function() vim.cmd("tabnext") end)
+  vim.keymap.set("n", "<tab>", function() require("nvchad.tabufline").next() end, { desc = "buffer goto next" })
+  vim.keymap.set("n", "<S-tab>", function() require("nvchad.tabufline").prev() end, { desc = "buffer goto prev" })
 end
 
 

@@ -129,7 +129,7 @@ vnoremap so :source<CR>
 " MANAGE_VIMRC
 "----------------------------------------------------------------------
 nnoremap <leader>e :edit $MYVIMRC<CR>
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
 
 
 "----------------------------------------------------------------------
@@ -245,18 +245,19 @@ endfunc
 "----------------------------------------------------------------------
 
 " Open a new buffer
+nmap <leader><leader>b :enew<CR>
 nmap <leader>O :e /tmp/buffer<CR>
 
 " Next buffer
-noremap <leader>l :bn<CR>
+noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
+" noremap <Tab> :exe 'buffer '.g:lastbuffer<CR>
 
 " set filetype
 noremap <leader><leader>ft :set filetype=
-noremap <leader><leader>fm :set foldmethod=
+noremap <leader><leader>f  :set foldmetho =
 
 " Let <leader>l toggle between this and the last accessed buffer
 let g:lastbuffer = 1
-noremap <Tab> :exe "buffer ".g:lastbuffer<CR>
 au BufLeave * let g:lastbuffer = bufnr()
 
 "----------------------------------------------------------------------
@@ -270,7 +271,7 @@ vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
 vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
-vnoremap z <ESC>`<i「<ESC>`>la」<ESC>
+vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 
 
 "----------------------------------------------------------------------
