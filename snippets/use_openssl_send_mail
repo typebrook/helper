@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# ref: https://stackoverflow.com/questions/9998710/is-it-possible-to-send-mails-by-bash-script-via-smtp
+# Use "host -t mx host" to find out mail server
+
+set -e
+
+MAIL_SERVER=smtp.gmail.com
+PORT=465
+MAIL_FROM=typebrook@gmail.com
+RCPT_TO=typebrook@gmail.com
+
+send_message_line_by_line() {
+	while read line; do
+		echo $line >/dev/tty
+		echo $line
+		sleep 1
+	done | openssl s_client -connect $MAIL_SERVER:$PORT -crlf
+}
+
+# 1. openssl do RENEGOTIATING when input starts with R, so use "rcpt to:" instead of "RCPT TO:"
+# 2. End mail with an empty line, and followed by '.' and 'QUIT'
+cat <<MAILEND | send_message_line_by_line
+HELO $MAIL_SERVER
+AUTH LOGIN
+$(echo $MAIL_FROM | base64)
+$(pass google/imap_for_typebrook | base64)
+MAIL FROM: <$MAIL_FROM>
+rcpt to: <$RCPT_TO>
+DATA
+Subject: $(date) test mail from bash
+Another test mail
+
+.
+QUIT
+MAILEND

@@ -6,6 +6,10 @@ return {
         -- ["<c-k>"] = "move_selection_previous",
         ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
         ["<C-u>"] = false,
+        ["<C-o>"] = function(p_bufnr)
+          require("telescope.actions").send_selected_to_qflist(p_bufnr)
+          vim.cmd.cfdo("edit")
+        end,
       },
     },
     layout_config = {
@@ -45,7 +49,7 @@ return {
       },
     },
   },
-  on_attach = function ()
+  on_attach = function()
     require("telescope").load_extension("aerial")
   end
 }

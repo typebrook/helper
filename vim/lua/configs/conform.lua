@@ -1,12 +1,12 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    css = { "prettier" },
-    html = { "prettier" },
-    markdown = { "prettier" },
     sh = {"shfmt"},
     bash = {"shfmt"},
     zsh = {"shfmt"},
+    markdown = { "prettier" },
+    css = { "prettier" },
+    html = { "prettier" },
   },
 
   -- format_on_save = {

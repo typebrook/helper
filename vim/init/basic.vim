@@ -66,8 +66,8 @@ set autoindent		    " If current line has indent, automatically set indent for n
 set cindent
 set ttimeout
 set ttimeoutlen=50
-set updatetime=500
-autocmd CursorHold * normal! m'
+" set updatetime=1000
+" autocmd CursorHold * normal! m'
 
 imap <C-c> <Esc>l
 " Change IM to US when exit to Normal mode
@@ -209,7 +209,7 @@ set matchtime=2
 set display=lastline
 
 " 允許下方顯示目錄
-set wildmenu
+set wildmenu wildoptions=pum,fuzzy
 
 " Improve performance
 set lazyredraw
