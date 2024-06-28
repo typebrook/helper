@@ -13,6 +13,7 @@
 " BUFFERS
 " ENCODING_PREFERENCE
 " FOLDING
+" BACKUP
 " MISC
 "======================================================================
 
@@ -197,6 +198,22 @@ set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
 set foldlevel=2         " Expand all by default
 
+
+"----------------------------------------------------------------------
+" BACKUP
+"----------------------------------------------------------------------
+
+" Allow backup
+set backup
+set backupext=.bak
+set noswapfile
+
+" Create backup dir if it doesn't exist
+silent! call mkdir(expand('~/.vim/tmp'), "p", 0755)
+set backupdir=~/.vim/tmp
+
+" backup when write file
+set writebackup
 
 "----------------------------------------------------------------------
 " MISC

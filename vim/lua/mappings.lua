@@ -23,10 +23,6 @@ end, { desc = "format files" })
 -- global lsp mappings
 vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
--- Comment
-vim.keymap.set("n", "<leader>/", "gcc", { desc = "comment toggle", remap = true })
-vim.keymap.set("v", "<leader>/", "gc", { desc = "comment toggle", remap = true })
-
 -- nvimtree
 vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 vim.keymap.set("n", "<leader>nf", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })

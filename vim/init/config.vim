@@ -7,56 +7,6 @@
 "
 "======================================================================
 
-" Open help page in a new tab
-autocmd BufEnter *.txt if &filetype == 'help' | wincmd T | endif
-
-" Automatically apply filetype by shebang
-function! s:ApplyShebang()
-  let l:filetype = matchstr(getline(1), '^#!.*[ /]\zs[[:alnum:]]\+$')
-  let l:shebangMatch = #{node: "javascript"}
-  if l:filetype != ""
-    if has_key(shebangMatch, l:filetype)
-      let l:filetype = shebangMatch[l:filetype]
-    endif
-    echo "filetype from shebang: ".l:filetype
-    execute "set filetype=".l:filetype
-  endif
-endfunction
-autocmd BufReadPost * call <SID>ApplyShebang()
-
-" For vimscript
-if executable('vim-language-server')
-  echo "set vim language server"
-  au User lsp_setup call lsp#register_server({
-        \ 'name': 'vimscript-language-server',
-        \ 'cmd': {server_info->['vimscript-language-server']},
-        \ 'whitelist': ['vim'],
-        \ })
-endif
-
-" html
-" Quickly edit html tag class
-function! s:ChangeAttr(pattern)
-  let l:attr = matchstr(getline('.'), a:pattern.'="')
-  if l:attr == ''
-    let l:all_attrs = matchstr(getline('.'), '<[[:alnum:]]\+\zs\s\?[^>]*>\ze')
-    execute 's/'.l:all_attrs.'/ '.a:pattern.'=""'.l:all_attrs.'/'
-    noh
-    normal! 0f"l
-    startinsert
-  else
-    normal! 0
-    call search(l:attr)
-    normal! f"l
-    noh
-    startinsert
-  endif
-endfunction
-" Edit class and id for javascript files
-autocmd FileType html nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
-autocmd BufLeave nunmap <leader>cl
-autocmd FileType html nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
-autocmd BufLeave nunmap <leader>id
 
 "----------------------------------------------------------------------
 " 有 tmux 何没有的功能键超时（毫秒）
@@ -76,9 +26,11 @@ if has('nvim') == 0 && has('gui_running') == 0
   function! s:metacode(key)
     exec "set <M-".a:key.">=\e".a:key
   endfunc
+  " set 0-9
   for i in range(10)
     call s:metacode(nr2char(char2nr('0') + i))
   endfor
+  " set a-z A-Z
   for i in range(26)
     call s:metacode(nr2char(char2nr('a') + i))
     call s:metacode(nr2char(char2nr('A') + i))
@@ -130,52 +82,21 @@ call s:key_escape('<S-F12>', '[24;2~')
 if &term =~ '256color' && $TMUX != ''
   " disable Background Color Erase (BCE) so that color schemes
   " render properly when inside 256-color tmux and GNU screen.
-  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
   set t_ut=
 endif
 
-
-"----------------------------------------------------------------------
-" 备份设置
-"----------------------------------------------------------------------
-
-" 允许备份
-set backup
-
-" 保存时备份
-set writebackup
-
-" 备份文件地址，统一管理
-set backupdir=~/.vim/tmp
-
-" 备份文件扩展名
-set backupext=.bak
-
-" 禁用交换文件
-set noswapfile
-
-" 创建目录，并且忽略可能出现的警告
-silent! call mkdir(expand('~/.vim/tmp'), "p", 0755)
+" Ref: https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
+" You might have to force true color when using regular vim inside tmux as the
+" colorscheme can appear to be grayscale with 'termguicolors' option enabled.
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 
 
 "----------------------------------------------------------------------
 " 配置微调
 "----------------------------------------------------------------------
-
-" 修正 ScureCRT/XShell 以及某些终端乱码问题，主要原因是不支持一些
-" 终端控制命令，比如 cursor shaping 这类更改光标形状的 xterm 终端命令
-" 会令一些支持 xterm 不完全的终端解析错误，显示为错误的字符，比如 q 字符
-" 如果你确认你的终端支持，不会在一些不兼容的终端上运行该配置，可以注释
-if has('nvim')
-  set guicursor=
-elseif (!has('gui_running')) && has('terminal') && has('patch-8.0.1200')
-  let g:termcap_guicursor = &guicursor
-  let g:termcap_t_RS = &t_RS
-  let g:termcap_t_SH = &t_SH
-  set guicursor=
-  set t_RS=
-  set t_SH=
-endif
 
 " 打开文件时恢复上一次光标所在位置
 autocmd BufReadPost *
@@ -190,7 +111,6 @@ if !exists(":DiffOrig")
 endif
 
 
-
 "----------------------------------------------------------------------
 " 文件类型微调
 "----------------------------------------------------------------------
@@ -199,36 +119,67 @@ augroup InitFileTypesGroup
   " 清除同组的历史 autocommand
   au!
 
-  " C/C++ 文件使用 // 作为注释
-  au FileType c,cpp setlocal commentstring=//\ %s
+  " help page: open in a new tab
+  autocmd BufEnter *.txt if &filetype == 'help' | wincmd T | endif
 
-  " markdown 允许自动换行
-  au FileType markdown setlocal wrap
-  au FileType markdown set sw=2
-  au FileType markdown set ts=2
+  " shegang: Automatically apply filetype by shebang
+  function! s:ApplyShebang()
+    let l:filetype = matchstr(getline(1), '^#!.*[ /]\zs[[:alnum:]]\+$')
+    let l:shebangMatch = #{ node: "javascript" }
+    if l:filetype != ""
+      if has_key(shebangMatch, l:filetype)
+        let l:filetype = shebangMatch[l:filetype]
+      endif
+      echo "filetype from shebang: ".l:filetype
+      execute "set filetype=".l:filetype
+    endif
+  endfunction
+  autocmd BufReadPost * call <SID>ApplyShebang()
 
-  " Fold markdown by heading level
-  function MarkdownLevel()
-    let h = matchstr(getline(v:lnum), '^#\+')
-    if empty(h)
-      return "="
+  " html: Quickly edit html tag class
+  function! s:ChangeAttr(pattern)
+    let l:attr = matchstr(getline('.'), a:pattern.'="')
+    if l:attr == ''
+      let l:all_attrs = matchstr(getline('.'), '<[[:alnum:]]\+\zs\s\?[^>]*>\ze')
+      execute 's/'.l:all_attrs.'/ '.a:pattern.'=""'.l:all_attrs.'/'
+      noh
+      normal! 0f"l
+      startinsert
     else
-      return ">" . len(h)
+      normal! 0
+      call search(l:attr)
+      normal! f"l
+      noh
+      startinsert
+    endif
+  endfunction
+  " Edit class and id for javascript files
+  autocmd FileType html nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
+  autocmd BufLeave nunmap <leader>cl
+  autocmd FileType html nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
+  autocmd BufLeave nunmap <leader>id
+
+  " markdown
+  au FileType markdown setlocal wrap
+  au FileType markdown set sw=2 ts=2
+  " Fold by heading level
+  function! MarkdownLevel()
+    let hash_num = matchstr(getline(v:lnum), '^#\+')
+    let hash_num_at_top = matchstr(getline(v:lnum-1), '^#\+')
+    if empty(hash_num)
+      if empty(hash_num_at_top)
+        return "="
+      else
+        return ">".(len(hash_num-1))
+      endif
+    else
+      return len(hash_num)-1
     endif
   endfunction
   au FileType markdown setlocal foldexpr=MarkdownLevel()
   au FileType markdown setlocal foldmethod=expr
 
-  " lisp 进行微调
-  au FileType lisp setlocal ts=8 sts=2 sw=2 et
-
-  " scala 微调
-  au FileType scala setlocal sts=4 sw=4 noet
-
-  " haskell 进行微调
-  au FileType haskell setlocal et
-
-  " quickfix 隐藏行号
+  " quickfix: hide line number
   au FileType qf setlocal nonumber
 
   " 强制对某些扩展名的 filetype 进行纠正

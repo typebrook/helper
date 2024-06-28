@@ -155,7 +155,7 @@ cnoremap <C-e> <End>
 cnoremap <M-f> <S-Right>
 cnoremap <M-b> <S-Left>
 cnoremap <C-d> <Del>
-cnoremap <C-r> <C-d>
+" cnoremap <C-r> <C-d>
 cnoremap <C-h> <BackSpace>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
