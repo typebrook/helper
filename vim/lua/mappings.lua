@@ -25,7 +25,6 @@ vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagn
 
 -- nvimtree
 vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
-vim.keymap.set("n", "<leader>nf", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
 -- telescope
 vim.keymap.set("n", "<leader>f", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })

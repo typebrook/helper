@@ -11,6 +11,7 @@
 "   - MANAGE_BUFFERS
 "   - SURROURD_WITH_CHAR
 "   - REDIRECTION_WITH_BUFFER
+"   - QUICK_SUBSTITUTE
 "   - 终端支持
 "   - 编译运行
 "   - 符号搜索
@@ -262,6 +263,7 @@ noremap <leader><leader>fm :set foldmethod=
 let g:lastbuffer = 1
 au BufLeave * let g:lastbuffer = bufnr()
 
+
 "----------------------------------------------------------------------
 " SURROURD_WITH_CHAR
 "----------------------------------------------------------------------
@@ -304,6 +306,26 @@ endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir
+
+
+"----------------------------------------------------------------------
+" QUICK_SUBSTITUTE
+"----------------------------------------------------------------------
+function! IsSubstituteTextSelected()
+  execute "norm \<ESC>"
+  " Get position of the first/last char
+  echo col("'<") col("'>") len(getline('.'))+1
+  return col("'<") != 1 || col("'>") != len(getline('.')) + 1
+endfunction
+function! SelectAreaOrDoSubstitute()
+  if IsSubstituteTextSelected()
+    call feedkeys('gv"aygv*NVL')
+  else
+    call feedkeys("gv:s//\<C-R>a/g\<Left>\<Left>")
+  endif
+endfunction
+vnoremap <CR> <Cmd>call SelectAreaOrDoSubstitute()<CR>
+
 
 "----------------------------------------------------------------------
 " Markdown items (temproray solution)
