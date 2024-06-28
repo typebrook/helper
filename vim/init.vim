@@ -29,9 +29,6 @@ source ~/helper/vim/init/keymaps.vim
 " Extra config for different contexts
 source ~/helper/vim/init/config.vim
 
-" Set tabsize
-source ~/helper/vim/init/tabsize.vim
-
 if has('nvim')
   " For neovim
   source ~/.config/nvim/lazy.lua

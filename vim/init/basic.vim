@@ -11,6 +11,7 @@
 " JUMP
 " SEARCH
 " BUFFERS
+" TABSIZE
 " ENCODING_PREFERENCE
 " FOLDING
 " BACKUP
@@ -178,6 +179,16 @@ function SetPasswordFile()
     norm! ggzfl
 endfunction
 
+
+"----------------------------------------------------------------------
+" TABSIZE
+"----------------------------------------------------------------------
+set expandtab
+set shiftwidth=2
+set autoindent
+set tabstop=4
+set softtabstop=0
+set smartindent
 
 
 "----------------------------------------------------------------------
