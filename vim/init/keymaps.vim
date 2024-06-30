@@ -33,8 +33,8 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-" Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :nohlsearch<cr>
+" Disable highlight when <leader><CR> is pressed
+map <silent> <leader><CR> :noh<CR>
 
 " Quick move in a line
 noremap <C-h> 30h
@@ -44,13 +44,13 @@ noremap <C-l> 30l
 nnoremap <C-p> "0p
 
 " Fast saving
-nmap <leader>w :w!<cr>
+nmap <leader>w :w!<CR>
 
 " Fast quit with error
-nmap <leader>q :cq<cr>
+nmap cq :cq<CR>
 
 " Switch wrap
-nmap <leader>W :set wrap!<cr>
+nmap <leader>W :set wrap!<CR>
 
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
@@ -74,14 +74,15 @@ augroup END
 " Open terminal
 " nnoremap <leader>, :terminal ++noclose<CR>
 vnoremap <leader>, :terminal<CR>
+echo foo
 
 " Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
+map <leader>pp :setlocal paste!<CR>
 
 " Switch CDW to root git directory
 nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " Switch CWD to the directory of the open buffer
-nnoremap cd :cd %:p:h<cr>:pwd<cr>
+nnoremap cd :cd %:p:h<CR>:pwd<CR>
 
 " Move one line up and down
 nnoremap <C-j> ddp
@@ -215,8 +216,8 @@ nmap <C-t>c :tabclose<CR>
 nmap <C-t>m :tabmove
 nmap <C-t>o :tabonly
 
-noremap <silent><m-h> :call Tab_MoveLeft()<cr>
-noremap <silent><m-l> :call Tab_MoveRight()<cr>
+noremap <silent><m-h> :call Tab_MoveLeft()<CR>
+noremap <silent><m-l> :call Tab_MoveRight()<CR>
 
 " Let <leader>tl toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -225,7 +226,7 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>
+map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
 
 " Tab move functions
 function! Tab_MoveLeft()
@@ -395,29 +396,29 @@ let g:asyncrun_open = 6
 let g:asyncrun_bell = 1
 
 " 设置 F10 打开/关闭 Quickfix 窗口
-nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+nnoremap <F10> :call asyncrun#quickfix_toggle(6)<CR>
 
 " F9 编译 C/C++ 文件
-nnoremap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+nnoremap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <CR>
 
 " F5 运行文件
-nnoremap <silent> <F5> :call ExecuteFile()<cr>
+nnoremap <silent> <F5> :call ExecuteFile()<CR>
 
 " F7 编译项目
-nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
+nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <CR>
 
 " F8 运行项目
-nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
+nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <CR>
 
 " F6 测试项目
-nnoremap <silent> <F6> :AsyncRun -cwd=<root> -raw make test <cr>
+nnoremap <silent> <F6> :AsyncRun -cwd=<root> -raw make test <CR>
 
 " 更新 cmake
-nnoremap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
+nnoremap <silent> <F4> :AsyncRun -cwd=<root> cmake . <CR>
 
 " Windows 下支持直接打开新 cmd 窗口运行
 if has('win32') || has('win64')
-  nnoremap <silent> <F8> :AsyncRun -cwd=<root> -mode=4 make run <cr>
+  nnoremap <silent> <F8> :AsyncRun -cwd=<root> -mode=4 make run <CR>
 endif
 
 
@@ -477,15 +478,15 @@ endfunc
 if executable('rg')
   noremap <silent><F2> :AsyncRun! -cwd=<root> rg -n --no-heading
         \ --color never -g *.h -g *.c* -g *.py -g *.js -g *.vim
-        \ <C-R><C-W> "<root>" <cr>
+        \ <C-R><C-W> "<root>" <CR>
 elseif has('win32') || has('win64')
   noremap <silent><F2> :AsyncRun! -cwd=<root> findstr /n /s /C:"<C-R><C-W>"
         \ "\%CD\%\*.h" "\%CD\%\*.c*" "\%CD\%\*.py" "\%CD\%\*.js"
         \ "\%CD\%\*.vim"
-        \ <cr>
+        \ <CR>
 else
   noremap <silent><F2> :AsyncRun! -cwd=<root> grep -n -s -R <C-R><C-W>
         \ --include='*.h' --include='*.c*' --include='*.py'
         \ --include='*.js' --include='*.vim'
-        \ '<root>' <cr>
+        \ '<root>' <CR>
 endif

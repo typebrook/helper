@@ -154,9 +154,9 @@ augroup InitFileTypesGroup
     endif
   endfunction
   " Edit class and id for javascript files
-  autocmd FileType html nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
+  autocmd FileType html,markdown nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
   autocmd BufLeave nunmap <leader>cl
-  autocmd FileType html nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
+  autocmd FileType html,markdown nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
   autocmd BufLeave nunmap <leader>id
 
   " markdown
