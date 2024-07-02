@@ -46,24 +46,44 @@ vim.keymap.set('n', '<leader>ss', function()
   local current_filetype = vim.bo.filetype
   local cwd = os.getenv("HOME") .. '/snippets'
   require('telescope.builtin').find_files {
-    prompt_title = 'Select a snippet for ' .. current_filetype,
+    prompt_title = 'Press <C-T> to edit a snippet',
     default_text = current_filetype .. "_",
     cwd = cwd,
     attach_mappings = function(prompt_bufnr, map)
-      local insert_selected_snippet = function()
-        local file = require('telescope.actions.state').get_selected_entry()[1]
-        local snippet_content = vim.fn.readfile(cwd .. "/" .. file)
-        require('telescope.actions').close(prompt_bufnr)
-        vim.api.nvim_put(snippet_content, '', false, true)
+      local get_prompt_or_entry = function()
+        local file_list = require('telescope.actions.state').get_selected_entry()
+        if file_list then
+          return file_list[1]
+        else
+          local current_picker = require('telescope.actions.state').get_current_picker(prompt_bufnr)
+          return current_picker:_get_prompt()
+        end
       end
-      local edit_selected_snippet = function()
-        local file = require('telescope.actions.state').get_selected_entry()[1]
+
+      local edit_snippet = function()
+        local file = get_prompt_or_entry()
         require('telescope.actions').close(prompt_bufnr)
+        local prefix_filetype = string.match(file, "([^_]+)")
         vim.cmd(":e " .. cwd .. "/" .. file)
+        vim.bo.filetype(prefix_filetype)
+        vim.cmd("set filetype?")
+      end
+
+      local insert_selected_snippet = function()
+        local file = get_prompt_or_entry()
+        local path = cwd .. "/" .. file
+        if vim.fn.filereadable(path) ~= 0 then
+          local snippet_content = vim.fn.readfile(path)
+          require('telescope.actions').close(prompt_bufnr)
+          vim.fn.setreg('"', snippet_content)
+          print('Snippet saved to register')
+        else
+          edit_snippet()
+        end
       end
 
       map('i', '<CR>', insert_selected_snippet)
-      map('i', '<C-T>', edit_selected_snippet)
+      map('i', '<C-T>', edit_snippet)
       map('n', '<CR>', insert_selected_snippet)
 
       return true
@@ -90,16 +110,6 @@ vim.keymap.set('n', '<leader>sd', function()
     end,
   }
 end, { desc = 'Search Directory' })
-
-vim.keymap.set('n', '<leader>sn', function()
-  local current_filetype = vim.bo.filetype
-  vim.ui.input({ prompt = 'Snippet Name: ', default = current_filetype .. "_"  }, function(snippet)
-    vim.cmd("cd ~/snippets")
-    vim.cmd("e " .. snippet)
-    vim.cmd("set filetype=" .. current_filetype)
-    vim.cmd("set filetype?")
-  end)
-end, { desc = "Create a new snippet" })
 
 
 -- map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
@@ -172,5 +182,5 @@ vim.cmd('vmap s S')
 -- [ Aerial ]
 vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", {})
 vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", {})
-vim.keymap.set("n", "gN", "<cmd>Telescope aerial<CR>")
-vim.keymap.set("n", "gn", function() require("aerial").toggle({ direction = "left" }) end)
+vim.keymap.set("n", "<C-W>a", "<cmd>Telescope aerial<CR>")
+vim.keymap.set("n", "<C-W><C-A>", function() require("aerial").toggle({ direction = "left" }) end)

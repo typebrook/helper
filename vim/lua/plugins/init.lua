@@ -61,14 +61,15 @@ return {
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
-        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end,
-          { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
-        vim.keymap.set('v', 'hr', ":Gitsigns reset_hunk<CR>", { buffer = bufnr, desc = '[h]unk [r]eset' })
+        local gs = require('gitsigns')
+        vim.keymap.set('n', '<leader>gp', gs.prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gn', gs.next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>hd', gs.diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
+        vim.keymap.set('n', '<leader>hD', function() gs.diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+        -- vim.keymap.set("n", "<leader>gb", gs.blame_line{full=true}, { desc = "Git Blame" })
+        vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Blame Line" })
+        vim.keymap.set('v', 'hr', gs.reset_hunk, { buffer = bufnr, desc = '[h]unk [r]eset' })
       end,
     },
   },

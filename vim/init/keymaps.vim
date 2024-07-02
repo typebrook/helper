@@ -47,6 +47,9 @@ nnoremap <C-p> "0p
 nmap <leader>w :w!<CR>
 
 " Fast quit with error
+nmap <leader>q :q<CR>
+
+" Fast quit with error
 nmap cq :cq<CR>
 
 " Switch wrap
@@ -74,7 +77,6 @@ augroup END
 " Open terminal
 " nnoremap <leader>, :terminal ++noclose<CR>
 vnoremap <leader>, :terminal<CR>
-echo foo
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<CR>
@@ -312,20 +314,17 @@ nnoremap <leader>rr :Redir
 "----------------------------------------------------------------------
 " QUICK_SUBSTITUTE
 "----------------------------------------------------------------------
-function! IsSubstituteTextSelected()
-  execute "norm \<ESC>"
-  " Get position of the first/last char
-  echo col("'<") col("'>") len(getline('.'))+1
-  return col("'<") != 1 || col("'>") != len(getline('.')) + 1
-endfunction
+let g:text_selected = 1
 function! SelectAreaOrDoSubstitute()
-  if IsSubstituteTextSelected()
-    call feedkeys('gv"aygv*NVL')
+  if g:text_selected
+    call feedkeys("\"sygv/\<C-R>s\<CR>gn")
+    let g:text_selected = 0
   else
-    call feedkeys("gv:s//\<C-R>a/g\<Left>\<Left>")
+    call feedkeys(":s//\<C-R>//g\<Left>\<Left>")
+    let g:text_selected = 1
   endif
 endfunction
-vnoremap <CR> <Cmd>call SelectAreaOrDoSubstitute()<CR>
+vnoremap <TAB> <Cmd>call SelectAreaOrDoSubstitute()<CR>
 
 
 "----------------------------------------------------------------------
