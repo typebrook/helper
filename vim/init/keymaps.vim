@@ -289,11 +289,11 @@ vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 " 	:Redir !ls -al ........ show the full output of command ':!ls -al' in a scratch window
 "
 function! Redir(cmd)
-  for win in range(1, winnr('$'))
-    if getwinvar(win, 'scratch')
-      execute win . 'windo close'
-    endif
-  endfor
+  " for win in range(1, winnr('$'))
+  "   if getwinvar(win, 'scratch')
+  "     execute win . 'windo close'
+  "   endif
+  " endfor
   if a:cmd =~ '^!'
     let output = system(matchstr(a:cmd, '^!\zs.*'))
   else
@@ -308,7 +308,7 @@ function! Redir(cmd)
 endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
-nnoremap <leader>rr :Redir
+nnoremap <leader>rr :Redir<space>
 
 
 "----------------------------------------------------------------------

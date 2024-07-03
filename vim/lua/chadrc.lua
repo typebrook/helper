@@ -13,19 +13,14 @@ M.ui = {
   -- },
   tabufline = {
     enabled = true,
+    order = { "treeOffset", "buffers", "tabs" },
   },
 }
 
 -- For tabufline
 if M.ui.tabufline.enabled then
   vim.keymap.set("n", "<C-c>", function()
-    local bufnrs = vim.tbl_filter(function(b)
-      if 1 ~= vim.fn.buflisted(b) then
-        return false
-      else
-        return true
-      end
-    end, vim.api.nvim_list_bufs())
+    local bufnrs = vim.tbl_filter(function(b) return 1 == vim.fn.buflisted(b) end, vim.api.nvim_list_bufs())
     if #bufnrs == 1 then
       vim.cmd("silent quit!")
     else
