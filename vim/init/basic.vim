@@ -47,15 +47,16 @@ filetype plugin indent on
 "----------------------------------------------------------------------
 
 " colorscheme desert	        " I like desert!
+
 " In most of the cases, it is overrides by lightline.vim
 set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 set showmatch		        " Show pairing brackets
 
 set number relativenumber   " Use relativenumber
-set wrap		    " Disable wrap by default
-set scrolloff=3		    " Leave some buffer when scrolling down
-set ruler		    " Show cursor position
-set laststatus=2    	    " Always show the status line
+set wrap		                " Disable wrap by default
+set scrolloff=3		          " Leave some buffer when scrolling down
+set ruler		                " Show cursor position
+set laststatus=2    	      " Always show the status line
 set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
 
 

@@ -88,6 +88,7 @@ nnoremap cd :cd %:p:h<CR>:pwd<CR>
 " Switch CDW to root git directory
 nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " alias for cd
+nnoremap cd<space> :cd<space>
 nnoremap cd.. :cd .. <CR>:pwd<CR>
 nnoremap cd... :cd ../.. <CR>:pwd<CR>
 
