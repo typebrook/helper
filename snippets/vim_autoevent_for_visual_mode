@@ -1,0 +1,5 @@
+augroup VisualEvent
+  autocmd!
+  autocmd ModeChanged *:[vV\x16]* :echom 'VisualEnter'
+  autocmd Modechanged [vV\x16]*:* :echom 'VisualLeave'
+augroup END

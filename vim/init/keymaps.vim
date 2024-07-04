@@ -88,7 +88,7 @@ nnoremap cd :cd %:p:h<CR>:pwd<CR>
 " Switch CDW to root git directory
 nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " alias for cd
-nnoremap cd<space> :cd<space>
+nnoremap cdd :cd<space>
 nnoremap cd.. :cd .. <CR>:pwd<CR>
 nnoremap cd... :cd ../.. <CR>:pwd<CR>
 
@@ -317,22 +317,30 @@ endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
-
-
 "----------------------------------------------------------------------
 " QUICK_SUBSTITUTE
-"----------------------------------------------------------------------
-let g:text_selected = 1
-function! SelectAreaOrDoSubstitute()
-  if g:text_selected
-    call feedkeys("\"sygv/\<C-R>s\<CR>gn")
-    let g:text_selected = 0
-  else
-    call feedkeys(":s//\<C-R>//g\<Left>\<Left>")
-    let g:text_selected = 1
+" Press <TAB> n times for area, and <CR> for substitute
+let g:search_not_in_register = 1
+function! ExpandSelectionForSearch(sep)
+  if g:search_not_in_register == 1
+    " Save current selection to register s, and keep selection
+    execute 'norm "sygv'
+    let g:search_not_in_register = 0
   endif
+  " Use register s to go to next search, counts/total is displayed in
+  " statusline
+  call feedkeys(a:sep.."\<C-R>s"..a:sep.."e\<CR>")
 endfunction
-vnoremap <TAB> <Cmd>call SelectAreaOrDoSubstitute()<CR>
+function! SubstituteForSearch()
+  " Apply current for default substitute text
+  call feedkeys(":s//\<C-R>s/g\<Left>\<Left>")
+endfunction
+vnoremap <TAB> <Cmd>call ExpandSelectionForSearch('/')<CR>
+vnoremap <S-TAB> <Cmd>call ExpandSelectionForSearch('?')<CR>
+vnoremap <CR> <Cmd>call SubstituteForSearch()<CR>
+" When leaving visual mode, resume search_not_in_register
+autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
+
 
 
 "----------------------------------------------------------------------
