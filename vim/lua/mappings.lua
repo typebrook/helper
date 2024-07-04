@@ -181,8 +181,6 @@ vim.keymap.set('n', '<C-.>', ':HopChar1<CR>')
 -- [ Configure vim-surround ]
 vim.cmd('vmap s S')
 
--- [ Aerial ]
-vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", {})
-vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", {})
-vim.keymap.set("n", "<C-W>a", "<cmd>Telescope aerial<CR>")
-vim.keymap.set("n", "<C-W><C-A>", function() require("aerial").toggle({ direction = "left" }) end)
+-- [ Aerial ]"" "<cmd>AerialNext<CR>", {})
+vim.keymap.set("n", "gL", "<cmd>Telescope aerial<CR>")
+vim.keymap.set("n", "gl", function() require("aerial").toggle({ direction = "left" }) end)

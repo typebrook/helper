@@ -108,7 +108,7 @@ function! ToggleQuit()
     echo message
 endfunction
 
-nnoremap gl :call ToggleQuit()<CR>
+nnoremap <leader><leader>gl :call ToggleQuit()<CR>
 
 " Simply exit when closing the last buffer
 
@@ -117,7 +117,7 @@ function! Bye()
     if g:quitVimWhenPressingCtrlC
       :silent! quit
     else
-      :echo "Press gl to allow quit with <C-c>"
+      :echo "Press <leader><leader>gl to allow quit with <C-c>"
     endif
   else
     :bdelete

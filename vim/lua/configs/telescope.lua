@@ -20,6 +20,9 @@ return {
       -- other layout configuration here
       preview_cutoff = 0,
     },
+    file_ignore_patterns = {
+      "node_modules"
+    },
   },
   pickers = {
     buffers = {
@@ -40,6 +43,13 @@ return {
   },
   extensions_list = {},
   extensions = {
+    fzf = {
+      fuzzy = true,                   -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true,    -- override the file sorter
+      case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
+    },
     aerial = {
       -- Display symbols as <root>.<parent>.<symbol>
       show_nesting = {
@@ -50,6 +60,7 @@ return {
     },
   },
   on_attach = function()
+    require("telescope").load_extension("fzf")
     require("telescope").load_extension("aerial")
   end
 }

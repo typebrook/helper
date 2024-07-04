@@ -83,10 +83,13 @@ vnoremap <leader>, :terminal<CR>
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<CR>
 
-" Switch CDW to root git directory
-nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
 " Switch CWD to the directory of the open buffer
 nnoremap cd :cd %:p:h<CR>:pwd<CR>
+" Switch CDW to root git directory
+nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+" alias for cd
+nnoremap cd.. :cd .. <CR>:pwd<CR>
+nnoremap cd... :cd ../.. <CR>:pwd<CR>
 
 " Move one line up and down
 nnoremap <C-j> ddp
