@@ -161,10 +161,8 @@ augroup InitFileTypesGroup
     endif
   endfunction
   " Edit class and id for javascript files
-  autocmd FileType html,markdown nnoremap <leader>cl :call <SID>ChangeAttr("class")<CR>
-  autocmd BufLeave nunmap <leader>cl
-  autocmd FileType html,markdown nnoremap <leader>id :call <SID>ChangeAttr("id")<CR>
-  autocmd BufLeave nunmap <leader>id
+  autocmd FileType html,markdown nnoremap <buffer> <leader>cl :call <SID>ChangeAttr("class")<CR>
+  autocmd FileType html,markdown nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
 
   " markdown
   au FileType markdown setlocal wrap
@@ -177,7 +175,7 @@ augroup InitFileTypesGroup
       if empty(hash_num_at_top)
         return "="
       else
-        return ">".(len(hash_num-1))
+        return ">"..(len(hash_num_at_top))
       endif
     else
       return len(hash_num)-1

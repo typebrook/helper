@@ -51,7 +51,8 @@ return {
 
   {
     'lewis6991/gitsigns.nvim',
-    opts = {
+    opts = function()
+      return {
       -- See `:help gitsigns.txt`
       signs = {
         add = { text = '+' },
@@ -66,12 +67,14 @@ return {
         vim.keymap.set('n', '<leader>gn', gs.next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
         vim.keymap.set('n', '<leader>hd', gs.diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
-        vim.keymap.set('n', '<leader>hD', function() gs.diffthis('~') end, { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+        vim.keymap.set('n', '<leader>hD', function() gs.diffthis('~') end,
+          { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
         -- vim.keymap.set("n", "<leader>gb", gs.blame_line{full=true}, { desc = "Git Blame" })
         vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Blame Line" })
         vim.keymap.set('v', 'hr', gs.reset_hunk, { buffer = bufnr, desc = '[h]unk [r]eset' })
-      end,
-    },
+      end
+    }
+    end,
   },
 
   {
@@ -246,7 +249,25 @@ return {
   {
     'tpope/vim-surround',
     lazy = false,
-  }
+  },
+
+  {
+    "nvim-tree/nvim-tree.lua",
+    opts = function()
+      local opts = require "nvchad.configs.nvimtree"
+      opts.on_attach = function(bufnr)
+        local api = require("nvim-tree.api")
+        api.config.mappings.default_on_attach(bufnr)
+        vim.keymap.set('n', 'l', api.node.open.edit, { buffer = bufnr, nowait = true })
+        vim.keymap.set('n', 'h', api.tree.change_root_to_parent, { buffer = bufnr, nowait = true })
+      end
+      return opts
+    end,
+  },
+  -- {
+  --   'junegunn/goyo.vim',
+  --   lazy = false,
+  -- },
 
 
   -- {

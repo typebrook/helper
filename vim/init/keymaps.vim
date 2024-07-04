@@ -58,6 +58,8 @@ nmap <leader>W :set wrap!<CR>
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
+" Use l to open fold
+nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)

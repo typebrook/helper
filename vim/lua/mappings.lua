@@ -38,7 +38,9 @@ vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<CR>", { desc = "tele
 
 vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<CR>", { desc = "telescope git files" })
 vim.keymap.set("n", "<leader>sH", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
-vim.keymap.set("n", "<leader>tt", ":Telescope ", { desc = "telescope help page" })
+vim.keymap.set("n", "<leader>sm", "<cmd>Telescope marks<CR>", { desc = "telescope marks" })
+vim.keymap.set("n", "<leader>sj", "<cmd>Telescope jumplist<CR>", { desc = "telescope marks" })
+vim.keymap.set("n", "<leader>tt", "<cmd>Telescope<CR>", { desc = "telescope help page" })
 vim.keymap.set('n', '<leader>sk', "<cmd>Telescope keymaps<CR>", { desc = 'telescope keymaps' })
 vim.keymap.set("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
 
@@ -65,7 +67,7 @@ vim.keymap.set('n', '<leader>ss', function()
         require('telescope.actions').close(prompt_bufnr)
         local prefix_filetype = string.match(file, "([^_]+)")
         vim.cmd(":e " .. cwd .. "/" .. file)
-        vim.bo.filetype(prefix_filetype)
+        vim.bo.filetype = prefix_filetype
         vim.cmd("set filetype?")
       end
 
