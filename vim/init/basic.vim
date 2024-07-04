@@ -24,9 +24,9 @@
 "----------------------------------------------------------------------
 
 let mapleader = ","	    " Always use comma as leader key
-set nocompatible	    " Disable vi compatible, today is 20XX
+set nocompatible	  " Disable vi compatible, today is 20XX
 set path=.,**		    " Allow :find with completion
-set mouse=		    " Disable mouse selection
+set mouse=		      " Disable mouse selection
 set winaltkeys=no	    " Allow alt key for mapping
 set cursorline
 set whichwrap=b,s
@@ -104,9 +104,9 @@ autocmd FocusGained,BufEnter .* checktime
 
 let g:quitVimWhenPressingCtrlC = 1
 function! ToggleQuit()
-    let g:quitVimWhenPressingCtrlC = g:quitVimWhenPressingCtrlC ? 0 : 1
-    let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
-    echo message
+  let g:quitVimWhenPressingCtrlC = g:quitVimWhenPressingCtrlC ? 0 : 1
+  let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
+  echo message
 endfunction
 
 nnoremap <leader><leader>gl :call ToggleQuit()<CR>
@@ -136,30 +136,30 @@ set hidden
 " Put these in an autocmd group, so that you can revert them with:
 " ":augroup vimStartup | au! | augroup END"
 augroup vimStartup
-au!
+  au!
 
-" When editing a file, always jump to the last known cursor position.
-" Don't do it when the position is invalid, when inside an event handler
-" (happens when dropping a file on gvim) and for a commit message
-" (it's likely a different one than last time).
-autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-  \ |   exe "normal! g`\""
-  \ | endif
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid, when inside an event handler
+  " (happens when dropping a file on gvim) and for a commit message
+  " (it's likely a different one than last time).
+  autocmd BufReadPost *
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g`\""
+        \ | endif
 augroup END
 
 " Set filetype for beancount
 autocmd BufRead,BufNewFile *.bean call PrepareBean()
 function PrepareBean()
-    set filetype=beancount
-    silent !setsid fava ~/bean/main.bean &>/dev/null
-    autocmd VimLeave * silent !killall fava
+  set filetype=beancount
+  silent !setsid fava ~/bean/main.bean &>/dev/null
+  autocmd VimLeave * silent !killall fava
 endfunction
 
 " Set filetype for index.html
 autocmd BufWrite *.html,*.js,*.css call ReloadServer()
 function ReloadServer()
-    silent !browser-sync reload &>/dev/null
+  silent !browser-sync reload &>/dev/null
 endfunction
 
 " Hide the first line of a file if editing password file
@@ -167,13 +167,13 @@ endfunction
 " files under /dev/shm as filter
 autocmd BufRead /dev/shm/*.txt call SetPasswordFile()
 function SetPasswordFile()
-    setlocal foldminlines=0
-    setlocal foldmethod=manual
-    function s:custom()
-      return "Password"
-    endfunction
-    setlocal foldtext=s:custom()
-    norm! ggzfl
+  setlocal foldminlines=0
+  setlocal foldmethod=manual
+  function s:custom()
+    return "Password"
+  endfunction
+  setlocal foldtext=s:custom()
+  norm! ggzfl
 endfunction
 
 
@@ -192,10 +192,10 @@ set smartindent
 " ENCODING_PREFERENCE
 "----------------------------------------------------------------------
 if has('multi_byte')
-	set encoding=utf-8
-	set fileencoding=utf-8
-	" Try encodings by this order
-	set fileencodings=utf-8,big5,ucs-bom,gbk,gb18030,euc-jp,latin1
+  set encoding=utf-8
+  set fileencoding=utf-8
+  " Try encodings by this order
+  set fileencodings=utf-8,big5,ucs-bom,gbk,gb18030,euc-jp,latin1
 endif
 
 
