@@ -14,7 +14,6 @@
 "   - QUICK_SUBSTITUTE
 "   - 终端支持
 "   - 编译运行
-"   - 符号搜索
 "
 "======================================================================
 " vim: set ts=4 sw=4 tw=78 noet :
@@ -317,12 +316,16 @@ endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
+
+
 "----------------------------------------------------------------------
 " QUICK_SUBSTITUTE
 " Press <TAB> n times for area, and <CR> for substitute
+"----------------------------------------------------------------------
+
 let g:search_not_in_register = 1
-function! ExpandSelectionForSearch(sep)
-  if g:search_not_in_register == 1
+function! ExpandSelectionBySearch(sep)
+  if g:search_not_in_register
     " Save current selection to register s, and keep selection
     execute 'norm "sygv'
     let g:search_not_in_register = 0
@@ -331,16 +334,15 @@ function! ExpandSelectionForSearch(sep)
   " statusline
   call feedkeys(a:sep.."\<C-R>s"..a:sep.."e\<CR>")
 endfunction
-function! SubstituteForSearch()
-  " Apply current for default substitute text
+function! SubstituteBySearch()
+  " Apply current search for default substitute text
   call feedkeys(":s//\<C-R>s/g\<Left>\<Left>")
 endfunction
-vnoremap <TAB> <Cmd>call ExpandSelectionForSearch('/')<CR>
-vnoremap <S-TAB> <Cmd>call ExpandSelectionForSearch('?')<CR>
-vnoremap <CR> <Cmd>call SubstituteForSearch()<CR>
+vnoremap <TAB> <Cmd>call ExpandSelectionBySearch('/')<CR>
+vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
+vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 " When leaving visual mode, resume search_not_in_register
 autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
-
 
 
 "----------------------------------------------------------------------
