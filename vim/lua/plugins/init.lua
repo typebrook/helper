@@ -12,6 +12,7 @@ return {
   -- For focus mode
   {
     "Pocco81/true-zen.nvim",
+    lazy = false,
     cmd = { "TZAtaraxis", "TZMinimalist" },
   },
 

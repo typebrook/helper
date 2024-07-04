@@ -97,16 +97,15 @@ vim.keymap.set('n', '<leader>sd', function()
   require('telescope.builtin').oldfiles {
     prompt_title = 'CD to',
     attach_mappings = function(prompt_bufnr, map)
-      local cd_to_dir = function()
+      local cd_prompt = function()
         local file = require('telescope.actions.state').get_selected_entry()[1]
         local path = string.match(file, "(.*[/\\])")
         require('telescope.actions').close(prompt_bufnr)
-        vim.cmd("cd " .. path)
-        vim.cmd("pwd")
+        vim.api.nvim_feedkeys(":cd " .. path, 'n', true)
       end
 
-      map('i', '<CR>', cd_to_dir)
-      map('n', '<CR>', cd_to_dir)
+      map('i', '<CR>', cd_prompt)
+      map('n', '<CR>', cd_prompt)
 
       return true
     end,
@@ -184,3 +183,6 @@ vim.cmd('vmap s S')
 -- [ Aerial ]"" "<cmd>AerialNext<CR>", {})
 vim.keymap.set("n", "gL", "<cmd>Telescope aerial<CR>")
 vim.keymap.set("n", "gl", function() require("aerial").toggle({ direction = "left" }) end)
+
+--[ TrunZen ]
+vim.keymap.set('n', '<leader>z', ':TZAtaraxis<CR>')

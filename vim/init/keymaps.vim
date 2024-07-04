@@ -269,8 +269,10 @@ noremap <leader><leader>ft :set filetype=
 noremap <leader><leader>fm :set foldmethod=
 
 " Let <leader>l toggle between this and the last accessed buffer
+augroup SaveLastBuffer
 let g:lastbuffer = 1
 au BufLeave * let g:lastbuffer = bufnr()
+augroup END
 
 
 "----------------------------------------------------------------------

@@ -29,6 +29,9 @@ source ~/helper/vim/init/keymaps.vim
 " Extra config for different contexts
 source ~/helper/vim/init/config.vim
 
+" Highlight
+source ~/helper/vim/init/special_highlight.vim
+
 if has('nvim')
   " For neovim
   source ~/.config/nvim/lazy.lua
@@ -37,5 +40,3 @@ else
   source ~/helper/vim/init/plugins.vim
   source ~/helper/vim/init/style.vim
 endif
-
-source ~/helper/vim/init/special_highlight.vim
