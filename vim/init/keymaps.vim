@@ -261,7 +261,7 @@ noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
 " noremap <Tab> :exe 'buffer '.g:lastbuffer<CR>
 
 " set filetype
-noremap <leader><leader>ft :let @f=&filetype<CR>:set filetype=<C-R>f
+noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
 
 " Let <leader>l toggle between this and the last accessed buffer
 augroup SaveLastBuffer
@@ -280,7 +280,7 @@ nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 "----------------------------------------------------------------------
 
 " Set foldmethod
-noremap <leader><leader>fm :let @f=&foldmethod<CR>:set foldmethod=<C-R>f
+noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>

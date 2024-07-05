@@ -35,6 +35,10 @@ return {
     -- event = 'BufWritePre', -- uncomment for format on save
     config = function()
       require "configs.conform"
+
+      vim.keymap.set("n", "<leader>F", function()
+        require("conform").format { lsp_fallback = true }
+      end, { desc = "format files" })
     end,
   },
 
