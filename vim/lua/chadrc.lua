@@ -34,7 +34,7 @@ M.ui = {
 if M.ui.tabufline.enabled then
   vim.keymap.set("n", "<C-c>", function()
     local bufnrs = vim.tbl_filter(function(b) return 1 == vim.fn.buflisted(b) end, vim.api.nvim_list_bufs())
-    if #bufnrs == 1 then
+    if #bufnrs == 1 or #vim.fn.getwininfo() > 1 then
       vim.cmd("silent quit")
     else
       require("nvchad.tabufline").close_buffer()

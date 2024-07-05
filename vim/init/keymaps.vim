@@ -9,6 +9,7 @@
 "  JUMP_TO_TABS_WITH_ALT
 "  MANAGE_TABS
 "  MANAGE_BUFFERS
+"  MANAGE_WINDOWS
 "  FOLDING
 "  SURROURD_WITH_CHAR
 "  REDIRECTION_WITH_BUFFER
@@ -263,9 +264,14 @@ noremap <leader><leader>ft :set filetype=
 
 " Let <leader>l toggle between this and the last accessed buffer
 augroup SaveLastBuffer
-let g:lastbuffer = 1
-au BufLeave * let g:lastbuffer = bufnr()
+  let g:lastbuffer = 1
+  au BufLeave * let g:lastbuffer = bufnr()
 augroup END
+
+"----------------------------------------------------------------------
+" MANAGE_WINDOWS
+"----------------------------------------------------------------------
+nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 
 
 "----------------------------------------------------------------------
