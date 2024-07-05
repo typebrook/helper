@@ -80,8 +80,9 @@ map <leader>pp :setlocal paste!<CR>
 
 " Switch CWD to the directory of the open buffer
 nnoremap cd :cd %:p:h<CR>:pwd<CR>
-" Switch CDW to root git directory
+" Switch CWD to root git directory
 nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+
 " alias for cd
 nnoremap cdd :cd<space>
 nnoremap cd.. :cd .. <CR>:pwd<CR>

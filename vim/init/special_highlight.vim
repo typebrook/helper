@@ -5,9 +5,9 @@
 syntax enable
 
 function! GetHighlightGroupName()
-    let l:syntaxID = synID(line('.'), col('.'), 1)
-    let l:groupName = synIDattr(l:syntaxID, 'name')
-    echo "Highlight Group Name: " . l:groupName
+  let l:syntaxID = synID(line('.'), col('.'), 1)
+  let l:groupName = synIDattr(l:syntaxID, 'name')
+  echo "Highlight Group Name: " . l:groupName
 endfunction
 
 " Defualt highlight for matched parenthesis is so weird in many colorscheme
