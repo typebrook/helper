@@ -152,6 +152,14 @@ return {
         substitutions = {},
       },
     },
+    config = function()
+      vim.keymap.set('n', "<leader>oo", ':Obsidian', { buffer = true })
+      vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>', { buffer = true })
+      vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>', { buffer = true })
+      vim.keymap.set('n', "<leader>oq", ':ObsidianQuickSwitch<CR>', { buffer = true })
+      vim.keymap.set('v', "<leader>on", ':ObsidianLinkNew<CR>', { buffer = true })
+      vim.keymap.set('n', "<leader>ol", ':ObsidianLinks<CR>', { buffer = true })
+    end
   },
 
   {

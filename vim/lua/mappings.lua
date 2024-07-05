@@ -154,14 +154,6 @@ vim.keymap.set("n", "<leader>cc", function()
   end
 end, { desc = "blankline jump to current context" })
 
--- [[ Configure Obsidian.nvim ]]
-vim.keymap.set('n', "<leader>oo", ':Obsidian')
-vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>')
-vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>')
-vim.keymap.set('n', "<leader>oq", ':ObsidianQuickSwitch<CR>')
-vim.keymap.set('v', "<leader>on", ':ObsidianLinkNew<CR>')
-vim.keymap.set('n', "<leader>ol", ':ObsidianLinks<CR>')
-
 -- vim.cmd("let g:mkdp_browser = 'surf'")
 vim.cmd("let g:mkdp_browser = 'firefox'")
 vim.g.mkdp_preview_options = {

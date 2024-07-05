@@ -1,9 +1,9 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    sh = {"shfmt"},
-    bash = {"shfmt"},
-    zsh = {"shfmt"},
+    sh = { "shfmt" },
+    bash = { "shfmt" },
+    zsh = { "shfmt" },
     markdown = { "prettier" },
     css = { "prettier" },
     html = { "prettier" },
