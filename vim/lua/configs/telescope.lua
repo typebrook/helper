@@ -4,9 +4,9 @@ return {
       i = {
         -- ["<c-j>"] = "move_selection_next",
         -- ["<c-k>"] = "move_selection_previous",
-        ["<C-e>"] = require("telescope.actions.layout").toggle_preview,
+        ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
         ["<C-u>"] = false,
-        ["<C-o>"] = function(p_bufnr)
+        ["<C-q>"] = function(p_bufnr)
           require("telescope.actions").send_selected_to_qflist(p_bufnr)
           vim.cmd.cfdo("edit")
         end,
@@ -37,7 +37,7 @@ return {
         n = {
           ["<c-d>"] = "delete_buffer",
         }
-      }
+      },
     },
 
   },

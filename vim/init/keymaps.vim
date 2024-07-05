@@ -2,18 +2,19 @@
 "
 " Only for key mapping
 "
-"   - COMMON_MAPPING
-"   - MANAGE_VIMRC
-"   - MOVING_WITH_READLINE
-"   - INSERT_SURROUNDING
-"   - JUMP_TO_TABS_WITH_ALT
-"   - MANAGE_TABS
-"   - MANAGE_BUFFERS
-"   - SURROURD_WITH_CHAR
-"   - REDIRECTION_WITH_BUFFER
-"   - QUICK_SUBSTITUTE
-"   - 终端支持
-"   - 编译运行
+"  COMMON_MAPPING
+"  MANAGE_VIMRC
+"  MOVING_WITH_READLINE
+"  INSERT_SURROUNDING
+"  JUMP_TO_TABS_WITH_ALT
+"  MANAGE_TABS
+"  MANAGE_BUFFERS
+"  FOLDING
+"  SURROURD_WITH_CHAR
+"  REDIRECTION_WITH_BUFFER
+"  QUICK_SUBSTITUTE
+"  终端支持
+"  编译运行
 "
 "======================================================================
 " vim: set ts=4 sw=4 tw=78 noet :
@@ -53,12 +54,6 @@ nmap cq :cq<CR>
 
 " Switch wrap
 nmap <leader>W :set wrap!<CR>
-
-" Show fold level when it changes
-nnoremap zm zm:set foldlevel<CR>
-nnoremap zr zr:set foldlevel<CR>
-" Use l to open fold
-nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
@@ -265,13 +260,29 @@ noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
 
 " set filetype
 noremap <leader><leader>ft :set filetype=
-noremap <leader><leader>fm :set foldmethod=
 
 " Let <leader>l toggle between this and the last accessed buffer
 augroup SaveLastBuffer
 let g:lastbuffer = 1
 au BufLeave * let g:lastbuffer = bufnr()
 augroup END
+
+
+"----------------------------------------------------------------------
+" FOLDING
+"----------------------------------------------------------------------
+
+" Set foldmethod
+noremap <leader><leader>fm :set foldmethod=
+
+" Show fold level when it changes
+nnoremap zm zm:set foldlevel<CR>
+nnoremap zr zr:set foldlevel<CR>
+" Use l to open fold
+nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
+" Open fold in next line
+nnoremap <expr> zo foldclosed('.') == -1 ? 'jzo' : 'zo'
+nnoremap <expr> zO foldclosed('.') == -1 ? 'jzO' : 'zO'
 
 
 "----------------------------------------------------------------------
@@ -323,26 +334,31 @@ nnoremap <leader>rr :Redir<space>
 " Press <TAB> n times for area, and <CR> for substitute
 "----------------------------------------------------------------------
 
+" substitute across file
+vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
+
 let g:search_not_in_register = 1
+" When leaving visual mode, resume search_not_in_register
+autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
+
 function! ExpandSelectionBySearch(sep)
   if g:search_not_in_register
-    " Save current selection to register s, and keep selection
-    execute 'norm "sygv'
+    " Save current selection to register, and keep selection
+    execute 'norm ygv'
     let g:search_not_in_register = 0
   endif
   " Use register s to go to next search, counts/total is displayed in
   " statusline
-  call feedkeys(a:sep.."\<C-R>s"..a:sep.."e\<CR>")
+  call feedkeys(a:sep.."\<C-R>0"..a:sep.."e\<CR>")
 endfunction
 function! SubstituteBySearch()
   " Apply current search for default substitute text
-  call feedkeys(":s//\<C-R>s/g\<Left>\<Left>")
+  call feedkeys(":s//\<C-R>0/g\<Left>\<Left>")
 endfunction
+
 vnoremap <TAB> <Cmd>call ExpandSelectionBySearch('/')<CR>
 vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
 vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
-" When leaving visual mode, resume search_not_in_register
-autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
 
 
 "----------------------------------------------------------------------

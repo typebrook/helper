@@ -15,6 +15,19 @@ M.ui = {
     enabled = true,
     order = { "treeOffset", "buffers", "tabs" },
   },
+
+  term = {
+    hl = "Normal:term,WinSeparator:WinSeparator",
+    sizes = { sp = 0.4, vsp = 0.4 },
+    float = {
+      relative = "editor",
+      row = 0.15,
+      col = 0.13,
+      width = 0.7,
+      height = 0.7,
+      border = "single",
+    },
+  },
 }
 
 -- For tabufline
