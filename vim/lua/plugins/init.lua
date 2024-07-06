@@ -1,11 +1,11 @@
 return {
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+  "tpope/vim-sleuth",
 
   -- Use sudo in command mode
   {
-    'lambdalisue/suda.vim',
+    "lambdalisue/suda.vim",
     cmd = { "SudaWrite" },
   },
 
@@ -18,15 +18,15 @@ return {
 
   -- hop.nvim: For quick jump
   {
-    'smoka7/hop.nvim',
+    "smoka7/hop.nvim",
     lazy = false,
     version = "*",
     opts = {
-      keys = 'etovxqpdygfblzhckisuran'
+      keys = "etovxqpdygfblzhckisuran",
     },
     config = function()
       require("hop").setup()
-    end
+    end,
   },
 
   {
@@ -34,17 +34,17 @@ return {
     lazy = false,
     -- event = 'BufWritePre', -- uncomment for format on save
     config = function()
-      require "configs.conform"
+      require("configs.conform")
 
       vim.keymap.set("n", "<leader>F", function()
-        require("conform").format { lsp_fallback = true }
+        require("conform").format({ lsp_fallback = true })
       end, { desc = "format files" })
     end,
   },
 
   {
     -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
+    "lukas-reineke/indent-blankline.nvim",
     -- See `:help ibl`
     enabled = true,
     main = "ibl",
@@ -55,33 +55,46 @@ return {
   },
 
   {
-    'lewis6991/gitsigns.nvim',
+    "lewis6991/gitsigns.nvim",
     opts = function()
       return {
         -- See `:help gitsigns.txt`
         signs = {
-          add = { text = '+' },
-          change = { text = '~' },
-          delete = { text = '_' },
-          topdelete = { text = '‾' },
-          changedelete = { text = '~' },
+          add = { text = "+" },
+          change = { text = "~" },
+          delete = { text = "_" },
+          topdelete = { text = "‾" },
+          changedelete = { text = "~" },
         },
         on_attach = function(bufnr)
-          local gs = require('gitsigns')
-          vim.keymap.set('n', '<leader>gp', gs.prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-          vim.keymap.set('n', '<leader>gn', gs.next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-          vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
-          vim.keymap.set('n', '<leader>hd', gs.diffthis, { buffer = bufnr, desc = '[h]unk [d]iff' })
-          vim.keymap.set('n', '<leader>hD', function() gs.diffthis('~') end,
-            { buffer = bufnr, desc = '[h]unk [d]iff for ~' })
+          local gs = require("gitsigns")
+          vim.keymap.set(
+          "n",
+          "<leader>gp",
+          gs.prev_hunk,
+          { buffer = bufnr, desc = "[G]o to [P]revious Hunk" }
+          )
+          vim.keymap.set("n", "<leader>gn", gs.next_hunk, { buffer = bufnr, desc = "[G]o to [N]ext Hunk" })
+          vim.keymap.set("n", "<leader>hp", gs.preview_hunk, { buffer = bufnr, desc = "[P]review [H]unk" })
+          vim.keymap.set("n", "<leader>hd", gs.diffthis, { buffer = bufnr, desc = "[h]unk [d]iff" })
+          vim.keymap.set("n", "<leader>hD", function()
+            gs.diffthis("~")
+          end, { buffer = bufnr, desc = "[h]unk [d]iff for ~" })
           -- vim.keymap.set("n", "<leader>gb", gs.blame_line{full=true}, { desc = "Git Blame" })
           vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Blame Line" })
-          vim.keymap.set('v', 'hr', gs.reset_hunk, { buffer = bufnr, desc = '[h]unk [r]eset' })
-        end
+          vim.keymap.set("v", "hr", gs.reset_hunk, { buffer = bufnr, desc = "[h]unk [r]eset" })
+        end,
       }
     end,
   },
 
+  {
+    "iberianpig/tig-explorer.vim",
+    lazy = false,
+    dependencies = {
+      "rbgrouleff/bclose.vim",
+    },
+  },
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
@@ -125,7 +138,7 @@ return {
             return require("obsidian").util.smart_action()
           end,
           opts = { buffer = true, expr = true },
-        }
+        },
       },
       -- see below for full list of options 👇
       note_id_func = function(title)
@@ -157,24 +170,25 @@ return {
       },
     },
     config = function()
-      vim.keymap.set('n', "<leader>oo", ':Obsidian', { buffer = true })
-      vim.keymap.set('n', "<leader>ot", ':ObsidianTags<CR>', { buffer = true })
-      vim.keymap.set('n', "<leader>os", ':ObsidianSearch<CR>', { buffer = true })
-      vim.keymap.set('n', "<leader>oq", ':ObsidianQuickSwitch<CR>', { buffer = true })
-      vim.keymap.set('v', "<leader>on", ':ObsidianLinkNew<CR>', { buffer = true })
-      vim.keymap.set('n', "<leader>ol", ':ObsidianLinks<CR>', { buffer = true })
-    end
+      vim.keymap.set("n", "<leader>oo", ":Obsidian", { buffer = true })
+      vim.keymap.set("n", "<leader>ot", ":ObsidianTags<CR>", { buffer = true })
+      vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>", { buffer = true })
+      vim.keymap.set("n", "<leader>oq", ":ObsidianQuickSwitch<CR>", { buffer = true })
+      vim.keymap.set("v", "<leader>on", ":ObsidianLinkNew<CR>", { buffer = true })
+      vim.keymap.set("n", "<leader>ol", ":ObsidianLinks<CR>", { buffer = true })
+    end,
   },
 
   {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
     init = function()
       vim.g.mkdp_preview_options = {
-        mkit = {
-        }
+        mkit = {},
       }
     end,
   },
@@ -182,33 +196,32 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     opts = function()
-      return require "configs.telescope"
+      return require("configs.telescope")
     end,
   },
 
   {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      "nvim-treesitter/nvim-treesitter-textobjects",
     },
     opts = function()
-      return require "configs.treesitter"
+      return require("configs.treesitter")
     end,
   },
 
   {
-    'stevearc/aerial.nvim',
-    opts = {
-    },
+    "stevearc/aerial.nvim",
+    opts = {},
     -- Optional dependencies
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons"
+      "nvim-tree/nvim-web-devicons",
     },
   },
 
@@ -230,7 +243,7 @@ return {
     lazy = false,
     config = function()
       require("nvchad.configs.lspconfig").defaults()
-      require "configs.lspconfig"
+      require("configs.lspconfig")
     end,
   },
   --
@@ -250,34 +263,34 @@ return {
   },
 
   {
-    'numToStr/Comment.nvim',
+    "numToStr/Comment.nvim",
     lazy = false,
     opts = {
       toggler = {
-        line = '<C-/>',
-        block = 'gb',
+        line = "<C-/>",
+        block = "gb",
       },
       opleader = {
-        line = '<C-/>',
-        block = 'gb',
+        line = "<C-/>",
+        block = "gb",
       },
     },
   },
 
   {
-    'tpope/vim-surround',
+    "tpope/vim-surround",
     lazy = false,
   },
 
   {
     "nvim-tree/nvim-tree.lua",
     opts = function()
-      local opts = require "nvchad.configs.nvimtree"
+      local opts = require("nvchad.configs.nvimtree")
       opts.on_attach = function(bufnr)
         local api = require("nvim-tree.api")
         api.config.mappings.default_on_attach(bufnr)
-        vim.keymap.set('n', 'l', api.node.open.edit, { buffer = bufnr, nowait = true })
-        vim.keymap.set('n', 'h', api.tree.change_root_to_parent, { buffer = bufnr, nowait = true })
+        vim.keymap.set("n", "l", api.node.open.edit, { buffer = bufnr, nowait = true })
+        vim.keymap.set("n", "h", api.tree.change_root_to_parent, { buffer = bufnr, nowait = true })
       end
       return opts
     end,
@@ -286,7 +299,6 @@ return {
   --   'junegunn/goyo.vim',
   --   lazy = false,
   -- },
-
 
   -- {
   --   'akinsho/bufferline.nvim',

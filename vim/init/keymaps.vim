@@ -14,6 +14,7 @@
 "  SURROURD_WITH_CHAR
 "  REDIRECTION_WITH_BUFFER
 "  QUICK_SUBSTITUTE
+"  GIT_TIG
 "  终端支持
 "  编译运行
 "
@@ -215,10 +216,6 @@ map <leader>tn :tabnew<CR>
 map <leader>tc :tabclose<CR>
 map <leader>tm :tabmove<SPACE>
 map <leader>to :tabonly<CR>
-nmap <C-t>n :tabnew<CR>
-nmap <C-t>c :tabclose<CR>
-nmap <C-t>m :tabmove
-nmap <C-t>o :tabonly
 
 noremap <silent><m-h> :call Tab_MoveLeft()<CR>
 noremap <silent><m-l> :call Tab_MoveRight()<CR>
@@ -326,9 +323,10 @@ function! Redir(cmd)
     execute a:cmd
     redir END
   endif
-  vnew
+  enew
   let w:scratch = 1
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  " setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  setlocal buftype=nofile noswapfile
   call setline(1, split(output, "\n"))
 endfunction
 
@@ -368,6 +366,10 @@ vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
 vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 
 
+"----------------------------------------------------------------------
+" GIT_TIG
+"----------------------------------------------------------------------
+nnoremap ,ti :Tig
 "----------------------------------------------------------------------
 " Markdown items (temproray solution)
 "----------------------------------------------------------------------
