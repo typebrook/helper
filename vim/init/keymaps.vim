@@ -266,6 +266,16 @@ augroup SaveLastBuffer
   au BufLeave * let g:lastbuffer = bufnr()
 augroup END
 
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
+nnoremap <leader><leader>d :DiffSaved<CR>zR
+
 "----------------------------------------------------------------------
 " MANAGE_WINDOWS
 "----------------------------------------------------------------------
@@ -369,7 +379,8 @@ vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 "----------------------------------------------------------------------
 " GIT_TIG
 "----------------------------------------------------------------------
-nnoremap ,ti :Tig
+nnoremap ,ti :TigStatus<CR>
+
 "----------------------------------------------------------------------
 " Markdown items (temproray solution)
 "----------------------------------------------------------------------
