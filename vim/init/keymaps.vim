@@ -266,6 +266,7 @@ augroup SaveLastBuffer
   au BufLeave * let g:lastbuffer = bufnr()
 augroup END
 
+" Uset <C-w>d to toggle Diff mode
 function! s:SwitchDiff()
   if &diff
     windo | if &buftype == "nofile" | bdelete | endif
@@ -276,6 +277,19 @@ function! s:SwitchDiff()
 endfunction
 com! SwitchDiff call s:SwitchDiff()
 nnoremap <C-w>d <Cmd>silent! SwitchDiff<CR>
+
+function! s:SwitchDiffForGitHEAD()
+  nmap cdg
+  if &diff
+    windo | if &buftype == "nofile" | bdelete | endif
+  else
+	  vert new | set buftype=nofile nobuflisted
+    read !git show HEAD:#
+    0d_ | diffthis | wincmd p | diffthis
+  endif
+endfunction
+com! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
+nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
 
 
 "----------------------------------------------------------------------
@@ -551,8 +565,3 @@ else
         \ --include='*.js' --include='*.vim'
         \ '<root>' <CR>
 endif
-
-hi DiffAdd      ctermfg=Green          ctermbg=NONE
-hi DiffChange   ctermfg=Yellow          ctermbg=NONE
-hi DiffDelete   ctermfg=LightBlue     ctermbg=None
-hi DiffText     ctermfg=Yellow        ctermbg=None

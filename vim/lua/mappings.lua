@@ -213,5 +213,5 @@ vim.g.mkdp_preview_options = {
 
     vim.cmd("setl nocul nonu nornu")
     vim.cmd("hi ActiveWindow guibg=#2a5a6a guifg=White | setl winhighlight=Normal:ActiveWindow")
-    vim.cmd(':%s/\\%x1b\\[[0-9;]*m//g')
+    vim.cmd(':silent %s/\\%x1b\\[[0-9;]*m//g')
   end, { desc = "Description" })
