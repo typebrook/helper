@@ -70,8 +70,10 @@ vim.keymap.set("n", "<leader>ss", function()
         local file = get_prompt_or_entry()
         require("telescope.actions").close(prompt_bufnr)
         local prefix_filetype = string.match(file, "([^_]+)")
+        vim.cmd(":vs")
         vim.cmd(":e " .. cwd .. "/" .. file)
         vim.bo.filetype = prefix_filetype
+        vim.bo.bufhidden = "wipe"
         vim.cmd("set filetype?")
       end
 

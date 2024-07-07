@@ -1,0 +1,1 @@
+  autocmd CmdwinEnter,BufReadPost * nnoremap <buffer> <C-c> <C-c>

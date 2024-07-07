@@ -35,6 +35,9 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+" set buflisted
+noremap <leader>st :set<space>
+
 " Disable highlight when <leader><CR> is pressed
 map <silent> <leader><CR> :noh<CR>
 
@@ -64,9 +67,10 @@ command! W execute 'w !sudo -S tee %' <bar> edit!
 " Enter to open file
 nnoremap <CR> gf
 nnoremap gF :e <cfile><CR>
+
+" Remap <CR> in Quickfix, Cmdwin Location list
 augroup vimrc_CRfix
   au!
-  " Quickfix, Location list, &c. remap <CR> to work as expected
   autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
   autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
   autocmd CmdwinEnter * nnoremap <buffer> <C-c> <C-c>
@@ -283,7 +287,7 @@ function! s:SwitchDiffForGitHEAD()
   if &diff
     windo | if &buftype == "nofile" | bdelete | endif
   else
-	  vert new | set buftype=nofile nobuflisted
+    vert new | set buftype=nofile nobuflisted
     read !git show HEAD:#
     0d_ | diffthis | wincmd p | diffthis
   endif

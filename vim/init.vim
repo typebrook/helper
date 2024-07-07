@@ -34,7 +34,7 @@ source ~/helper/vim/init/special_highlight.vim
 
 if has('nvim')
   " For neovim
-  source ~/.config/nvim/lazy.lua
+  source ~/helper/vim/lazy.lua
 else
   " For vim
   source ~/helper/vim/init/plugins.vim
