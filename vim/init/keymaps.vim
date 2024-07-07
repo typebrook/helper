@@ -266,15 +266,17 @@ augroup SaveLastBuffer
   au BufLeave * let g:lastbuffer = bufnr()
 augroup END
 
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+function! s:SwitchDiff()
+  if &diff
+    windo | if &buftype == "nofile" | bdelete | endif
+  else
+    DiffOrig
+    wincmd p | set nobuflisted | wincmd p
+  endif
 endfunction
-com! DiffSaved call s:DiffWithSaved()
-nnoremap <leader><leader>d :DiffSaved<CR>zR
+com! SwitchDiff call s:SwitchDiff()
+nnoremap <C-w>d <Cmd>silent! SwitchDiff<CR>
+
 
 "----------------------------------------------------------------------
 " MANAGE_WINDOWS
@@ -295,8 +297,8 @@ nnoremap zr zr:set foldlevel<CR>
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 " Open fold in next line
-nnoremap <expr> zo foldclosed('.') == -1 ? 'jzo' : 'zo'
-nnoremap <expr> zO foldclosed('.') == -1 ? 'jzO' : 'zO'
+nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
+nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
 
 
 "----------------------------------------------------------------------
@@ -379,7 +381,13 @@ vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 "----------------------------------------------------------------------
 " GIT_TIG
 "----------------------------------------------------------------------
-nnoremap ,ti :TigStatus<CR>
+let g:tig_explorer_keymap_commit_split   = '<C-s>'
+let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
+nnoremap <C-t> <Cmd>Tig<CR>
+nnoremap <C-t>s <Cmd>TigStatus<CR>
+nnoremap <C-t>b <Cmd>TigBlame<CR>
+nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
+
 
 "----------------------------------------------------------------------
 " Markdown items (temproray solution)
@@ -543,3 +551,8 @@ else
         \ --include='*.js' --include='*.vim'
         \ '<root>' <CR>
 endif
+
+hi DiffAdd      ctermfg=Green          ctermbg=NONE
+hi DiffChange   ctermfg=Yellow          ctermbg=NONE
+hi DiffDelete   ctermfg=LightBlue     ctermbg=None
+hi DiffText     ctermfg=Yellow        ctermbg=None
