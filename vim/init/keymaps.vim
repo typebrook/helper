@@ -8,22 +8,11 @@
 " Space for searching
 map <space> /
 
-" j/k will move virtual lines (lines that wrap)
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-" set buflisted
-noremap <leader>st :set<space>
-
 " Disable highlight when <leader><CR> is pressed
 map <silent> <leader><CR> :noh<CR>
-
-" Quick move in a line
-noremap <C-h> 30h
-noremap <C-l> 30l
 
 " Paste register 0
 nnoremap <C-p> "0p
@@ -99,7 +88,7 @@ nnoremap <leader>P :r !xsel -ob<CR>
 vnoremap Y :w !xsel -ib<CR>
 
 " Spell
-nnoremap <leader>ts :set spell!<CR>
+nnoremap <leader><leader>sp :set spell!<CR>
 nnoremap <leader>ss ]s
 nnoremap <leader>S [s
 
@@ -116,12 +105,26 @@ nnoremap <leader><leader>so :source ~/.vimrc<CR>
 vnoremap so :source<CR>
 
 " }}}
+" MOVE ----------------{{{
+
+" j/k will move virtual lines (lines that wrap)
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" Quick move in a line
+noremap <C-h> 30h
+noremap <C-l> 30l
+
+" }}}
 " MANAGE_VIMRC ----------------{{{
+
 nnoremap <leader>e :scriptnames<space>
 nnoremap <leader>ee :edit $MYVIMRC<CR>
 autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
+
 " }}}
 " MOVING_WITH_READLINE ----------------{{{
+
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 inoremap <C-a> <C-o>0
@@ -155,13 +158,16 @@ inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 " }}}
 " INSERT_SURROUNDING ----------------{{{
+
 inoremap ' ''<Left>
 inoremap " ""<Left>
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
+
 " }}}
 " JUMP_TO_TABS_WITH_ALT ----------------{{{
+
 noremap <silent><A-1> :tabn 1<CR>
 noremap <silent><A-2> :tabn 2<CR>
 noremap <silent><M-3> :tabn 3<CR>
@@ -180,6 +186,7 @@ inoremap <silent><M-6> <Esc>:tabn 6<CR>
 inoremap <silent><M-7> <Esc>:tabn 7<CR>
 inoremap <silent><M-8> <Esc>:tabn 8<CR>
 inoremap <silent><M-9> <Esc>:tablast<CR>
+
 " }}}
 " MANAGE_TABS ----------------{{{
 
@@ -216,6 +223,9 @@ function! Tab_MoveRight()
 endfunc
 " }}}
 " MANAGE_BUFFERS ----------------{{{
+
+" set buflisted
+noremap <leader>st :set<space>
 
 " Open a new buffer
 nmap <leader><leader>b :enew<CR>
@@ -261,6 +271,7 @@ com! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
 nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
 " }}}
 " MANAGE_WINDOWS ----------------{{{
+
 nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 
 " 窗口切换：ALT+SHIFT+hjkl
@@ -296,19 +307,24 @@ elseif has('nvim')
 endif
 " }}}
 " FOLDING ----------------{{{
+
 " Set foldmethod
 noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
+
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
+sourcesourcesource
 " Open fold in next line
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+
 " }}}
 " SURROURD_WITH_CHAR ----------------{{{
+
 vnoremap S sa
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
 vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
@@ -318,6 +334,7 @@ vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
 vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
+
 " }}}
 " REDIRECTION_WITH_BUFFER ----------------{{{
 
@@ -380,12 +397,14 @@ vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 
 " }}}
 " GIT_TIG ----------------{{{
+
 let g:tig_explorer_keymap_commit_split   = '<C-s>'
 let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
 nnoremap <C-t> <Cmd>Tig<CR>
 nnoremap <C-t>s <Cmd>TigStatus<CR>
 nnoremap <C-t>b <Cmd>TigBlame<CR>
 nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
+
 " }}}
 " Markdown items (temproray solution) ----------------{{{
 
@@ -401,8 +420,10 @@ nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
 nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dt :r !date +\%H:\%m<CR>A
+
 " }}}
 " Compile ----------------{{{
+
 " 编译运行 C/C++ 项目
 " 详细见：http://www.skywind.me/blog/archives/2084
 "----------------------------------------------------------------------
@@ -506,4 +527,5 @@ else
         \ --include='*.js' --include='*.vim'
         \ '<root>' <CR>
 endif
+
 " }}}

@@ -1,11 +1,14 @@
 "======================================================================
-" init-config.vim - 正常模式下的配置，在 init-basic.vim 后调用
+" init-config.vim
+" Do some autocommand for by contexts
 "======================================================================
 
-" foo Unnamed Buffer ----------------{{{
+" Unnamed Buffer ----------------{{{
+
 augroup DeleteUnnamedEmptBuffer!
   au BufLeave {} if getline(1, '$') == [''] | setlocal bufhidden=wipe | endif
 augroup END
+
 " }}}
 " X11 ----------------{{{
 
@@ -99,7 +102,7 @@ call s:key_escape('<S-F12>', '[24;2~')
 augroup InitFileTypes
 
   au!
-source
+
   " Filetype for Vim ----------------{{{
 
   " Help page
@@ -174,7 +177,9 @@ source
 
   " }}}
   " Mail ----------------{{{
+
   autocmd BufRead /tmp/mutt-* set tw=72
+
   " }}}
   " Password ----------------{{{
 
@@ -194,7 +199,6 @@ source
   " }}}
   " Beancount ----------------{{{
 
-  " Set filetype for beancount
   autocmd BufRead,BufNewFile *.bean call PrepareBean()
   function PrepareBean()
     set filetype=beancount
