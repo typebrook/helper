@@ -8,6 +8,7 @@ endif
 " Get current dir
 " let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let s:home = '~/helper/vim'
+execute 'cd '.s:home
 
 " Load script in current dir
 " command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
@@ -15,28 +16,24 @@ let s:home = '~/helper/vim'
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home
 
-
 "----------------------------------------------------------------------
-" Locad Modules
+" Locad Scripts
 "----------------------------------------------------------------------
 
 " Basic configuration
-source ~/helper/vim/init/basic.vim
+source init/basic.vim
 
 " Key mappings
-source ~/helper/vim/init/keymaps.vim
+source init/keymaps.vim
 
 " Extra config for different contexts
-source ~/helper/vim/init/config.vim
-
-" Highlight
-source ~/helper/vim/init/special_highlight.vim
+source init/config.vim
 
 if has('nvim')
   " For neovim
-  source ~/helper/vim/lazy.lua
+  source lazy.lua
 else
   " For vim
-  source ~/helper/vim/init/plugins.vim
-  source ~/helper/vim/init/style.vim
+  source init/plugins.vim
+  source init/style.vim
 endif

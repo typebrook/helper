@@ -120,12 +120,7 @@ endfunction
 nnoremap <silent> <C-c> :call Bye()<CR>
 
 " }}}
-
-" Don't unload a buffer when no longer shown in a window
-" This allows you open a new buffer and leaves current buffer modified
-set hidden
-
-" ":augroup vimStartup | au! | augroup END"
+" Go to last cursor position ----------------{{{
 augroup vimStartup
   au!
   " When editing a file, always jump to the last known cursor position.
@@ -138,6 +133,7 @@ augroup vimStartup
         \ | endif
 augroup END
 
+" }}}
 " }}}
 " TABSIZE ----------------{{{
 
@@ -177,6 +173,32 @@ set backupdir=~/.vim/tmp
 
 " backup when write file
 set writebackup
+" }}}
+" HIGHLIGHT ----------------{{{
+syntax enable
+
+function! GetHighlightGroupName()
+  let l:syntaxID = synID(line('.'), col('.'), 1)
+  let l:groupName = synIDattr(l:syntaxID, 'name')
+  echo "Highlight Group Name: " . l:groupName
+endfunction
+
+" Defualt highlight for matched parenthesis is so weird in many colorscheme
+" Why the background color is lighter than my caret !?
+" highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
+highlight LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
+
+" Show trailing spaces
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+
+" Persist visualized lines
+" define line highlight color
+highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black guifg=Black
+" highlight the current line
+nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.').'l')<CR>
+" clear all the highlighted lines
+nnoremap <silent> <leader>gH :call clearmatches()<CR>
 " }}}
 " MISC ----------------{{{
 
