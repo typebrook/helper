@@ -184,8 +184,36 @@ augroup InitFileTypesGroup
   au FileType markdown setlocal foldexpr=MarkdownLevel()
   au FileType markdown setlocal foldmethod=expr
 
+  " Hide the first line of a file if editing password file
+  " TODO a better way to determine a file is related to password-store, now use
+  " files under /dev/shm as filter
+  autocmd BufRead /dev/shm/*.txt call SetPasswordFile()
+  function SetPasswordFile()
+    setlocal foldminlines=0
+    setlocal foldmethod=manual
+    function s:custom()
+      return "Password"
+    endfunction
+    setlocal foldtext=s:custom()
+    norm! ggzfl
+  endfunction
+
+  " Set filetype for beancount
+  autocmd BufRead,BufNewFile *.bean call PrepareBean()
+  function PrepareBean()
+    set filetype=beancount
+    silent !setsid fava ~/bean/main.bean &>/dev/null
+    autocmd VimLeave * silent !killall fava
+  endfunction
+
+  " Set filetype for index.html
+  autocmd BufWrite *.html,*.js,*.css call ReloadServer()
+  function ReloadServer()
+    silent !browser-sync reload &>/dev/null
+  endfunction
+
   " quickfix: hide line number
-  au FileType qf setlocal nonumber
+  au FileType quickfix setlocal nonumber
 
   " 强制对某些扩展名的 filetype 进行纠正
   au BufNewFile,BufRead *.as setlocal filetype=actionscript

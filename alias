@@ -23,7 +23,7 @@ eval "${shell}rc(){
 alias vimrc='vim ~/.vimrc'
 alias tigrc="$EDITOR ~/.tigrc"
 alias muttrc="$EDITOR ~/.config/mutt/muttrc"
-alias alarc="$EDITOR ~/.config/alacritty/alacritty.yml"
+alias alarc="$EDITOR ~/.config/alacritty/alacritty.toml"
 alias alacritty.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
 alias gitconfig="$EDITOR ~/.gitconfig"
 alias gpgconfig="$EDITOR ~/.gnupg/gpg-agent.conf"

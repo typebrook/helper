@@ -72,3 +72,7 @@ lines = 18
 [window.padding]
 x = 24
 y = 12
+
+[font]
+offset.x = 0
+offset.y = 0

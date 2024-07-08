@@ -191,8 +191,14 @@ return {
 		end,
 		init = function()
 			vim.g.mkdp_preview_options = {
-				mkit = {},
+				mkit = { breaks = true },
+				toc = {
+					containerClass = "toc",
+					format = "function format(x, htmlencode) { return `<span>${htmlencode(x)}</span>`; }",
+					callback = "console.log('foo')",
+				},
 			}
+			vim.cmd("let g:mkdp_browser = 'firefox'")
 		end,
 	},
 
@@ -283,6 +289,9 @@ return {
 	{
 		"tpope/vim-surround",
 		lazy = false,
+		config = function()
+			vim.cmd("vmap s S")
+		end,
 	},
 
 	{

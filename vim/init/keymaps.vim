@@ -2,28 +2,13 @@
 "
 " Only for key mapping
 "
-"  COMMON_MAPPING
-"  MANAGE_VIMRC
-"  MOVING_WITH_READLINE
-"  INSERT_SURROUNDING
-"  JUMP_TO_TABS_WITH_ALT
-"  MANAGE_TABS
-"  MANAGE_BUFFERS
-"  MANAGE_WINDOWS
-"  FOLDING
-"  SURROURD_WITH_CHAR
-"  REDIRECTION_WITH_BUFFER
-"  QUICK_SUBSTITUTE
-"  GIT_TIG
 "  终端支持
 "  编译运行
 "
 "======================================================================
 " vim: set ts=4 sw=4 tw=78 noet :
 
-"----------------------------------------------------------------------
-" COMMON_MAPPING
-"----------------------------------------------------------------------
+" COMMON_MAPPING ----------------{{{
 
 " Space for searching
 map <space> /
@@ -135,18 +120,13 @@ nnoremap <leader>so V:so<CR>
 nnoremap <leader><leader>so :source ~/.vimrc<CR>
 vnoremap so :source<CR>
 
-
-"----------------------------------------------------------------------
-" MANAGE_VIMRC
-"----------------------------------------------------------------------
+" }}}
+" MANAGE_VIMRC ----------------{{{
 nnoremap <leader>e :scriptnames<space>
 nnoremap <leader>ee :edit $MYVIMRC<CR>
 autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
-
-
-"----------------------------------------------------------------------
-" MOVING_WITH_READLINE
-"----------------------------------------------------------------------
+" }}}
+" MOVING_WITH_READLINE ----------------{{{
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 inoremap <C-a> <C-o>0
@@ -178,19 +158,15 @@ noremap <m-j> gj
 noremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
-
-"----------------------------------------------------------------------
-" INSERT_SURROUNDING
-"----------------------------------------------------------------------
+" }}}
+" INSERT_SURROUNDING ----------------{{{
 inoremap ' ''<Left>
 inoremap " ""<Left>
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-
-"----------------------------------------------------------------------
-" JUMP_TO_TABS_WITH_ALT
-"----------------------------------------------------------------------
+" }}}
+" JUMP_TO_TABS_WITH_ALT ----------------{{{
 noremap <silent><A-1> :tabn 1<CR>
 noremap <silent><A-2> :tabn 2<CR>
 noremap <silent><M-3> :tabn 3<CR>
@@ -209,11 +185,8 @@ inoremap <silent><M-6> <Esc>:tabn 6<CR>
 inoremap <silent><M-7> <Esc>:tabn 7<CR>
 inoremap <silent><M-8> <Esc>:tabn 8<CR>
 inoremap <silent><M-9> <Esc>:tablast<CR>
-
-
-"----------------------------------------------------------------------
-" MANAGE_TABS
-"----------------------------------------------------------------------
+" }}}
+" MANAGE_TABS ----------------{{{
 
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<CR>
@@ -246,11 +219,8 @@ function! Tab_MoveRight()
     exec 'tabmove '.l:tabnr
   endif
 endfunc
-
-
-"----------------------------------------------------------------------
-" MANAGE_BUFFERS
-"----------------------------------------------------------------------
+" }}}
+" MANAGE_BUFFERS ----------------{{{
 
 " Open a new buffer
 nmap <leader><leader>b :enew<CR>
@@ -294,141 +264,10 @@ function! s:SwitchDiffForGitHEAD()
 endfunction
 com! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
 nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
-
-
-"----------------------------------------------------------------------
-" MANAGE_WINDOWS
-"----------------------------------------------------------------------
+" }}}
+" MANAGE_WINDOWS ----------------{{{
 nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 
-
-"----------------------------------------------------------------------
-" FOLDING
-"----------------------------------------------------------------------
-
-" Set foldmethod
-noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
-
-" Show fold level when it changes
-nnoremap zm zm:set foldlevel<CR>
-nnoremap zr zr:set foldlevel<CR>
-" Use l to open fold
-nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
-" Open fold in next line
-nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
-nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
-
-
-"----------------------------------------------------------------------
-" SURROURD_WITH_CHAR
-"----------------------------------------------------------------------
-vnoremap S sa
-vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
-vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
-vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
-vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
-vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
-vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
-vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
-vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
-
-
-"----------------------------------------------------------------------
-" REDIRECTION_WITH_BUFFER
-"----------------------------------------------------------------------
-" Usage:
-" 	:Redir hi ............. show the full output of command ':hi' in a scratch window
-" 	:Redir !ls -al ........ show the full output of command ':!ls -al' in a scratch window
-"
-function! Redir(cmd)
-  " for win in range(1, winnr('$'))
-  "   if getwinvar(win, 'scratch')
-  "     execute win . 'windo close'
-  "   endif
-  " endfor
-  if a:cmd =~ '^!'
-    let output = system(matchstr(a:cmd, '^!\zs.*'))
-  else
-    redir => output
-    execute a:cmd
-    redir END
-  endif
-  enew
-  let w:scratch = 1
-  " setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
-  setlocal buftype=nofile noswapfile
-  call setline(1, split(output, "\n"))
-endfunction
-
-command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
-nnoremap <leader>rr :Redir<space>
-
-
-"----------------------------------------------------------------------
-" QUICK_SUBSTITUTE
-" Press <TAB> n times for area, and <CR> for substitute
-"----------------------------------------------------------------------
-
-" substitute across file
-vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
-
-let g:search_not_in_register = 1
-" When leaving visual mode, resume search_not_in_register
-autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
-
-function! ExpandSelectionBySearch(sep)
-  if g:search_not_in_register
-    " Save current selection to register, and keep selection
-    execute 'norm ygv'
-    let g:search_not_in_register = 0
-  endif
-  " Use register s to go to next search, counts/total is displayed in
-  " statusline
-  call feedkeys(a:sep.."\<C-R>0"..a:sep.."e\<CR>")
-endfunction
-function! SubstituteBySearch()
-  " Apply current search for default substitute text
-  call feedkeys(":s//\<C-R>0/g\<Left>\<Left>")
-endfunction
-
-vnoremap <TAB> <Cmd>call ExpandSelectionBySearch('/')<CR>
-vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
-vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
-
-
-"----------------------------------------------------------------------
-" GIT_TIG
-"----------------------------------------------------------------------
-let g:tig_explorer_keymap_commit_split   = '<C-s>'
-let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
-nnoremap <C-t> <Cmd>Tig<CR>
-nnoremap <C-t>s <Cmd>TigStatus<CR>
-nnoremap <C-t>b <Cmd>TigBlame<CR>
-nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
-
-
-"----------------------------------------------------------------------
-" Markdown items (temproray solution)
-"----------------------------------------------------------------------
-
-" Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
-" autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
-" autocmd FileType markdown          nnoremap <buffer> <leader>I V:!sed -E 's/^( *)/\1- [ ] /'<CR><CR>
-
-" Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
-" nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
-
-
-"----------------------------------------------------------------------
-" Common command
-"----------------------------------------------------------------------
-" Show date selector
-nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
-nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
-nnoremap <leader>dt :r !date +\%H:\%m<CR>A
-
-
-"----------------------------------------------------------------------
 " 窗口切换：ALT+SHIFT+hjkl
 " 传统的 CTRL+hjkl 移动窗口不适用于 vim 8.1 的终端模式，CTRL+hjkl 在
 " bash/zsh 及带文本界面的程序中都是重要键位需要保留，不能 tnoremap 的
@@ -460,10 +299,115 @@ elseif has('nvim')
   tnoremap <m-K> <c-\><c-n><c-w>k
   tnoremap <m-q> <c-\><c-n>
 endif
+" }}}
+" FOLDING ----------------{{{
+" Set foldmethod
+noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 
+" Show fold level when it changes
+nnoremap zm zm:set foldlevel<CR>
+nnoremap zr zr:set foldlevel<CR>
+" Use l to open fold
+nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
+" Open fold in next line
+nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
+nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+" }}}
+" SURROURD_WITH_CHAR ----------------{{{
+vnoremap S sa
+vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
+vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
+vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
+vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
+vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
+vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
+vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
+vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
+" }}}
+" REDIRECTION_WITH_BUFFER ----------------{{{
 
+" Usage:
+" 	:Redir hi ............. show the full output of command ':hi' in a scratch window
+" 	:Redir !ls -al ........ show the full output of command ':!ls -al' in a scratch window
+"
+function! Redir(cmd)
+  " for win in range(1, winnr('$'))
+  "   if getwinvar(win, 'scratch')
+  "     execute win . 'windo close'
+  "   endif
+  " endfor
+  if a:cmd =~ '^!'
+    let output = system(matchstr(a:cmd, '^!\zs.*'))
+  else
+    redir => output
+    execute a:cmd
+    redir END
+  endif
+  enew
+  let w:scratch = 1
+  " setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  setlocal buftype=nofile noswapfile
+  call setline(1, split(output, "\n"))
+endfunction
 
-"----------------------------------------------------------------------
+command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
+nnoremap <leader>rr :Redir<space>
+" }}}
+" QUICK_SUBSTITUTE ----------------{{{
+
+" Usage: Press <TAB> n times for area, and <CR> for substitute
+
+" substitute across file
+vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
+
+let g:search_not_in_register = 1
+" When leaving visual mode, resume search_not_in_register
+autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
+
+function! ExpandSelectionBySearch(sep)
+  if g:search_not_in_register
+    " Save current selection to register, and keep selection
+    execute 'norm ygv'
+    let g:search_not_in_register = 0
+  endif
+  " Use register s to go to next search, counts/total is displayed in
+  " statusline
+  call feedkeys(a:sep.."\<C-R>0"..a:sep.."e\<CR>")
+endfunction
+function! SubstituteBySearch()
+  " Apply current search for default substitute text
+  call feedkeys(":s//\<C-R>0/g\<Left>\<Left>")
+endfunction
+
+vnoremap <TAB> <Cmd>call ExpandSelectionBySearch('/')<CR>
+vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
+vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
+
+" }}}
+" GIT_TIG ----------------{{{
+let g:tig_explorer_keymap_commit_split   = '<C-s>'
+let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
+nnoremap <C-t> <Cmd>Tig<CR>
+nnoremap <C-t>s <Cmd>TigStatus<CR>
+nnoremap <C-t>b <Cmd>TigBlame<CR>
+nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
+" }}}
+" Markdown items (temproray solution) ----------------{{{
+
+" Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
+" autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
+" autocmd FileType markdown          nnoremap <buffer> <leader>I V:!sed -E 's/^( *)/\1- [ ] /'<CR><CR>
+
+" Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
+" nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
+" }}}
+" Common system command ----------------{{{
+" Show date selector
+nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
+nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
+nnoremap <leader>dt :r !date +\%H:\%m<CR>A
+" }}}
+" Compile ----------------{{{
 " 编译运行 C/C++ 项目
 " 详细见：http://www.skywind.me/blog/archives/2084
 "----------------------------------------------------------------------
@@ -501,7 +445,6 @@ if has('win32') || has('win64')
 endif
 
 
-"----------------------------------------------------------------------
 " F5 运行当前文件：根据文件类型判断方法，并且输出到 quickfix 窗口
 "----------------------------------------------------------------------
 function! ExecuteFile()
@@ -548,7 +491,6 @@ endfunc
 
 
 
-"----------------------------------------------------------------------
 " F2 在项目目录下 Grep 光标下单词，默认 C/C++/Py/Js ，扩展名自己扩充
 " 支持 rg/grep/findstr ，其他类型可以自己扩充
 " 不是在当前目录 grep，而是会去到当前文件所属的项目目录 project root
@@ -569,3 +511,4 @@ else
         \ --include='*.js' --include='*.vim'
         \ '<root>' <CR>
 endif
+" }}}
