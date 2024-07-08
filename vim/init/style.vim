@@ -13,14 +13,7 @@
 " 显示设置
 "----------------------------------------------------------------------
 
-" 总是显示状态栏
-set laststatus=2
-
-" 总是显示行号
-set number
-
 " 总是显示侧边栏（用于显示 mark/gitdiff/诊断信息）
-set signcolumn=yes
 
 " 总是显示标签栏
 set showtabline=2
@@ -36,7 +29,6 @@ set showcmd
 " set showmode
 
 " 水平切割窗口时，默认在右边显示新窗口
-set splitright
 
 
 "----------------------------------------------------------------------
@@ -111,16 +103,6 @@ if has('terminal') && exists(':terminal') == 2
     augroup END
   endif
 endif
-
-
-"----------------------------------------------------------------------
-" quickfix 设置，隐藏行号
-"----------------------------------------------------------------------
-augroup VimInitStyle
-  au!
-  au FileType qf setlocal nonumber
-augroup END
-
 
 "----------------------------------------------------------------------
 " 标签栏文字风格：默认为零，GUI 模式下空间大，按风格 3显示
@@ -286,6 +268,3 @@ endfunc
 set tabline=%!Vim_NeatTabLine()
 set guitablabel=%{Vim_NeatGuiTabLabel()}
 set guitabtooltip=%{Vim_NeatGuiTabTip()}
-
-
-

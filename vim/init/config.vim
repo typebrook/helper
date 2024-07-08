@@ -2,10 +2,16 @@
 " init-config.vim - 正常模式下的配置，在 init-basic.vim 后调用
 "======================================================================
 
-" Unnamed Buffer ----------------{{{
+" foo Unnamed Buffer ----------------{{{
 augroup DeleteUnnamedEmptBuffer!
   au BufLeave {} if getline(1, '$') == [''] | setlocal bufhidden=wipe | endif
 augroup END
+" }}}
+" X11 ----------------{{{
+
+" Change IM to US when exit to Normal mode
+autocmd InsertLeave * :silent !fcitx-remote -c &>/dev/null || true
+
 " }}}
 " TMUX ----------------{{{
 
@@ -89,11 +95,11 @@ call s:key_escape('<S-F12>', '[24;2~')
 
 " }}}
 " Filetype ----------------{{{
-"----------------------------------------------------------------------
-augroup InitFileTypesGroup
+
+augroup InitFileTypes
 
   au!
-
+source
   " Filetype for Vim ----------------{{{
 
   " Help page

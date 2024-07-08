@@ -13,7 +13,7 @@ augroup filetype_vim
     autocmd FileType vim setlocal foldmethod=marker foldlevel=0
 augroup END
 " }}}
-" VIM_BEHAVIOR ----------------{{{
+" GERERNAL ----------------{{{
 let mapleader = ","	    " Always use comma as leader key
 set nocompatible	  " Disable vi compatible, today is 20XX
 set path=.,**		    " Allow :find with completion
@@ -24,7 +24,6 @@ set winaltkeys=no	    " Allow alt key for mapping
 " means that you can undo even when you close a buffer/VIM
 set undofile
 set undodir=~/.vim/.undodir
-set conceallevel=1
 
 " Apply plugin and indent by filetype
 filetype plugin indent on
@@ -36,10 +35,9 @@ autocmd FocusGained,BufEnter .* checktime
 " }}}
 " VISUAL ----------------{{{
 
-" colorscheme desert	        " I like desert!
+" colorscheme desert
 
 " Editing Area
-set number relativenumber   " Use relativenumber
 set wrap		                " enable wrap by default
 set scrolloff=3		          " Leave some buffer when scrolling down
 set showmatch		            " Show pairing brackets
@@ -48,6 +46,9 @@ set lazyredraw
 set formatoptions+=m        " 遇到Unicode值大於255的文本，不必等到空格再折行
 set formatoptions+=B        " 合併兩行中文時，不在中間加空格
 set whichwrap=b,s
+
+" Side column
+set signcolumn=yes number relativenumber
 
 " Cursor
 set cursorline
@@ -65,6 +66,7 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 
 " 顯示分隔符號
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+
 " }}}
 " EDIT ----------------{{{
 
@@ -77,8 +79,17 @@ set ttimeoutlen=50
 " autocmd CursorHold * normal! m'
 
 imap <C-c> <Esc>l
-" Change IM to US when exit to Normal mode
-autocmd InsertLeave * :silent !fcitx-remote -c &>/dev/null || true
+
+" TABSIZE ----------------{{{
+
+set expandtab
+set shiftwidth=2
+set autoindent
+set tabstop=4
+set softtabstop=0
+set smartindent
+
+" }}}
 
 " }}}
 " JUMP to anoterh file ----------------{{{
@@ -94,6 +105,7 @@ set hlsearch		    " Hilight all matched texts
 set incsearch		    " Show matched strings when typing
 " }}}
 " BUFFERS ----------------{{{
+
 " Use <C-c> to quit the last buffer ----------------{{{
 let g:quitVimWhenPressingCtrlC = 1
 function! ToggleQuit()
@@ -134,15 +146,6 @@ augroup vimStartup
 augroup END
 
 " }}}
-" }}}
-" TABSIZE ----------------{{{
-
-set expandtab
-set shiftwidth=2
-set autoindent
-set tabstop=4
-set softtabstop=0
-set smartindent
 
 " }}}
 " ENCODING_PREFERENCE ----------------{{{
@@ -176,6 +179,7 @@ set writebackup
 " }}}
 " HIGHLIGHT ----------------{{{
 syntax enable
+set conceallevel=1
 
 function! GetHighlightGroupName()
   let l:syntaxID = synID(line('.'), col('.'), 1)
@@ -224,4 +228,5 @@ set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
 set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
 set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
 set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
+
 " }}}
