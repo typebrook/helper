@@ -236,13 +236,12 @@ endfunc
 function! Bye()
   let windows = gettabinfo(tabpagenr())[0]['windows']
   let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
+
   if len(windows) == 1 && len(bufs) == 1
-    echo 'quit'
     call QuitWithCheck()
   elseif &diff
     call CloseBuffersForDiff()
   else
-    echo 'bdelete'
     call CheckSave()
   endif
 endfunction
