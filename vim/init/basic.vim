@@ -12,8 +12,10 @@ augroup filetype_vim
     execute "autocmd FileType vim :inoreabbrev <buffer> --- ----------------{".."{{"
     autocmd FileType vim setlocal foldmethod=marker foldlevel=0
 augroup END
+
 " }}}
 " GERERNAL ----------------{{{
+
 let mapleader = ","	    " Always use comma as leader key
 set nocompatible	  " Disable vi compatible, today is 20XX
 set path=.,**		    " Allow :find with completion
@@ -32,6 +34,7 @@ filetype plugin indent on
 " Unnamed buffer like CmdWindows should prevent this
 set autoread
 autocmd FocusGained,BufEnter .* checktime
+
 " }}}
 " VISUAL ----------------{{{
 
@@ -64,14 +67,12 @@ set wildmenu wildoptions=pum,fuzzy
 " Format of error message
 set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 
-" 顯示分隔符號
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
-
 " }}}
 " EDIT ----------------{{{
 
 set backspace=eol,start,indent " Set Backspace behaviors
-set autoindent		    " If current line has indent, automatically set indent for next line
+set autoindent smartindent
+set shiftwidth=2
 set cindent
 set ttimeout
 set ttimeoutlen=50
@@ -80,14 +81,14 @@ set ttimeoutlen=50
 
 imap <C-c> <Esc>l
 
-" TABSIZE ----------------{{{
+" TAB ----------------{{{
 
 set expandtab
-set shiftwidth=2
-set autoindent
-set tabstop=4
-set softtabstop=0
-set smartindent
+set softtabstop=-1
+
+" 顯示分隔符號
+set list
+set listchars=tab:▷▷,extends:>,precedes:<
 
 " }}}
 
@@ -99,39 +100,15 @@ set suffixesadd=.md			" Enable reference markdown file without extension
 
 " }}}
 " SEARCH ----------------{{{
-set ignorecase		  " Search case without case sensation
+
+set ignorecase      " Search case without case sensation
 set smartcase
-set hlsearch		    " Hilight all matched texts
-set incsearch		    " Show matched strings when typing
+set hlsearch        " Hilight all matched texts
+set incsearch       " Show matched strings when typing
+
 " }}}
 " BUFFERS ----------------{{{
 
-" Use <C-c> to quit the last buffer ----------------{{{
-let g:quitVimWhenPressingCtrlC = 1
-function! ToggleQuit()
-  let g:quitVimWhenPressingCtrlC = g:quitVimWhenPressingCtrlC ? 0 : 1
-  let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
-  echo message
-endfunction
-
-nnoremap <leader><leader>gl :call ToggleQuit()<CR>
-
-function! Bye()
-  if len(getbufinfo({'buflisted': 1})) == 1 && len(getwininfo()) == 1
-    if g:quitVimWhenPressingCtrlC
-      :silent! quit
-    else
-      :echo "Press <leader><leader>gl to allow quit with <C-c>"
-    endif
-  else
-    :bdelete
-  endif
-endfunction
-
-" Ctrl-C rules!!!
-nnoremap <silent> <C-c> :call Bye()<CR>
-
-" }}}
 " Go to last cursor position ----------------{{{
 augroup vimStartup
   au!
@@ -141,7 +118,7 @@ augroup vimStartup
   " (it's likely a different one than last time).
   autocmd BufReadPost *
         \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`\""
+        \ |   exe "normal! g`\"zv"
         \ | endif
 augroup END
 
@@ -158,10 +135,12 @@ if has('multi_byte')
 endif
 
 " }}}
-" FOLDING ----------------{{{
+" FOLD ----------------{{{
+
 set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
 set foldlevel=2
+
 " }}}
 " BACKUP ----------------{{{
 
@@ -176,8 +155,10 @@ set backupdir=~/.vim/tmp
 
 " backup when write file
 set writebackup
+
 " }}}
 " HIGHLIGHT ----------------{{{
+
 syntax enable
 set conceallevel=1
 
@@ -186,6 +167,7 @@ function! GetHighlightGroupName()
   let l:groupName = synIDattr(l:syntaxID, 'name')
   echo "Highlight Group Name: " . l:groupName
 endfunction
+nnoremap <leader>H :call GetHighlightGroupName()<CR>
 
 " Defualt highlight for matched parenthesis is so weird in many colorscheme
 " Why the background color is lighter than my caret !?
@@ -203,6 +185,7 @@ highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black
 nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.').'l')<CR>
 " clear all the highlighted lines
 nnoremap <silent> <leader>gH :call clearmatches()<CR>
+
 " }}}
 " MISC ----------------{{{
 

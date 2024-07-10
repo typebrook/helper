@@ -1,7 +1,6 @@
 "======================================================================
 " Only for key mapping
 "======================================================================
-" vim: set ts=4 sw=4 tw=78 noet :
 
 " COMMON_MAPPING ----------------{{{
 
@@ -14,28 +13,21 @@ vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 " Disable highlight when <leader><CR> is pressed
 map <silent> <leader><CR> :noh<CR>
 
-" Paste register 0
-nnoremap <C-p> "0p
+" Set wrap
+nnoremap <leader>W :set wrap!<CR>:set wrap?<CR>
 
 " Fast saving
 nmap <leader>w :w!<CR>
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W execute 'w !sudo -S tee %' <bar> edit!
 
 " Fast quit with error
 nmap <leader>q :q<CR>
 
 " Fast quit with error
 nmap cq :cq<CR>
-
-" Switch wrap
-nmap <leader>W :set wrap!<CR>
-
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-command! W execute 'w !sudo -S tee %' <bar> edit!
-
-" Enter to open file
-nnoremap <CR> gf
-nnoremap gF :e <cfile><CR>
 
 " Remap <CR> in Quickfix, Cmdwin Location list
 augroup vimrc_CRfix
@@ -49,13 +41,25 @@ augroup END
 " nnoremap <leader>, :terminal ++noclose<CR>
 vnoremap <leader>, :terminal<CR>
 
+" Paste register 0
+nnoremap <C-p> "0p
+
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<CR>
+
+" Copy from system clipboard
+nnoremap <leader>P :r !xsel -ob<CR>
+vnoremap Y :w !xsel -ib<CR>
 
 " Switch CWD to the directory of the open buffer
 nnoremap cd :cd %:p:h<CR>:pwd<CR>
 " Switch CWD to root git directory
-nnoremap cdg :execute 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))<CR>:pwd<CR>
+function! CdToGitRepo()
+    let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
+    let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
+    execute "cd" l:repo
+endfunction
+nnoremap cdg :call CdToGitRepo()<CR>:pwd<CR>
 
 " alias for cd
 nnoremap cdd :cd<space>
@@ -83,10 +87,6 @@ nnoremap <C-k> ddkP
 " execute "set <M-l>=\el"
 " execute "set <M-h>=\eh"
 
-" Copy from system clipboard
-nnoremap <leader>P :r !xsel -ob<CR>
-vnoremap Y :w !xsel -ib<CR>
-
 " Spell
 nnoremap <leader><leader>sp :set spell!<CR>
 nnoremap <leader>ss ]s
@@ -99,11 +99,6 @@ nnoremap <C-g> 1<C-g>
 vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
 
-" source .vimrc
-nnoremap <leader>so V:so<CR>
-nnoremap <leader><leader>so :source ~/.vimrc<CR>
-vnoremap so :source<CR>
-
 " }}}
 " MOVE ----------------{{{
 
@@ -115,15 +110,11 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 noremap <C-h> 30h
 noremap <C-l> 30l
 
-" }}}
-" MANAGE_VIMRC ----------------{{{
+" File under the cursor
+nnoremap <CR> gf
+nnoremap gF :e <cfile><CR>
 
-nnoremap <leader>e :scriptnames<space>
-nnoremap <leader>ee :edit $MYVIMRC<CR>
-autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
-
-" }}}
-" MOVING_WITH_READLINE ----------------{{{
+" READLINE_FEATURES ----------------{{{
 
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
@@ -157,15 +148,6 @@ noremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 " }}}
-" INSERT_SURROUNDING ----------------{{{
-
-inoremap ' ''<Left>
-inoremap " ""<Left>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
-
-" }}}
 " JUMP_TO_TABS_WITH_ALT ----------------{{{
 
 noremap <silent><A-1> :tabn 1<CR>
@@ -188,87 +170,122 @@ inoremap <silent><M-8> <Esc>:tabn 8<CR>
 inoremap <silent><M-9> <Esc>:tablast<CR>
 
 " }}}
-" MANAGE_TABS ----------------{{{
 
-" Useful mappings for managing tabs
-map <leader>tn :tabnew<CR>
-map <leader>tc :tabclose<CR>
-map <leader>tm :tabmove<SPACE>
-map <leader>to :tabonly<CR>
+" }}}
+" MANAGE_VIMRC ----------------{{{
 
-noremap <silent><m-h> :call Tab_MoveLeft()<CR>
-noremap <silent><m-l> :call Tab_MoveRight()<CR>
+" source .vimrc
+nnoremap <leader>so V:so<CR>
+nnoremap <leader><leader>so :source ~/.vimrc<CR>
+vnoremap so :source<CR>
+autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
 
-" Let <leader>tl toggle between this and the last accessed tab
-let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-autocmd TabLeave * let g:lasttab = tabpagenr()
+"  Find scripts
+nnoremap <leader>e :scriptnames<space>
+nnoremap <leader>ee :edit $MYVIMRC<CR>
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
-
-" Tab move functions
-function! Tab_MoveLeft()
-  let l:tabnr = tabpagenr() - 2
-  if l:tabnr >= 0
-    exec 'tabmove '.l:tabnr
-  endif
-endfunc
-function! Tab_MoveRight()
-  let l:tabnr = tabpagenr() + 1
-  if l:tabnr <= tabpagenr('$')
-    exec 'tabmove '.l:tabnr
-  endif
-endfunc
 " }}}
 " MANAGE_BUFFERS ----------------{{{
 
-" set buflisted
+" Set options
 noremap <leader>st :set<space>
+noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
 
 " Open a new buffer
-nmap <leader><leader>b :enew<CR>
 nmap <leader>B :enew<CR>
 nmap <leader>O :e /tmp/buffer<CR>
-
-" Next buffer
-noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
-" noremap <Tab> :exe 'buffer '.g:lastbuffer<CR>
-
-" set filetype
-noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
 
 " Let <leader>l toggle between this and the last accessed buffer
 augroup SaveLastBuffer
   let g:lastbuffer = 1
   au BufLeave * let g:lastbuffer = bufnr()
 augroup END
+noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
+
+" Use Ctrl-C for buffer delete or quit vim ----------------{{{
+
+" Toggle behavior for the last buffer in the last window
+let g:quitVimWhenPressingCtrlC = 1
+function! ToggleQuit()
+  let g:quitVimWhenPressingCtrlC = g:quitVimWhenPressingCtrlC ? 0 : 1
+  let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
+  echo message
+endfunction
+nnoremap <leader><leader>gl :call ToggleQuit()<CR>
+
+function! CheckSave()
+  if &modified
+    let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
+    if answer == 1 | write | endif
+    if answer == 3 | return | endif
+  endif
+
+  if len(getbufinfo({'buflisted': 1})) == 2
+    try | buffer # | bdelete! # | catch | endtry
+  else
+    bdelete!
+  endif
+endfunction
+func! QuitWithCheck()
+  if g:quitVimWhenPressingCtrlC
+    silent! quit
+  else
+    echo "Press <leader><leader>gl to allow quit with <C-c>"
+  endif
+endfunc
+function! Bye()
+  let windows = gettabinfo(tabpagenr())[0]['windows']
+  let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
+  if len(windows) == 1 && len(bufs) == 1
+    echo 'quit'
+    call QuitWithCheck()
+  elseif &diff
+    call CloseBuffersForDiff()
+  else
+    echo 'bdelete'
+    call CheckSave()
+  endif
+endfunction
+nnoremap <silent> <C-c> :call Bye()<CR>
+
+"}}}
+" Diff Mode ----------------{{{
+
+function! CloseBuffersForDiff()
+    windo | if &diff && &buftype == "nofile" | bdelete | endif
+    norm! zv
+endfunction
+
+command! DiffOrig vert new | set buftype=nofile nobuflisted | read ++edit # | 0d_
+\ | diffthis | wincmd p | diffthis
 
 " Uset <C-w>d to toggle Diff mode
 function! s:SwitchDiff()
   if &diff
-    windo | if &buftype == "nofile" | bdelete | endif
+    call CloseBuffersForDiff()
   else
     DiffOrig
-    wincmd p | set nobuflisted | wincmd p
   endif
 endfunction
 com! SwitchDiff call s:SwitchDiff()
 nnoremap <C-w>d <Cmd>silent! SwitchDiff<CR>
 
 function! s:SwitchDiffForGitHEAD()
-  nmap cdg
+  norm cdg
   if &diff
     windo | if &buftype == "nofile" | bdelete | endif
+    norm! zv
   else
     vert new | set buftype=nofile nobuflisted
     read !git show HEAD:#
     0d_ | diffthis | wincmd p | diffthis
   endif
 endfunction
-com! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
+command! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
 nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
+
+" }}}
+
 " }}}
 " MANAGE_WINDOWS ----------------{{{
 
@@ -306,7 +323,41 @@ elseif has('nvim')
   tnoremap <m-q> <c-\><c-n>
 endif
 " }}}
-" FOLDING ----------------{{{
+" MANAGE_TABS ----------------{{{
+
+" Useful mappings for managing tabs
+map <leader>tn :tabnew<CR>
+map <leader>tc :tabclose<CR>
+map <leader>tm :tabmove<SPACE>
+map <leader>to :tabonly<CR>
+
+noremap <silent><m-h> :call Tab_MoveLeft()<CR>
+noremap <silent><m-l> :call Tab_MoveRight()<CR>
+
+" Let <leader>tl toggle between this and the last accessed tab
+let g:lasttab = 1
+nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+autocmd TabLeave * let g:lasttab = tabpagenr()
+
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
+
+" Tab move functions
+function! Tvab_MoveLeft()
+  let l:tabnr = tabpagenr() - 2
+  if l:tabnr >= 0
+    exec 'tabmove '.l:tabnr
+  endif
+endfunc
+function! Tab_MoveRight()
+  let l:tabnr = tabpagenr() + 1
+  if l:tabnr <= tabpagenr('$')
+    exec 'tabmove '.l:tabnr
+  endif
+endfunc
+" }}}
+" FOLD ----------------{{{
 
 " Set foldmethod
 noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
@@ -317,13 +368,19 @@ nnoremap zr zr:set foldlevel<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
-sourcesourcesource
+
 " Open fold in next line
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
 
 " }}}
-" SURROURD_WITH_CHAR ----------------{{{
+" SURROUND ----------------{{{
+
+inoremap ' ''<Left>
+inoremap " ""<Left>
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
 
 vnoremap S sa
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
@@ -403,7 +460,6 @@ let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
 nnoremap <C-t> <Cmd>Tig<CR>
 nnoremap <C-t>s <Cmd>TigStatus<CR>
 nnoremap <C-t>b <Cmd>TigBlame<CR>
-nnoremap <C-t>d :vertical TigOpenFileWithCommit <C-R>+ % 0<CR>
 
 " }}}
 " Markdown items (temproray solution) ----------------{{{

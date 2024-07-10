@@ -1,7 +1,7 @@
 -- For NvChad
 -- require "nvchad.mappings"
 vim.keymap.set("n", "<leader>ch", "<cmd>NvCheatsheet<CR>", { desc = "toggle nvcheatsheet" })
-vim.keymap.set("n", "<leader>th", "<cmd>Telescope themes<CR>", { desc = "telescope nvchad themes" })
+vim.keymap.set("n", "<leader><leader>th", "<cmd>Telescope themes<CR>", { desc = "telescope nvchad themes" })
 
 --  General
 vim.keymap.set("i", "jk", "<ESC>")

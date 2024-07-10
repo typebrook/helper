@@ -6,6 +6,7 @@
 " Unnamed Buffer ----------------{{{
 
 augroup DeleteUnnamedEmptBuffer!
+  au!
   au BufLeave {} if getline(1, '$') == [''] | setlocal bufhidden=wipe | endif
 augroup END
 
