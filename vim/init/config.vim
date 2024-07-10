@@ -11,6 +11,22 @@ augroup DeleteUnnamedEmptBuffer!
 augroup END
 
 " }}}
+" Small Terminal ----------------{{{
+
+augroup TerminalSize
+  au!
+  function! LayoutForSmall()
+    echo 'vim resized'
+    if &lines < 18
+      set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
+    else
+      set cmdheight& laststatus& showtabline=2 signcolumn=yes scrolloff=3
+    endif
+  endfunction
+  autocmd VimResized * call LayoutForSmall()
+augroup END
+
+" }}}
 " X11 ----------------{{{
 
 " Change IM to US when exit to Normal mode

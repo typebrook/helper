@@ -14,7 +14,7 @@ vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 map <silent> <leader><CR> :noh<CR>
 
 " Set wrap
-nnoremap <leader>W :set wrap!<CR>:set wrap?<CR>
+nnoremap <leader>W :set wrap!<CR>
 
 " Fast saving
 nmap <leader>w :w!<CR>
@@ -220,11 +220,8 @@ function! CheckSave()
     if answer == 3 | return | endif
   endif
 
-  if len(getbufinfo({'buflisted': 1})) == 2
-    try | buffer # | bdelete! # | catch | endtry
-  else
-    bdelete!
-  endif
+  bdelete!
+
 endfunction
 func! QuitWithCheck()
   if g:quitVimWhenPressingCtrlC
@@ -364,6 +361,15 @@ noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
+
+" Fold file except selection
+function! UnfoldSelectionOnly()
+  set foldmethod=manual
+  norm! zE
+  execute "0,'<-1fold"
+  execute "'>+1,$fold"
+endfunction
+vnoremap zF :call UnfoldSelectionOnly()<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'

@@ -310,6 +310,7 @@ return {
 
 	{
 		"folke/which-key.nvim",
+    lazy = false,
 		opts = {
 			presets = {
 				windows = true, -- default bindings on <c-w>
