@@ -76,19 +76,17 @@ set shiftwidth=2
 set cindent
 set ttimeout
 set ttimeoutlen=50
-" set updatetime=1000
+" set updatetime=4000
 " autocmd CursorHold * normal! m'
-
-imap <C-c> <Esc>l
 
 " TAB ----------------{{{
 
 set expandtab
 set softtabstop=-1
 
-" 顯示分隔符號
-set list
-set listchars=tab:▷▷,extends:>,precedes:<
+" Invisible chars
+set nolist
+set listchars=tab:»·,extends:>,precedes:<
 
 " }}}
 
@@ -118,11 +116,25 @@ augroup vimStartup
   " (it's likely a different one than last time).
   autocmd BufReadPost *
         \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`\"zv"
+        \ |   try | silent execute 'normal! g`"zv' | endtry
         \ | endif
 augroup END
 
 " }}}
+
+" }}}
+" FOLD ----------------{{{
+set foldenable          " Allow fold
+set foldmethod=indent   " Fold contents by indent
+set foldlevel=2
+set fillchars+=foldopen:▽,foldsep:│,foldclose:▶
+let g:defaut_foldcolumn = ""
+if has('nvim')
+  let g:defaut_foldcolumn = "auto:5"
+else
+  let g:defaut_foldcolumn = 5
+endif
+let &foldcolumn = g:defaut_foldcolumn
 
 " }}}
 " ENCODING_PREFERENCE ----------------{{{
@@ -133,13 +145,6 @@ if has('multi_byte')
   " Try encodings by this order
   set fileencodings=utf-8,big5,ucs-bom,gbk,gb18030,euc-jp,latin1
 endif
-
-" }}}
-" FOLD ----------------{{{
-
-set foldenable          " Allow fold
-set foldmethod=indent   " Fold contents by indent
-set foldlevel=2
 
 " }}}
 " BACKUP ----------------{{{
@@ -162,13 +167,6 @@ set writebackup
 syntax enable
 set conceallevel=1
 
-function! GetHighlightGroupName()
-  let l:syntaxID = synID(line('.'), col('.'), 1)
-  let l:groupName = synIDattr(l:syntaxID, 'name')
-  echo "Highlight Group Name: " . l:groupName
-endfunction
-nnoremap <leader>H :call GetHighlightGroupName()<CR>
-
 " Defualt highlight for matched parenthesis is so weird in many colorscheme
 " Why the background color is lighter than my caret !?
 " highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
@@ -177,14 +175,6 @@ highlight LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
 " Show trailing spaces
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
-
-" Persist visualized lines
-" define line highlight color
-highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black guifg=Black
-" highlight the current line
-nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.').'l')<CR>
-" clear all the highlighted lines
-nnoremap <silent> <leader>gH :call clearmatches()<CR>
 
 " }}}
 " MISC ----------------{{{

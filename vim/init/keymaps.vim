@@ -7,6 +7,9 @@
 " Space for searching
 map <space> /
 
+" Escape normal mode by <C-c>
+imap <C-c> <Esc>l
+
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
@@ -23,10 +26,8 @@ nmap <leader>w :w!<CR>
 " (useful for handling the permission-denied error)
 command! W execute 'w !sudo -S tee %' <bar> edit!
 
-" Fast quit with error
+" Quit
 nmap <leader>q :q<CR>
-
-" Fast quit with error
 nmap cq :cq<CR>
 
 " Remap <CR> in Quickfix, Cmdwin Location list
@@ -88,7 +89,8 @@ nnoremap <C-k> ddkP
 " execute "set <M-h>=\eh"
 
 " Spell
-nnoremap <leader><leader>sp :set spell!<CR>
+nnoremap <expr> <leader><leader>sp ": echo spell "..(echo &spell ? "on" : "off").."<CR>"
+nnoremap <expr> <leader><leader>sp ": echo spell "
 nnoremap <leader>ss ]s
 nnoremap <leader>S [s
 
@@ -190,6 +192,10 @@ nnoremap <leader>ee :edit $MYVIMRC<CR>
 " Set options
 noremap <leader>st :set<space>
 noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
+noremap <leader><leader>li :set list!<CR>
+noremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
+noremap <leader><leader>nu :set number!<CR>
+noremap <leader><leader>ru :set relativenumber!<CR>
 
 " Open a new buffer
 nmap <leader>B :enew<CR>
@@ -213,43 +219,53 @@ function! ToggleQuit()
 endfunction
 nnoremap <leader><leader>gl :call ToggleQuit()<CR>
 
-function! CheckSave()
+function! CloseBufferSafely()
   if &modified
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
     if answer == 1 | write | endif
     if answer == 3 | return | endif
   endif
 
-  bdelete!
-
+  let bufs = getbufinfo({'buflisted': 1})
+  if len(bufs) == 1
+    bdelete!
+  else
+    b# | bd! #
+  endif
 endfunction
 func! QuitWithCheck()
-  if g:quitVimWhenPressingCtrlC
-    silent! quit
-  else
-    echo "Press <leader><leader>gl to allow quit with <C-c>"
-  endif
+if g:quitVimWhenPressingCtrlC
+  silent! quit
+else
+  echo "Press <leader><leader>gl to allow quit with <C-c>"
+endif
 endfunc
 function! Bye()
-  let windows = gettabinfo(tabpagenr())[0]['windows']
+let windows = gettabinfo(tabpagenr())[0]['windows']
+try
   let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
+catch
+  let bufs = getbufinfo({'buflisted': 1})
+endtry
 
-  if len(windows) == 1 && len(bufs) == 1
-    call QuitWithCheck()
-  elseif &diff
-    call CloseBuffersForDiff()
-  else
-    call CheckSave()
-  endif
+if len(windows) == 1 && len(bufs) == 1
+  call QuitWithCheck()
+elseif &diff
+  call CloseBuffersForDiff()
+elseif len(windows) >1
+  quit
+else
+ silent! call CloseBufferSafely()
+endif
 endfunction
 nnoremap <silent> <C-c> :call Bye()<CR>
 
-"}}}
-" Diff Mode ----------------{{{
+
+" Diff Mode ----------------
 
 function! CloseBuffersForDiff()
-    windo | if &diff && &buftype == "nofile" | bdelete | endif
-    norm! zv
+  windo | if &diff && &buftype == "nofile" | bdelete | endif
+  norm! zv
 endfunction
 
 command! DiffOrig vert new | set buftype=nofile nobuflisted | read ++edit # | 0d_
@@ -257,25 +273,25 @@ command! DiffOrig vert new | set buftype=nofile nobuflisted | read ++edit # | 0d
 
 " Uset <C-w>d to toggle Diff mode
 function! s:SwitchDiff()
-  if &diff
-    call CloseBuffersForDiff()
-  else
-    DiffOrig
-  endif
+if &diff
+  call CloseBuffersForDiff()
+else
+  DiffOrig
+endif
 endfunction
 com! SwitchDiff call s:SwitchDiff()
 nnoremap <C-w>d <Cmd>silent! SwitchDiff<CR>
 
 function! s:SwitchDiffForGitHEAD()
-  norm cdg
-  if &diff
-    windo | if &buftype == "nofile" | bdelete | endif
-    norm! zv
-  else
-    vert new | set buftype=nofile nobuflisted
-    read !git show HEAD:#
-    0d_ | diffthis | wincmd p | diffthis
-  endif
+norm cdg
+if &diff
+  windo | if &buftype == "nofile" | bdelete | endif
+  norm! zv
+else
+  vert new | set buftype=nofile nobuflisted
+  read !git show HEAD:#
+  0d_ | diffthis | wincmd p | diffthis
+endif
 endfunction
 command! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
 nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
@@ -301,22 +317,22 @@ inoremap <m-J> <esc><c-w>j
 inoremap <m-K> <esc><c-w>k
 
 if has('terminal') && exists(':terminal') == 2 && has('patch-8.1.1')
-  " vim 8.1 支持 termwinkey ，不需要把 terminal 切换成 normal 模式
-  " 设置 termwinkey 为 CTRL 加减号（GVIM），有些终端下是 CTRL+?
-  " 后面四个键位是搭配 termwinkey 的，如果 termwinkey 更改，也要改
-  set termwinkey=<c-_>
-  tnoremap <m-H> <c-_>h
-  tnoremap <m-L> <c-_>l
-  tnoremap <m-J> <c-_>j
-  tnoremap <m-K> <c-_>k
-  tnoremap <m-q> <c-\><c-n>
+" vim 8.1 支持 termwinkey ，不需要把 terminal 切换成 normal 模式
+" 设置 termwinkey 为 CTRL 加减号（GVIM），有些终端下是 CTRL+?
+" 后面四个键位是搭配 termwinkey 的，如果 termwinkey 更改，也要改
+set termwinkey=<c-_>
+tnoremap <m-H> <c-_>h
+tnoremap <m-L> <c-_>l
+tnoremap <m-J> <c-_>j
+tnoremap <m-K> <c-_>k
+tnoremap <m-q> <c-\><c-n>
 elseif has('nvim')
-  " neovim 没有 termwinkey 支持，必须把 terminal 切换回 normal 模式
-  tnoremap <m-H> <c-\><c-n><c-w>h
-  tnoremap <m-L> <c-\><c-n><c-w>l
-  tnoremap <m-J> <c-\><c-n><c-w>j
-  tnoremap <m-K> <c-\><c-n><c-w>k
-  tnoremap <m-q> <c-\><c-n>
+" neovim 没有 termwinkey 支持，必须把 terminal 切换回 normal 模式
+tnoremap <m-H> <c-\><c-n><c-w>h
+tnoremap <m-L> <c-\><c-n><c-w>l
+tnoremap <m-J> <c-\><c-n><c-w>j
+tnoremap <m-K> <c-\><c-n><c-w>k
+tnoremap <m-q> <c-\><c-n>
 endif
 " }}}
 " MANAGE_TABS ----------------{{{
@@ -341,35 +357,44 @@ map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
 
 " Tab move functions
 function! Tvab_MoveLeft()
-  let l:tabnr = tabpagenr() - 2
-  if l:tabnr >= 0
-    exec 'tabmove '.l:tabnr
-  endif
+let l:tabnr = tabpagenr() - 2
+if l:tabnr >= 0
+  exec 'tabmove '.l:tabnr
+endif
 endfunc
 function! Tab_MoveRight()
-  let l:tabnr = tabpagenr() + 1
-  if l:tabnr <= tabpagenr('$')
-    exec 'tabmove '.l:tabnr
-  endif
+let l:tabnr = tabpagenr() + 1
+if l:tabnr <= tabpagenr('$')
+  exec 'tabmove '.l:tabnr
+endif
 endfunc
 " }}}
 " FOLD ----------------{{{
 
 " Set foldmethod
 noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
+noremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
 
 " Fold file except selection
+let g:original_foldmethod = ""
 function! UnfoldSelectionOnly()
-  set foldmethod=manual
+  echo 'Unfold'..&foldmethod
+  let g:original_foldmethod = &foldmethod
+  let &foldmethod = "manual"
   norm! zE
   execute "0,'<-1fold"
   execute "'>+1,$fold"
 endfunction
-vnoremap zF :call UnfoldSelectionOnly()<CR>
+function! ResumeFoldmethod()
+  norm! zE
+  let &foldmethod = g:original_foldmethod ? g:original_foldmethod : "indent"
+endfunc
+vnoremap zF :<C-u>call UnfoldSelectionOnly()<CR>
+nnoremap zF :<C-u>call ResumeFoldmethod()<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
@@ -377,6 +402,36 @@ nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 " Open fold in next line
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+
+" }}}
+" HIGHLIGHT ----------------{{{
+
+function! HiFile()
+  let i = 1
+  while i <= line("$")
+    if strlen(getline(i)) > 0 && len(split(getline(i))) > 2
+      let w = split(getline(i))[0]
+      let l:command =  "syn match " . w . " /^" . w . "\\s\\+xxx/"
+      exe l:command
+    endif
+    let i += 1
+  endwhile
+endfunction
+
+function! GetHighlightGroupName()
+  let l:syntaxID = synID(line('.'), col('.'), 1)
+  let l:groupName = synIDattr(l:syntaxID, 'name')
+  echo "Highlight Group Name: " . l:groupName
+endfunction
+nnoremap <leader>H :call GetHighlightGroupName()<CR>
+
+" Persist visualized lines
+" define line highlight color
+highlight MultiLineHighlight ctermbg=LightYellow guibg=LightYellow ctermfg=Black guifg=Black
+" highlight the current line
+nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.').'l')<CR>
+" clear all the highlighted lines
+nnoremap <silent> <leader>gH :call clearmatches()<CR>
 
 " }}}
 " SURROUND ----------------{{{
@@ -397,6 +452,11 @@ vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
 vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 
+" }}}
+" QUICKFIX ----------------{{{
+nnoremap <leader>cn :cn<CR>
+nnoremap <leader>cp :cp<CR>
+nnoremap <leader>cw :cw 10<CR>
 " }}}
 " REDIRECTION_WITH_BUFFER ----------------{{{
 

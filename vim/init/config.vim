@@ -5,6 +5,7 @@
 
 " Unnamed Buffer ----------------{{{
 
+" Automatically delete unnamed empty buffer when leaving
 augroup DeleteUnnamedEmptBuffer!
   au!
   au BufLeave {} if getline(1, '$') == [''] | setlocal bufhidden=wipe | endif
@@ -15,15 +16,14 @@ augroup END
 
 augroup TerminalSize
   au!
-  function! LayoutForSmall()
-    echo 'vim resized'
-    if &lines < 18
-      set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
+  function! LayoutForSmallTerminal()
+    if &lines < 19
+      silent! set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
     else
-      set cmdheight& laststatus& showtabline=2 signcolumn=yes scrolloff=3
+      silent! set cmdheight& laststatus& showtabline=2 signcolumn=yes scrolloff=3
     endif
   endfunction
-  autocmd VimResized * call LayoutForSmall()
+  autocmd VimEnter,VimResized * call LayoutForSmallTerminal()
 augroup END
 
 " }}}
@@ -144,24 +144,28 @@ augroup InitFileTypes
   autocmd BufReadPost * call <SID>ApplyShebang()
   " }}}
   " Markdown ----------------{{{
-  au FileType markdown setlocal wrap
-  au FileType markdown set sw=2 ts=2
-  " Fold by heading level
-  function! MarkdownLevel()
-    let hash_num = matchstr(getline(v:lnum), '^#\+')
-    let hash_num_at_top = matchstr(getline(v:lnum-1), '^#\+')
-    if empty(hash_num)
-      if empty(hash_num_at_top)
-        return "="
+
+  augroup Config_Markdown
+    au!
+    au FileType markdown setlocal wrap sw=2 ts=2
+    au FileType markdown setlocal foldexpr=MarkdownLevel() foldmethod=expr
+
+    " Fold by heading level
+    function! MarkdownLevel()
+      let hash_num = matchstr(getline(v:lnum), '^#\+')
+      let hash_num_at_top = matchstr(getline(v:lnum-1), '^#\+')
+      if empty(hash_num)
+        if empty(hash_num_at_top)
+          return "="
+        else
+          return ">"..(len(hash_num_at_top))
+        endif
       else
-        return ">"..(len(hash_num_at_top))
+        return len(hash_num) - 1
       endif
-    else
-      return len(hash_num)-1
-    endif
-  endfunction
-  au FileType markdown setlocal foldexpr=MarkdownLevel()
-  au FileType markdown setlocal foldmethod=expr
+    endfunction
+
+  augroup END
 
   " }}}
   " HTML ----------------{{{
