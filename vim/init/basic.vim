@@ -9,7 +9,7 @@
 " Usage: type --- for foldmark
 augroup filetype_vim
     autocmd!
-    execute "autocmd FileType vim :inoreabbrev <buffer> --- ----------------{".."{{"
+    execute "autocmd FileType vim :inoreabbrev <buffer> --- ----------------{".."{{<CR>\" }"."}}"
     autocmd FileType vim setlocal foldmethod=marker foldlevel=0
 augroup END
 
@@ -34,6 +34,13 @@ filetype plugin indent on
 " Unnamed buffer like CmdWindows should prevent this
 set autoread
 autocmd FocusGained,BufEnter .* checktime
+
+" spell
+set spell
+set spellfile="/tmp/spell"
+
+" Custom sign from help page :h sign
+sign define piet text=>> texthl=Search
 
 " }}}
 " VISUAL ----------------{{{
@@ -79,8 +86,9 @@ set ttimeoutlen=50
 " set updatetime=4000
 " autocmd CursorHold * normal! m'
 
-" TAB ----------------{{{
+" TAB and special Chars ----------------{{{
 
+set tabstop=8
 set expandtab
 set softtabstop=-1
 

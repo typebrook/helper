@@ -22,3 +22,5 @@ o.completeopt = 'menuone,noselect'
 o.termguicolors = true
 
 o.whichwrap = "b,s"
+
+o.tabstop = 8

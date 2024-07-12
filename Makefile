@@ -75,8 +75,8 @@ console:
 
 task:
 	ln -sf $(HOME)/.task/taskrc $(HOME)/.taskrc
-	if [ ! -d "$(HOME)/.task/.git" ]; then 
-		if [ -d "$(HOME)/.task" ]; then rm -rf "$(HOME)/.task"; fi; 
+	if [ ! -d "$(HOME)/.task/.git" ]; then
+		if [ -d "$(HOME)/.task" ]; then rm -rf "$(HOME)/.task"; fi;
 		git clone --depth 1 vps:~/.task ~/.task;
 	fi
 

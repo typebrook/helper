@@ -52,21 +52,6 @@ map <leader>pp :setlocal paste!<CR>
 nnoremap <leader>P :r !xsel -ob<CR>
 vnoremap Y :w !xsel -ib<CR>
 
-" Switch CWD to the directory of the open buffer
-nnoremap cd :cd %:p:h<CR>:pwd<CR>
-" Switch CWD to root git directory
-function! CdToGitRepo()
-    let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
-    let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
-    execute "cd" l:repo
-endfunction
-nnoremap cdg :call CdToGitRepo()<CR>:pwd<CR>
-
-" alias for cd
-nnoremap cdd :cd<space>
-nnoremap cd.. :cd .. <CR>:pwd<CR>
-nnoremap cd... :cd ../.. <CR>:pwd<CR>
-
 " Move one line up and down
 nnoremap <C-j> ddp
 nnoremap <C-k> ddkP
@@ -89,8 +74,7 @@ nnoremap <C-k> ddkP
 " execute "set <M-h>=\eh"
 
 " Spell
-nnoremap <expr> <leader><leader>sp ": echo spell "..(echo &spell ? "on" : "off").."<CR>"
-nnoremap <expr> <leader><leader>sp ": echo spell "
+nnoremap <leader><leader>sp :set spell!<CR>:set spell?<CR>
 nnoremap <leader>ss ]s
 nnoremap <leader>S [s
 
@@ -102,7 +86,40 @@ vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
 
 " }}}
-" MOVE ----------------{{{
+" WORKING_DIR ----------------{{{
+
+let g:last_path = execute("pwd")
+augroup SaveLatestDir
+  au!
+  autocmd DirChangedPre * let g:last_path = split(execute('pwd'), "\n")[0]
+augroup END
+
+" Switch CWD to the directory of the open buffer
+nnoremap cd :cd %:p:h<CR>:pwd<CR>
+
+nnoremap cd<space> :cd<space>
+nnoremap cdg :call CdToGitRepo()<CR>:pwd<CR>
+noremap <C-[> :cd ..<CR>:pwd<CR>
+noremap <C-]> :call InCaseCdToLatestDir()<CR>
+
+" Switch CWD to root git directory
+function! CdToGitRepo()
+    let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
+    let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
+    execute "cd" l:repo
+endfunction
+
+function! InCaseCdToLatestDir()
+  try
+    execute "norm! \<C-]>"
+  catch
+    cd -
+    pwd
+  endtry
+endfunction
+
+" }}}
+" MOTION ----------------{{{
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -371,7 +388,7 @@ endfunc
 " }}}
 " FOLD ----------------{{{
 
-" Set foldmethod
+" Set fold options
 noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 noremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
@@ -379,22 +396,13 @@ noremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
 
-" Fold file except selection
-let g:original_foldmethod = ""
-function! UnfoldSelectionOnly()
-  echo 'Unfold'..&foldmethod
-  let g:original_foldmethod = &foldmethod
-  let &foldmethod = "manual"
-  norm! zE
-  execute "0,'<-1fold"
-  execute "'>+1,$fold"
-endfunction
-function! ResumeFoldmethod()
-  norm! zE
-  let &foldmethod = g:original_foldmethod ? g:original_foldmethod : "indent"
-endfunc
+" Fold all except selection
 vnoremap zF :<C-u>call UnfoldSelectionOnly()<CR>
-nnoremap zF :<C-u>call ResumeFoldmethod()<CR>
+" Resume
+nnoremap zF :<C-u>call ResumeFoldmethod()<CR>zv
+
+" Select current fold
+xnoremap iz :<C-U>silent!normal![zV]z<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
@@ -402,6 +410,21 @@ nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 " Open fold in next line
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+
+" Fold file except selection
+let b:original_foldmethod = ""
+function! UnfoldSelectionOnly()
+  echo 'Unfold'..&foldmethod
+  let b:original_foldmethod = &foldmethod
+  let &foldmethod = "manual"
+  norm! zE
+  execute "0,'<-1fold"
+  execute "'>+1,$fold"
+endfunction
+function! ResumeFoldmethod()
+  norm! zE
+  let &foldmethod = empty(b:original_foldmethod) ? "indent" : b:original_foldmethod
+endfunc
 
 " }}}
 " HIGHLIGHT ----------------{{{
@@ -449,14 +472,28 @@ vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
 vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
 vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
 vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
-vnoremap <space> <ESC>`<i<space><ESC>`>la<space><ESC>
 vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
+
+function! AddSpaceForSelection()
+  if line("'<") == line("'>")
+    call cursor('.', col("'<"))
+    execute "norm! i\<space>"
+    call cursor('.', col("'>")+1)
+    execute "norm! a\<space>"
+  else
+    '< norm! O
+    '> norm! o
+  endif
+endfunction
+vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>
 
 " }}}
 " QUICKFIX ----------------{{{
+
 nnoremap <leader>cn :cn<CR>
 nnoremap <leader>cp :cp<CR>
 nnoremap <leader>cw :cw 10<CR>
+
 " }}}
 " REDIRECTION_WITH_BUFFER ----------------{{{
 
@@ -518,6 +555,12 @@ vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
 vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 
 " }}}
+" SIGN ----------------{{{
+
+nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') .. " name=piet file=" .. expand("%:p")<CR>
+nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>
+
+" }}
 " GIT_TIG ----------------{{{
 
 let g:tig_explorer_keymap_commit_split   = '<C-s>'
