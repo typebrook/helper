@@ -505,11 +505,6 @@ nnoremap <leader>cw :cw 10<CR>
 " 	:Redir !ls -al ........ show the full output of command ':!ls -al' in a scratch window
 "
 function! Redir(cmd)
-  " for win in range(1, winnr('$'))
-  "   if getwinvar(win, 'scratch')
-  "     execute win . 'windo close'
-  "   endif
-  " endfor
   if a:cmd =~ '^!'
     let output = system(matchstr(a:cmd, '^!\zs.*'))
   else
@@ -519,12 +514,12 @@ function! Redir(cmd)
   endif
   enew
   let w:scratch = 1
-  " setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
   setlocal buftype=nofile noswapfile
   call setline(1, split(output, "\n"))
 endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
+command! -nargs=1 -complete=command R silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
 " }}}
 " QUICK_SUBSTITUTE ----------------{{{
