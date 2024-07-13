@@ -13,14 +13,14 @@ imap <C-c> <Esc>l
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-" Disable highlight when <leader><CR> is pressed
-map <silent> <leader><CR> :noh<CR>
-
 " Set wrap
 nnoremap <leader>W :set wrap!<CR>
 
 " Fast saving
-nmap <leader>w :w!<CR>
+function! s:WriteOrEnterFileName()
+  if !empty(expand('%')) | w! | else | call feedkeys(":w ") | endif
+endfunction
+nmap <leader>w :call <SID>WriteOrEnterFileName()<CR>
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
@@ -268,7 +268,7 @@ endtry
 if len(windows) == 1 && len(bufs) == 1
   call QuitWithCheck()
 elseif &diff
-  call CloseBuffersForDiff()
+  silent call CloseBuffersForDiff()
 elseif len(windows) >1
   quit
 else
@@ -428,6 +428,9 @@ endfunc
 
 " }}}
 " HIGHLIGHT ----------------{{{
+
+" Disable highlight when <leader><CR> is pressed
+map <silent> <leader><CR> :noh<CR>
 
 function! HiFile()
   let i = 1
