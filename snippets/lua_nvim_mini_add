@@ -1,0 +1,7 @@
+add({
+  source = "ModuleName",
+  depends = {
+    'SubModule',
+  },
+  hooks = { post_checkout = function() end },
+})

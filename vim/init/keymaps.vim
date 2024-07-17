@@ -50,7 +50,7 @@ map <leader>pp :setlocal paste!<CR>
 
 " Copy from system clipboard
 nnoremap <leader>P :r !xsel -ob<CR>
-vnoremap Y :w !xsel -ib<CR>
+vnoremap Y "+y
 
 " Move one line up and down
 nnoremap <C-j> ddp
@@ -80,6 +80,8 @@ nnoremap <leader>S [s
 
 " Show full path by default
 nnoremap <C-g> 1<C-g>
+
+nnoremap S S<ESC>
 
 " Translate by Google API
 vnoremap Tz :!trans -t zh-TW -b<CR>
@@ -478,14 +480,14 @@ vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 
 function! AddSpaceForSelection()
-  if line("'<") == line("'>")
+  if line("'<") != line("'>") || (col("'<") == 1 && col("'>") == len(getline('.'))+1)
+    '< norm! O
+    '> norm! o
+  else
     call cursor('.', col("'<"))
     execute "norm! i\<space>"
     call cursor('.', col("'>")+1)
     execute "norm! a\<space>"
-  else
-    '< norm! O
-    '> norm! o
   endif
 endfunction
 vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>

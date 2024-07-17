@@ -1,10 +1,15 @@
--- vim: foldmethod=marker foldmarker={{{,}}}
+-- vim: sw=2 foldmethod=marker foldmarker={{{,}}}
 
--- Install mini.nvim -{{{
+-- Ref: https://github.com/echasnovski/mini.nvim?tab=readme-ov-file
+-- TODO
+
+-- Install mini.nvim {{{
+
 -- Put this at the top of 'init.lua'
 local path_package = vim.fn.stdpath('data') .. '/site'
-vim.o.packpath=path_package
+vim.o.packpath = path_package
 local mini_path = path_package .. '/pack/deps/start/mini.nvim'
+
 if not vim.loop.fs_stat(mini_path) then
   vim.cmd('echo "Installing `mini.nvim`" | redraw')
   local clone_cmd = {
@@ -16,8 +21,27 @@ if not vim.loop.fs_stat(mini_path) then
   vim.fn.system(clone_cmd)
   vim.cmd('packadd mini.nvim | helptags ALL')
 end
+
 -- }}}
-require('mini.base16').setup({ --{{{
+-- mini.deps {{{
+require('mini.deps').setup({
+  path = { package = path_package }
+})
+add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+-- }}}
+-- Disabled: mini.bufremote {{{
+add('echasnovski/mini.bufremove')
+vim.g.bufremove_disable = true
+--}}}
+-- Disabled: mini.animate --{{{
+add('echasnovski/mini.animate')
+vim.g.animate_disable = true
+-- }}}
+-- mini.basics {{{
+require('mini.basics').setup()
+-- }}}
+-- mini.base16 {{{
+require('mini.base16').setup({
   palette = {
     -- Default Background
     base00 = "#2d2a2e",
@@ -54,10 +78,15 @@ require('mini.base16').setup({ --{{{
   },
   use_cterm = true,
 }) --}}}
-require('mini.misc').setup({ --{{{
+-- mini.misc {{{
+require('mini.misc').setup({
   make_global = { 'put', 'put_text', 'zoom'}
 }) --}}}
-require('mini.statusline').setup({--{{{
+-- mini.icons {{{
+require('mini.icons').setup({
+}) --}}}
+-- mini.statusline {{{
+require('mini.statusline').setup({
   content = {
     active = status_config
   },
@@ -84,27 +113,21 @@ function status_config()
   local location      = MiniStatusline.section_location({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
-  { hl = mode_hl,                  strings = { mode } },
-  { hl = 'MiniStatuslineDevinfo',  strings = { git, diagnostics['s'] } },
-  { hl = 'MiniStatuslineError',  strings = { diagnostics['e'] } },
-  { hl = 'MiniStatuslineWarning',  strings = { diagnostics['w'] } },
-  { hl = 'MiniStatuslineInfo',  strings = { diagnostics['i'] } },
-  { hl = 'MiniStatuslineHint',  strings = { diagnostics['h'] } },
-  '%<', -- Mark general truncate point
-  { hl = 'MiniStatuslineFilename', strings = { filename } },
-  '%=', -- End left alignment
-  { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-  { hl = mode_hl,                  strings = { location } },
+    { hl = mode_hl,                  strings = { mode } },
+    { hl = 'MiniStatuslineDevinfo',  strings = { git, diagnostics['s'] } },
+    { hl = 'MiniStatuslineError',  strings = { diagnostics['e'] } },
+    { hl = 'MiniStatuslineWarning',  strings = { diagnostics['w'] } },
+    { hl = 'MiniStatuslineInfo',  strings = { diagnostics['i'] } },
+    { hl = 'MiniStatuslineHint',  strings = { diagnostics['h'] } },
+    '%<', -- Mark general truncate point
+    { hl = 'MiniStatuslineFilename', strings = { filename } },
+    '%=', -- End left alignment
+    { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+    { hl = mode_hl,                  strings = { location } },
   })
 end
 -- }}}
-require('mini.animate').setup()--{{{
--- }}}
-require('mini.basics').setup()--{{{
--- }}}
--- require('mini.bufremove').setup() --{{{
---}}}
-require('mini.clue') --{{{
+-- mini.clue {{{
 local miniclue = require('mini.clue')
 miniclue.setup({
   triggers = {
@@ -149,10 +172,12 @@ miniclue.setup({
     miniclue.gen_clues.z(),
   },
 })-- }}}
-require('mini.colors').setup()-- {{{
+-- mini.colors {{{
+require('mini.colors').setup()
 -- }}}
-require('mini.comment').setup({-- {{{
-    -- Module mappings. Use `''` (empty string) to disable one.
+-- mini.comment {{{
+require('mini.comment').setup({
+  -- Module mappings. Use `''` (empty string) to disable one.
   mappings = {
     -- Toggle comment (like `gcip` - comment inner paragraph) for both
     -- Normal and Visual modes
@@ -169,9 +194,230 @@ require('mini.comment').setup({-- {{{
     textobject = 'gc',
   },
 })-- }}}
-require('mini.cursorword').setup()-- {{{
+-- mini.cursorword {{{
+require('mini.cursorword').setup()
 -- }}}
-require('mini.cursorword').setup()-- {{{
+-- mini.diff {{{
+require('mini.diff').setup({
+  -- Options for how hunks are visualized
+  view = {
+    -- Visualization style. Possible values are 'sign' and 'number'.
+    -- Default: 'number' if line numbers are enabled, 'sign' otherwise.
+    style = 'sign',
+
+    -- Signs used for hunks with 'sign' view
+    signs = { add = '+', change = '▒', delete = '-' },
+
+    -- Priority of used visualization extmarks
+    priority = 199,
+  },
+})
 -- }}}
-require('mini.diff').setup()-- {{{
+-- mini.extra {{{
+require('mini.extra').setup()
 -- }}}
+-- mini.map {{{
+require('mini.map').setup()
+-- }}}
+-- mini.tabline {{{
+
+require('mini.tabline').setup()
+
+for i = 1, 9, 1 do
+  vim.keymap.set("n", string.format("<A-%s>", i), function()
+    vim.api.nvim_set_current_buf(vim.t.bufs[i])
+  end)
+end
+
+-- }}}
+-- mini.visits {{{
+require('mini.visits').setup()
+-- }}}
+-- mini.completion {{{
+require('mini.completion').setup()
+-- }}}
+-- Telescope {{{
+add({
+  source = "nvim-telescope/telescope.nvim",
+  depends = {
+    'nvim-lua/plenary.nvim',
+  },
+  hooks = { post_checkout = function() end },
+})
+-- add({
+--   source = 'nvim-telescope/telescope-fzf-native.nvim',
+--   hooks = { post_checkout = function()
+--     vim.fn.system('make')
+--   end },
+-- })
+-- config {{{
+require('telescope').setup({
+  defaults = {-- {{{
+  mappings = {
+    i = {
+      -- ["<c-j>"] = "move_selection_next",
+      -- ["<c-k>"] = "move_selection_previous",
+      ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
+      ["<C-u>"] = false,
+      ["<C-q>"] = function(p_bufnr)
+        require("telescope.actions").send_selected_to_qflist(p_bufnr)
+        vim.cmd.cfdo("edit")
+      end,
+    },
+  },
+  layout_config = {
+    horizontal = {
+      prompt_position = "bottom",
+    },
+    vertical = { height = 0.8 },
+    -- other layout configuration here
+    preview_cutoff = 0,
+  },
+  file_ignore_patterns = {
+    "node_modules"
+  },
+},-- }}}
+pickers = {-- {{{
+buffers = {
+  show_all_buffers = true,
+  sort_lastused = true,
+  theme = "dropdown",
+  previewer = false,
+  mappings = {
+    i = {
+      ["<c-d>"] = "delete_buffer",
+    },
+    n = {
+      ["<c-d>"] = "delete_buffer",
+    }
+  },
+},
+},-- }}}
+extensions = {
+  fzf = {
+    fuzzy = true,                   -- false will only do exact matching
+    override_generic_sorter = true, -- override the generic sorter
+    override_file_sorter = true,    -- override the file sorter
+    case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+    -- the default case_mode is "smart_case"
+  },
+  aerial = {
+    -- Display symbols as <root>.<parent>.<symbol>
+    show_nesting = {
+      ["_"] = false, -- This key will be the default
+      json = true,   -- You can set the option for specific filetypes
+      yaml = true,
+    },
+  },
+},
+})
+-- }}}
+-- require("telescope").load_extension("fzf")
+-- require("telescope").load_extension("aerial")
+
+-- Keymaps {{{
+vim.keymap.set("n", "<leader>f", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
+vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
+vim.keymap.set("n", "//", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
+vim.keymap.set("n", "<leader>sf", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
+vim.keymap.set(
+"n",
+"<leader>sF",
+"<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
+{ desc = "telescope find all files" }
+)
+vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
+vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<CR>", { desc = "telescope git files" })
+vim.keymap.set("n", "<leader>sH", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
+vim.keymap.set("n", "<leader>sm", "<cmd>Telescope marks<CR>", { desc = "telescope marks" })
+vim.keymap.set("n", "<leader>sj", "<cmd>Telescope jumplist<CR>", { desc = "telescope marks" })
+vim.keymap.set("n", "<leader>tt", "<cmd>Telescope<CR>", { desc = "telescope help page" })
+vim.keymap.set("n", "<leader>sk", "<cmd>Telescope keymaps<CR>", { desc = "telescope keymaps" })
+vim.keymap.set("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
+
+vim.keymap.set("n", "<leader>ss", function()
+  local current_filetype = vim.bo.filetype
+  local cwd = os.getenv("HOME") .. "/snippets"
+  require("telescope.builtin").find_files({
+    prompt_title = "Press <C-T> to edit a snippet",
+    default_text = current_filetype == "" and "" or current_filetype .. "_",
+    cwd = cwd,
+    attach_mappings = function(prompt_bufnr, map)
+      local get_prompt_or_entry = function()
+        local file_list = require("telescope.actions.state").get_selected_entry()
+        if file_list then
+          return file_list[1]
+        else
+          local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+          return current_picker:_get_prompt()
+        end
+      end
+
+      local edit_snippet = function()
+        local file = get_prompt_or_entry()
+        require("telescope.actions").close(prompt_bufnr)
+        local prefix_filetype = string.match(file, "([^_]+)")
+        vim.cmd(":vs")
+        vim.cmd(":e " .. cwd .. "/" .. file)
+        vim.bo.filetype = prefix_filetype
+        vim.bo.bufhidden = "wipe"
+        vim.cmd("set filetype?")
+      end
+
+      local insert_selected_snippet = function()
+        local file = get_prompt_or_entry()
+        local path = cwd .. "/" .. file
+        if vim.fn.filereadable(path) ~= 0 then
+          local snippet_content = vim.fn.readfile(path)
+          require("telescope.actions").close(prompt_bufnr)
+          vim.fn.setreg('"', snippet_content)
+          print("Snippet saved to register")
+        else
+          edit_snippet()
+        end
+      end
+
+      map("i", "<CR>", insert_selected_snippet)
+      map("i", "<C-T>", edit_snippet)
+      map("n", "<CR>", insert_selected_snippet)
+
+      return true
+    end,
+  })
+end, { desc = "[S]earch [S]nippets" })
+
+vim.keymap.set("n", "<leader>sd", function()
+  require("telescope.builtin").oldfiles({
+    prompt_title = "CD to",
+    attach_mappings = function(prompt_bufnr, map)
+      local cd_prompt = function()
+        local file = require("telescope.actions.state").get_selected_entry()[1]
+        local path = string.match(file, "(.*[/\\])")
+        require("telescope.actions").close(prompt_bufnr)
+        vim.api.nvim_feedkeys(":cd " .. path, "n", true)
+      end
+
+      map("i", "<CR>", cd_prompt)
+      map("n", "<CR>", cd_prompt)
+
+      return true
+    end,
+  })
+end, { desc = "Search Directory" })-- }}}
+
+-- }}}
+-- toggleterm {{{
+
+add({
+  source = "akinsho/toggleterm.nvim",
+  hooks = { post_checkout = function() end },
+})
+require("toggleterm").setup{
+    persist_size = false,
+    direction = 'float',
+}
+
+vim.keymap.set({ "n", "t" }, "<A-i>", function() vim.cmd("ToggleTerm direction=float") end, { desc = "terminal toggle floating term" })
+vim.keymap.set({ "n", "t" }, "<A-v>", function() vim.cmd("ToggleTerm direction=horizontal") end, { desc = "terminal toggle floating term" })
+
+--}}}
