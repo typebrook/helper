@@ -82,7 +82,7 @@ set autoindent smartindent
 set shiftwidth=2
 set cindent
 set ttimeout
-set ttimeoutlen=50
+set timeoutlen=500
 " set updatetime=4000
 " autocmd CursorHold * normal! m'
 

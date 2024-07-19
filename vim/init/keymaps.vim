@@ -12,8 +12,8 @@ imap <C-c> <Esc>l
 
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
-
 " Set wrap
+
 nnoremap <leader>W :set wrap!<CR>
 
 " Fast saving
@@ -243,6 +243,7 @@ function! CloseBufferSafely()
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
     if answer == 1 | write | endif
     if answer == 3 | return | endif
+    if answer == "" | return | endif
   endif
 
   let bufs = getbufinfo({'buflisted': 1})
@@ -404,7 +405,8 @@ vnoremap zF :<C-u>call UnfoldSelectionOnly()<CR>
 nnoremap zF :<C-u>call ResumeFoldmethod()<CR>zv
 
 " Select current fold
-xnoremap iz :<C-U>silent!normal![zV]z<CR>
+xnoremap az :<C-U>silent!normal![zV]z<CR>
+xnoremap iz :<C-U>silent!normal![zjV]zk<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
@@ -412,6 +414,9 @@ nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 " Open fold in next line
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+
+nnoremap zJ zjzx
+nnoremap zK zkzx
 
 " Fold file except selection
 let b:original_foldmethod = ""

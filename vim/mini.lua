@@ -1,6 +1,6 @@
 -- vim: sw=2 foldmethod=marker foldmarker={{{,}}}
 
--- Ref: https://github.com/echasnovski/mini.nvim?tab=readme-ov-file
+-- Ref: https://github.com/echasnovski/mini.nvim
 -- TODO
 
 -- Install mini.nvim {{{
@@ -40,6 +40,17 @@ vim.g.animate_disable = true
 -- mini.basics {{{
 require('mini.basics').setup()
 -- }}}
+-- mini.misc {{{
+require('mini.misc').setup({
+  make_global = { 'put', 'put_text', 'zoom'}
+}) --}}}
+-- mini.extra {{{
+require('mini.extra').setup()
+-- }}}
+-- mini.colors {{{
+require('mini.colors').setup()
+vim.keymap.set( 'n', '<leader>co', function() require('mini.colors').interactive() end)
+-- }}}
 -- mini.base16 {{{
 require('mini.base16').setup({
   palette = {
@@ -78,14 +89,22 @@ require('mini.base16').setup({
   },
   use_cterm = true,
 }) --}}}
--- mini.misc {{{
-require('mini.misc').setup({
-  make_global = { 'put', 'put_text', 'zoom'}
-}) --}}}
 -- mini.icons {{{
 require('mini.icons').setup({
 }) --}}}
+-- mini.tabline {{{
+
+require('mini.tabline').setup {}
+
+for i = 1, 9, 1 do
+  vim.keymap.set("n", string.format("<A-%s>", i), function()
+    vim.api.nvim_set_current_buf( vim.fn.getbufinfo({ buflisted=true })[i].bufnr)
+  end, {silent = true})
+end
+
+-- }}}
 -- mini.statusline {{{
+
 require('mini.statusline').setup({
   content = {
     active = status_config
@@ -126,54 +145,52 @@ function status_config()
     { hl = mode_hl,                  strings = { location } },
   })
 end
+
 -- }}}
--- mini.clue {{{
-local miniclue = require('mini.clue')
-miniclue.setup({
-  triggers = {
-    -- Leader triggers
-    { mode = 'n', keys = '<Leader>' },
-    { mode = 'x', keys = '<Leader>' },
-
-    -- Built-in completion
-    { mode = 'i', keys = '<C-x>' },
-
-    -- `g` key
-    { mode = 'n', keys = 'g' },
-    { mode = 'x', keys = 'g' },
-
-    -- Marks
-    { mode = 'n', keys = "'" },
-    { mode = 'n', keys = '`' },
-    { mode = 'x', keys = "'" },
-    { mode = 'x', keys = '`' },
-
-    -- Registers
-    { mode = 'n', keys = '"' },
-    { mode = 'x', keys = '"' },
-    { mode = 'i', keys = '<C-r>' },
-    { mode = 'c', keys = '<C-r>' },
-
-    -- Window commands
-    { mode = 'n', keys = '<C-w>' },
-
-    -- `z` key
-    { mode = 'n', keys = 'z' },
-    { mode = 'x', keys = 'z' },
-  },
-
-  clues = {
-    -- Enhance this by adding descriptions for <Leader> mapping groups
-    miniclue.gen_clues.builtin_completion(),
-    miniclue.gen_clues.g(),
-    miniclue.gen_clues.marks(),
-    miniclue.gen_clues.registers(),
-    miniclue.gen_clues.windows(),
-    miniclue.gen_clues.z(),
-  },
-})-- }}}
--- mini.colors {{{
-require('mini.colors').setup()
+-- Disabled: mini.clue {{{
+-- local miniclue = require('mini.clue')
+-- miniclue.setup({
+--   triggers = {
+--     -- Leader triggers
+--     { mode = 'n', keys = '<Leader>' },
+--     { mode = 'x', keys = '<Leader>' },
+--
+--     -- Built-in completion
+--     { mode = 'i', keys = '<C-x>' },
+--
+--     -- `g` key
+--     { mode = 'n', keys = 'g' },
+--     { mode = 'x', keys = 'g' },
+--
+--     -- Marks
+--     { mode = 'n', keys = "'" },
+--     { mode = 'n', keys = '`' },
+--     { mode = 'x', keys = "'" },
+--     { mode = 'x', keys = '`' },
+--
+--     -- Registers
+--     { mode = 'n', keys = '"' },
+--     { mode = 'x', keys = '"' },
+--     { mode = 'i', keys = '<C-r>' },
+--     { mode = 'c', keys = '<C-r>' },
+--
+--     -- Window commands
+--     { mode = 'n', keys = '<C-w>' },
+--
+--     -- `z` key
+--     { mode = 'n', keys = 'z' },
+--     { mode = 'x', keys = 'z' },
+--   },
+--
+--   clues = {
+--     -- Enhance this by adding descriptions for <Leader> mapping groups
+--     miniclue.gen_clues.builtin_completion(),
+--     miniclue.gen_clues.g(),
+--     miniclue.gen_clues.marks(),
+--     miniclue.gen_clues.registers(),
+--     miniclue.gen_clues.windows(),
+--     miniclue.gen_clues.z(),
+--   },
 -- }}}
 -- mini.comment {{{
 require('mini.comment').setup({
@@ -213,28 +230,59 @@ require('mini.diff').setup({
   },
 })
 -- }}}
--- mini.extra {{{
-require('mini.extra').setup()
--- }}}
 -- mini.map {{{
 require('mini.map').setup()
--- }}}
--- mini.tabline {{{
-
-require('mini.tabline').setup()
-
-for i = 1, 9, 1 do
-  vim.keymap.set("n", string.format("<A-%s>", i), function()
-    vim.api.nvim_set_current_buf(vim.t.bufs[i])
-  end)
-end
-
+vim.keymap.set( 'n', '<leader><leader>mp', function() require('mini.map').toggle() end, { buffer = bufnr, desc = '' })
 -- }}}
 -- mini.visits {{{
 require('mini.visits').setup()
+vim.keymap.set( 'n', '<leader><leader>li', function()
+    MiniVisits.list_paths()
+  end,
+  { buffer = bufnr, desc = '' }
+)
 -- }}}
 -- mini.completion {{{
 require('mini.completion').setup()
+-- }}}
+-- mini.surround {{{
+require('mini.surround').setup {
+  mappings = {
+    add = 's'
+  }
+}
+-- }}}
+-- mini.indentscope {{{
+require('mini.indentscope').setup()
+-- }}}
+-- mini.splitjoin {{{
+require('mini.splitjoin').setup()
+-- }}}
+-- mini.move {{{
+require('mini.move').setup()
+-- }}}
+-- mini.pairs {{{
+require('mini.pairs').setup()
+-- }}}
+-- mini.hipatterns {{{
+local hipatterns = require('mini.hipatterns')
+hipatterns.setup({
+  highlighters = {
+    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+    fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+    hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
+    todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
+    note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = hipatterns.gen_highlighter.hex_color(),
+  },
+})
+vim.keymap.set( 'n', '<leader><leader>hi', function()
+    MiniHipatterns.toggle()
+  end,
+  { buffer = bufnr, desc = 'Toggle hex color highlight' }
+)
 -- }}}
 -- Telescope {{{
 add({
@@ -409,15 +457,61 @@ end, { desc = "Search Directory" })-- }}}
 -- toggleterm {{{
 
 add({
-  source = "akinsho/toggleterm.nvim",
-  hooks = { post_checkout = function() end },
+source = "akinsho/toggleterm.nvim",
+hooks = { post_checkout = function() end },
 })
 require("toggleterm").setup{
-    persist_size = false,
-    direction = 'float',
+persist_size = false,
+direction = 'float',
 }
 
 vim.keymap.set({ "n", "t" }, "<A-i>", function() vim.cmd("ToggleTerm direction=float") end, { desc = "terminal toggle floating term" })
 vim.keymap.set({ "n", "t" }, "<A-v>", function() vim.cmd("ToggleTerm direction=horizontal") end, { desc = "terminal toggle floating term" })
 
 --}}}
+-- Tig {{{
+
+add({
+  source = "iberianpig/tig-explorer.vim",
+  depends = { "rbgrouleff/bclose.vim" },
+  hooks = { post_checkout = function() end },
+})
+
+--}}}
+-- Disabled: suda {{{
+-- add { source = "lambdalisue/suda.vim" }
+-- }}}
+-- which-key {{{
+add({
+  source = "folke/which-key.nvim",
+  checkout = "stable",
+})
+require('which-key').setup {
+  defaults = {
+    win = {
+      -- don't allow the popup to overlap with the cursor
+      no_overlap = false,
+      -- width = 1,
+      height = { min = 10, max = 25 },
+      -- col = 0,
+      -- row = math.huge,
+      -- border = "none",
+      padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+      title = true,
+      title_pos = "center",
+      zindex = 1000,
+      -- Additional vim.wo and vim.bo options
+      bo = {},
+      wo = {
+        -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+      },
+    },
+  }
+}
+-- }}}
+-- true-zen {{{
+add {
+  source = "Pocco81/true-zen.nvim",
+}
+vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
+-- }}}
