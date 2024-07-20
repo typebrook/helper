@@ -29,14 +29,6 @@ require('mini.deps').setup({
 })
 add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 -- }}}
--- Disabled: mini.bufremote {{{
-add('echasnovski/mini.bufremove')
-vim.g.bufremove_disable = true
---}}}
--- Disabled: mini.animate --{{{
-add('echasnovski/mini.animate')
-vim.g.animate_disable = true
--- }}}
 -- mini.basics {{{
 require('mini.basics').setup()
 -- }}}
@@ -49,7 +41,7 @@ require('mini.extra').setup()
 -- }}}
 -- mini.colors {{{
 require('mini.colors').setup()
-vim.keymap.set( 'n', '<leader>co', function() require('mini.colors').interactive() end)
+vim.keymap.set( 'n', '<leader><leader>co', function() require('mini.colors').interactive() end)
 -- }}}
 -- mini.base16 {{{
 require('mini.base16').setup({
@@ -75,7 +67,7 @@ require('mini.base16').setup({
     -- Integers, Boolean, Constants, XML Attributes, Markup Link Url
     base09 = "#ef9062",
     -- Classes, Markup Bold, Search Text Background
-    base0A = "#a6e22e",
+    base0A = "#efca84",
     -- Strings, Inherited Class, Markup Code, Diff Inserted
     base0B = "#e5c463",
     -- Support, Regular Expressions, Escape Characters, Markup Quotes
@@ -88,7 +80,9 @@ require('mini.base16').setup({
     base0F = "#f9f8f5",
   },
   use_cterm = true,
-}) --}}}
+})
+
+--}}}
 -- mini.icons {{{
 require('mini.icons').setup({
 }) --}}}
@@ -98,7 +92,7 @@ require('mini.tabline').setup {}
 
 for i = 1, 9, 1 do
   vim.keymap.set("n", string.format("<A-%s>", i), function()
-    vim.api.nvim_set_current_buf( vim.fn.getbufinfo({ buflisted=true })[i].bufnr)
+    vim.api.nvim_set_current_buf(vim.fn.getbufinfo({ buflisted=true })[i].bufnr)
   end, {silent = true})
 end
 
@@ -147,7 +141,97 @@ function status_config()
 end
 
 -- }}}
--- Disabled: mini.clue {{{
+-- mini.comment {{{
+require('mini.comment').setup({
+  -- Module mappings. Use `''` (empty string) to disable one.
+  mappings = {
+    -- Toggle comment (like `gcip` - comment inner paragraph) for both
+    -- Normal and Visual modes
+    comment = 'gc',
+
+    -- Toggle comment on current line
+    comment_line = '<C-/>',
+
+    -- Toggle comment on visual selection
+    comment_visual = '<C-/>',
+
+    -- Define 'comment' textobject (like `dgc` - delete whole comment block)
+    -- Works also in Visual mode if mapping differs from `comment_visual`
+    textobject = 'gc',
+  },
+})-- }}}
+-- mini.cursorword {{{
+require('mini.cursorword').setup()
+-- }}}
+-- mini.diff {{{
+require('mini.diff').setup({
+  -- Options for how hunks are visualized
+  view = {
+    -- Visualization style. Possible values are 'sign' and 'number'.
+    -- Default: 'number' if line numbers are enabled, 'sign' otherwise.
+    style = 'sign',
+
+    -- Signs used for hunks with 'sign' view
+    signs = { add = '+', change = '▒', delete = '-' },
+
+    -- Priority of used visualization extmarks
+    priority = 199,
+  },
+})
+-- }}}
+-- mini.map {{{
+require('mini.map').setup()
+vim.keymap.set( 'n', '\\m', function() require('mini.map').toggle() end, { buffer = bufnr, desc = '' })
+-- }}}
+-- mini.visits {{{
+require('mini.visits').setup()
+vim.keymap.set( 'n', '<leader><leader>li', function()
+    MiniVisits.list_paths()
+  end,
+  { buffer = bufnr, desc = '' }
+)
+-- }}}
+-- mini.completion {{{
+require('mini.completion').setup()
+-- }}}
+-- mini.surround {{{
+require('mini.surround').setup {
+  mappings = {
+    add = 's'
+  }
+}
+-- }}}
+-- mini.indentscope {{{
+require('mini.indentscope').setup()
+-- }}}
+-- mini.splitjoin {{{
+require('mini.splitjoin').setup()
+-- }}}
+-- mini.move {{{
+require('mini.move').setup()
+-- }}}
+-- mini.hipatterns {{{
+
+local hipatterns = require('mini.hipatterns')
+hipatterns.setup({
+  highlighters = {
+    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+    fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+    hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
+    todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
+    note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = hipatterns.gen_highlighter.hex_color(),
+  },
+})
+vim.keymap.set( 'n', '<leader><leader>hi', function()MiniHipatterns.toggle() end, { buffer = bufnr, desc = 'Toggle hex color highlight' })
+
+-- }}}
+-- mini.pairs {{{
+require('mini.pairs').setup()
+-- }}}
+-- -- mini.clue {{{
 -- local miniclue = require('mini.clue')
 -- miniclue.setup({
 --   triggers = {
@@ -191,98 +275,14 @@ end
 --     miniclue.gen_clues.windows(),
 --     miniclue.gen_clues.z(),
 --   },
--- }}}
--- mini.comment {{{
-require('mini.comment').setup({
-  -- Module mappings. Use `''` (empty string) to disable one.
-  mappings = {
-    -- Toggle comment (like `gcip` - comment inner paragraph) for both
-    -- Normal and Visual modes
-    comment = 'gc',
-
-    -- Toggle comment on current line
-    comment_line = '<C-/>',
-
-    -- Toggle comment on visual selection
-    comment_visual = '<C-/>',
-
-    -- Define 'comment' textobject (like `dgc` - delete whole comment block)
-    -- Works also in Visual mode if mapping differs from `comment_visual`
-    textobject = 'gc',
-  },
-})-- }}}
--- mini.cursorword {{{
-require('mini.cursorword').setup()
--- }}}
--- mini.diff {{{
-require('mini.diff').setup({
-  -- Options for how hunks are visualized
-  view = {
-    -- Visualization style. Possible values are 'sign' and 'number'.
-    -- Default: 'number' if line numbers are enabled, 'sign' otherwise.
-    style = 'sign',
-
-    -- Signs used for hunks with 'sign' view
-    signs = { add = '+', change = '▒', delete = '-' },
-
-    -- Priority of used visualization extmarks
-    priority = 199,
-  },
-})
--- }}}
--- mini.map {{{
-require('mini.map').setup()
-vim.keymap.set( 'n', '<leader><leader>mp', function() require('mini.map').toggle() end, { buffer = bufnr, desc = '' })
--- }}}
--- mini.visits {{{
-require('mini.visits').setup()
-vim.keymap.set( 'n', '<leader><leader>li', function()
-    MiniVisits.list_paths()
-  end,
-  { buffer = bufnr, desc = '' }
-)
--- }}}
--- mini.completion {{{
-require('mini.completion').setup()
--- }}}
--- mini.surround {{{
-require('mini.surround').setup {
-  mappings = {
-    add = 's'
-  }
-}
--- }}}
--- mini.indentscope {{{
-require('mini.indentscope').setup()
--- }}}
--- mini.splitjoin {{{
-require('mini.splitjoin').setup()
--- }}}
--- mini.move {{{
-require('mini.move').setup()
--- }}}
--- mini.pairs {{{
-require('mini.pairs').setup()
--- }}}
--- mini.hipatterns {{{
-local hipatterns = require('mini.hipatterns')
-hipatterns.setup({
-  highlighters = {
-    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-    fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-    hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
-    todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
-    note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
-
-    -- Highlight hex color strings (`#rrggbb`) using that color
-    hex_color = hipatterns.gen_highlighter.hex_color(),
-  },
-})
-vim.keymap.set( 'n', '<leader><leader>hi', function()
-    MiniHipatterns.toggle()
-  end,
-  { buffer = bufnr, desc = 'Toggle hex color highlight' }
-)
+-- -- }}}
+-- -- mini.bufremote {{{
+add('echasnovski/mini.bufremove')
+vim.g.bufremove_disable = true
+--}}}
+-- -- mini.animate --{{{
+add('echasnovski/mini.animate')
+vim.g.animate_disable = true
 -- }}}
 -- Telescope {{{
 add({
@@ -292,81 +292,85 @@ add({
   },
   hooks = { post_checkout = function() end },
 })
--- add({
---   source = 'nvim-telescope/telescope-fzf-native.nvim',
---   hooks = { post_checkout = function()
---     vim.fn.system('make')
---   end },
--- })
 -- config {{{
 require('telescope').setup({
-  defaults = {-- {{{
-  mappings = {
-    i = {
-      -- ["<c-j>"] = "move_selection_next",
-      -- ["<c-k>"] = "move_selection_previous",
-      ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
-      ["<C-u>"] = false,
-      ["<C-q>"] = function(p_bufnr)
-        require("telescope.actions").send_selected_to_qflist(p_bufnr)
-        vim.cmd.cfdo("edit")
-      end,
+  defaults = {
+    mappings = {
+      i = {
+        -- ["<c-j>"] = "move_selection_next",
+        -- ["<c-k>"] = "move_selection_previous",
+        ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
+        ["<C-u>"] = false,
+        ["<C-q>"] = function(p_bufnr)
+          require("telescope.actions").send_selected_to_qflist(p_bufnr)
+          vim.cmd.cfdo("edit")
+        end,
+      },
+    },
+    layout_config = {
+      horizontal = {
+        prompt_position = "bottom",
+      },
+      vertical = { height = 0.8 },
+      -- other layout configuration here
+      preview_cutoff = 0,
+    },
+    file_ignore_patterns = {
+      "node_modules"
     },
   },
-  layout_config = {
-    horizontal = {
-      prompt_position = "bottom",
-    },
-    vertical = { height = 0.8 },
-    -- other layout configuration here
-    preview_cutoff = 0,
-  },
-  file_ignore_patterns = {
-    "node_modules"
-  },
-},-- }}}
-pickers = {-- {{{
-buffers = {
-  show_all_buffers = true,
-  sort_lastused = true,
-  theme = "dropdown",
-  previewer = false,
-  mappings = {
-    i = {
-      ["<c-d>"] = "delete_buffer",
-    },
-    n = {
-      ["<c-d>"] = "delete_buffer",
-    }
-  },
-},
-},-- }}}
-extensions = {
-  fzf = {
-    fuzzy = true,                   -- false will only do exact matching
-    override_generic_sorter = true, -- override the generic sorter
-    override_file_sorter = true,    -- override the file sorter
-    case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
-    -- the default case_mode is "smart_case"
-  },
-  aerial = {
-    -- Display symbols as <root>.<parent>.<symbol>
-    show_nesting = {
-      ["_"] = false, -- This key will be the default
-      json = true,   -- You can set the option for specific filetypes
-      yaml = true,
+  pickers = {
+    buffers = {
+      show_all_buffers = true,
+      sort_lastused = true,
+      theme = "dropdown",
+      previewer = false,
+      mappings = {
+        i = {
+          ["<c-d>"] = "delete_buffer",
+        },
+        n = {
+          ["<c-d>"] = "delete_buffer",
+        }
+      },
     },
   },
-},
+  extensions = {
+    fzf = {
+      fuzzy = true,                   -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true,    -- override the file sorter
+      case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
+    },
+    aerial = {
+      -- Display symbols as <root>.<parent>.<symbol>
+      show_nesting = {
+        ["_"] = false, -- This key will be the default
+        json = true,   -- You can set the option for specific filetypes
+        yaml = true,
+      },
+    },
+  },
 })
 -- }}}
--- require("telescope").load_extension("fzf")
+-- extensions {{{
+add({
+  source = 'nvim-telescope/telescope-fzf-native.nvim',
+  hooks = {
+    post_install = function(config)
+      vim.cmd("make -C " .. config.path)
+    end
+  },
+})
+require("telescope").load_extension("fzf")
 -- require("telescope").load_extension("aerial")
+-- }}}
 
 -- Keymaps {{{
 vim.keymap.set("n", "<leader>f", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
 vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
-vim.keymap.set("n", "//", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
+vim.keymap.set("n", "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
 vim.keymap.set("n", "<leader>sf", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
 vim.keymap.set(
 "n",
@@ -457,12 +461,12 @@ end, { desc = "Search Directory" })-- }}}
 -- toggleterm {{{
 
 add({
-source = "akinsho/toggleterm.nvim",
-hooks = { post_checkout = function() end },
+  source = "akinsho/toggleterm.nvim",
+  hooks = { post_checkout = function() end },
 })
 require("toggleterm").setup{
-persist_size = false,
-direction = 'float',
+  persist_size = false,
+  direction = 'float',
 }
 
 vim.keymap.set({ "n", "t" }, "<A-i>", function() vim.cmd("ToggleTerm direction=float") end, { desc = "terminal toggle floating term" })
@@ -476,6 +480,7 @@ add({
   depends = { "rbgrouleff/bclose.vim" },
   hooks = { post_checkout = function() end },
 })
+vim.cmd('nunmap <leader>bd')
 
 --}}}
 -- Disabled: suda {{{
@@ -514,4 +519,98 @@ add {
   source = "Pocco81/true-zen.nvim",
 }
 vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
+-- }}}
+-- nvim-tree {{{
+add {
+  source = "nvim-tree/nvim-tree.lua",
+}
+-- config {{{
+require("nvim-tree").setup {
+  filters = {
+    dotfiles = false,
+  },
+  disable_netrw = true,
+  hijack_netrw = true,
+  hijack_cursor = true,
+  hijack_unnamed_buffer_when_opening = false,
+  sync_root_with_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_root = false,
+  },
+  view = {
+    adaptive_size = false,
+    side = "left",
+    width = 30,
+    preserve_window_proportions = true,
+  },
+  git = {
+    enable = true,
+    ignore = true,
+  },
+  filesystem_watchers = {
+    enable = true,
+  },
+  actions = {
+    open_file = {
+      resize_window = true,
+    },
+  },
+  renderer = {
+    root_folder_label = false,
+    highlight_git = true,
+    highlight_opened_files = "none",
+
+    indent_markers = {
+      enable = true,
+    },
+
+    icons = {
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+
+      glyphs = {
+        default = "󰈚",
+        symlink = "",
+        folder = {
+          default = "",
+          empty = "",
+          empty_open = "",
+          open = "",
+          symlink = "",
+          symlink_open = "",
+          arrow_open = "",
+          arrow_closed = "",
+        },
+        git = {
+          unstaged = "✗",
+          staged = "✓",
+          unmerged = "",
+          renamed = "➜",
+          untracked = "★",
+          deleted = "",
+          ignored = "◌",
+        },
+      },
+    },
+  },
+}
+-- }}}
+vim.keymap.set(
+  "n",
+  "<C-n>",
+  "<cmd>NvimTreeToggle<CR>",
+  { desc = "nvimtree toggle window" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>e",
+  "<cmd>NvimTreeFocus<CR>",
+  { desc = "nvimtree focus window" }
+)
+
 -- }}}

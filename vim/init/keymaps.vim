@@ -1,6 +1,7 @@
 "======================================================================
 " Only for key mapping
 "======================================================================
+" vim: sw=2 ts=2 foldmethod=marker foldmarker={{{,}}}
 
 " COMMON_MAPPING ----------------{{{
 
@@ -8,17 +9,17 @@
 map <space> /
 
 " Escape normal mode by <C-c>
-imap <C-c> <Esc>l
+inoremap <C-c> <Esc>l
 
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
-" Set wrap
 
+" Set wrap
 nnoremap <leader>W :set wrap!<CR>
 
 " Fast saving
 function! s:WriteOrEnterFileName()
-  if !empty(expand('%')) | w! | else | call feedkeys(":w ") | endif
+  if !empty(expand('%')) | write! | else | call feedkeys(":w ") | endif
 endfunction
 nmap <leader>w :call <SID>WriteOrEnterFileName()<CR>
 
@@ -38,27 +39,9 @@ augroup vimrc_CRfix
   autocmd CmdwinEnter * nnoremap <buffer> <C-c> <C-c>
 augroup END
 
-" Open terminal
-" nnoremap <leader>, :terminal ++noclose<CR>
-vnoremap <leader>, :terminal<CR>
-
-" Paste register 0
-nnoremap <C-p> "0p
-
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<CR>
-
-" Copy from system clipboard
-nnoremap <leader>P :r !xsel -ob<CR>
-vnoremap Y "+y
-
-" Move one line up and down
-nnoremap <C-j> ddp
-nnoremap <C-k> ddkP
-
 " In case ALT key is not working
-" execute "set <M-1>=\e1"
 " execute "set <M-2>=\e2"
+" execute "set <M-1>=\e1"
 " execute "set <M-3>=\e3"
 " execute "set <M-4>=\e4"
 " execute "set <M-5>=\e5"
@@ -80,8 +63,6 @@ nnoremap <leader>S [s
 
 " Show full path by default
 nnoremap <C-g> 1<C-g>
-
-nnoremap S S<ESC>
 
 " Translate by Google API
 vnoremap Tz :!trans -t zh-TW -b<CR>
@@ -191,6 +172,27 @@ inoremap <silent><M-8> <Esc>:tabn 8<CR>
 inoremap <silent><M-9> <Esc>:tablast<CR>
 
 " }}}
+
+" }}}
+" REGISTER {{{
+" Paste register 0
+nnoremap <C-p> "0p
+
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<CR>
+
+" Copy from system clipboard
+nnoremap <leader>P :r !xsel -ob<CR>
+vnoremap Y "+y
+" }}}
+" EDIT {{{
+
+" Move one line up and down
+nnoremap <C-j> ddp
+nnoremap <C-k> ddkP
+
+" Clear current line
+nnoremap S S<ESC>
 
 " }}}
 " MANAGE_VIMRC ----------------{{{
@@ -395,18 +397,22 @@ endfunc
 noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 noremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
+nnoremap zi zizz
+
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
 nnoremap zr zr:set foldlevel<CR>
 
 " Fold all except selection
-vnoremap zF :<C-u>call UnfoldSelectionOnly()<CR>
+vnoremap zF :<C-u>call ToggleUnfoldSelection()<CR>
 " Resume
-nnoremap zF :<C-u>call ResumeFoldmethod()<CR>zv
+nnoremap zF :call ToggleUnfoldSelection()<CR>zv
+
+nnoremap \z :call GrayOutOtherFolds()<CR>
 
 " Select current fold
-xnoremap az :<C-U>silent!normal![zV]z<CR>
-xnoremap iz :<C-U>silent!normal![zjV]zk<CR>
+xnoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
+xnoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
 
 " Use l to open fold
 nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
@@ -415,29 +421,49 @@ nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
 nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
 nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
 
+" Go to next fold and unfold
 nnoremap zJ zjzx
 nnoremap zK zkzx
 
 " Fold file except selection
-let b:original_foldmethod = ""
-function! UnfoldSelectionOnly()
-  echo 'Unfold'..&foldmethod
-  let b:original_foldmethod = &foldmethod
-  let &foldmethod = "manual"
-  norm! zE
-  execute "0,'<-1fold"
-  execute "'>+1,$fold"
+autocmd BufEnter * let b:unfold_selection = 0
+function! ToggleUnfoldSelection()
+  if !b:unfold_selection
+    let b:unfold_selection = 1
+    mkview
+    echo 'Unfold'..&foldmethod
+
+    let &foldmethod = "manual"
+    norm! zE
+    execute "0,'<-1fold"
+    execute "'>+1,$fold"
+  else
+    let b:unfold_selection = 0
+    loadview
+  endif
 endfunction
-function! ResumeFoldmethod()
-  norm! zE
-  let &foldmethod = empty(b:original_foldmethod) ? "indent" : b:original_foldmethod
-endfunc
+
+autocmd BufEnter * let b:clear_matches = 0
+function! GrayOutOtherFolds()
+  if b:clear_matches
+    let b:clear_matches = 0
+    call clearmatches()
+  else
+    let b:clear_matches = 1
+    let pos = getpos('.')
+    exe "norm! [zV]z\<C-c>"
+    call matchadd('Folded', '\%<'.line("'<").'l')
+    call matchadd('Folded', '\%>'.line("'>").'l')
+    norm! zR
+    call setpos('.', pos)
+  endif
+endfunction
 
 " }}}
 " HIGHLIGHT ----------------{{{
 
 " Disable highlight when <leader><CR> is pressed
-map <silent> <leader><CR> :noh<CR>
+noremap <silent> <leader><CR> :noh<CR>
 
 function! HiFile()
   let i = 1
@@ -454,7 +480,7 @@ endfunction
 function! GetHighlightGroupName()
   let l:syntaxID = synID(line('.'), col('.'), 1)
   let l:groupName = synIDattr(l:syntaxID, 'name')
-  echo "Highlight Group Name: " . l:groupName
+  echo l:groupName
 endfunction
 nnoremap <leader>H :call GetHighlightGroupName()<CR>
 
@@ -485,9 +511,12 @@ vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
 vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 
 function! AddSpaceForSelection()
+  " If visual selection by lines, add empty space at top and bottom
   if line("'<") != line("'>") || (col("'<") == 1 && col("'>") == len(getline('.'))+1)
-    '< norm! O
+    '< norm! O | 
     '> norm! o
+    exe "norm! "..(line("'<")-1).."GV"..(line("'>")+1).."G"
+  " Otherwise, add space at start and end column
   else
     call cursor('.', col("'<"))
     execute "norm! i\<space>"
@@ -543,7 +572,7 @@ autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
 function! ExpandSelectionBySearch(sep)
   if g:search_not_in_register
     " Save current selection to register, and keep selection
-    execute 'norm ygv'
+    norm! ygv
     let g:search_not_in_register = 0
   endif
   " Use register s to go to next search, counts/total is displayed in
@@ -565,7 +594,7 @@ vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') .. " name=piet file=" .. expand("%:p")<CR>
 nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>
 
-" }}
+" }}}
 " GIT_TIG ----------------{{{
 
 let g:tig_explorer_keymap_commit_split   = '<C-s>'
@@ -575,7 +604,7 @@ nnoremap <C-t>s <Cmd>TigStatus<CR>
 nnoremap <C-t>b <Cmd>TigBlame<CR>
 
 " }}}
-" Markdown items (temproray solution) ----------------{{{
+" Tmp: Markdown items (temproray solution) ----------------{{{
 
 " Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
 " autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
@@ -584,14 +613,14 @@ nnoremap <C-t>b <Cmd>TigBlame<CR>
 " Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
 " nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
 " }}}
-" Common system command ----------------{{{
+" Tmp: Common system command ----------------{{{
 " Show date selector
 nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dt :r !date +\%H:\%m<CR>A
 
 " }}}
-" Compile ----------------{{{
+" Tmp: Compile ----------------{{{
 
 " 编译运行 C/C++ 项目
 " 详细见：http://www.skywind.me/blog/archives/2084
