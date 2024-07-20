@@ -88,7 +88,13 @@ require('mini.icons').setup({
 }) --}}}
 -- mini.tabline {{{
 
-require('mini.tabline').setup {}
+require('mini.tabline').setup {
+  format = function(buf_id, label)
+    local suffix = vim.bo[buf_id].modified and '+ ' or ''
+    return MiniTabline.default_format(buf_id, label) .. suffix
+  end,
+  tabpage_section = 'right'
+}
 
 for i = 1, 9, 1 do
   vim.keymap.set("n", string.format("<A-%s>", i), function()
