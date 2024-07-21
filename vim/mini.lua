@@ -12,47 +12,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 -- }}}
+vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 require("lazy").setup ({
   "tpope/vim-sleuth",
-  -- bufferline {{{
-  {
-    "akinsho/bufferline.nvim",
-    dependencies = {
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-      "tiagovla/scope.nvim",
-    },
-    config = function()
-      require("bufferline").setup{
-        options = {
-          tab_size = 14,
-          separator_style = { '', '' },
-          themable = true,
-          buffer_close_icon = '',
-          close_icon = '',
-          groups = {
-            items = {
-              require('bufferline.groups').builtin.pinned:with({ icon = "󰐃" })
-            }
-          }
-        },
-      }
-      require("scope").setup{}
-      -- keymaps {{{
-      for i = 1, 9, 1 do
-        vim.keymap.set("n", string.format("<A-%s>", i), function()
-          vim.cmd("BufferLineGoToBuffer "..i)
-        end, {silent = true})
-      end
-      local opts = { noremap = true, silent = true }
-      vim.keymap.set('n', '<TAB>', '<Cmd>BufferLineCyclePrev<CR>', opts)
-      vim.keymap.set('n', '<S-TAB>', '<Cmd>BufferLineCycleNext<CR>', opts)
-      vim.keymap.set('n', '<M-h>', '<Cmd>BufferLineMovePrev<CR>', opts)
-      vim.keymap.set('n', '<M-l>', '<Cmd>BufferLineMoveNext<CR>', opts)
-      vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineTogglePin<CR>', opts)
-    end,
-    -- }}}
-  },
-  -- }}}
   -- conform {{{
   {
     "stevearc/conform.nvim",
@@ -68,15 +30,14 @@ require("lazy").setup ({
   -- }}}
   -- Telescope {{{
   {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    build = "make",
-  },
-  {
     "nvim-telescope/telescope.nvim",
     lazy = false,
     dependencies = {
       'nvim-lua/plenary.nvim',
-      "nvim-telescope/telescope-fzf-native.nvim",
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+      },
     },
     config = function()
       -- extensions {{{
@@ -387,6 +348,50 @@ require("lazy").setup ({
     end,
   },
   --}}}
+-- Nvchad {{{
+  {
+    "NvChad/NvChad",
+    lazy = false,
+    branch = "v2.5",
+    dependencies = {
+      "Nvchad/base46",
+      "Nvchad/ui",
+    }
+  },
+-- }}}
+-- nvim-cmp {{{
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      {
+        -- snippet plugin
+        "L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
+        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+        config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require "nvchad.configs.luasnip"
+        end,
+      },
+
+      -- cmp sources plugins
+      {
+        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+      },
+    },
+    opts = function()
+      return require "nvchad.configs.cmp"
+    end,
+    config = function(_, opts)
+      require("cmp").setup(opts)
+    end,
+  },
+-- }}}
 })
 
 -- Install mini.nvim {{{
@@ -564,6 +569,13 @@ require('mini.diff').setup({
     priority = 199,
   },
 })
+
+vim.keymap.set( 'n', '\\gh', function()
+    MiniDiff.toggle_overlay()
+  end,
+  { buffer = bufnr, desc = 'Toggle diff' }
+)
+
 -- }}}
 -- mini.map {{{
 require('mini.map').setup()
@@ -576,9 +588,6 @@ vim.keymap.set( 'n', '<leader><leader>li', function()
 end,
 { buffer = bufnr, desc = '' }
 )
--- }}}
--- mini.completion {{{
-require('mini.completion').setup()
 -- }}}
 -- mini.surround {{{
 require('mini.surround').setup {
@@ -617,6 +626,9 @@ vim.keymap.set( 'n', '<leader><leader>hi', function()MiniHipatterns.toggle() end
 -- mini.pairs {{{
 require('mini.pairs').setup()
 -- }}}
+-- -- mini.completion {{{
+-- require('mini.completion').setup()
+-- -- }}}
 -- -- mini.tabline {{{
 --
 -- require('mini.tabline').setup {
@@ -693,4 +705,41 @@ add {
   source = "Pocco81/true-zen.nvim",
 }
 vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
+-- }}}
+-- bufferline {{{
+add {
+  source = "akinsho/bufferline.nvim",
+  depends = {
+    'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    "tiagovla/scope.nvim",
+  },
+}
+require("bufferline").setup{
+  options = {
+    tab_size = 14,
+    separator_style = { '', '' },
+    themable = true,
+    buffer_close_icon = '',
+    close_icon = '',
+    groups = {
+      items = {
+        require('bufferline.groups').builtin.pinned:with({ icon = "󰐃" })
+      }
+    }
+  },
+}
+require("scope").setup{}
+-- keymaps {{{
+for i = 1, 9, 1 do
+  vim.keymap.set("n", string.format("<A-%s>", i), function()
+    vim.cmd("BufferLineGoToBuffer "..i)
+  end, {silent = true})
+end
+local opts = { noremap = true, silent = true }
+vim.keymap.set('n', '<TAB>', '<Cmd>BufferLineCyclePrev<CR>', opts)
+vim.keymap.set('n', '<S-TAB>', '<Cmd>BufferLineCycleNext<CR>', opts)
+vim.keymap.set('n', '<M-h>', '<Cmd>BufferLineMovePrev<CR>', opts)
+vim.keymap.set('n', '<M-l>', '<Cmd>BufferLineMoveNext<CR>', opts)
+vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineTogglePin<CR>', opts)
+-- }}}
 -- }}}
