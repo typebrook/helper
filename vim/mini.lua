@@ -1,10 +1,395 @@
 -- vim: sw=2 foldmethod=marker foldmarker={{{,}}}
 
 -- Ref: https://github.com/echasnovski/mini.nvim
--- TODO
+--      https://lazy.folke.io/spec
+
+-- Install Lazy {{{
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+end
+vim.opt.rtp:prepend(lazypath)
+-- }}}
+require("lazy").setup ({
+  "tpope/vim-sleuth",
+  -- bufferline {{{
+  {
+    "akinsho/bufferline.nvim",
+    dependencies = {
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+      "tiagovla/scope.nvim",
+    },
+    config = function()
+      require("bufferline").setup{
+        options = {
+          tab_size = 14,
+          separator_style = { '', '' },
+          themable = true,
+          buffer_close_icon = '',
+          close_icon = '',
+          groups = {
+            items = {
+              require('bufferline.groups').builtin.pinned:with({ icon = "󰐃" })
+            }
+          }
+        },
+      }
+      require("scope").setup{}
+      -- keymaps {{{
+      for i = 1, 9, 1 do
+        vim.keymap.set("n", string.format("<A-%s>", i), function()
+          vim.cmd("BufferLineGoToBuffer "..i)
+        end, {silent = true})
+      end
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set('n', '<TAB>', '<Cmd>BufferLineCyclePrev<CR>', opts)
+      vim.keymap.set('n', '<S-TAB>', '<Cmd>BufferLineCycleNext<CR>', opts)
+      vim.keymap.set('n', '<M-h>', '<Cmd>BufferLineMovePrev<CR>', opts)
+      vim.keymap.set('n', '<M-l>', '<Cmd>BufferLineMoveNext<CR>', opts)
+      vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineTogglePin<CR>', opts)
+    end,
+    -- }}}
+  },
+  -- }}}
+  -- conform {{{
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+      },
+    },
+    config = function(_, opts)
+      require("conform").setup(opts)
+    end,
+  },
+  -- }}}
+  -- Telescope {{{
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      "nvim-telescope/telescope-fzf-native.nvim",
+    },
+    config = function()
+      -- extensions {{{
+      require("telescope").load_extension("fzf")
+      -- require("telescope").load_extension("aerial")
+      -- }}}
+      -- config {{{
+      require('telescope').setup({
+        defaults = {
+          mappings = {
+            i = {
+              -- ["<c-j>"] = "move_selection_next",
+              -- ["<c-k>"] = "move_selection_previous",
+              ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
+              ["<C-u>"] = false,
+              ["<C-q>"] = function(p_bufnr)
+                require("telescope.actions").send_selected_to_qflist(p_bufnr)
+                vim.cmd.cfdo("edit")
+              end,
+            },
+          },
+          layout_config = {
+            horizontal = {
+              prompt_position = "bottom",
+            },
+            vertical = { height = 0.8 },
+            -- other layout configuration here
+            preview_cutoff = 0,
+          },
+          file_ignore_patterns = {
+            "node_modules"
+          },
+        },
+        pickers = {
+          buffers = {
+            show_all_buffers = true,
+            sort_lastused = true,
+            theme = "dropdown",
+            previewer = false,
+            mappings = {
+              i = {
+                ["<c-d>"] = "delete_buffer",
+              },
+              n = {
+                ["<c-d>"] = "delete_buffer",
+              }
+            },
+          },
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,                   -- false will only do exact matching
+            override_generic_sorter = true, -- override the generic sorter
+            override_file_sorter = true,    -- override the file sorter
+            case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+            -- the default case_mode is "smart_case"
+          },
+          aerial = {
+            -- Display symbols as <root>.<parent>.<symbol>
+            show_nesting = {
+              ["_"] = false, -- This key will be the default
+              json = true,   -- You can set the option for specific filetypes
+              yaml = true,
+            },
+          },
+        },
+      })
+      -- }}}
+      -- Keymaps {{{
+      vim.keymap.set("n", "<leader>f", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
+      vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
+      vim.keymap.set("n", "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
+      vim.keymap.set("n", "<leader>sf", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
+      vim.keymap.set(
+      "n",
+      "<leader>sF",
+      "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
+      { desc = "telescope find all files" }
+      )
+      vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
+      vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<CR>", { desc = "telescope git files" })
+      vim.keymap.set("n", "<leader>sH", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
+      vim.keymap.set("n", "<leader>sm", "<cmd>Telescope marks<CR>", { desc = "telescope marks" })
+      vim.keymap.set("n", "<leader>sj", "<cmd>Telescope jumplist<CR>", { desc = "telescope marks" })
+      vim.keymap.set("n", "<leader>tt", "<cmd>Telescope<CR>", { desc = "telescope help page" })
+      vim.keymap.set("n", "<leader>sk", "<cmd>Telescope keymaps<CR>", { desc = "telescope keymaps" })
+      vim.keymap.set("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
+
+      vim.keymap.set("n", "<leader>ss", function()
+        local current_filetype = vim.bo.filetype
+        local cwd = os.getenv("HOME") .. "/snippets"
+        require("telescope.builtin").find_files({
+          prompt_title = "Press <C-T> to edit a snippet",
+          default_text = current_filetype == "" and "" or current_filetype .. "_",
+          cwd = cwd,
+          attach_mappings = function(prompt_bufnr, map)
+            local get_prompt_or_entry = function()
+              local file_list = require("telescope.actions.state").get_selected_entry()
+              if file_list then
+                return file_list[1]
+              else
+                local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+                return current_picker:_get_prompt()
+              end
+            end
+
+            local edit_snippet = function()
+              local file = get_prompt_or_entry()
+              require("telescope.actions").close(prompt_bufnr)
+              local prefix_filetype = string.match(file, "([^_]+)")
+              vim.cmd(":vs")
+              vim.cmd(":e " .. cwd .. "/" .. file)
+              vim.bo.filetype = prefix_filetype
+              vim.bo.bufhidden = "wipe"
+              vim.cmd("set filetype?")
+            end
+
+            local insert_selected_snippet = function()
+              local file = get_prompt_or_entry()
+              local path = cwd .. "/" .. file
+              if vim.fn.filereadable(path) ~= 0 then
+                local snippet_content = vim.fn.readfile(path)
+                require("telescope.actions").close(prompt_bufnr)
+                vim.fn.setreg('"', snippet_content)
+                print("Snippet saved to register")
+              else
+                edit_snippet()
+              end
+            end
+
+            map("i", "<CR>", insert_selected_snippet)
+            map("i", "<C-T>", edit_snippet)
+            map("n", "<CR>", insert_selected_snippet)
+
+            return true
+          end,
+        })
+      end, { desc = "[S]earch [S]nippets" })
+
+      vim.keymap.set("n", "<leader>sd", function()
+        require("telescope.builtin").oldfiles({
+          prompt_title = "CD to",
+          attach_mappings = function(prompt_bufnr, map)
+            local cd_prompt = function()
+              local file = require("telescope.actions.state").get_selected_entry()[1]
+              local path = string.match(file, "(.*[/\\])")
+              require("telescope.actions").close(prompt_bufnr)
+              vim.api.nvim_feedkeys(":cd " .. path, "n", true)
+            end
+
+            map("i", "<CR>", cd_prompt)
+            map("n", "<CR>", cd_prompt)
+
+            return true
+          end,
+        })
+      end, { desc = "Search Directory" })-- }}}
+    end,
+  },
+  -- }}}
+  -- nvim-tree {{{
+  {
+    "nvim-tree/nvim-tree.lua",
+    config = function()
+      -- config {{{
+      require("nvim-tree").setup {
+        filters = {
+          dotfiles = false,
+        },
+        disable_netrw = true,
+        hijack_netrw = true,
+        hijack_cursor = true,
+        hijack_unnamed_buffer_when_opening = false,
+        sync_root_with_cwd = true,
+        update_focused_file = {
+          enable = true,
+          update_root = false,
+        },
+        view = {
+          adaptive_size = false,
+          side = "left",
+          width = 30,
+          preserve_window_proportions = true,
+        },
+        git = {
+          enable = true,
+          ignore = true,
+        },
+        filesystem_watchers = {
+          enable = true,
+        },
+        actions = {
+          open_file = {
+            resize_window = true,
+          },
+        },
+        renderer = {
+          root_folder_label = false,
+          highlight_git = true,
+          highlight_opened_files = "none",
+
+          indent_markers = {
+            enable = true,
+          },
+
+          icons = {
+            show = {
+              file = true,
+              folder = true,
+              folder_arrow = true,
+              git = true,
+            },
+
+            glyphs = {
+              default = "󰈚",
+              symlink = "",
+              folder = {
+                default = "",
+                empty = "",
+                empty_open = "",
+                open = "",
+                symlink = "",
+                symlink_open = "",
+                arrow_open = "",
+                arrow_closed = "",
+              },
+              git = {
+                unstaged = "✗",
+                staged = "✓",
+                unmerged = "",
+                renamed = "➜",
+                untracked = "★",
+                deleted = "",
+                ignored = "◌",
+              },
+            },
+          },
+        },
+      }
+      -- }}}
+      -- keymaps {{{
+      vim.keymap.set(
+      "n",
+      "<C-n>",
+      "<cmd>NvimTreeToggle<CR>",
+      { desc = "nvimtree toggle window" }
+      )
+      vim.keymap.set(
+      "n",
+      "<leader>e",
+      "<cmd>NvimTreeFocus<CR>",
+      { desc = "nvimtree focus window" }
+      )
+      -- }}}
+    end,
+  },
+  -- }}}
+  -- which-key {{{
+  {
+    "folke/which-key.nvim",
+    lazy = false,
+    config = function()
+      require('which-key').setup {
+        defaults = {
+          win = {
+            -- don't allow the popup to overlap with the cursor
+            no_overlap = false,
+            -- width = 1,
+            height = { min = 10, max = 25 },
+            -- col = 0,
+            -- row = math.huge,
+            -- border = "none",
+            padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+            title = true,
+            title_pos = "center",
+            zindex = 1000,
+            -- Additional vim.wo and vim.bo options
+            bo = {},
+            wo = {
+              -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+            },
+          },
+        }
+      }
+    end,
+  },
+  -- }}}
+  -- Tig {{{
+  {
+    "iberianpig/tig-explorer.vim",
+    dependencies = { "rbgrouleff/bclose.vim" },
+    config = function()
+      vim.cmd('nunmap <leader>bd')
+    end,
+  },
+  --}}}
+  -- toggleterm {{{
+  {
+    "akinsho/toggleterm.nvim",
+    config = function()
+      require("toggleterm").setup {
+        persist_size = false,
+        direction = 'float',
+      }
+
+      vim.keymap.set({ "n", "t" }, "<A-i>", function() vim.cmd("ToggleTerm direction=float") end, { desc = "terminal toggle floating term" })
+      vim.keymap.set({ "n", "t" }, "<A-v>", function() vim.cmd("ToggleTerm direction=horizontal") end, { desc = "terminal toggle floating term" })
+    end,
+  },
+  --}}}
+})
 
 -- Install mini.nvim {{{
-
 -- Put this at the top of 'init.lua'
 local path_package = vim.fn.stdpath('data') .. '/site'
 vim.o.packpath = path_package
@@ -67,7 +452,7 @@ require('mini.base16').setup({
     -- Integers, Boolean, Constants, XML Attributes, Markup Link Url
     base09 = "#ef9062",
     -- Classes, Markup Bold, Search Text Background
-    base0A = "#efca84",
+    base0A = "#a6e22e",
     -- Strings, Inherited Class, Markup Code, Diff Inserted
     base0B = "#e5c463",
     -- Support, Regular Expressions, Escape Characters, Markup Quotes
@@ -79,13 +464,20 @@ require('mini.base16').setup({
     -- Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
     base0F = "#f9f8f5",
   },
-  use_cterm = true,
+  use_cterm = false,
 })
+
+-- Override settings for search
+vim.cmd('hi Search guibg=#e5c07b')
 
 -- Resume terminal color
 for i = 1, 15, 1 do
   vim.cmd("let terminal_color_"..i.." = ''")
 end
+
+-- Override settings for bufferline
+vim.cmd('hi BufferLineTabSelected guibg=#f85e84')
+vim.cmd('hi BufferLineTab guibg=Gray')
 
 --}}}
 -- mini.icons {{{
@@ -180,9 +572,9 @@ vim.keymap.set( 'n', '\\m', function() require('mini.map').toggle() end, { desc 
 -- mini.visits {{{
 require('mini.visits').setup()
 vim.keymap.set( 'n', '<leader><leader>li', function()
-    MiniVisits.list_paths()
-  end,
-  { buffer = bufnr, desc = '' }
+  MiniVisits.list_paths()
+end,
+{ buffer = bufnr, desc = '' }
 )
 -- }}}
 -- mini.completion {{{
@@ -288,262 +680,13 @@ require('mini.pairs').setup()
 --   },
 -- -- }}}
 -- -- mini.bufremote {{{
-add('echasnovski/mini.bufremove')
-vim.g.bufremove_disable = true
+-- require('mini.bufremove')
 --}}}
 -- -- mini.animate --{{{
--- add('echasnovski/mini.animate')
 -- require("mini.animate").setup()
 -- -- }}}
 -- -- suda {{{
 -- add { source = "lambdalisue/suda.vim" }
--- }}}
--- -- nvchad {{{
--- add {
---   source = "Nvchad/base46"
--- }
--- add {
---   source = "Nvchad/ui"
--- }
--- add {
---   source = "NvChad/nvim-colorizer.lua"
--- }
--- require("colorizer").setup(opts)
---
--- -- execute colorizer as soon as possible
--- vim.defer_fn(function()
---   require("colorizer").attach_to_buffer(0)
--- end, 0)
---
--- require('base46')
--- require('nvchad')
--- }}}
--- Telescope {{{
-add({
-  source = "nvim-telescope/telescope.nvim",
-  depends = {
-    'nvim-lua/plenary.nvim',
-  },
-  hooks = { post_checkout = function() end },
-})
--- config {{{
-require('telescope').setup({
-  defaults = {
-    mappings = {
-      i = {
-        -- ["<c-j>"] = "move_selection_next",
-        -- ["<c-k>"] = "move_selection_previous",
-        ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
-        ["<C-u>"] = false,
-        ["<C-q>"] = function(p_bufnr)
-          require("telescope.actions").send_selected_to_qflist(p_bufnr)
-          vim.cmd.cfdo("edit")
-        end,
-      },
-    },
-    layout_config = {
-      horizontal = {
-        prompt_position = "bottom",
-      },
-      vertical = { height = 0.8 },
-      -- other layout configuration here
-      preview_cutoff = 0,
-    },
-    file_ignore_patterns = {
-      "node_modules"
-    },
-  },
-  pickers = {
-    buffers = {
-      show_all_buffers = true,
-      sort_lastused = true,
-      theme = "dropdown",
-      previewer = false,
-      mappings = {
-        i = {
-          ["<c-d>"] = "delete_buffer",
-        },
-        n = {
-          ["<c-d>"] = "delete_buffer",
-        }
-      },
-    },
-  },
-  extensions = {
-    fzf = {
-      fuzzy = true,                   -- false will only do exact matching
-      override_generic_sorter = true, -- override the generic sorter
-      override_file_sorter = true,    -- override the file sorter
-      case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
-      -- the default case_mode is "smart_case"
-    },
-    aerial = {
-      -- Display symbols as <root>.<parent>.<symbol>
-      show_nesting = {
-        ["_"] = false, -- This key will be the default
-        json = true,   -- You can set the option for specific filetypes
-        yaml = true,
-      },
-    },
-  },
-})
--- }}}
--- extensions {{{
-add({
-  source = 'nvim-telescope/telescope-fzf-native.nvim',
-  hooks = {
-    post_install = function(config)
-      vim.cmd("make -C " .. config.path)
-    end
-  },
-})
-require("telescope").load_extension("fzf")
--- require("telescope").load_extension("aerial")
--- }}}
-
--- Keymaps {{{
-vim.keymap.set("n", "<leader>f", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
-vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
-vim.keymap.set("n", "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
-vim.keymap.set("n", "<leader>sf", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
-vim.keymap.set(
-"n",
-"<leader>sF",
-"<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
-{ desc = "telescope find all files" }
-)
-vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
-vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<CR>", { desc = "telescope git files" })
-vim.keymap.set("n", "<leader>sH", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
-vim.keymap.set("n", "<leader>sm", "<cmd>Telescope marks<CR>", { desc = "telescope marks" })
-vim.keymap.set("n", "<leader>sj", "<cmd>Telescope jumplist<CR>", { desc = "telescope marks" })
-vim.keymap.set("n", "<leader>tt", "<cmd>Telescope<CR>", { desc = "telescope help page" })
-vim.keymap.set("n", "<leader>sk", "<cmd>Telescope keymaps<CR>", { desc = "telescope keymaps" })
-vim.keymap.set("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
-
-vim.keymap.set("n", "<leader>ss", function()
-  local current_filetype = vim.bo.filetype
-  local cwd = os.getenv("HOME") .. "/snippets"
-  require("telescope.builtin").find_files({
-    prompt_title = "Press <C-T> to edit a snippet",
-    default_text = current_filetype == "" and "" or current_filetype .. "_",
-    cwd = cwd,
-    attach_mappings = function(prompt_bufnr, map)
-      local get_prompt_or_entry = function()
-        local file_list = require("telescope.actions.state").get_selected_entry()
-        if file_list then
-          return file_list[1]
-        else
-          local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-          return current_picker:_get_prompt()
-        end
-      end
-
-      local edit_snippet = function()
-        local file = get_prompt_or_entry()
-        require("telescope.actions").close(prompt_bufnr)
-        local prefix_filetype = string.match(file, "([^_]+)")
-        vim.cmd(":vs")
-        vim.cmd(":e " .. cwd .. "/" .. file)
-        vim.bo.filetype = prefix_filetype
-        vim.bo.bufhidden = "wipe"
-        vim.cmd("set filetype?")
-      end
-
-      local insert_selected_snippet = function()
-        local file = get_prompt_or_entry()
-        local path = cwd .. "/" .. file
-        if vim.fn.filereadable(path) ~= 0 then
-          local snippet_content = vim.fn.readfile(path)
-          require("telescope.actions").close(prompt_bufnr)
-          vim.fn.setreg('"', snippet_content)
-          print("Snippet saved to register")
-        else
-          edit_snippet()
-        end
-      end
-
-      map("i", "<CR>", insert_selected_snippet)
-      map("i", "<C-T>", edit_snippet)
-      map("n", "<CR>", insert_selected_snippet)
-
-      return true
-    end,
-  })
-end, { desc = "[S]earch [S]nippets" })
-
-vim.keymap.set("n", "<leader>sd", function()
-  require("telescope.builtin").oldfiles({
-    prompt_title = "CD to",
-    attach_mappings = function(prompt_bufnr, map)
-      local cd_prompt = function()
-        local file = require("telescope.actions.state").get_selected_entry()[1]
-        local path = string.match(file, "(.*[/\\])")
-        require("telescope.actions").close(prompt_bufnr)
-        vim.api.nvim_feedkeys(":cd " .. path, "n", true)
-      end
-
-      map("i", "<CR>", cd_prompt)
-      map("n", "<CR>", cd_prompt)
-
-      return true
-    end,
-  })
-end, { desc = "Search Directory" })-- }}}
-
--- }}}
--- toggleterm {{{
-
-add({
-  source = "akinsho/toggleterm.nvim",
-  hooks = { post_checkout = function() end },
-})
-require("toggleterm").setup{
-  persist_size = false,
-  direction = 'float',
-}
-
-vim.keymap.set({ "n", "t" }, "<A-i>", function() vim.cmd("ToggleTerm direction=float") end, { desc = "terminal toggle floating term" })
-vim.keymap.set({ "n", "t" }, "<A-v>", function() vim.cmd("ToggleTerm direction=horizontal") end, { desc = "terminal toggle floating term" })
-
---}}}
--- Tig {{{
-
-add({
-  source = "iberianpig/tig-explorer.vim",
-  depends = { "rbgrouleff/bclose.vim" },
-  hooks = { post_checkout = function() end },
-})
-vim.cmd('nunmap <leader>bd')
-
---}}}
--- which-key {{{
-add({
-  source = "folke/which-key.nvim",
-  checkout = "stable",
-})
-require('which-key').setup {
-  defaults = {
-    win = {
-      -- don't allow the popup to overlap with the cursor
-      no_overlap = false,
-      -- width = 1,
-      height = { min = 10, max = 25 },
-      -- col = 0,
-      -- row = math.huge,
-      -- border = "none",
-      padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
-      title = true,
-      title_pos = "center",
-      zindex = 1000,
-      -- Additional vim.wo and vim.bo options
-      bo = {},
-      wo = {
-        -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-      },
-    },
-  }
-}
 -- }}}
 -- true-zen {{{
 add {
@@ -551,136 +694,3 @@ add {
 }
 vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
 -- }}}
--- nvim-tree {{{
-add {
-  source = "nvim-tree/nvim-tree.lua",
-}
--- config {{{
-require("nvim-tree").setup {
-  filters = {
-    dotfiles = false,
-  },
-  disable_netrw = true,
-  hijack_netrw = true,
-  hijack_cursor = true,
-  hijack_unnamed_buffer_when_opening = false,
-  sync_root_with_cwd = true,
-  update_focused_file = {
-    enable = true,
-    update_root = false,
-  },
-  view = {
-    adaptive_size = false,
-    side = "left",
-    width = 30,
-    preserve_window_proportions = true,
-  },
-  git = {
-    enable = true,
-    ignore = true,
-  },
-  filesystem_watchers = {
-    enable = true,
-  },
-  actions = {
-    open_file = {
-      resize_window = true,
-    },
-  },
-  renderer = {
-    root_folder_label = false,
-    highlight_git = true,
-    highlight_opened_files = "none",
-
-    indent_markers = {
-      enable = true,
-    },
-
-    icons = {
-      show = {
-        file = true,
-        folder = true,
-        folder_arrow = true,
-        git = true,
-      },
-
-      glyphs = {
-        default = "󰈚",
-        symlink = "",
-        folder = {
-          default = "",
-          empty = "",
-          empty_open = "",
-          open = "",
-          symlink = "",
-          symlink_open = "",
-          arrow_open = "",
-          arrow_closed = "",
-        },
-        git = {
-          unstaged = "✗",
-          staged = "✓",
-          unmerged = "",
-          renamed = "➜",
-          untracked = "★",
-          deleted = "",
-          ignored = "◌",
-        },
-      },
-    },
-  },
-}
--- }}}
-vim.keymap.set(
-  "n",
-  "<C-n>",
-  "<cmd>NvimTreeToggle<CR>",
-  { desc = "nvimtree toggle window" }
-)
-vim.keymap.set(
-  "n",
-  "<leader>e",
-  "<cmd>NvimTreeFocus<CR>",
-  { desc = "nvimtree focus window" }
-)
-
--- }}}
--- bufferline {{{
-add {
-  source = "akinsho/bufferline.nvim",
-  depends = {
-    'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-  },
-}
-require("bufferline").setup{
-  options = {
-    themable = true,
-    buffer_close_icon = '',
-    close_icon = '',
-    groups = {
-      items = {
-        require('bufferline.groups').builtin.pinned:with({ icon = "󰐃" })
-      }
-    }
-  },
-}
-
--- Since mini.base16 override highlight for bufferline
--- Set it directly
-vim.cmd('hi BufferLineTabSelected guibg=#f85e84')
-vim.cmd('hi BufferLineTab guibg=Gray')
-
--- keymaps {{{
-for i = 1, 9, 1 do
-  vim.keymap.set("n", string.format("<A-%s>", i), function()
-    vim.cmd("BufferLineGoToBuffer "..i)
-  end, {silent = true})
-end
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<TAB>', '<Cmd>BufferLineCyclePrev<CR>', opts)
-vim.keymap.set('n', '<S-TAB>', '<Cmd>BufferLineCycleNext<CR>', opts)
-vim.keymap.set('n', '<M-h>', '<Cmd>BufferLineMovePrev<CR>', opts)
-vim.keymap.set('n', '<M-l>', '<Cmd>BufferLineMoveNext<CR>', opts)
-vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineTogglePin<CR>', opts)
--- }}}
---}}}

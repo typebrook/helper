@@ -87,9 +87,9 @@ noremap <C-]> :call InCaseCdToLatestDir()<CR>
 
 " Switch CWD to root git directory
 function! CdToGitRepo()
-    let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
-    let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
-    execute "cd" l:repo
+  let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
+  let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
+  execute "cd" l:repo
 endfunction
 
 function! InCaseCdToLatestDir()
@@ -256,29 +256,29 @@ function! CloseBufferSafely()
   endif
 endfunction
 func! QuitWithCheck()
-if g:quitVimWhenPressingCtrlC
-  silent! quit
-else
-  echo "Press <leader><leader>gl to allow quit with <C-c>"
-endif
+  if g:quitVimWhenPressingCtrlC
+    silent! quit
+  else
+    echo "Press <leader><leader>gl to allow quit with <C-c>"
+  endif
 endfunc
 function! Bye()
-let windows = gettabinfo(tabpagenr())[0]['windows']
-try
-  let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
-catch
-  let bufs = getbufinfo({'buflisted': 1})
-endtry
+  let windows = gettabinfo(tabpagenr())[0]['windows']
+  try
+    let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
+  catch
+    let bufs = getbufinfo({'buflisted': 1})
+  endtry
 
-if len(windows) == 1 && len(bufs) == 1
-  call QuitWithCheck()
-elseif &diff
-  silent call CloseBuffersForDiff()
-elseif len(windows) >1
-  quit
-else
- silent! call CloseBufferSafely()
-endif
+  if len(windows) == 1 && len(bufs) == 1
+    call QuitWithCheck()
+  elseif &diff
+    silent call CloseBuffersForDiff()
+  elseif len(windows) >1
+    quit
+  else
+    silent! call CloseBufferSafely()
+  endif
 endfunction
 nnoremap <silent> <C-c> :call Bye()<CR>
 
@@ -291,29 +291,29 @@ function! CloseBuffersForDiff()
 endfunction
 
 command! DiffOrig vert new | set buftype=nofile nobuflisted | read ++edit # | 0d_
-\ | diffthis | wincmd p | diffthis
+      \ | diffthis | wincmd p | diffthis
 
 " Uset <C-w>d to toggle Diff mode
 function! s:SwitchDiff()
-if &diff
-  call CloseBuffersForDiff()
-else
-  DiffOrig
-endif
+  if &diff
+    call CloseBuffersForDiff()
+  else
+    DiffOrig
+  endif
 endfunction
 com! SwitchDiff call s:SwitchDiff()
 nnoremap <C-w>d <Cmd>silent! SwitchDiff<CR>
 
 function! s:SwitchDiffForGitHEAD()
-norm cdg
-if &diff
-  windo | if &buftype == "nofile" | bdelete | endif
-  norm! zv
-else
-  vert new | set buftype=nofile nobuflisted
-  read !git show HEAD:#
-  0d_ | diffthis | wincmd p | diffthis
-endif
+  norm cdg
+  if &diff
+    windo | if &buftype == "nofile" | bdelete | endif
+    norm! zv
+  else
+    vert new | set buftype=nofile nobuflisted
+    read !git show HEAD:#
+    0d_ | diffthis | wincmd p | diffthis
+  endif
 endfunction
 command! SwitchDiffForGitHEAD call s:SwitchDiffForGitHEAD()
 nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
@@ -339,22 +339,22 @@ inoremap <m-J> <esc><c-w>j
 inoremap <m-K> <esc><c-w>k
 
 if has('terminal') && exists(':terminal') == 2 && has('patch-8.1.1')
-" vim 8.1 支持 termwinkey ，不需要把 terminal 切换成 normal 模式
-" 设置 termwinkey 为 CTRL 加减号（GVIM），有些终端下是 CTRL+?
-" 后面四个键位是搭配 termwinkey 的，如果 termwinkey 更改，也要改
-set termwinkey=<c-_>
-tnoremap <m-H> <c-_>h
-tnoremap <m-L> <c-_>l
-tnoremap <m-J> <c-_>j
-tnoremap <m-K> <c-_>k
-tnoremap <m-q> <c-\><c-n>
+  " vim 8.1 支持 termwinkey ，不需要把 terminal 切换成 normal 模式
+  " 设置 termwinkey 为 CTRL 加减号（GVIM），有些终端下是 CTRL+?
+  " 后面四个键位是搭配 termwinkey 的，如果 termwinkey 更改，也要改
+  set termwinkey=<c-_>
+  tnoremap <m-H> <c-_>h
+  tnoremap <m-L> <c-_>l
+  tnoremap <m-J> <c-_>j
+  tnoremap <m-K> <c-_>k
+  tnoremap <m-q> <c-\><c-n>
 elseif has('nvim')
-" neovim 没有 termwinkey 支持，必须把 terminal 切换回 normal 模式
-tnoremap <m-H> <c-\><c-n><c-w>h
-tnoremap <m-L> <c-\><c-n><c-w>l
-tnoremap <m-J> <c-\><c-n><c-w>j
-tnoremap <m-K> <c-\><c-n><c-w>k
-tnoremap <m-q> <c-\><c-n>
+  " neovim 没有 termwinkey 支持，必须把 terminal 切换回 normal 模式
+  tnoremap <m-H> <c-\><c-n><c-w>h
+  tnoremap <m-L> <c-\><c-n><c-w>l
+  tnoremap <m-J> <c-\><c-n><c-w>j
+  tnoremap <m-K> <c-\><c-n><c-w>k
+  tnoremap <m-q> <c-\><c-n>
 endif
 " }}}
 " MANAGE_TABS ----------------{{{
@@ -379,16 +379,16 @@ map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
 
 " Tab move functions
 function! Tvab_MoveLeft()
-let l:tabnr = tabpagenr() - 2
-if l:tabnr >= 0
-  exec 'tabmove '.l:tabnr
-endif
+  let l:tabnr = tabpagenr() - 2
+  if l:tabnr >= 0
+    exec 'tabmove '.l:tabnr
+  endif
 endfunc
 function! Tab_MoveRight()
-let l:tabnr = tabpagenr() + 1
-if l:tabnr <= tabpagenr('$')
-  exec 'tabmove '.l:tabnr
-endif
+  let l:tabnr = tabpagenr() + 1
+  if l:tabnr <= tabpagenr('$')
+    exec 'tabmove '.l:tabnr
+  endif
 endfunc
 " }}}
 " FOLD ----------------{{{
@@ -516,7 +516,7 @@ function! AddSpaceForSelection()
     '< norm! O
     '> norm! o
     exe "norm! "..(line("'<")-1).."GV"..(line("'>")+1).."G"
-  " Otherwise, add space at start and end column
+    " Otherwise, add space at start and end column
   else
     call cursor('.', col("'<"))
     execute "norm! i\<space>"
