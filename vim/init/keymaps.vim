@@ -513,7 +513,7 @@ vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
 function! AddSpaceForSelection()
   " If visual selection by lines, add empty space at top and bottom
   if line("'<") != line("'>") || (col("'<") == 1 && col("'>") == len(getline('.'))+1)
-    '< norm! O | 
+    '< norm! O
     '> norm! o
     exe "norm! "..(line("'<")-1).."GV"..(line("'>")+1).."G"
   " Otherwise, add space at start and end column

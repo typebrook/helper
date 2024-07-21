@@ -82,27 +82,15 @@ require('mini.base16').setup({
   use_cterm = true,
 })
 
+-- Resume terminal color
+for i = 1, 15, 1 do
+  vim.cmd("let terminal_color_"..i.." = ''")
+end
+
 --}}}
 -- mini.icons {{{
 require('mini.icons').setup({
 }) --}}}
--- mini.tabline {{{
-
-require('mini.tabline').setup {
-  format = function(buf_id, label)
-    local suffix = vim.bo[buf_id].modified and '+ ' or ''
-    return MiniTabline.default_format(buf_id, label) .. suffix
-  end,
-  tabpage_section = 'right'
-}
-
-for i = 1, 9, 1 do
-  vim.keymap.set("n", string.format("<A-%s>", i), function()
-    vim.api.nvim_set_current_buf(vim.fn.getbufinfo({ buflisted=true })[i].bufnr)
-  end, {silent = true})
-end
-
--- }}}
 -- mini.statusline {{{
 
 require('mini.statusline').setup({
@@ -187,7 +175,7 @@ require('mini.diff').setup({
 -- }}}
 -- mini.map {{{
 require('mini.map').setup()
-vim.keymap.set( 'n', '\\m', function() require('mini.map').toggle() end, { buffer = bufnr, desc = '' })
+vim.keymap.set( 'n', '\\m', function() require('mini.map').toggle() end, { desc = 'Minimap', buffer = bufnr, desc = '' })
 -- }}}
 -- mini.visits {{{
 require('mini.visits').setup()
@@ -237,6 +225,23 @@ vim.keymap.set( 'n', '<leader><leader>hi', function()MiniHipatterns.toggle() end
 -- mini.pairs {{{
 require('mini.pairs').setup()
 -- }}}
+-- -- mini.tabline {{{
+--
+-- require('mini.tabline').setup {
+--   format = function(buf_id, label)
+--     local suffix = vim.bo[buf_id].modified and '+ ' or ''
+--     return MiniTabline.default_format(buf_id, label) .. suffix
+--   end,
+--   tabpage_section = 'right'
+-- }
+--
+-- for i = 1, 9, 1 do
+--   vim.keymap.set("n", string.format("<A-%s>", i), function()
+--     vim.api.nvim_set_current_buf(vim.fn.getbufinfo({ buflisted=true })[i].bufnr)
+--   end, {silent = true})
+-- end
+--
+-- -- }}}
 -- -- mini.clue {{{
 -- local miniclue = require('mini.clue')
 -- miniclue.setup({
@@ -287,8 +292,31 @@ add('echasnovski/mini.bufremove')
 vim.g.bufremove_disable = true
 --}}}
 -- -- mini.animate --{{{
-add('echasnovski/mini.animate')
-vim.g.animate_disable = true
+-- add('echasnovski/mini.animate')
+-- require("mini.animate").setup()
+-- -- }}}
+-- -- suda {{{
+-- add { source = "lambdalisue/suda.vim" }
+-- }}}
+-- -- nvchad {{{
+-- add {
+--   source = "Nvchad/base46"
+-- }
+-- add {
+--   source = "Nvchad/ui"
+-- }
+-- add {
+--   source = "NvChad/nvim-colorizer.lua"
+-- }
+-- require("colorizer").setup(opts)
+--
+-- -- execute colorizer as soon as possible
+-- vim.defer_fn(function()
+--   require("colorizer").attach_to_buffer(0)
+-- end, 0)
+--
+-- require('base46')
+-- require('nvchad')
 -- }}}
 -- Telescope {{{
 add({
@@ -489,9 +517,6 @@ add({
 vim.cmd('nunmap <leader>bd')
 
 --}}}
--- Disabled: suda {{{
--- add { source = "lambdalisue/suda.vim" }
--- }}}
 -- which-key {{{
 add({
   source = "folke/which-key.nvim",
@@ -620,3 +645,42 @@ vim.keymap.set(
 )
 
 -- }}}
+-- bufferline {{{
+add {
+  source = "akinsho/bufferline.nvim",
+  depends = {
+    'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+  },
+}
+require("bufferline").setup{
+  options = {
+    themable = true,
+    buffer_close_icon = '',
+    close_icon = '',
+    groups = {
+      items = {
+        require('bufferline.groups').builtin.pinned:with({ icon = "󰐃" })
+      }
+    }
+  },
+}
+
+-- Since mini.base16 override highlight for bufferline
+-- Set it directly
+vim.cmd('hi BufferLineTabSelected guibg=#f85e84')
+vim.cmd('hi BufferLineTab guibg=Gray')
+
+-- keymaps {{{
+for i = 1, 9, 1 do
+  vim.keymap.set("n", string.format("<A-%s>", i), function()
+    vim.cmd("BufferLineGoToBuffer "..i)
+  end, {silent = true})
+end
+local opts = { noremap = true, silent = true }
+vim.keymap.set('n', '<TAB>', '<Cmd>BufferLineCyclePrev<CR>', opts)
+vim.keymap.set('n', '<S-TAB>', '<Cmd>BufferLineCycleNext<CR>', opts)
+vim.keymap.set('n', '<M-h>', '<Cmd>BufferLineMovePrev<CR>', opts)
+vim.keymap.set('n', '<M-l>', '<Cmd>BufferLineMoveNext<CR>', opts)
+vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineTogglePin<CR>', opts)
+-- }}}
+--}}}
