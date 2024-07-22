@@ -211,7 +211,7 @@ nnoremap <leader>ee :edit $MYVIMRC<CR>
 " MANAGE_BUFFERS ----------------{{{
 
 " Set options
-noremap <leader>st :set<space>
+noremap st :set<space>
 noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
 noremap <leader><leader>li :set list!<CR>
 noremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>

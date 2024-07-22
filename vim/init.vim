@@ -12,8 +12,9 @@ let s:home = '~/helper/vim'
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home
 
-" Load script in home
+" Load scripts in home
 command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
+
 
 " Gerneral scripts
 LoadScript init/basic.vim     " Basic configuration
@@ -22,7 +23,7 @@ LoadScript init/config.vim    " Extra config for different contexts
 
 " Different scripts for nvim and vim
 if has('nvim')
-  LoadScript lazy.lua
+  LoadScript mini.lua
 else
   LoadScript init/plugins.vim
   LoadScript init/style.vim
