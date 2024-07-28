@@ -21,15 +21,15 @@ nnoremap <leader>W :set wrap!<CR>
 function! s:WriteOrEnterFileName()
   if !empty(expand('%')) | write! | else | call feedkeys(":w ") | endif
 endfunction
-nmap <leader>w :call <SID>WriteOrEnterFileName()<CR>
+nnoremap <leader>w :call <SID>WriteOrEnterFileName()<CR>
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W execute 'w !sudo -S tee %' <bar> edit!
 
 " Quit
-nmap <leader>q :q<CR>
-nmap cq :cq<CR>
+nnoremap <leader>q :q<CR>
+nnoremap cq :cq<CR>
 
 " Remap <CR> in Quickfix, Cmdwin Location list
 augroup vimrc_CRfix
@@ -57,7 +57,7 @@ augroup END
 " execute "set <M-h>=\eh"
 
 " Spell
-nnoremap <leader><leader>sp :set spell!<CR>:set spell?<CR>
+nnoremap \s :set spell!<CR>:set spell?<CR>
 nnoremap <leader>ss ]s
 nnoremap <leader>S [s
 
@@ -67,6 +67,7 @@ nnoremap <C-g> 1<C-g>
 " Translate by Google API
 vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
+
 
 " }}}
 " WORKING_DIR ----------------{{{
@@ -82,8 +83,8 @@ nnoremap cd :cd %:p:h<CR>:pwd<CR>
 
 nnoremap cd<space> :cd<space>
 nnoremap cdg :call CdToGitRepo()<CR>:pwd<CR>
-noremap <C-[> :cd ..<CR>:pwd<CR>
-noremap <C-]> :call InCaseCdToLatestDir()<CR>
+nnoremap <C-[> :cd ..<CR>:pwd<CR>
+nnoremap <C-]> :call InCaseCdToLatestDir()<CR>
 
 " Switch CWD to root git directory
 function! CdToGitRepo()
@@ -105,16 +106,20 @@ endfunction
 " MOTION ----------------{{{
 
 " j/k will move virtual lines (lines that wrap)
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " Quick move in a line
-noremap <C-h> 30h
-noremap <C-l> 30l
+nnoremap <C-h> 30h
+nnoremap <C-l> 30l
 
 " File under the cursor
 nnoremap <CR> gf
 nnoremap gF :e <cfile><CR>
+
+xnoremap iq i"
+xnoremap aq a"
+
 
 " READLINE_FEATURES ----------------{{{
 
@@ -145,22 +150,22 @@ cnoremap <C-k> <C-x>d$<C-c>
 cnoremap <M-d> <C-x>de<C-c>
 
 " Moving with wrap
-noremap <m-j> gj
-noremap <m-k> gk
+nnoremap <m-j> gj
+nnoremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 " }}}
 " JUMP_TO_TABS_WITH_ALT ----------------{{{
 
-noremap <silent><A-1> :tabn 1<CR>
-noremap <silent><A-2> :tabn 2<CR>
-noremap <silent><M-3> :tabn 3<CR>
-noremap <silent><M-4> :tabn 4<CR>
-noremap <silent><M-5> :tabn 5<CR>
-noremap <silent><M-6> :tabn 6<CR>
-noremap <silent><M-7> :tabn 7<CR>
-noremap <silent><M-8> :tabn 8<CR>
-noremap <silent><M-9> :tablast<CR>
+nnoremap <silent><A-1> :tabn 1<CR>
+nnoremap <silent><A-2> :tabn 2<CR>
+nnoremap <silent><M-3> :tabn 3<CR>
+nnoremap <silent><M-4> :tabn 4<CR>
+nnoremap <silent><M-5> :tabn 5<CR>
+nnoremap <silent><M-6> :tabn 6<CR>
+nnoremap <silent><M-7> :tabn 7<CR>
+nnoremap <silent><M-8> :tabn 8<CR>
+nnoremap <silent><M-9> :tablast<CR>
 inoremap <silent><A-1> <Esc>:tabn 1<CR>
 inoremap <silent><A-2> <Esc>:tabn 2<CR>
 inoremap <silent><M-3> <Esc>:tabn 3<CR>
@@ -211,23 +216,25 @@ nnoremap <leader>ee :edit $MYVIMRC<CR>
 " MANAGE_BUFFERS ----------------{{{
 
 " Set options
-noremap st :set<space>
-noremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
-noremap <leader><leader>li :set list!<CR>
-noremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
-noremap <leader><leader>nu :set number!<CR>
-noremap <leader><leader>ru :set relativenumber!<CR>
+nnoremap so :set<space>
+nnoremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
+nnoremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
+nnoremap <leader><leader>ts :<C-\>e'set tabstop='..&tabstop<CR>
+nnoremap \e :set expandtab!<CR>:set expandtab?<CR>
+nnoremap \l :set list!<CR>:set list?<CR>
+nnoremap \n :set nu!<CR>:set nu?<CR>
+nnoremap \r :set relativenumber!<CR>:set rnu?<CR>
 
 " Open a new buffer
-nmap <leader>B :enew<CR>
-nmap <leader>O :e /tmp/buffer<CR>
+nnoremap <leader>B :enew<CR>
+nnoremap <leader>O :e /tmp/buffer<CR>
 
 " Let <leader>l toggle between this and the last accessed buffer
 augroup SaveLastBuffer
   let g:lastbuffer = 1
-  au BufLeave * let g:lastbuffer = bufnr()
+  au BufLeave * if &buflisted | let g:lastbuffer = expand('<abuf>') | endif
 augroup END
-noremap <leader>l :exe "buffer ".g:lastbuffer<CR>
+nnoremap <leader>l :exe "buffer ".g:lastbuffer<CR>
 
 " Use Ctrl-C for buffer delete or quit vim ----------------{{{
 
@@ -238,9 +245,11 @@ function! ToggleQuit()
   let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
   echo message
 endfunction
-nnoremap <leader><leader>gl :call ToggleQuit()<CR>
+nnoremap \q :call ToggleQuit()<CR>
 
 function! CloseBufferSafely()
+  let l:bufnr = bufnr()
+  " Ask Saving
   if &modified
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
     if answer == 1 | write | endif
@@ -248,27 +257,22 @@ function! CloseBufferSafely()
     if answer == "" | return | endif
   endif
 
-  let bufs = getbufinfo({'buflisted': 1})
-  if len(bufs) == 1
-    bdelete!
+  if g:tab_group[tabpagenr()] == [l:bufnr]
+    bdelete
   else
-    b# | bd! #
+    bprevious | bd #
   endif
 endfunction
 func! QuitWithCheck()
   if g:quitVimWhenPressingCtrlC
     silent! quit
   else
-    echo "Press <leader><leader>gl to allow quit with <C-c>"
+    echo "Press \\q to allow quit with <C-c>"
   endif
 endfunc
 function! Bye()
   let windows = gettabinfo(tabpagenr())[0]['windows']
-  try
-    let bufs = gettabinfo(tabpagenr())[0]['variables']['bufs']
-  catch
-    let bufs = getbufinfo({'buflisted': 1})
-  endtry
+  let bufs = getbufinfo({'buflisted': 1})
 
   if len(windows) == 1 && len(bufs) == 1
     call QuitWithCheck()
@@ -282,8 +286,8 @@ function! Bye()
 endfunction
 nnoremap <silent> <C-c> :call Bye()<CR>
 
-
-" Diff Mode ----------------
+" }}}
+" Diff Mode {{{
 
 function! CloseBuffersForDiff()
   windo | if &diff && &buftype == "nofile" | bdelete | endif
@@ -329,10 +333,10 @@ nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 " 传统的 CTRL+hjkl 移动窗口不适用于 vim 8.1 的终端模式，CTRL+hjkl 在
 " bash/zsh 及带文本界面的程序中都是重要键位需要保留，不能 tnoremap 的
 "----------------------------------------------------------------------
-noremap <m-H> <c-w>h
-noremap <m-L> <c-w>l
-noremap <m-J> <c-w>j
-noremap <m-K> <c-w>k
+nnoremap <m-H> <c-w>h
+nnoremap <m-L> <c-w>l
+nnoremap <m-J> <c-w>j
+nnoremap <m-K> <c-w>k
 inoremap <m-H> <esc><c-w>h
 inoremap <m-L> <esc><c-w>l
 inoremap <m-J> <esc><c-w>j
@@ -365,12 +369,12 @@ map <leader>tc :tabclose<CR>
 map <leader>tm :tabmove<SPACE>
 map <leader>to :tabonly<CR>
 
-noremap <silent><m-h> :call Tab_MoveLeft()<CR>
-noremap <silent><m-l> :call Tab_MoveRight()<CR>
+nnoremap <silent><m-h> :call Tab_MoveLeft()<CR>
+nnoremap <silent><m-l> :call Tab_MoveRight()<CR>
 
 " Let <leader>tl toggle between this and the last accessed tab
 let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+nnoremap <Leader>tl :exe "tabn ".g:lasttab<CR>
 autocmd TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
@@ -394,8 +398,8 @@ endfunc
 " FOLD ----------------{{{
 
 " Set fold options
-noremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
-noremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
+nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
+nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
 nnoremap zi zizz
 
@@ -463,7 +467,7 @@ endfunction
 " HIGHLIGHT ----------------{{{
 
 " Disable highlight when <leader><CR> is pressed
-noremap <silent> <leader><CR> :noh<CR>
+nnoremap <silent> <leader><CR> :noh<CR>
 
 function! HiFile()
   let i = 1
@@ -501,7 +505,6 @@ inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 
-vnoremap S sa
 vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
 vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
@@ -590,6 +593,8 @@ vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
 
 " }}}
 " SIGN ----------------{{{
+
+nnoremap <leader><leader>sc :<C-\>e'set signcolumn='..&signcolumn<CR>
 
 nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') .. " name=piet file=" .. expand("%:p")<CR>
 nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>

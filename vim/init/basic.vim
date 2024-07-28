@@ -4,7 +4,7 @@
 " Used for general usecases. No keymap and personal preference
 "======================================================================
 
-" Vimscript file settings ---------------------- {{{
+" For Vimscript {{{
 
 " Usage: type --- for foldmark
 augroup filetype_vim
@@ -14,13 +14,63 @@ augroup filetype_vim
 augroup END
 
 " }}}
-" GERERNAL ----------------{{{
+" For Buffer and Tab {{{
+augroup tabinfo
+  au!
+  let g:tab_group = {}
+  " BufEnter {{{
+  function! AddBufToTabGroup(tab_group)
+    let l:tabId = tabpagenr()
+    let l:bufnr = bufnr()
 
-let mapleader = ","	    " Always use comma as leader key
-set nocompatible	  " Disable vi compatible, today is 20XX
-set path=.,**		    " Allow :find with completion
-set mouse=		      " Disable mouse selection
-set winaltkeys=no	    " Allow alt key for mapping
+    if has_key(a:tab_group, l:tabId)
+      for v in a:tab_group[l:tabId]
+        if v == l:bufnr
+          return
+        endif
+      endfor
+      call add(a:tab_group[l:tabId], l:bufnr)
+    else
+      let a:tab_group[l:tabId] = [l:bufnr]
+    endif
+
+  endfunc
+  autocmd BufWinEnter * if &buflisted | call AddBufToTabGroup(g:tab_group) | endif
+  " }}}
+  " BufDelete {{{
+  function! RemoveBufFromTabGroup(tab_group)
+    let l:tabId = tabpagenr()
+
+    if has_key(a:tab_group, l:tabId)
+      let l:new_tab_group = {}
+
+      for [k, tab_list] in items(a:tab_group)
+        let l:list = []
+        for buf in tab_list
+          if buflisted(buf) > 0 && buf != expand('<abuf>')
+            call add(l:list, buf)
+          end
+        endfor
+        if !empty(l:list)
+          let l:new_tab_group[k] = l:list
+        endif
+      endfor
+      let g:tab_group = l:new_tab_group
+
+    endif
+
+  endfunc
+  autocmd BufDelete * call RemoveBufFromTabGroup(g:tab_group)
+  "}}}
+augroup END
+"}}}
+" GERERNAL {{{
+
+let mapleader = ","     " Always use comma as leader key
+set nocompatible        " Disable vi compatible, today is 20XX
+set path=.,**           " Allow :find with completion
+set mouse=              " Disable mouse selection
+set winaltkeys=no       " Allow alt key for mapping
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
@@ -43,22 +93,20 @@ set spellfile="/tmp/spell"
 sign define piet text=>> texthl=Search
 
 " }}}
-" VISUAL ----------------{{{
+" VISUAL {{{
 
 " colorscheme desert
 
 " Editing Area
-set wrap		                " enable wrap by default
-set scrolloff=3		          " Leave some buffer when scrolling down
-set showmatch		            " Show pairing brackets
+set wrap                " enable wrap by default
+set scrolloff=3         " Leave some buffer when scrolling down
+set showmatch           " Show pairing brackets
 set display=lastline
 set lazyredraw
-set formatoptions+=m        " 遇到Unicode值大於255的文本，不必等到空格再折行
-set formatoptions+=B        " 合併兩行中文時，不在中間加空格
 set whichwrap=b,s
 
 " Side column
-set signcolumn=yes number relativenumber
+set  number relativenumber
 
 " Cursor
 set cursorline
@@ -67,30 +115,40 @@ set matchtime=2
 
 " In most of the cases, it is overrides by lightline.vim
 set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-set laststatus=2    	      " Always show the status line
-set ruler		                " Show cursor position
+set laststatus=2            " Always show the status line
+set ruler                    " Show cursor position
 set wildmenu wildoptions=pum,fuzzy
 
 " Format of error message
 set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 
-" }}}
-" EDIT ----------------{{{
+" Direction for new window
+set splitright
 
-set backspace=eol,start,indent " Set Backspace behaviors
-set autoindent smartindent
+" }}}
+" EDIT {{{
+
+" overrides ftplugin in runtimepath
+" Don't wrap line when typing CJK characters
+" Don't add spaces for CJK
+" Don't add comment at next line
+autocmd Filetype * set fo+=mB fo-=cro
+
 set shiftwidth=2
+set autoindent smartindent
 set cindent
 set ttimeout
 set timeoutlen=500
+
+set backspace=eol,start,indent  " Set Backspace behaviors
+
 " set updatetime=4000
 " autocmd CursorHold * normal! m'
 
-" TAB and special Chars ----------------{{{
+" TAB and special Chars {{{
 
-set tabstop=8
+set tabstop=8 softtabstop=8
 set expandtab
-set softtabstop=-1
 
 " Invisible chars
 set nolist
@@ -99,23 +157,23 @@ set listchars=tab:»·,extends:>,precedes:<
 " }}}
 
 " }}}
-" JUMP to anoterh file ----------------{{{
+" JUMP to anoterh file {{{
 
 set isfname=@,48-57,/,.,-,_,+,,,#,$,%,~ " This affects filename recognition for gf (go to file)
-set suffixesadd=.md			" Enable reference markdown file without extension
+set suffixesadd=.md                     " Enable reference markdown file without extension
 
 " }}}
-" SEARCH ----------------{{{
+" SEARCH {{{
 
-set ignorecase      " Search case without case sensation
+set ignorecase  " Search case without case sensation
 set smartcase
-set hlsearch        " Hilight all matched texts
-set incsearch       " Show matched strings when typing
+set hlsearch    " Highlight all matched texts
+set incsearch   " Show matched strings when typing
 
 " }}}
-" BUFFERS ----------------{{{
+" BUFFERS {{{
 
-" Go to last cursor position ----------------{{{
+" Go to last cursor position {{{
 augroup vimStartup
   au!
   " When editing a file, always jump to the last known cursor position.
@@ -131,21 +189,22 @@ augroup END
 " }}}
 
 " }}}
-" FOLD ----------------{{{
+" FOLD {{{
+
 set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
 set foldlevel=2
 set fillchars+=foldopen:▽,foldsep:│,foldclose:▶
 let g:defaut_foldcolumn = ""
 if has('nvim')
-  let g:defaut_foldcolumn = "auto:5"
+  let g:defaut_foldcolumn = "auto:3"
 else
-  let g:defaut_foldcolumn = 5
+  let g:defaut_foldcolumn = 3
 endif
 let &foldcolumn = g:defaut_foldcolumn
 
 " }}}
-" ENCODING_PREFERENCE ----------------{{{
+" ENCODING_PREFERENCE {{{
 
 if has('multi_byte')
   set encoding=utf-8
@@ -155,7 +214,7 @@ if has('multi_byte')
 endif
 
 " }}}
-" BACKUP ----------------{{{
+" BACKUP {{{
 
 " Allow backup
 set backup
@@ -170,7 +229,7 @@ set backupdir=~/.vim/tmp
 set writebackup
 
 " }}}
-" HIGHLIGHT ----------------{{{
+" HIGHLIGHT {{{
 
 syntax enable
 set conceallevel=1
@@ -185,7 +244,7 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 
 " }}}
-" MISC ----------------{{{
+" MISC {{{
 
 " Use Unix way to add newline
 set ffs=unix,dos,mac

@@ -3,7 +3,7 @@
 " Do some autocommand for by contexts
 "======================================================================
 
-" Unnamed Buffer ----------------{{{
+" Unnamed Buffer {{{
 
 " Automatically delete unnamed empty buffer when leaving
 augroup DeleteUnnamedEmptBuffer!
@@ -12,7 +12,7 @@ augroup DeleteUnnamedEmptBuffer!
 augroup END
 
 " }}}
-" Small Terminal ----------------{{{
+" Small Terminal {{{
 
 augroup TerminalSize
   au!
@@ -27,13 +27,13 @@ augroup TerminalSize
 augroup END
 
 " }}}
-" X11 ----------------{{{
+" X11 {{{
 
 " Change IM to US when exit to Normal mode
 autocmd InsertLeave * :silent !fcitx-remote -c &>/dev/null || true
 
 " }}}
-" TMUX ----------------{{{
+" TMUX {{{
 
 " 有 tmux 何没有的功能键超时（毫秒）
 if $TMUX != ''
@@ -60,7 +60,7 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
 endif
 
 " }}}
-" KeyCode ----------------{{{
+" KeyCode {{{
 
 "----------------------------------------------------------------------
 " 终端下允许 ALT，详见：http://www.skywind.me/blog/archives/2021
@@ -114,22 +114,22 @@ call s:key_escape('<S-F11>', '[23;2~')
 call s:key_escape('<S-F12>', '[24;2~')
 
 " }}}
-" Filetype ----------------{{{
+" Filetype {{{
 
 augroup InitFileTypes
 
   au!
 
-  " Filetype for Vim ----------------{{{
+  " Filetype for Vim {{{
 
   " Help page
-  autocmd BufEnter *.txt if &filetype == 'help' | wincmd T | endif
+  autocmd BufEnter * if &filetype == 'help' | wincmd T | set buflisted | endif
 
   " quickfix: hide line number
   autocmd FileType quickfix setlocal nonumber
 
   " }}}
-  " Shebeng: Set filetype from shebeng ----------------{{{
+  " Shebeng: Set filetype from shebeng {{{
   function! s:ApplyShebang()
     let l:filetype = matchstr(getline(1), '^#!.*[ /]\zs[[:alnum:]]\+$')
     let l:shebangMatch = #{ node: "javascript" }
@@ -143,7 +143,7 @@ augroup InitFileTypes
   endfunction
   autocmd BufReadPost * call <SID>ApplyShebang()
   " }}}
-  " Markdown ----------------{{{
+  " Markdown {{{
 
   augroup Config_Markdown
     au!
@@ -168,7 +168,7 @@ augroup InitFileTypes
   augroup END
 
   " }}}
-  " HTML ----------------{{{
+  " HTML {{{
 
   " Usage: <leader>cl(ass) or <leader>id to edit html tag attribute
   function! s:ChangeAttr(pattern)
@@ -192,17 +192,17 @@ augroup InitFileTypes
 
   " Reload preview server
   autocmd BufWrite *.html,*.js,*.css call ReloadServer()
-  function ReloadServer()
+  function! ReloadServer()
     silent !browser-sync reload &>/dev/null
   endfunction
 
   " }}}
-  " Mail ----------------{{{
+  " Mail {{{
 
   autocmd BufRead /tmp/mutt-* set tw=72
 
   " }}}
-  " Password ----------------{{{
+  " Password {{{
 
   " Hide the first line of a file if editing password file
   " TODO a better way to determine a file is related to password-store, now use
@@ -218,7 +218,7 @@ augroup InitFileTypes
     norm! ggzfl
   endfunction
   " }}}
-  " Beancount ----------------{{{
+  " Beancount {{{
 
   autocmd BufRead,BufNewFile *.bean call PrepareBean()
   function PrepareBean()

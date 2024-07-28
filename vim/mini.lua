@@ -13,8 +13,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- }}}
 require("lazy").setup({
-
-  "tpope/vim-sleuth",
+  -- "tpope/vim-sleuth",
   -- Telescope {{{
   {
     "nvim-telescope/telescope.nvim",
@@ -236,7 +235,6 @@ require("lazy").setup({
           indent_markers = {
             enable = true,
           },
-          --
           icons = {
             show = {
               file = true,
@@ -244,7 +242,6 @@ require("lazy").setup({
               folder_arrow = true,
               git = true,
             },
-            --
             glyphs = {
               default = "󰈚",
               symlink = "",
@@ -336,192 +333,278 @@ require("lazy").setup({
     end,
   },
   --}}}
+  -- lualine {{{
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.g.lualine_laststatus = vim.o.laststatus
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+    end,
+    opts = function()
+      -- PERF: we don't need this lualine require madness 🤷
+      local lualine_require = require("lualine_require")
+      lualine_require.require = require
 
-  -- -- lspconfig {{{
-  -- -- Use :help lspconfig-all to check servers
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   lazy = false,
-  --   config = function()
-  --     local lspconfig = require "lspconfig"
-  --     --
-  --     -- typescript
-  --     lspconfig.lua_ls.setup {}
-  --     lspconfig.tsserver.setup {}
-  --     lspconfig.vimls.setup {}
-  --     lspconfig.html.setup {}
-  --     --
-  --     vim.keymap.set("n", "<leader>F", function()
-  --       vim.lsp.buf.format()
-  --     end, { desc = "format files" })
-  --   end,
-  -- },
-  -- -- }}}
-  -- -- Mason {{{
-  -- {
-  --   "williamboman/mason.nvim",
-  --   config = function()
-  --     require('mason').setup {
-  --       automatically_installation = true,
-  --       ensure_installed = {
-  --         "vim-language-server",
-  --         "lua-language-server",
-  --         "css-lsp",
-  --         "html-lsp",
-  --         "prettier",
-  --         "stylua",
-  --       },
-  --     }
-  --   end
-  -- },
-  -- -- }}}
-  -- -- treesitter {{{
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   event = { "BufReadPost", "BufNewFile" },
-  --   cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-  --   build = ":TSUpdate",
-  --   config = function()
-  --     require("nvim-treesitter.configs").setup({
-  --       ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
-  --       --
-  --       highlight = {
-  --         enable = true,
-  --         use_languagetree = true,
-  --       },
-  --       --
-  --       indent = { enable = true },
-  --     })
-  --   end,
-  -- },
-  -- -- }}}
-  -- -- nvim-cmp {{{
-  -- {
-  --   "hrsh7th/nvim-cmp",
-  --   event = {
-  --     "InsertEnter",
-  --     "CmdlineEnter"
-  --   },
-  --   dependencies = { -- {{{
-  --     {
-  --       -- snippet plugin
-  --       "L3MON4D3/LuaSnip",
-  --       build = "make install_jsregexp",
-  --       dependencies = {
-  --         "rafamadriz/friendly-snippets",
-  --         "saadparwaiz1/cmp_luasnip",
-  --         "onsails/lspkind-nvim",
-  --       },
-  --       opts = {
-  --         history = true,
-  --         updateevents = "TextChanged,TextChangedI"
-  --       },
-  --       config = function(_, opts)
-  --         require("luasnip").config.set_config(opts)
-  --         require("luasnip.loaders.from_vscode").lazy_load()
-  --         require("luasnip.loaders.from_lua").load()
-  --         require("luasnip.loaders.from_lua").lazy_load { paths = vim.g.lua_snippets_path or "" }
-  --         --
-  --         vim.api.nvim_create_autocmd("InsertLeave", {
-  --           callback = function()
-  --             if
-  --                 require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
-  --                 and not require("luasnip").session.jump_active
-  --             then
-  --               require("luasnip").unlink_current()
-  --             end
-  --           end,
-  --         })
-  --       end,
-  --     },
-  --     --
-  --     -- cmp sources plugins
-  --     {
-  --       "hrsh7th/cmp-nvim-lua",
-  --       "hrsh7th/cmp-nvim-lsp",
-  --       "hrsh7th/cmp-buffer",
-  --       "hrsh7th/cmp-path",
-  --       "hrsh7th/cmp-cmdline",
-  --     },
-  --   }, -- }}}
-  --   config = function()
-  --     local cmp = require "cmp"
-  --     local default_mapping = {
-  --       ["<S-TAB>"] = cmp.mapping.select_prev_item(),
-  --       ["<TAB>"] = cmp.mapping.select_next_item(),
-  --       ["<C-p>"] = cmp.mapping.select_prev_item(),
-  --       ["<C-n>"] = cmp.mapping.select_next_item(),
-  --       ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-  --       ["<C-f>"] = cmp.mapping.scroll_docs(4),
-  --       ["<C-Space>"] = cmp.mapping.complete(),
-  --       ["<C-e>"] = cmp.mapping.close(),
-  --       ['<CR>'] = cmp.mapping.confirm(),
-  --       ['<C-c>'] = cmp.mapping.abort(),
-  --     }
-  --
-  --     require("cmp").setup({
-  --       completion = {
-  --         completeopt = "menu,menuone,noselect",
-  --       },
-  --       window = {
-  --         documentation = cmp.config.window.bordered(),
-  --         completion = cmp.config.window.bordered({
-  --           winhighlight = 'Normal:CmpPmenu,CursorLine:PmenuSel,Search:None'
-  --         }),
-  --       },
-  --       snippet = {
-  --         expand = function(args)
-  --           require("luasnip").lsp_expand(args.body)
-  --         end,
-  --       },
-  --       formatting = {
-  --         format = require('lspkind').cmp_format({
-  --           with_text = true, -- do not show text alongside icons
-  --           maxwidth = 50,  -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-  --           before = function(entry, vim_item)
-  --             -- Source 显示提示来源
-  --             vim_item.menu = '<' .. entry.source.name .. '>'
-  --             return vim_item
-  --           end
-  --         })
-  --       },
-  --       mapping = default_mapping,
-  --       sources = cmp.config.sources {
-  --         { name = "nvim_lsp" },
-  --         { name = "luasnip" },
-  --         { name = "buffer" },
-  --         { name = "nvim_lua" },
-  --         { name = "path" },
-  --       },
-  --       experimental = {
-  --         ghost_text = true,
-  --       }
-  --     })
-  --     cmp.setup.cmdline(':', {
-  --       mapping = cmp.mapping.preset.cmdline {
-  --         ['<C-n>'] = cmp.config.disable,
-  --         ['<C-p>'] = cmp.config.disable,
-  --         ['<C-c>'] = cmp.mapping.abort(),
-  --       },
-  --       sources = cmp.config.sources(
-  --         { { name = 'path' } },
-  --         { { name = 'cmdline' } }
-  --       )
-  --     })
-  --     cmp.setup.cmdline({ '/', '?' }, {
-  --       mapping = cmp.mapping.preset.cmdline {
-  --         ['<C-n>'] = cmp.config.disable,
-  --         ['<C-p>'] = cmp.config.disable,
-  --         ['<C-c>'] = cmp.mapping.abort(),
-  --       },
-  --       sources = { { name = 'buffer' } }
-  --     })
-  --
-  --     vim.opt.complete = ""
-  --   end,
-  -- },
-  --
-  -- -- }}}
+      vim.o.laststatus = vim.g.lualine_laststatus
+
+      local opts = {
+        options = {
+          theme = "auto",
+          globalstatus = vim.o.laststatus == 3,
+          disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch" },
+
+          lualine_x = {
+            -- stylua: ignore
+            {
+              function() return require("noice").api.status.command.get() end,
+              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+            },
+            -- stylua: ignore
+            {
+              function() return require("noice").api.status.mode.get() end,
+              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+            },
+            -- stylua: ignore
+            {
+              function() return "  " .. require("dap").status() end,
+              cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+            },
+            -- stylua: ignore
+            {
+              require("lazy.status").updates,
+              cond = require("lazy.status").has_updates,
+            },
+            {
+              "diff",
+              source = function()
+                local gitsigns = vim.b.gitsigns_status_dict
+                if gitsigns then
+                  return {
+                    added = gitsigns.added,
+                    modified = gitsigns.changed,
+                    removed = gitsigns.removed,
+                  }
+                end
+              end,
+            },
+          },
+          lualine_y = {
+            { "progress", separator = " ", padding = { left = 1, right = 0 } },
+            { "location", padding = { left = 0, right = 1 } },
+          },
+          lualine_z = {
+            function()
+              return " " .. os.date("%R")
+            end,
+          },
+        },
+        extensions = { "neo-tree", "lazy" },
+      }
+
+      return opts
+    end,
+  },
+  -- }}}
+
+  -- lspconfig {{{
+  -- Use :help lspconfig-all to check servers
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    config = function()
+      local lspconfig = require "lspconfig"
+      --
+      -- typescript
+      lspconfig.lua_ls.setup {}
+      lspconfig.tsserver.setup {}
+      lspconfig.vimls.setup {}
+      lspconfig.html.setup {}
+      --
+      vim.keymap.set("n", "<leader>F", function()
+        vim.lsp.buf.format()
+      end, { desc = "format files" })
+    end,
+  },
+  -- }}}
+  -- Mason {{{
+  {
+    "williamboman/mason.nvim",
+    dependencies = {
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      require('mason').setup {
+        automatically_installation = true,
+        ensure_installed = {
+          "vim-language-server",
+          "lua-language-server",
+          "css-lsp",
+          "html-lsp",
+          "prettier",
+          "stylua",
+        },
+      }
+    end
+  },
+  -- }}}
+  -- treesitter {{{
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
+        --
+        highlight = {
+          enable = true,
+          use_languagetree = true,
+        },
+        --
+        indent = { enable = true },
+      })
+    end,
+  },
+  -- }}}
+  -- nvim-cmp {{{
+  {
+    "hrsh7th/nvim-cmp",
+    event = {
+      "InsertEnter",
+      "CmdlineEnter"
+    },
+    dependencies = { -- {{{
+      {
+        -- snippet plugin
+        "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp",
+        dependencies = {
+          "rafamadriz/friendly-snippets",
+          "saadparwaiz1/cmp_luasnip",
+          "onsails/lspkind-nvim",
+        },
+        opts = {
+          history = true,
+          updateevents = "TextChanged,TextChangedI"
+        },
+        config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require("luasnip.loaders.from_vscode").lazy_load()
+          require("luasnip.loaders.from_lua").load()
+          require("luasnip.loaders.from_lua").lazy_load { paths = vim.g.lua_snippets_path or "" }
+          --
+          vim.api.nvim_create_autocmd("InsertLeave", {
+            callback = function()
+              if
+                  require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+                  and not require("luasnip").session.jump_active
+              then
+                require("luasnip").unlink_current()
+              end
+            end,
+          })
+        end,
+      },
+      --
+      -- cmp sources plugins
+      {
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-cmdline",
+      },
+    }, -- }}}
+    config = function()
+      local cmp = require "cmp"
+      local default_mapping = {
+        ["<S-TAB>"] = cmp.mapping.select_prev_item(),
+        ["<TAB>"] = cmp.mapping.select_next_item(),
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm(),
+        ['<C-c>'] = cmp.mapping.abort(),
+      }
+
+      require("cmp").setup({
+        completion = {
+          completeopt = "menu,menuone,noselect",
+        },
+        window = {
+          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered({
+            winhighlight = 'Normal:CmpPmenu,CursorLine:PmenuSel,Search:None'
+          }),
+        },
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
+        formatting = {
+          format = require('lspkind').cmp_format({
+            with_text = true, -- do not show text alongside icons
+            maxwidth = 50,  -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            before = function(entry, vim_item)
+              -- Source 显示提示来源
+              vim_item.menu = '<' .. entry.source.name .. '>'
+              return vim_item
+            end
+          })
+        },
+        mapping = default_mapping,
+        sources = cmp.config.sources {
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+          { name = "buffer" },
+          { name = "nvim_lua" },
+          { name = "path" },
+        },
+        experimental = {
+          ghost_text = true,
+        }
+      })
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline {
+          ['<C-n>'] = cmp.config.disable,
+          ['<C-p>'] = cmp.config.disable,
+          ['<C-c>'] = cmp.mapping.abort(),
+        },
+        sources = cmp.config.sources(
+          { { name = 'path' } },
+          { { name = 'cmdline' } }
+        )
+      })
+      cmp.setup.cmdline({ '/', '?' }, {
+        mapping = cmp.mapping.preset.cmdline {
+          ['<C-n>'] = cmp.config.disable,
+          ['<C-p>'] = cmp.config.disable,
+          ['<C-c>'] = cmp.mapping.abort(),
+        },
+        sources = { { name = 'buffer' } }
+      })
+
+      vim.opt.complete = ""
+    end,
+  },
+
+  -- }}}
   -- -- lspsaga {{{
   -- {
   --   'nvimdev/lspsaga.nvim',
@@ -555,7 +638,6 @@ require("lazy").setup({
   --   end,
   -- },
   -- -- }}}
-
 })
 
 -- Install mini.nvim {{{
@@ -658,52 +740,6 @@ vim.cmd("hi BufferLineTab guibg=Gray")
 -- mini.icons {{{
 require("mini.icons").setup({})
 --}}}
--- mini.statusline {{{
---
-require("mini.statusline").setup({
-  content = {
-    active = status_config,
-  },
-})
-local function diagnostics_table(args)
-  local info = vim.b.coc_diagnostic_info
-  if MiniStatusline.is_truncated(args.trunc_width) or info == nil then
-    return {}
-  end
-  local table = {}
-  table.e = (info["error"] or 0) > 0 and "E" .. info["error"] or ""
-  table.w = (info["warning"] or 0) > 0 and "W" .. info["warning"] or ""
-  table.h = (info["hint"] or 0) > 0 and "H" .. info["hint"] or ""
-  table.i = (info["information"] or 0) > 0 and "I" .. info["information"] or ""
-  table.s = vim.g.coc_status
-  return table
-end
---
-function status_config()
-  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  local git = MiniStatusline.section_git({ trunc_width = 75 })
-  local diagnostics = diagnostics_table({ trunc_width = 75 })
-  local filename = MiniStatusline.section_filename({ trunc_width = 140 })
-  local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
-  local location = MiniStatusline.section_location({ trunc_width = 75 })
-  --
-  return MiniStatusline.combine_groups({
-    { hl = mode_hl,                 strings = { mode } },
-    { hl = "MiniStatuslineDevinfo", strings = { git, diagnostics["s"] } },
-    { hl = "MiniStatuslineError",   strings = { diagnostics["e"] } },
-    { hl = "MiniStatuslineWarning", strings = { diagnostics["w"] } },
-    { hl = "MiniStatuslineInfo",    strings = { diagnostics["i"] } },
-    { hl = "MiniStatuslineHint",    strings = { diagnostics["h"] } },
-    "%<", -- Mark general truncate point
-    { hl = "MiniStatuslineFilename", strings = { filename } },
-    "%=", -- End left alignment
-    { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
-    { hl = mode_hl,                  strings = { location } },
-  })
-end
-
---
--- }}}
 -- mini.comment {{{
 require("mini.comment").setup({
   -- Module mappings. Use `''` (empty string) to disable one.
@@ -754,17 +790,20 @@ vim.keymap.set("n", "\\m", function()
 end, { desc = "Minimap", buffer = bufnr })
 -- }}}
 -- mini.visits {{{
+
 require("mini.visits").setup()
 -- vim.keymap.set("n", "<leader><leader>li", function()
 -- 	MiniVisits.list_paths()
 -- end, { buffer = bufnr, desc = "" })
+--
 -- }}}
 -- mini.surround {{{
-require("mini.surround").setup({
+require("mini.surround").setup {
   mappings = {
-    add = "s",
-  },
-})
+    add = 'S'
+  }
+}
+vim.keymap.set('v', 's', 'S', { remap = true })
 -- }}}
 -- mini.indentscope {{{
 require("mini.indentscope").setup()
@@ -798,6 +837,51 @@ end, { buffer = bufnr, desc = "Toggle hex color highlight" })
 -- mini.pairs {{{
 require("mini.pairs").setup()
 -- }}}
+-- -- mini.statusline {{{
+-- --
+-- require("mini.statusline").setup({
+--   content = {
+--     active = status_config,
+--   },
+-- })
+-- local function diagnostics_table(args)
+--   local info = vim.b.coc_diagnostic_info
+--   if MiniStatusline.is_truncated(args.trunc_width) or info == nil then
+--     return {}
+--   end
+--   local table = {}
+--   table.e = (info["error"] or 0) > 0 and "E" .. info["error"] or ""
+--   table.w = (info["warning"] or 0) > 0 and "W" .. info["warning"] or ""
+--   table.h = (info["hint"] or 0) > 0 and "H" .. info["hint"] or ""
+--   table.i = (info["information"] or 0) > 0 and "I" .. info["information"] or ""
+--   table.s = vim.g.coc_status
+--   return table
+-- end
+--
+-- function status_config()
+--   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+--   local git = MiniStatusline.section_git({ trunc_width = 75 })
+--   local diagnostics = diagnostics_table({ trunc_width = 75 })
+--   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+--   local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+--   local location = MiniStatusline.section_location({ trunc_width = 75 })
+--
+--   return MiniStatusline.combine_groups({
+--     { hl = mode_hl,                 strings = { mode } },
+--     { hl = "MiniStatuslineDevinfo", strings = { git, diagnostics["s"] } },
+--     { hl = "MiniStatuslineError",   strings = { diagnostics["e"] } },
+--     { hl = "MiniStatuslineWarning", strings = { diagnostics["w"] } },
+--     { hl = "MiniStatuslineInfo",    strings = { diagnostics["i"] } },
+--     { hl = "MiniStatuslineHint",    strings = { diagnostics["h"] } },
+--     "%<", -- Mark general truncate point
+--     { hl = "MiniStatuslineFilename", strings = { filename } },
+--     "%=", -- End left alignment
+--     { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+--     { hl = mode_hl,                  strings = { location } },
+--   })
+-- end
+--
+-- -- }}}
 -- -- mini.completion {{{
 -- require('mini.completion').setup()
 -- -- }}}
@@ -878,7 +962,7 @@ require("mini.pairs").setup()
 -- })
 -- vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
 -- -- }}}
--- bufferline {{{
+-- -- bufferline {{{
 Add({
   source = "akinsho/bufferline.nvim",
   depends = {
@@ -886,8 +970,9 @@ Add({
     "tiagovla/scope.nvim",
   },
 })
-require("bufferline").setup({
+require('bufferline').setup{
   options = {
+    numbers = 'ordinal',
     tab_size = 14,
     separator_style = { "", "" },
     themable = true,
@@ -898,9 +983,66 @@ require("bufferline").setup({
         require("bufferline.groups").builtin.pinned:with({ icon = "󰐃" }),
       },
     },
-  },
-})
-require("scope").setup({})
+    enforce_regular_tabs = false,
+    diagnostics = "coc",
+    diagnostics_update_in_insert = true,
+    diagnostics_indicator = function(count, level)
+      local icon = level:match("error") and " " or " "
+      return " " .. icon .. count
+    end,
+    offsets = {
+      {
+        filetype = "NvimTree",
+        text = "File Explorer",
+        highlight = "Directory",
+        text_align = "left"
+      },
+      {
+        filetype = "coc-explorer",
+        text = function()
+          return vim.fn.getcwd()
+        end,
+        highlight = "Directory",
+        text_align = "left"
+      },
+      {
+        filetype = 'vista',
+        text = function()
+          return vim.fn.getcwd()
+        end,
+        highlight = "Tags",
+        text_align = "right"
+      }
+    },
+    custom_filter = function (buf_number)
+      local tabId = tostring(vim.fn.tabpagenr())
+      if vim.g.tab_group[tabId] then
+        for _, p in ipairs(vim.g.tab_group[tabId]) do
+          if p == buf_number then
+            return true
+          end
+        end
+      end
+      return false
+    end
+  }
+};
+
+-- require("bufferline").setup({
+--   options = {
+--     custom_filter = function(buf_number)
+--       local tabId = vim.fn.tabpagenr()
+--       if vim.g.tab_group[tabId] then
+--         for _, p in ipairs(vim.g.tab_group[tabId]) do
+--           if p == buf_number then
+--             return true
+--           end
+--         end
+--       end
+--       return false
+--     end
+--   },
+-- })
 -- keymaps {{{
 for i = 1, 9, 1 do
   vim.keymap.set("n", string.format("<A-%s>", i), function()
@@ -914,4 +1056,31 @@ vim.keymap.set("n", "<M-h>", "<Cmd>BufferLineMovePrev<CR>", opts)
 vim.keymap.set("n", "<M-l>", "<Cmd>BufferLineMoveNext<CR>", opts)
 vim.keymap.set("n", "<M-p>", "<Cmd>BufferLineTogglePin<CR>", opts)
 -- }}}
+-- -- TODO: tabpages
+-- -- }}}
+
+-- KEYMAPS {{{
+
+-- Use floating window for translation
+vim.keymap.set("v", "Tz", function()
+  vim.cmd('norm o^zt"ty')
+  local translated_text = vim.fn.system("trans -t zh-TW -b", vim.fn.getreg("t"))
+  local lines = vim.split(translated_text, "\n")
+  table.remove(lines)
+
+  local new_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(new_buf, 0, -1, true, lines)
+
+  vim.api.nvim_open_win(new_buf, true, {
+    relative = "cursor",
+    width = 80,
+    height = #lines,
+    row = #lines,
+    col = 0,
+  })
+
+  vim.cmd("setl nocul nonu nornu")
+  vim.cmd("hi ActiveWindow guibg=#2a5a6a guifg=White | setl winhighlight=Normal:ActiveWindow")
+  vim.cmd(":silent! %s/\\%x1b\\[[0-9;]*m//g")
+end, { desc = "Description" })
 -- }}}
