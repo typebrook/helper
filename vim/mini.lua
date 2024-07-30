@@ -1,4 +1,4 @@
--- vim: sw=2 ts=2 et foldmethod=marker foldmarker={{{,}}} foldlevel=0
+-- vim: sw=2 et foldmethod=marker foldmarker={{{,}}} foldlevel=0
 
 -- Ref: https://github.com/echasnovski/mini.nvim
 --      https://lazy.folke.io/spec
@@ -785,6 +785,7 @@ require("mini.misc").setup({
 })
 vim.keymap.set( 'n', '<leader>Z', function()
   zoom()
+  vim.cmd("silent! call ToggleWinPadding()")
 end, { buffer = bufnr, desc = 'zoom' })
 --}}}
 -- mini.extra {{{
