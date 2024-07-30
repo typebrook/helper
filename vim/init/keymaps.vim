@@ -197,45 +197,57 @@ endfunc
 nnoremap dm :call DeleteMark(getchar())<CR>
 
 
-" Usage: z' to fold lines not near marks, use v:count to set bound
+" Usage: z' to fold lines not near marks, use v:count to set offset
 "        For example: 15z'
-autocmd BufEnter * let b:unfold_marks = 0
-let g:mark_bound = 5
-function! ToggleFoldForMarks(bound)
-  let bound = a:bound ? a:bound : g:mark_bound
-  if !b:unfold_marks
-    mkview
-    setlocal foldmethod=manual
+autocmd BufEnter * let b:fold_for_marks = 0
+let g:mark_offset = 5
+function! ToggleFoldForMarks(offset)
+  if !b:fold_for_marks || a:offset
+    " If toggling from other foldmethod, save view!
+    if !b:fold_for_marks
+      mkview 
+      setlocal foldmethod=manual 
+    endif
+
+    " Then clear all folds
     norm! zEgg
 
+    " Get list of lines which has mark
     let line_list = []
     for info in getmarklist(bufnr())
       if match(info.mark, "[a-z]") == 1
         call add(line_list, info.pos[1])
       endif
     endfor
-    echo line_list
     call uniq(sort(line_list, 'n'))
 
+    " Create folds not inside offset of marks
+    let offset = a:offset ? a:offset : g:mark_offset
     for line in line_list
       let foldstart = line('.')
-      let line_upper = line - bound
-      let line_lower = line + bound
+      let line_upper = line - offset
+      let line_lower = line + offset
       if foldstart < (line_upper - 1)
         exe foldstart..","..(line_upper-1).." fold"
       endif
-      " Jump to lower bound of lineer
+      " Move cursor outside of lower offset
       exe (line_lower + 1)
     endfor
+
+    " Fold lower offset to end of file
     if line('.') < line('$')
       norm! zfG
     endif
+
+    let b:fold_for_marks = 1
+    echo "Folds for Marks"
   else
     loadview
+    let b:fold_for_marks = 0
+    echo "Reset Folds"
   endif
-  let b:unfold_marks = !b:unfold_marks
 endfunction
-nnoremap <expr> z' ":\<C-u>call ToggleFoldForMarks(".v:count..")\<CR>"
+nnoremap <expr> z' ":\<C-u>call ToggleFoldForMarks("..v:count..")\<CR>"
 
 "}}}
 " EDIT {{{
