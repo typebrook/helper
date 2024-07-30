@@ -17,57 +17,28 @@ augroup END
 " For Buffer and Tab {{{
 augroup tabinfo
   au!
-  let g:tab_group = {}
-  " BufEnter {{{
-  function! AddBufToTabGroup(tab_group)
-    let l:tabId = tabpagenr()
-    let l:bufnr = bufnr()
 
-    if has_key(a:tab_group, l:tabId)
-      for v in a:tab_group[l:tabId]
-        if v == l:bufnr
-          return
-        endif
-      endfor
-      call add(a:tab_group[l:tabId], l:bufnr)
-    else
-      let a:tab_group[l:tabId] = [l:bufnr]
-    endif
+  " t:bufs holds buffer numbers
+  autocmd BufWinEnter * if &buflisted | call AddBufToTab() | endif
+  autocmd BufDelete * call RemoveBufFromTabs()
 
+  function! AddBufToTab()
+    if !has_key(t:, 'bufs') | let t:['bufs'] = [] | endif
+    call add(t:bufs, bufnr()) | call sort(t:bufs) | call uniq(t:bufs)
   endfunc
-  autocmd BufWinEnter * if &buflisted | call AddBufToTabGroup(g:tab_group) | endif
-  " }}}
-  " BufDelete {{{
-  function! RemoveBufFromTabGroup(tab_group)
-    let l:tabId = tabpagenr()
-
-    if has_key(a:tab_group, l:tabId)
-      let l:new_tab_group = {}
-
-      for [k, tab_list] in items(a:tab_group)
-        let l:list = []
-        for buf in tab_list
-          if buflisted(buf) > 0 && buf != expand('<abuf>')
-            call add(l:list, buf)
-          end
-        endfor
-        if !empty(l:list)
-          let l:new_tab_group[k] = l:list
-        endif
-      endfor
-      let g:tab_group = l:new_tab_group
-
-    endif
-
+  function! RemoveBufFromTabs()
+    for tab in gettabinfo()
+      call filter(tab.variables.bufs, "v:val != "..expand('<abuf>'))
+    endfor
   endfunc
-  autocmd BufDelete * call RemoveBufFromTabGroup(g:tab_group)
-  "}}}
+
+  nnoremap T :echo t:bufs<CR>
 augroup END
 "}}}
 " GERERNAL {{{
 
 let mapleader = ","     " Always use comma as leader key
-set nocompatible        " Disable vi compatible, today is 20XX
+set nocompatible        " Disable vi compatible, today is 2RemoveBufFromTabXX
 set path=.,**           " Allow :find with completion
 set mouse=              " Disable mouse selection
 set winaltkeys=no       " Allow alt key for mapping
@@ -194,7 +165,7 @@ augroup END
 set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
 set foldlevel=2
-set fillchars+=foldopen:▽,foldsep:│,foldclose:▶
+set fillchars=fold:\ ,foldopen:▽,foldsep:│,foldclose:▶
 let g:defaut_foldcolumn = ""
 if has('nvim')
   let g:defaut_foldcolumn = "auto:3"

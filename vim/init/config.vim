@@ -16,14 +16,15 @@ augroup END
 
 augroup TerminalSize
   au!
-  function! LayoutForSmallTerminal()
-    if &lines < 19
+  function! LayoutForSmallTerminal(bound)
+    let l:bound = a:bound ? a:bound : 19
+    if &lines < l:bound || g:alacritty_extra_padding
       silent! set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
     else
       silent! set cmdheight& laststatus& showtabline=2 signcolumn=yes scrolloff=3
     endif
-  endfunction
-  autocmd VimEnter,VimResized * call LayoutForSmallTerminal()
+  endfunc
+  autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(0)
 augroup END
 
 " }}}
@@ -140,30 +141,45 @@ augroup InitFileTypes
       echo "filetype from shebang: ".l:filetype
       execute "set filetype=".l:filetype
     endif
-  endfunction
+  endfunc
   autocmd BufReadPost * call <SID>ApplyShebang()
   " }}}
   " Markdown {{{
 
   augroup Config_Markdown
     au!
-    au FileType markdown setlocal wrap sw=2 ts=2
-    au FileType markdown setlocal foldexpr=MarkdownLevel() foldmethod=expr
+    au FileType markdown call InitMarkdown()
+
+    function! InitMarkdown()
+      setlocal wrap sw=2 ts=2
+      setlocal foldexpr=MarkdownLevel() foldmethod=expr
+      setlocal foldtext=MarkdownFoldTextHeading()
+      syn match Details '^<details>' conceal cchar=▶
+      syn match Summary '<summary>' conceal cchar= 
+      syn match SummaryEnd '</summary>' conceal
+      syn match DetailsEnd '^</details>' conceal cchar=E
+    endfunc
 
     " Fold by heading level
     function! MarkdownLevel()
       let hash_num = matchstr(getline(v:lnum), '^#\+')
-      let hash_num_at_top = matchstr(getline(v:lnum-1), '^#\+')
-      if empty(hash_num)
-        if empty(hash_num_at_top)
-          return "="
-        else
-          return ">"..(len(hash_num_at_top))
-        endif
+      if !empty(hash_num)
+        " HEADING
+        " return ">"..(len(hash_num) - 1)
+        return len(hash_num) == 1 ? 0 : '>1'
       else
-        return len(hash_num) - 1
+        " Contents
+        return "="
       endif
-    endfunction
+    endfunc
+
+    function! MarkdownFoldTextHeading()
+      let origin = split(MarkdownFoldText()[2:], ' ')
+      let heading = substitute(join(origin[:-3], ' '), '\#', '    ', 'g')
+      let lines = join(origin[-2:], ' ')[1:-2]
+      let spaces = repeat('.', 50 - len(heading) - len(lines))
+      return heading..spaces.."  "..lines
+    endfunc
 
   augroup END
 
@@ -186,7 +202,7 @@ augroup InitFileTypes
       noh
       startinsert
     endif
-  endfunction
+  endfunc
   autocmd FileType html,markdown nnoremap <buffer> <leader>cl :call <SID>ChangeAttr("class")<CR>
   autocmd FileType html,markdown nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
 
@@ -194,12 +210,12 @@ augroup InitFileTypes
   autocmd BufWrite *.html,*.js,*.css call ReloadServer()
   function! ReloadServer()
     silent !browser-sync reload &>/dev/null
-  endfunction
+  endfunc
 
   " }}}
   " Mail {{{
 
-  autocmd BufRead /tmp/mutt-* set tw=72
+  autocmd BufRead /tmp/mutt-* setlocal tw=72
 
   " }}}
   " Password {{{
@@ -211,12 +227,9 @@ augroup InitFileTypes
   function SetPasswordFile()
     setlocal foldminlines=0
     setlocal foldmethod=manual
-    function s:custom()
-      return "Password"
-    endfunction
-    setlocal foldtext=s:custom()
+    setlocal foldtext="Password"
     norm! ggzfl
-  endfunction
+  endfunc
   " }}}
   " Beancount {{{
 
@@ -225,7 +238,7 @@ augroup InitFileTypes
     set filetype=beancount
     silent !setsid fava ~/bean/main.bean &>/dev/null
     autocmd VimLeave * silent !killall fava
-  endfunction
+  endfunc
 
   " }}}
 

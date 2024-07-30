@@ -327,12 +327,121 @@ require("lazy").setup({
       vim.keymap.set({ "n", "t" }, "<A-i>", function()
         vim.cmd("ToggleTerm direction=float")
       end, { desc = "terminal toggle floating term" })
+      vim.keymap.set({ "n", "t" }, "<A-e>", function()
+        zoom()
+      end, { desc = "terminal toggle floating term" })
       vim.keymap.set({ "n", "t" }, "<A-v>", function()
         vim.cmd("ToggleTerm direction=horizontal")
       end, { desc = "terminal toggle floating term" })
     end,
   },
   --}}}
+-- Markdown: obsidian {{{
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*", -- recommended, use latest release instead of latest commit
+    lazy = false,
+    ft = "markdown",
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    -- event = {
+    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+    --   "BufReadPre path/to/my-vault/**.md",
+    --   "BufNewFile path/to/my-vault/**.md",
+    -- },
+    dependencies = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      vim.keymap.set("n", "<leader>oo", ":Obsidian", { })
+      vim.keymap.set("n", "<leader>ot", ":ObsidianTags<CR>", { })
+      vim.keymap.set("n", "<leader>os", ":ObsidianSearch<CR>", { })
+      vim.keymap.set("n", "<leader>oq", ":ObsidianQuickSwitch<CR>", { })
+      vim.keymap.set("v", "<leader>on", ":ObsidianLinkNew<CR>", { })
+      vim.keymap.set("n", "<leader>ol", ":ObsidianLinks<CR>", { })
+      require("obsidian").setup({
+        workspaces = {
+          {
+            name = "log",
+            path = "~/log",
+          },
+        },
+        completion = {
+          -- Set to false to disable completion.
+          nvim_cmp = true,
+          -- Trigger completion at 2 chars.
+          min_chars = 2,
+        },
+        mapping = {
+          -- Toggle check-boxes.
+          ["<leader>oc"] = {
+            action = function()
+              return require("obsidian").util.toggle_checkbox()
+            end,
+            opts = { buffer = true },
+          },
+          -- Smart action depending on context, either follow link or toggle checkbox.
+          ["<cr>"] = {
+            action = function()
+              return require("obsidian").util.smart_action()
+            end,
+            opts = { buffer = true, expr = true },
+          },
+        },
+        -- see below for full list of options 👇
+        note_id_func = function(title)
+          return title
+          -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+          -- In this case a note with the title 'My new note' will be given an ID that looks
+          -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
+          -- local suffix = ""
+          -- title = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+          -- if title ~= nil and title ~= "" then
+          --   -- If title is given, transform it into valid file name.
+          --   suffix = "-" .. title
+          -- else
+          --   -- If title is nil, just add 4 random uppercase letters to the suffix.
+          --   for _ = 1, 4 do
+          --     suffix = suffix .. string.char(math.random(65, 90))
+          --   end
+          --   suffix = "-" .. title
+          -- end
+          -- return tostring(os.time()) .. suffix
+        end,
+        -- Optional, for templates (see below).
+        templates = {
+          folder = "templates",
+          date_format = "%Y-%m-%d",
+          time_format = "%H:%M",
+          -- A map for custom variables, the key should be the variable and the value a function
+          substitutions = {},
+        },
+      })
+    end,
+  },
+-- }}}
+-- Markdown: preview {{{
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+    keys = {
+      {
+        "<leader>cp",
+        ft = "markdown",
+        "<cmd>MarkdownPreviewToggle<cr>",
+        desc = "Markdown Preview",
+      },
+    },
+    config = function()
+      vim.cmd([[do FileType]])
+      vim.g.mkdp_browser = 'firefox'
+    end,
+  },
+-- }}}
   -- lualine {{{
   {
     "nvim-lualine/lualine.nvim",
@@ -417,67 +526,67 @@ require("lazy").setup({
   },
   -- }}}
 
-  -- lspconfig {{{
-  -- Use :help lspconfig-all to check servers
-  {
-    "neovim/nvim-lspconfig",
-    lazy = false,
-    config = function()
-      local lspconfig = require "lspconfig"
-      --
-      -- typescript
-      lspconfig.lua_ls.setup {}
-      lspconfig.tsserver.setup {}
-      lspconfig.vimls.setup {}
-      lspconfig.html.setup {}
-      --
-      vim.keymap.set("n", "<leader>F", function()
-        vim.lsp.buf.format()
-      end, { desc = "format files" })
-    end,
-  },
-  -- }}}
-  -- Mason {{{
-  {
-    "williamboman/mason.nvim",
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-    },
-    config = function()
-      require('mason').setup {
-        automatically_installation = true,
-        ensure_installed = {
-          "vim-language-server",
-          "lua-language-server",
-          "css-lsp",
-          "html-lsp",
-          "prettier",
-          "stylua",
-        },
-      }
-    end
-  },
-  -- }}}
-  -- treesitter {{{
-  {
-    "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
-        --
-        highlight = {
-          enable = true,
-          use_languagetree = true,
-        },
-        --
-        indent = { enable = true },
-      })
-    end,
-  },
-  -- }}}
+  -- -- lspconfig {{{
+  -- -- Use :help lspconfig-all to check servers
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   lazy = false,
+  --   config = function()
+  --     local lspconfig = require "lspconfig"
+  --     --
+  --     -- typescript
+  --     lspconfig.lua_ls.setup {}
+  --     lspconfig.tsserver.setup {}
+  --     lspconfig.vimls.setup {}
+  --     lspconfig.html.setup {}
+  --     --
+  --     vim.keymap.set("n", "<leader>F", function()
+  --       vim.lsp.buf.format()
+  --     end, { desc = "format files" })
+  --   end,
+  -- },
+  -- -- }}}
+  -- -- Mason {{{
+  -- {
+  --   "williamboman/mason.nvim",
+  --   dependencies = {
+  --     "williamboman/mason-lspconfig.nvim",
+  --   },
+  --   config = function()
+  --     require('mason').setup {
+  --       automatically_installation = true,
+  --       ensure_installed = {
+  --         "vim-language-server",
+  --         "lua-language-server",
+  --         "css-lsp",
+  --         "html-lsp",
+  --         "prettier",
+  --         "stylua",
+  --       },
+  --     }
+  --   end
+  -- },
+  -- -- }}}
+  -- -- treesitter {{{
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   event = { "BufReadPost", "BufNewFile" },
+  --   cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+  --   build = ":TSUpdate",
+  --   config = function()
+  --     require("nvim-treesitter.configs").setup({
+  --       ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
+  --       --
+  --       highlight = {
+  --         enable = true,
+  --         use_languagetree = true,
+  --       },
+  --       --
+  --       indent = { enable = true },
+  --     })
+  --   end,
+  -- },
+  -- -- }}}
   -- nvim-cmp {{{
   {
     "hrsh7th/nvim-cmp",
@@ -537,7 +646,6 @@ require("lazy").setup({
         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-e>"] = cmp.mapping.close(),
         ['<CR>'] = cmp.mapping.confirm(),
         ['<C-c>'] = cmp.mapping.abort(),
       }
@@ -577,7 +685,7 @@ require("lazy").setup({
           { name = "path" },
         },
         experimental = {
-          ghost_text = true,
+          -- ghost_text = true,
         }
       })
       cmp.setup.cmdline(':', {
@@ -675,6 +783,7 @@ require("mini.basics").setup()
 require("mini.misc").setup({
   make_global = { "put", "put_text", "zoom" },
 })
+vim.keymap.set( 'n', '<leader>z', function() zoom() end, { buffer = bufnr, desc = 'zoom' })
 --}}}
 -- mini.extra {{{
 require("mini.extra").setup()
@@ -800,10 +909,10 @@ require("mini.visits").setup()
 -- mini.surround {{{
 require("mini.surround").setup {
   mappings = {
-    add = 'S'
+    add = 'sa'
   }
 }
-vim.keymap.set('v', 's', 'S', { remap = true })
+vim.keymap.set('v', 's', 'sa', {})
 -- }}}
 -- mini.indentscope {{{
 require("mini.indentscope").setup()
@@ -957,16 +1066,16 @@ require("mini.pairs").setup()
 -- add { source = "lambdalisue/suda.vim" }
 -- }}}
 -- -- true-zen {{{
--- add({
+-- Add({
 --   source = "Pocco81/true-zen.nvim",
 -- })
 -- vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
 -- -- }}}
--- -- bufferline {{{
+-- bufferline {{{
 Add({
   source = "akinsho/bufferline.nvim",
   depends = {
-    "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+    "nvim-tree/nvim-web-devicons",
     "tiagovla/scope.nvim",
   },
 })
@@ -1015,34 +1124,15 @@ require('bufferline').setup{
       }
     },
     custom_filter = function (buf_number)
-      local tabId = tostring(vim.fn.tabpagenr())
-      if vim.g.tab_group[tabId] then
-        for _, p in ipairs(vim.g.tab_group[tabId]) do
-          if p == buf_number then
-            return true
-          end
+      for _, p in ipairs(vim.t.bufs) do
+        if p == buf_number then
+          return true
         end
       end
       return false
     end
   }
 };
-
--- require("bufferline").setup({
---   options = {
---     custom_filter = function(buf_number)
---       local tabId = vim.fn.tabpagenr()
---       if vim.g.tab_group[tabId] then
---         for _, p in ipairs(vim.g.tab_group[tabId]) do
---           if p == buf_number then
---             return true
---           end
---         end
---       end
---       return false
---     end
---   },
--- })
 -- keymaps {{{
 for i = 1, 9, 1 do
   vim.keymap.set("n", string.format("<A-%s>", i), function()
@@ -1058,6 +1148,12 @@ vim.keymap.set("n", "<M-p>", "<Cmd>BufferLineTogglePin<CR>", opts)
 -- }}}
 -- -- TODO: tabpages
 -- -- }}}
+Add {
+  source = "chentoast/marks.nvim"
+}
+require('marks').setup {
+}
+vim.cmd("hi MarkSignHL guifg=#f85e84 guibg=#37343a")
 
 -- KEYMAPS {{{
 

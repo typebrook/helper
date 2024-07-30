@@ -3,16 +3,13 @@
 "======================================================================
 " vim: sw=2 ts=2 foldmethod=marker foldmarker={{{,}}}
 
-" COMMON_MAPPING ----------------{{{
+" COMMON_MAPPING {{{
 
 " Space for searching
 map <space> /
 
 " Escape normal mode by <C-c>
 inoremap <C-c> <Esc>l
-
-" Search for selected test
-vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " Set wrap
 nnoremap <leader>W :set wrap!<CR>
@@ -39,23 +36,6 @@ augroup vimrc_CRfix
   autocmd CmdwinEnter * nnoremap <buffer> <C-c> <C-c>
 augroup END
 
-" In case ALT key is not working
-" execute "set <M-2>=\e2"
-" execute "set <M-1>=\e1"
-" execute "set <M-3>=\e3"
-" execute "set <M-4>=\e4"
-" execute "set <M-5>=\e5"
-" execute "set <M-6>=\e6"
-" execute "set <M-7>=\e7"
-" execute "set <M-8>=\e8"
-" execute "set <M-9>=\e9"
-" execute "set <M-0>=\e0"
-" execute "set <M-f>=\ef"
-" execute "set <M-b>=\eb"
-" execute "set <M-d>=\ed"
-" execute "set <M-l>=\el"
-" execute "set <M-h>=\eh"
-
 " Spell
 nnoremap \s :set spell!<CR>:set spell?<CR>
 nnoremap <leader>ss ]s
@@ -68,9 +48,22 @@ nnoremap <C-g> 1<C-g>
 vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
 
+let g:alacritty_extra_padding = 0
+function! ToggleWinPadding()
+  if g:alacritty_extra_padding
+    !alacritty msg config --window-id $WINDOWID --reset
+  else
+    redir => output | hi Normal | redir END
+    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
+    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
+  endif
+
+  let g:alacritty_extra_padding = !g:alacritty_extra_padding
+endfunc
+nnoremap <leader>Z <Cmd>silent call ToggleWinPadding()<CR>
 
 " }}}
-" WORKING_DIR ----------------{{{
+" WORKING_DIR {{{
 
 let g:last_path = execute("pwd")
 augroup SaveLatestDir
@@ -103,7 +96,7 @@ function! InCaseCdToLatestDir()
 endfunction
 
 " }}}
-" MOTION ----------------{{{
+" MOTION {{{
 
 " j/k will move virtual lines (lines that wrap)
 nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -121,7 +114,7 @@ xnoremap iq i"
 xnoremap aq a"
 
 
-" READLINE_FEATURES ----------------{{{
+" READLINE_FEATURES {{{
 
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
@@ -155,7 +148,7 @@ nnoremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 " }}}
-" JUMP_TO_TABS_WITH_ALT ----------------{{{
+" JUMP_TO_TABS_WITH_ALT {{{
 
 nnoremap <silent><A-1> :tabn 1<CR>
 nnoremap <silent><A-2> :tabn 2<CR>
@@ -200,11 +193,29 @@ nnoremap <C-k> ddkP
 nnoremap S S<ESC>
 
 " }}}
-" MANAGE_VIMRC ----------------{{{
+" TERMINAL {{{
+" In case ALT key is not working
+" execute "set <M-2>=\e2"
+" execute "set <M-1>=\e1"
+" execute "set <M-3>=\e3"
+" execute "set <M-4>=\e4"
+" execute "set <M-5>=\e5"
+" execute "set <M-6>=\e6"
+" execute "set <M-7>=\e7"
+" execute "set <M-8>=\e8"
+" execute "set <M-9>=\e9"
+" execute "set <M-0>=\e0"
+" execute "set <M-f>=\ef"
+" execute "set <M-b>=\eb"
+" execute "set <M-d>=\ed"
+" execute "set <M-l>=\el"
+" execute "set <M-h>=\eh"
+"}}}
+" MANAGE_VIMRC {{{
 
 " source .vimrc
 nnoremap <leader>so V:so<CR>
-nnoremap <leader><leader>so :source ~/.vimrc<CR>
+nnoremap <leader><leader>so :source %<CR>
 vnoremap so :source<CR>
 autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
 
@@ -213,7 +224,7 @@ nnoremap <leader>e :scriptnames<space>
 nnoremap <leader>ee :edit $MYVIMRC<CR>
 
 " }}}
-" MANAGE_BUFFERS ----------------{{{
+" MANAGE_BUFFERS {{{
 
 " Set options
 nnoremap so :set<space>
@@ -236,19 +247,25 @@ augroup SaveLastBuffer
 augroup END
 nnoremap <leader>l :exe "buffer ".g:lastbuffer<CR>
 
-" Use Ctrl-C for buffer delete or quit vim ----------------{{{
+" Use Ctrl-C for buffer delete or quit vim {{{
 
 " Toggle behavior for the last buffer in the last window
 let g:quitVimWhenPressingCtrlC = 1
 function! ToggleQuit()
-  let g:quitVimWhenPressingCtrlC = g:quitVimWhenPressingCtrlC ? 0 : 1
+  let g:quitVimWhenPressingCtrlC = !g:quitVimWhenPressingCtrlC
   let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
   echo message
 endfunction
 nnoremap \q :call ToggleQuit()<CR>
 
+func! QuitWithCheck()
+  if g:quitVimWhenPressingCtrlC
+    silent! quit
+  else
+    echo "Press \\q to allow quit with <C-c>"
+  endif
+endfunc
 function! CloseBufferSafely()
-  let l:bufnr = bufnr()
   " Ask Saving
   if &modified
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
@@ -257,31 +274,37 @@ function! CloseBufferSafely()
     if answer == "" | return | endif
   endif
 
-  if g:tab_group[tabpagenr()] == [l:bufnr]
-    bdelete
+  let l:bufnr = bufnr()
+
+  if len(t:bufs) == 1
+    " Close tab for last buffer
+    tabclose
   else
-    bprevious | bd #
+    " Switch to proper buffer
+    let l:next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..l:bufnr)[0]
+    exe "b "..l:next_buf
+    call filter(t:bufs, 'v:val != '..l:bufnr)
   endif
+
+  " Delete buffer if every t:buf doesn't have it
+  for tab in gettabinfo()
+    if get(tab.variables.bufs, l:bufnr) | return | endif
+  endfor
+  exe "bd! "..l:bufnr
+
 endfunction
-func! QuitWithCheck()
-  if g:quitVimWhenPressingCtrlC
-    silent! quit
-  else
-    echo "Press \\q to allow quit with <C-c>"
-  endif
-endfunc
 function! Bye()
   let windows = gettabinfo(tabpagenr())[0]['windows']
-  let bufs = getbufinfo({'buflisted': 1})
 
-  if len(windows) == 1 && len(bufs) == 1
+  if len(t:bufs) <= 1 && len(windows) == 1
     call QuitWithCheck()
   elseif &diff
     silent call CloseBuffersForDiff()
   elseif len(windows) >1
     quit
   else
-    silent! call CloseBufferSafely()
+    call CloseBufferSafely()
+    " silent! call CloseBufferSafely()
   endif
 endfunction
 nnoremap <silent> <C-c> :call Bye()<CR>
@@ -325,7 +348,7 @@ nnoremap <C-w>D <Cmd>silent! SwitchDiffForGitHEAD<CR>
 " }}}
 
 " }}}
-" MANAGE_WINDOWS ----------------{{{
+" MANAGE_WINDOWS {{{
 
 nnoremap <leader><leader>sb :windo set scrollbind!<CR>
 
@@ -361,7 +384,7 @@ elseif has('nvim')
   tnoremap <m-q> <c-\><c-n>
 endif
 " }}}
-" MANAGE_TABS ----------------{{{
+" MANAGE_TABS {{{
 
 " Useful mappings for managing tabs
 map <leader>tn :tabnew<CR>
@@ -395,13 +418,13 @@ function! Tab_MoveRight()
   endif
 endfunc
 " }}}
-" FOLD ----------------{{{
+" FOLD {{{
 
 " Set fold options
 nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
-nnoremap zi zizz
+nnoremap zi zizz:silent exe &foldenable ? "set foldcolumn=auto:3" : "set foldcolumn=0"<CR>
 
 " Show fold level when it changes
 nnoremap zm zm:set foldlevel<CR>
@@ -415,7 +438,9 @@ nnoremap zF :call ToggleUnfoldSelection()<CR>zv
 nnoremap \z :call GrayOutOtherFolds()<CR>
 
 " Select current fold
+onoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
 xnoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
+onoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
 xnoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
 
 " Use l to open fold
@@ -464,7 +489,7 @@ function! GrayOutOtherFolds()
 endfunction
 
 " }}}
-" HIGHLIGHT ----------------{{{
+" HIGHLIGHT {{{
 
 " Disable highlight when <leader><CR> is pressed
 nnoremap <silent> <leader><CR> :noh<CR>
@@ -497,7 +522,7 @@ nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.')
 nnoremap <silent> <leader>gH :call clearmatches()<CR>
 
 " }}}
-" SURROUND ----------------{{{
+" SURROUND {{{
 
 inoremap ' ''<Left>
 inoremap " ""<Left>
@@ -530,14 +555,14 @@ endfunction
 vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>
 
 " }}}
-" QUICKFIX ----------------{{{
+" QUICKFIX {{{
 
 nnoremap <leader>cn :cn<CR>
 nnoremap <leader>cp :cp<CR>
 nnoremap <leader>cw :cw 10<CR>
 
 " }}}
-" REDIRECTION_WITH_BUFFER ----------------{{{
+" REDIRECTION_WITH_BUFFER {{{
 
 " Usage:
 " 	:Redir hi ............. show the full output of command ':hi' in a scratch window
@@ -561,38 +586,23 @@ command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 command! -nargs=1 -complete=command R silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
 " }}}
-" QUICK_SUBSTITUTE ----------------{{{
+" SEARCH/SUBSTITUTE {{{
 
-" Usage: Press <TAB> n times for area, and <CR> for substitute
+" Search for selected test
+vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-" substitute across file
 vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
 
-let g:search_not_in_register = 1
-" When leaving visual mode, resume search_not_in_register
-autocmd Modechanged [vV\x16]*:* let g:search_not_in_register = 1
-
-function! ExpandSelectionBySearch(sep)
-  if g:search_not_in_register
-    " Save current selection to register, and keep selection
-    norm! ygv
-    let g:search_not_in_register = 0
-  endif
-  " Use register s to go to next search, counts/total is displayed in
-  " statusline
-  call feedkeys(a:sep.."\<C-R>0"..a:sep.."e\<CR>")
-endfunction
-function! SubstituteBySearch()
-  " Apply current search for default substitute text
-  call feedkeys(":s//\<C-R>0/g\<Left>\<Left>")
-endfunction
-
-vnoremap <TAB> <Cmd>call ExpandSelectionBySearch('/')<CR>
-vnoremap <S-TAB> <Cmd>call ExpandSelectionBySearch('?')<CR>
-vnoremap <CR> <Cmd>call SubstituteBySearch()<CR>
+" Usage: Press <TAB> n times for area, and <CR> for substitute
+let g:search_selection = 0
+" When leaving visual mode, resume search_selection
+autocmd Modechanged [vV\x16]*:* let g:search_selection = 0
+xmap <expr> <TAB> g:search_selection ? "//e<CR>" : "*:let g:search_selection = 1<CR>gv//e<CR>"
+xmap <expr> <S-TAB> g:search_selection ? "??<CR>" : "*:let g:search_selection = 1<CR>gv??<CR>" 
+vnoremap <CR> :s//<C-R>0/g<Left><Left>
 
 " }}}
-" SIGN ----------------{{{
+" SIGN {{{
 
 nnoremap <leader><leader>sc :<C-\>e'set signcolumn='..&signcolumn<CR>
 
@@ -600,7 +610,7 @@ nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') ..
 nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>
 
 " }}}
-" GIT_TIG ----------------{{{
+" GIT_TIG {{{
 
 let g:tig_explorer_keymap_commit_split   = '<C-s>'
 let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
@@ -609,7 +619,7 @@ nnoremap <C-t>s <Cmd>TigStatus<CR>
 nnoremap <C-t>b <Cmd>TigBlame<CR>
 
 " }}}
-" Tmp: Markdown items (temproray solution) ----------------{{{
+" Tmp: Markdown items (temproray solution) {{{
 
 " Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
 " autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
@@ -618,14 +628,14 @@ nnoremap <C-t>b <Cmd>TigBlame<CR>
 " Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
 " nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
 " }}}
-" Tmp: Common system command ----------------{{{
+" Tmp: Common system command {{{
 " Show date selector
 nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dt :r !date +\%H:\%m<CR>A
 
 " }}}
-" Tmp: Compile ----------------{{{
+" Tmp: Compile {{{
 
 " 编译运行 C/C++ 项目
 " 详细见：http://www.skywind.me/blog/archives/2084
