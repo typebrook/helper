@@ -776,14 +776,17 @@ require("mini.deps").setup({
 })
 Add, Now, Later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 -- }}}
--- mini.basics {{{
-require("mini.basics").setup()
--- }}}
+-- -- mini.basics {{{
+-- require("mini.basics").setup()
+-- -- }}}
 -- mini.misc {{{
 require("mini.misc").setup({
   make_global = { "put", "put_text", "zoom" },
 })
-vim.keymap.set( 'n', '<leader>z', function() zoom() end, { buffer = bufnr, desc = 'zoom' })
+vim.keymap.set( 'n', '<leader>Z', function()
+  zoom()
+  vim.cmd("silent! call ToggleWinPadding()")
+end, { buffer = bufnr, desc = 'zoom' })
 --}}}
 -- mini.extra {{{
 require("mini.extra").setup()
@@ -1148,13 +1151,14 @@ vim.keymap.set("n", "<M-p>", "<Cmd>BufferLineTogglePin<CR>", opts)
 -- }}}
 -- -- TODO: tabpages
 -- -- }}}
+-- marks.nvim {{{
 Add {
   source = "chentoast/marks.nvim"
 }
 require('marks').setup {
 }
 vim.cmd("hi MarkSignHL guifg=#f85e84 guibg=#37343a")
-
+-- }}}
 -- KEYMAPS {{{
 
 -- Use floating window for translation

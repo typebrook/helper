@@ -17,7 +17,7 @@ augroup END
 augroup TerminalSize
   au!
   function! LayoutForSmallTerminal(bound)
-    let l:bound = a:bound ? a:bound : 19
+    let l:bound = a:bound ? a:bound : 20
     if &lines < l:bound || g:alacritty_extra_padding
       silent! set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
     else
@@ -124,7 +124,7 @@ augroup InitFileTypes
   " Filetype for Vim {{{
 
   " Help page
-  autocmd BufEnter * if &filetype == 'help' | wincmd T | set buflisted | endif
+  autocmd BufEnter * if &filetype == 'help' | wincmd T | set buflisted nofoldenable | endif
 
   " quickfix: hide line number
   autocmd FileType quickfix setlocal nonumber
@@ -177,8 +177,8 @@ augroup InitFileTypes
       let origin = split(MarkdownFoldText()[2:], ' ')
       let heading = substitute(join(origin[:-3], ' '), '\#', '    ', 'g')
       let lines = join(origin[-2:], ' ')[1:-2]
-      let spaces = repeat('.', 50 - len(heading) - len(lines))
-      return heading..spaces.."  "..lines
+      let fills = repeat('.', 48 - len(heading) - len(lines))
+      return heading.."  "..fills.."  "..lines
     endfunc
 
   augroup END
@@ -224,7 +224,7 @@ augroup InitFileTypes
   " TODO a better way to determine a file is related to password-store, now use
   " files under /dev/shm as filter
   autocmd BufRead /dev/shm/*.txt call SetPasswordFile()
-  function SetPasswordFile()
+  function! SetPasswordFile()
     setlocal foldminlines=0
     setlocal foldmethod=manual
     setlocal foldtext="Password"
@@ -234,7 +234,7 @@ augroup InitFileTypes
   " Beancount {{{
 
   autocmd BufRead,BufNewFile *.bean call PrepareBean()
-  function PrepareBean()
+  function! PrepareBean()
     set filetype=beancount
     silent !setsid fava ~/bean/main.bean &>/dev/null
     autocmd VimLeave * silent !killall fava

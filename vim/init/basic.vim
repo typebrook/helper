@@ -32,7 +32,6 @@ augroup tabinfo
     endfor
   endfunc
 
-  nnoremap T :echo t:bufs<CR>
 augroup END
 "}}}
 " GERERNAL {{{
@@ -59,9 +58,6 @@ autocmd FocusGained,BufEnter .* checktime
 " spell
 set spell
 set spellfile="/tmp/spell"
-
-" Custom sign from help page :h sign
-sign define piet text=>> texthl=Search
 
 " }}}
 " VISUAL {{{
@@ -95,6 +91,12 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 
 " Direction for new window
 set splitright
+
+" Set signcolumn
+set signcolumn=auto:3
+" Custom sign from help page :h sign
+sign define piet text=>> texthl=Search
+
 
 " }}}
 " EDIT {{{

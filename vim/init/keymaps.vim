@@ -12,7 +12,7 @@ map <space> /
 inoremap <C-c> <Esc>l
 
 " Set wrap
-nnoremap <leader>W :set wrap!<CR>
+nnoremap \w :set wrap!<CR>
 
 " Fast saving
 function! s:WriteOrEnterFileName()
@@ -53,14 +53,14 @@ function! ToggleWinPadding()
   if g:alacritty_extra_padding
     !alacritty msg config --window-id $WINDOWID --reset
   else
-    redir => output | hi Normal | redir END
+    redir => output | hi SignColumn | redir END
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
     exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
   let g:alacritty_extra_padding = !g:alacritty_extra_padding
 endfunc
-nnoremap <leader>Z <Cmd>silent call ToggleWinPadding()<CR>
+nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
 
 " }}}
 " WORKING_DIR {{{
@@ -180,9 +180,22 @@ nnoremap <C-p> "0p
 map <leader>pp :setlocal paste!<CR>
 
 " Copy from system clipboard
-nnoremap <leader>P :r !xsel -ob<CR>
+nnoremap gp "+p
 vnoremap Y "+y
+
 " }}}
+" MARKS {{{
+
+" Delete mark
+function! DeleteMark(mark)
+  let mark = nr2char(a:mark)
+  if mark =~ '[a-z]'
+    execute "delmarks " . mark
+  endif
+endfunction
+nnoremap dm :call DeleteMark(getchar())<CR>
+
+"}}}
 " EDIT {{{
 
 " Move one line up and down
@@ -194,6 +207,7 @@ nnoremap S S<ESC>
 
 " }}}
 " TERMINAL {{{
+
 " In case ALT key is not working
 " execute "set <M-2>=\e2"
 " execute "set <M-1>=\e1"
@@ -210,6 +224,7 @@ nnoremap S S<ESC>
 " execute "set <M-d>=\ed"
 " execute "set <M-l>=\el"
 " execute "set <M-h>=\eh"
+
 "}}}
 " MANAGE_VIMRC {{{
 
@@ -424,11 +439,11 @@ endfunc
 nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
-nnoremap zi zizz:silent exe &foldenable ? "set foldcolumn=auto:3" : "set foldcolumn=0"<CR>
+nnoremap <expr> zi "zizz:silent set foldcolumn="..(&foldenable ? "0" : "auto:3").."\<CR>"
 
 " Show fold level when it changes
-nnoremap zm zm:set foldlevel<CR>
-nnoremap zr zr:set foldlevel<CR>
+nnoremap zm zm:set foldlevel?<CR>
+nnoremap zr zr:set foldlevel?<CR>
 
 " Fold all except selection
 vnoremap zF :<C-u>call ToggleUnfoldSelection()<CR>
@@ -591,6 +606,10 @@ nnoremap <leader>rr :Redir<space>
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+nnoremap g/ gv<esc>/\%V
+vnoremap g/ <esc>/\%V
+
+" Substitue across file
 vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
 
 " Usage: Press <TAB> n times for area, and <CR> for substitute
