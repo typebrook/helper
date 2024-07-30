@@ -65,7 +65,7 @@ set spellfile="/tmp/spell"
 " colorscheme desert
 
 " Editing Area
-set wrap                " enable wrap by default
+set nowrap              " disable wrap by default
 set scrolloff=3         " Leave some buffer when scrolling down
 set showmatch           " Show pairing brackets
 set display=lastline
