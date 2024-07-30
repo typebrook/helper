@@ -53,8 +53,9 @@ function! ToggleWinPadding()
   if g:alacritty_extra_padding
     !alacritty msg config --window-id $WINDOWID --reset
   else
-    redir => output | hi SignColumn | redir END
+    redir => output | hi LineNr | redir END
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
+    exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
     exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
@@ -439,6 +440,7 @@ endfunc
 nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
 nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
 
+" Toggle fold and foldcolumn
 nnoremap <expr> zi "zizz:silent set foldcolumn="..(&foldenable ? "0" : "auto:3").."\<CR>"
 
 " Show fold level when it changes

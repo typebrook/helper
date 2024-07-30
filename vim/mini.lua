@@ -785,7 +785,6 @@ require("mini.misc").setup({
 })
 vim.keymap.set( 'n', '<leader>Z', function()
   zoom()
-  vim.cmd("silent! call ToggleWinPadding()")
 end, { buffer = bufnr, desc = 'zoom' })
 --}}}
 -- mini.extra {{{
@@ -912,10 +911,9 @@ require("mini.visits").setup()
 -- mini.surround {{{
 require("mini.surround").setup {
   mappings = {
-    add = 'sa'
+    add = 's'
   }
 }
-vim.keymap.set('v', 's', 'sa', {})
 -- }}}
 -- mini.indentscope {{{
 require("mini.indentscope").setup()

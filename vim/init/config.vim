@@ -17,14 +17,13 @@ augroup END
 augroup TerminalSize
   au!
   function! LayoutForSmallTerminal(bound)
-    let l:bound = a:bound ? a:bound : 20
-    if &lines < l:bound || g:alacritty_extra_padding
-      silent! set cmdheight=0 laststatus=0 showtabline=0 signcolumn=no nowrap scrolloff=1
+    if &lines < a:bound || g:alacritty_extra_padding
+      silent! set cmdheight=0 laststatus=0 showtabline=0 nowrap scrolloff=1
     else
-      silent! set cmdheight& laststatus& showtabline=2 signcolumn=yes scrolloff=3
+      silent! set cmdheight& laststatus& showtabline=2 scrolloff=3
     endif
   endfunc
-  autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(0)
+  autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
 augroup END
 
 " }}}
