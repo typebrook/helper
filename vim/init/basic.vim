@@ -9,7 +9,6 @@
 " Usage: type --- for foldmark
 augroup filetype_vim
     autocmd!
-    execute "autocmd FileType vim :inoreabbrev <buffer> --- ----------------{".."{{<CR>\" }"."}}"
     autocmd FileType vim setlocal foldmethod=marker foldlevel=0
 augroup END
 
@@ -56,7 +55,7 @@ set autoread
 autocmd FocusGained,BufEnter .* checktime
 
 " spell
-set spell
+set nospell
 set spellfile="/tmp/spell"
 
 " }}}
@@ -71,6 +70,9 @@ set showmatch           " Show pairing brackets
 set display=lastline
 set lazyredraw
 set whichwrap=b,s
+
+" Tab
+set showtabline=2
 
 " Side column
 set  number relativenumber
@@ -168,6 +170,8 @@ set foldenable          " Allow fold
 set foldmethod=indent   " Fold contents by indent
 set foldlevel=2
 set fillchars=fold:\ ,foldopen:▽,foldsep:│,foldclose:▶
+set foldopen-=search fdo-=mark
+
 let g:defaut_foldcolumn = ""
 if has('nvim')
   let g:defaut_foldcolumn = "auto:3"

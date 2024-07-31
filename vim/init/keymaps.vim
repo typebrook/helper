@@ -48,21 +48,6 @@ nnoremap <C-g> 1<C-g>
 vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
 
-let g:alacritty_extra_padding = 0
-function! ToggleWinPadding()
-  if g:alacritty_extra_padding
-    !alacritty msg config --window-id $WINDOWID --reset
-  else
-    redir => output | hi LineNr | redir END
-    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
-    exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
-    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
-  endif
-
-  let g:alacritty_extra_padding = !g:alacritty_extra_padding
-endfunc
-nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
-
 " }}}
 " WORKING_DIR {{{
 
@@ -190,6 +175,7 @@ vnoremap Y "+y
 " Delete mark
 function! DeleteMark(mark)
   let mark = nr2char(a:mark)
+  echo mark
   if mark =~ '[a-Z]'
     execute "delmarks " . mark
   endif
@@ -214,7 +200,7 @@ function! ToggleFoldForMarks(offset)
     " Get list of lines which has mark
     let line_list = []
     for info in getmarklist(bufnr())
-      if match(info.mark, "[a-z]") == 1
+      if info.mark =~ "[a-z]"
         call add(line_list, info.pos[1])
       endif
     endfor
@@ -250,8 +236,12 @@ endfunction
 nnoremap <expr> z' ":\<C-u>call ToggleFoldForMarks("..v:count..")\<CR>"
 
 function! ChangeUnfold(downward, count)
-  " Only do this if foldmethod is manual or count is given
-  if &foldmethod != 'manual' || !a:count | return | endif
+  " Only do this if foldmethod is manual
+  if &foldmethod != 'manual' | return | endif
+
+  " If count is not given, reverse direction
+  let downward = a:count ? a:downward : !a:downward
+  let move = a:count ? a:count : -1
 
   " Move to fold upward/downward
   if downward
@@ -263,13 +253,12 @@ function! ChangeUnfold(downward, count)
   let foldend = foldclosedend('.')
 
   " Change folding area
-  norm! zd
-  let move = (a:count ? a:count : 1)
   if downward
     let foldstart += move
   else
     let foldend -= move
   endif
+  norm! zd
   exe foldstart..","..foldend.."fold"
 
   " Get back to origin cursor position
@@ -290,6 +279,25 @@ nnoremap S S<ESC>
 
 " }}}
 " TERMINAL {{{
+
+" Use <leader>z to toggle
+let g:alacritty_extra_padding = 0
+function! ToggleWinPadding()
+  if g:alacritty_extra_padding
+    !alacritty msg config --window-id $WINDOWID --reset
+    hi EndOfBuffer None
+    hi MsgArea None
+  else
+    redir => output | hi LineNr | redir END
+    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
+    exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
+    exe "hi MsgArea guibg="..bg_color
+    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
+  endif
+
+  let g:alacritty_extra_padding = !g:alacritty_extra_padding
+endfunc
+nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
 
 " In case ALT key is not working
 " execute "set <M-2>=\e2"
@@ -722,16 +730,8 @@ nnoremap <C-t>s <Cmd>TigStatus<CR>
 nnoremap <C-t>b <Cmd>TigBlame<CR>
 
 " }}}
-" Tmp: Markdown items (temproray solution) {{{
-
-" Toggle list item in markdown: "- [ ] XXX" -> "XXX" -> "- XXX" -> "- [ ] XXX"
-" autocmd FileType markdown          nnoremap <buffer> <leader>i V:!sed -E '/^ *- \[.\]/ { s/^( *)- \[.\] */\1/; q; }; /^ *[^[:space:]-]/ { s/^( *)/\1- /; q; }; /^ *- / { s/^( *)- /\1- [ ] /; q; }'<CR><CR>
-" autocmd FileType markdown          nnoremap <buffer> <leader>I V:!sed -E 's/^( *)/\1- [ ] /'<CR><CR>
-
-" Toggle task status: "- [ ] " -> "- [x]" -> "- [.] " -> "- [ ] "
-" nnoremap <leader>x V:!sed -E '/^ *- \[ \]/ { s/^( *)- \[ \]/\1- [x]/; q; }; /^ *- \[\x\]/ { s/^( *)- \[\x\]/\1- [.]/; q; }; /^ *- \[\.\]/ { s/^( *)- \[\.\]/\1- [ ]/; q; }'<CR><CR>
-" }}}
 " Tmp: Common system command {{{
+
 " Show date selector
 nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>

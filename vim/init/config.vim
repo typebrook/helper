@@ -18,9 +18,9 @@ augroup TerminalSize
   au!
   function! LayoutForSmallTerminal(bound)
     if &lines < a:bound || g:alacritty_extra_padding
-      silent! set cmdheight=0 laststatus=0 showtabline=0 nowrap scrolloff=1
+      silent! set laststatus=0 showtabline=0 signcolumn=0 nowrap scrolloff=1
     else
-      silent! set cmdheight& laststatus& showtabline=2 scrolloff=3
+      silent! set laststatus& showtabline& signcolumn& scrolloff&
     endif
   endfunc
   autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
@@ -148,6 +148,7 @@ augroup InitFileTypes
   augroup Config_Markdown
     au!
     au FileType markdown call InitMarkdown()
+    au FileType markdown let b:in_frontmatter = 0
 
     function! InitMarkdown()
       setlocal wrap sw=2 ts=2
@@ -159,12 +160,25 @@ augroup InitFileTypes
       syn match DetailsEnd '^</details>' conceal cchar=E
     endfunc
 
-    " Fold by heading level
     function! MarkdownLevel()
+      " For frontmatter
+      if v:lnum == 1 && getline(1) =~ '^---'
+        let b:in_frontmatter = 1
+        return '>1'
+      endif
+      if b:in_frontmatter
+        if getline(v:lnum) =~ '^---'
+          let b:in_frontmatter = 0
+          return '<1'
+        else
+          return '='
+        endif
+      endif
+
+      " Fold for heading and the following contents
       let hash_num = matchstr(getline(v:lnum), '^#\+')
       if !empty(hash_num)
         " HEADING
-        " return ">"..(len(hash_num) - 1)
         return len(hash_num) == 1 ? 0 : '>1'
       else
         " Contents
@@ -173,8 +187,14 @@ augroup InitFileTypes
     endfunc
 
     function! MarkdownFoldTextHeading()
+      " For frontmatter
+      if v:foldstart == 1 && getline(v:foldstart) =~ '^---'
+        return '===FrontMatter==='
+      endif
+
+      " For heading, foltext()
       let origin = split(MarkdownFoldText()[2:], ' ')
-      let heading = substitute(join(origin[:-3], ' '), '\#', '    ', 'g')
+      let heading = substitute(join(origin[:-3], ' '), '\#', '  ', 'g')
       let lines = join(origin[-2:], ' ')[1:-2]
       let fills = repeat('.', 48 - len(heading) - len(lines))
       return heading.."  "..fills.."  "..lines

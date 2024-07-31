@@ -337,7 +337,7 @@ Add {
 }
 require('marks').setup {
 }
-vim.cmd("hi MarkSignHL guifg=#f85e84 guibg=#37343a")
+vim.cmd("hi MarkSignHL gui=bold guifg=#f85e84 guibg=#37343a")
 -- }}}
 
 -- Install Lazy {{{
@@ -511,6 +511,10 @@ require("lazy").setup({
 
       return opts
     end,
+    config = function()
+      require('lualine').setup(opts)
+      vim.cmd('set laststatus=0')
+    end
   },
   -- }}}
   -- Telescope {{{
