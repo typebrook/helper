@@ -196,7 +196,6 @@ function! DeleteMark(mark)
 endfunc
 nnoremap dm :call DeleteMark(getchar())<CR>
 
-
 " Usage: z' to fold lines not near marks, use v:count to set offset
 "        For example: 15z'
 autocmd BufEnter * let b:fold_for_marks = 0
@@ -205,8 +204,8 @@ function! ToggleFoldForMarks(offset)
   if !b:fold_for_marks || a:offset
     " If toggling from other foldmethod, save view!
     if !b:fold_for_marks
-      mkview 
-      setlocal foldmethod=manual 
+      mkview
+      setlocal foldmethod=manual
     endif
 
     " Then clear all folds
@@ -242,12 +241,42 @@ function! ToggleFoldForMarks(offset)
     let b:fold_for_marks = 1
     echo "Folds for Marks"
   else
+    " Reset everything
     loadview
     let b:fold_for_marks = 0
     echo "Reset Folds"
   endif
 endfunction
 nnoremap <expr> z' ":\<C-u>call ToggleFoldForMarks("..v:count..")\<CR>"
+
+function! ChangeUnfold(downward, count)
+  " Only do this if foldmethod is manual or count is given
+  if &foldmethod != 'manual' || !a:count | return | endif
+
+  " Move to fold upward/downward
+  if downward
+    norm! zj
+  else
+    norm! zk
+  endif
+  let foldstart = foldclosed('.')
+  let foldend = foldclosedend('.')
+
+  " Change folding area
+  norm! zd
+  let move = (a:count ? a:count : 1)
+  if downward
+    let foldstart += move
+  else
+    let foldend -= move
+  endif
+  exe foldstart..","..foldend.."fold"
+
+  " Get back to origin cursor position
+  norm! ''
+endfunc
+nnoremap <expr> z> ":\<C-u>call ChangeUnfold(1,"..v:count..")\<CR>"
+nnoremap <expr> z< ":\<C-u>call ChangeUnfold(0,"..v:count..")\<CR>"
 
 "}}}
 " EDIT {{{

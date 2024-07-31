@@ -23,7 +23,7 @@ augroup tabinfo
   autocmd BufDelete * call RemoveBufFromTabs()
 
   function! AddBufToTab()
-    if !has_key(t:, 'bufs') | let t:['bufs'] = [] | endif
+    if !has_key(t:, 'bufs') | let t:bufs = [] | endif
     call add(t:bufs, bufnr()) | call sort(t:bufs) | call uniq(t:bufs)
   endfunc
   function! RemoveBufFromTabs()
