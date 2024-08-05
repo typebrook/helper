@@ -325,20 +325,30 @@ require("mini.pairs").setup()
 -- -- suda {{{
 -- add { source = "lambdalisue/suda.vim" }
 -- }}}
--- -- true-zen {{{
--- Add({
---   source = "Pocco81/true-zen.nvim",
--- })
--- vim.keymap.set("n", "<leader>z", ":TZAtaraxis<CR>")
--- -- }}}
 -- marks.nvim {{{
 Add {
   source = "chentoast/marks.nvim"
 }
 require('marks').setup {
+  bookmark_0 = {
+    sign = "⚑",
+    virt_text = "hello world",
+    -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+    -- defaults to false.
+    annotate = false,
+  },
 }
 vim.cmd("hi MarkSignHL gui=bold guifg=#f85e84 guibg=#37343a")
 -- }}}
+-- highlight-match-under-cursor {{{
+Add {
+  source = "adamheins/vim-highlight-match-under-cursor"
+}
+-- }}}
+Add {
+  source  ='shime/vim-livedown'
+}
+
 
 -- Install Lazy {{{
 -- Bootstrap lazy.nvim
@@ -513,7 +523,9 @@ require("lazy").setup({
     end,
     config = function()
       require('lualine').setup(opts)
-      vim.cmd('set laststatus=0')
+      if vim.o.lines < 20 then
+        vim.o.laststatus=0
+      end
     end
   },
   -- }}}
@@ -826,7 +838,7 @@ require("lazy").setup({
         persist_size = false,
         direction = "float",
       })
-      --
+
       vim.keymap.set({ "n", "t" }, "<A-i>", function()
         vim.cmd("ToggleTerm direction=float")
       end, { desc = "terminal toggle floating term" })
@@ -836,6 +848,10 @@ require("lazy").setup({
       vim.keymap.set({ "n", "t" }, "<A-v>", function()
         vim.cmd("ToggleTerm direction=horizontal")
       end, { desc = "terminal toggle floating term" })
+      vim.keymap.set("v", ",s", function()
+        require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
+        vim.cmd("ToggleTerm direction=float")
+      end)
     end,
   },
   --}}}
@@ -945,68 +961,89 @@ require("lazy").setup({
     end,
   },
 -- }}}
-
-  -- -- lspconfig {{{
-  -- -- Use :help lspconfig-all to check servers
+  -- -- markview.nvim {{{
   -- {
-  --   "neovim/nvim-lspconfig",
-  --   lazy = false,
-  --   config = function()
-  --     local lspconfig = require "lspconfig"
-  --     --
-  --     -- typescript
-  --     lspconfig.lua_ls.setup {}
-  --     lspconfig.tsserver.setup {}
-  --     lspconfig.vimls.setup {}
-  --     lspconfig.html.setup {}
-  --     --
-  --     vim.keymap.set("n", "<leader>F", function()
-  --       vim.lsp.buf.format()
-  --     end, { desc = "format files" })
-  --   end,
-  -- },
-  -- -- }}}
-  -- -- Mason {{{
-  -- {
-  --   "williamboman/mason.nvim",
+  --   "OXY2DEV/markview.nvim",
+  --   enable = false,
+  --   ft = "markdown",
+  --
   --   dependencies = {
-  --     "williamboman/mason-lspconfig.nvim",
+  --     -- You may not need this if you don't lazy load
+  --     -- Or if the parsers are in your $RUNTIMEPATH
+  --     "nvim-treesitter/nvim-treesitter",
+  --
+  --     "nvim-tree/nvim-web-devicons"
   --   },
-  --   config = function()
-  --     require('mason').setup {
-  --       automatically_installation = true,
-  --       ensure_installed = {
-  --         "vim-language-server",
-  --         "lua-language-server",
-  --         "css-lsp",
-  --         "html-lsp",
-  --         "prettier",
-  --         "stylua",
-  --       },
-  --     }
-  --   end
-  -- },
-  -- -- }}}
-  -- -- treesitter {{{
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   event = { "BufReadPost", "BufNewFile" },
-  --   cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-  --   build = ":TSUpdate",
-  --   config = function()
-  --     require("nvim-treesitter.configs").setup({
-  --       ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
-  --       --
-  --       highlight = {
-  --         enable = true,
-  --         use_languagetree = true,
-  --       },
-  --       --
-  --       indent = { enable = true },
-  --     })
-  --   end,
-  -- },
-  -- -- }}}
+  -- },-- }}}
+
+  -- lspconfig {{{
+  -- Use :help lspconfig-all to check servers
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    config = function()
+      local lspconfig = require "lspconfig"
+      --
+      -- typescript
+      lspconfig.lua_ls.setup {}
+      lspconfig.tsserver.setup {}
+      lspconfig.vimls.setup {}
+      lspconfig.html.setup {}
+      --
+      vim.keymap.set("n", "<leader>F", function()
+        vim.lsp.buf.format()
+      end, { desc = "format files" })
+    end,
+  },
+  -- }}}
+  -- Mason {{{
+  {
+    "williamboman/mason.nvim",
+    dependencies = {
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      require('mason').setup {
+        automatically_installation = true,
+        ensure_installed = {
+          "vim-language-server",
+          "lua-language-server",
+          "css-lsp",
+          "html-lsp",
+          "prettier",
+          "stylua",
+        },
+      }
+    end
+  },
+  -- }}}
+  -- treesitter {{{
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "markdown", "markdown_inline", "lua", "luadoc", "printf", "vim", "vimdoc" },
+
+        highlight = {
+          enable = true,
+          use_languagetree = true,
+          additional_vim_regex_highlighting = true,
+        },
+
+        indent = { enable = true },
+      })
+    vim.cmd([[
+      syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
+      syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
+      syn match MarkdownHtmlSummaryEnd '</summary>' conceal
+      syn match MarkdownHtmlDetailsEnd '^</details>' conceal cchar=E
+    ]])
+    end,
+  },
+  -- }}}
   -- nvim-cmp {{{
   {
     "hrsh7th/nvim-cmp",
@@ -1133,18 +1170,35 @@ require("lazy").setup({
   },
 
   -- }}}
-  -- -- lspsaga {{{
-  -- {
-  --   'nvimdev/lspsaga.nvim',
-  --   dependencies = {
-  --     'nvim-treesitter/nvim-treesitter', -- optional
-  --     'nvim-tree/nvim-web-devicons',     -- optional
-  --   },
-  --   config = function()
-  --     require('lspsaga').setup({})
-  --   end,
-  -- },
-  -- -- }}}
+  -- lspsaga {{{
+  {
+    'nvimdev/lspsaga.nvim',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter', -- optional
+      'nvim-tree/nvim-web-devicons',     -- optional
+    },
+  config = function()
+    require('lspsaga').setup({
+        autochdir = true,
+      })
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = custom_autocommands,
+      pattern = "*",
+        callback = function(args)
+          local map = vim.api.nvim_buf_set_keymap
+          map(0, "n", "gd", "<cmd>Lspsaga goto_definition<cr>", {silent = true, noremap = true})
+          map(0, "n", "gr", "<cmd>Lspsaga rename<cr>", {silent = true, noremap = true})
+          map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", {silent = true, noremap = true})
+          map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", {silent = true, noremap = true})
+          map(0, "n", "K",  "<cmd>Lspsaga hover_doc<cr>", {silent = true, noremap = true})
+          map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", {silent = true, noremap = true})
+          map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", {silent = true, noremap = true})
+          map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", {silent = true, noremap = true})
+      end,
+    })
+  end
+  },
+  -- }}}
   -- -- conform {{{
   -- {
   --   "stevearc/conform.nvim",

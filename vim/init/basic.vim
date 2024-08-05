@@ -4,6 +4,17 @@
 " Used for general usecases. No keymap and personal preference
 "======================================================================
 
+" Initial for terminal emulator {{{
+augroup Enter
+  au!
+  function! SetEmulaterBackground()
+    redir => output | hi Normal | redir END
+    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
+    exe "!alacritty msg config 'colors.primary.background=\"\\"..bg_color.."\"'"
+  endfunc
+  autocmd VimEnter * call SetEmulaterBackground()
+augroup END
+"}}}
 " For Vimscript {{{
 
 " Usage: type --- for foldmark
@@ -27,7 +38,9 @@ augroup tabinfo
   endfunc
   function! RemoveBufFromTabs()
     for tab in gettabinfo()
-      call filter(tab.variables.bufs, "v:val != "..expand('<abuf>'))
+      if has_key(t:, 'bufs')
+        call filter(tab.variables.bufs, "v:val != "..expand('<abuf>'))
+      endif
     endfor
   endfunc
 
@@ -78,7 +91,7 @@ set showtabline=2
 set  number relativenumber
 
 " Cursor
-set cursorline
+" set cursorline
 set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
 set matchtime=2
 
@@ -95,7 +108,7 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 set splitright
 
 " Set signcolumn
-set signcolumn=auto:3
+set signcolumn=yes:3
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 
@@ -107,7 +120,7 @@ sign define piet text=>> texthl=Search
 " Don't wrap line when typing CJK characters
 " Don't add spaces for CJK
 " Don't add comment at next line
-autocmd Filetype * set fo+=mB fo-=cro
+autocmd Filetype * set formatoptions+=mB formatoptions-=cro
 
 set shiftwidth=2
 set autoindent smartindent
@@ -140,10 +153,9 @@ set suffixesadd=.md                     " Enable reference markdown file without
 " }}}
 " SEARCH {{{
 
-set ignorecase  " Search case without case sensation
-set smartcase
-set hlsearch    " Highlight all matched texts
-set incsearch   " Show matched strings when typing
+set ignorecase smartcase        " Search case without case sensation
+set hlsearch                    " Highlight all matched texts
+set incsearch                   " Show matched strings when typing
 
 " }}}
 " BUFFERS {{{
@@ -209,16 +221,17 @@ set writebackup
 " HIGHLIGHT {{{
 
 syntax enable
-set conceallevel=1
+set syntax=filetype
+set conceallevel=2
 
 " Defualt highlight for matched parenthesis is so weird in many colorscheme
 " Why the background color is lighter than my caret !?
 " highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
-highlight LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
+hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
 
 " Show trailing spaces
-highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
+hi ExtraWhitespace ctermbg=red guibg=red
 
 " }}}
 " MISC {{{

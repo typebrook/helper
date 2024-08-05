@@ -3,7 +3,7 @@
 "======================================================================
 " vim: sw=2 ts=2 foldmethod=marker foldmarker={{{,}}}
 
-" COMMON_MAPPING {{{
+" COMMON {{{
 
 " Space for searching
 map <space> /
@@ -37,9 +37,7 @@ augroup vimrc_CRfix
 augroup END
 
 " Spell
-nnoremap \s :set spell!<CR>:set spell?<CR>
-nnoremap <leader>ss ]s
-nnoremap <leader>S [s
+nnoremap \sp :set spell!<CR>:set spell?<CR>
 
 " Show full path by default
 nnoremap <C-g> 1<C-g>
@@ -47,6 +45,8 @@ nnoremap <C-g> 1<C-g>
 " Translate by Google API
 vnoremap Tz :!trans -t zh-TW -b<CR>
 vnoremap Te :!trans -t en-US -b<CR>
+
+nnoremap q: :
 
 " }}}
 " WORKING_DIR {{{
@@ -158,6 +158,16 @@ inoremap <silent><M-9> <Esc>:tablast<CR>
 " }}}
 
 " }}}
+" EDIT {{{
+
+" Move one line up and down
+nnoremap <C-j> ddp
+nnoremap <C-k> ddkP
+
+" Clear current line
+nnoremap S S<ESC>
+
+" }}}
 " REGISTER {{{
 " Paste register 0
 nnoremap <C-p> "0p
@@ -176,7 +186,7 @@ vnoremap Y "+y
 function! DeleteMark(mark)
   let mark = nr2char(a:mark)
   echo mark
-  if mark =~ '[a-Z]'
+  if mark =~ '\a'
     execute "delmarks " . mark
   endif
 endfunc
@@ -259,7 +269,7 @@ function! ChangeUnfold(downward, count)
     let foldend -= move
   endif
   norm! zd
-  exe foldstart..","..foldend.."fold"
+  try | silent! exe foldstart..","..foldend.."fold" | endtry
 
   " Get back to origin cursor position
   norm! ''
@@ -268,16 +278,6 @@ nnoremap <expr> z> ":\<C-u>call ChangeUnfold(1,"..v:count..")\<CR>"
 nnoremap <expr> z< ":\<C-u>call ChangeUnfold(0,"..v:count..")\<CR>"
 
 "}}}
-" EDIT {{{
-
-" Move one line up and down
-nnoremap <C-j> ddp
-nnoremap <C-k> ddkP
-
-" Clear current line
-nnoremap S S<ESC>
-
-" }}}
 " TERMINAL {{{
 
 " Use <leader>z to toggle
@@ -285,13 +285,17 @@ let g:alacritty_extra_padding = 0
 function! ToggleWinPadding()
   if g:alacritty_extra_padding
     !alacritty msg config --window-id $WINDOWID --reset
+    call SetEmulaterBackground()
     hi EndOfBuffer None
     hi MsgArea None
   else
     redir => output | hi LineNr | redir END
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
-    exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
-    exe "hi MsgArea guibg="..bg_color
+
+    try
+      exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
+      exe "hi MsgArea guibg="..bg_color
+    endtry
     exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
@@ -380,24 +384,16 @@ function! CloseBufferSafely()
     if answer == "" | return | endif
   endif
 
-  let l:bufnr = bufnr()
-
+  let bufnr = bufnr()
   if len(t:bufs) == 1
     " Close tab for last buffer
     tabclose
   else
     " Switch to proper buffer
-    let l:next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..l:bufnr)[0]
-    exe "b "..l:next_buf
-    call filter(t:bufs, 'v:val != '..l:bufnr)
+    let next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..bufnr)[0]
+    exe "b "..next_buf
+    call filter(t:bufs, 'v:val != '..bufnr)
   endif
-
-  " Delete buffer if every t:buf doesn't have it
-  for tab in gettabinfo()
-    if get(tab.variables.bufs, l:bufnr) | return | endif
-  endfor
-  exe "bd! "..l:bufnr
-
 endfunction
 function! Bye()
   let windows = gettabinfo(tabpagenr())[0]['windows']
@@ -493,10 +489,10 @@ endif
 " MANAGE_TABS {{{
 
 " Useful mappings for managing tabs
-map <leader>tn :tabnew<CR>
-map <leader>tc :tabclose<CR>
-map <leader>tm :tabmove<SPACE>
-map <leader>to :tabonly<CR>
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>tm :tabmove<SPACE>
+nnoremap <leader>to :tabonly<CR>
 
 nnoremap <silent><m-h> :call Tab_MoveLeft()<CR>
 nnoremap <silent><m-l> :call Tab_MoveRight()<CR>
@@ -508,7 +504,7 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
+nnoremap <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
 
 " Tab move functions
 function! Tvab_MoveLeft()
@@ -597,6 +593,11 @@ endfunction
 
 " }}}
 " HIGHLIGHT {{{
+
+nnoremap <expr> \sy exists("g:syntax_on") ? ":syntax off <CR>" : ":syntax enable<CR>"
+
+" Toggle conceallevel0/2
+nnoremap <expr> \c ":set conceallevel="..(&cole ? 0 : 2).."<CR>:set cole?<CR>"
 
 " Disable highlight when <leader><CR> is pressed
 nnoremap <silent> <leader><CR> :noh<CR>

@@ -20,7 +20,7 @@ augroup TerminalSize
     if &lines < a:bound || g:alacritty_extra_padding
       silent! set laststatus=0 showtabline=0 signcolumn=0 nowrap scrolloff=1
     else
-      silent! set laststatus& showtabline& signcolumn& scrolloff&
+      silent! set laststatus& showtabline=2 signcolumn& scrolloff&
     endif
   endfunc
   autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
@@ -147,17 +147,23 @@ augroup InitFileTypes
 
   augroup Config_Markdown
     au!
-    au FileType markdown call InitMarkdown()
-    au FileType markdown let b:in_frontmatter = 0
 
-    function! InitMarkdown()
+    au FileType markdown call InitMarkdownFile()
+    function! InitMarkdownFile()
       setlocal wrap sw=2 ts=2
+
+      let b:in_frontmatter = 0
       setlocal foldexpr=MarkdownLevel() foldmethod=expr
       setlocal foldtext=MarkdownFoldTextHeading()
-      syn match Details '^<details>' conceal cchar=▶
-      syn match Summary '<summary>' conceal cchar= 
-      syn match SummaryEnd '</summary>' conceal
-      syn match DetailsEnd '^</details>' conceal cchar=E
+
+      call MarkdownHighlights()
+    endfunc
+
+    function MarkdownHighlights()
+      syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
+      syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
+      syn match MarkdownHtmlSummaryEnd '</summary>' conceal
+      syn match MarkdownHtmlDetailsEnd '^</details>' conceal cchar=E
     endfunc
 
     function! MarkdownLevel()
@@ -196,7 +202,7 @@ augroup InitFileTypes
       let origin = split(MarkdownFoldText()[2:], ' ')
       let heading = substitute(join(origin[:-3], ' '), '\#', '  ', 'g')
       let lines = join(origin[-2:], ' ')[1:-2]
-      let fills = repeat('.', 48 - len(heading) - len(lines))
+      let fills = repeat('.', 48 - strwidth(heading) - len(lines))
       return heading.."  "..fills.."  "..lines
     endfunc
 
