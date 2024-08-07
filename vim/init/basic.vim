@@ -12,7 +12,7 @@ augroup Enter
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
     exe "!alacritty msg config 'colors.primary.background=\"\\"..bg_color.."\"'"
   endfunc
-  autocmd VimEnter * call SetEmulaterBackground()
+  autocmd VimEnter * silent! call SetEmulaterBackground()
 augroup END
 "}}}
 " For Vimscript {{{

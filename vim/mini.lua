@@ -345,9 +345,19 @@ Add {
   source = "adamheins/vim-highlight-match-under-cursor"
 }
 -- }}}
+-- vim-livedown {{{
 Add {
   source  ='shime/vim-livedown'
 }
+vim.keymap.set( 'n', '<F10>', ":LivedownToggle<CR>", { buffer = bufnr, desc = '' })
+-- }}}
+-- Preview Image {{{
+Add {
+  source = 'qaiviq/vim-imager'
+}
+vim.cmd("let g:imager#filetypes = ['.md']")
+vim.keymap.set( 'n', '\\i', ":ToggleImages<CR>", { buffer = bufnr, desc = '' })
+-- }}}
 
 
 -- Install Lazy {{{
@@ -425,20 +435,20 @@ require("lazy").setup({
         }
       }
       -- keymaps {{{
-        for i = 1, 9, 1 do
-          vim.keymap.set("n", string.format("<A-%s>", i), function()
-            vim.cmd("BufferLineGoToBuffer " .. i)
-          end, { silent = true })
-        end
-        local opts = { noremap = true, silent = true }
-        vim.keymap.set("n", "<TAB>", "<Cmd>BufferLineCyclePrev<CR>", opts)
-        vim.keymap.set("n", "<S-TAB>", "<Cmd>BufferLineCycleNext<CR>", opts)
-        vim.keymap.set("n", "<M-h>", "<Cmd>BufferLineMovePrev<CR>", opts)
-        vim.keymap.set("n", "<M-l>", "<Cmd>BufferLineMoveNext<CR>", opts)
-        vim.keymap.set("n", "<M-p>", "<Cmd>BufferLineTogglePin<CR>", opts)
-        -- }}}
+      for i = 1, 9, 1 do
+        vim.keymap.set("n", string.format("<A-%s>", i), function()
+          require("bufferline").go_to(i, true)
+        end, { silent = true })
       end
-    },
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set("n", "<TAB>", "<Cmd>BufferLineCyclePrev<CR>", opts)
+      vim.keymap.set("n", "<S-TAB>", "<Cmd>BufferLineCycleNext<CR>", opts)
+      vim.keymap.set("n", "<M-h>", "<Cmd>BufferLineMovePrev<CR>", opts)
+      vim.keymap.set("n", "<M-l>", "<Cmd>BufferLineMoveNext<CR>", opts)
+      vim.keymap.set("n", "<M-p>", "<Cmd>BufferLineTogglePin<CR>", opts)
+      -- }}}
+    end
+  },
   -- }}}
   -- lualine {{{
   {

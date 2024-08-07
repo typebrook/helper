@@ -168,6 +168,138 @@ nnoremap <C-k> ddkP
 nnoremap S S<ESC>
 
 " }}}
+" SURROUND {{{
+
+inoremap ' ''<Left>
+inoremap " ""<Left>
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+
+vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
+vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
+vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
+vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
+vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
+" vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
+" vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
+
+function! AddSpaceForSelection()
+  " If visual selection by lines, add empty space at top and bottom
+  if line("'<") != line("'>") || (col("'<") == 1 && col("'>") == len(getline('.'))+1)
+    '< norm! O
+    '> norm! o
+    exe "norm! "..(line("'<")-1).."GV"..(line("'>")+1).."G"
+    " Otherwise, add space at start and end column
+  else
+    call cursor('.', col("'<"))
+    execute "norm! i\<space>"
+    call cursor('.', col("'>")+1)
+    execute "norm! a\<space>"
+  endif
+endfunction
+vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>
+
+" }}}
+" SEARCH/SUBSTITUTE {{{
+
+" Search for selected test
+vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+nnoremap g/ gv<esc>/\%V
+vnoremap g/ <esc>/\%V
+
+" Substitue across file
+vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
+
+" Usage: Press <TAB> n times for area, and <CR> for substitute
+let g:search_selection = 0
+" When leaving visual mode, resume search_selection
+autocmd Modechanged [vV\x16]*:* let g:search_selection = 0
+xmap <expr> <TAB> g:search_selection ? "//e<CR>" : "*:let g:search_selection = 1<CR>gv//e<CR>"
+xmap <expr> <S-TAB> g:search_selection ? "??<CR>" : "*:let g:search_selection = 1<CR>gv??<CR>" 
+vnoremap <CR> :s//<C-R>0/g<Left><Left>
+
+" }}}
+" SIGN {{{
+
+nnoremap <leader><leader>sc :<C-\>e'set signcolumn='..&signcolumn<CR>
+
+nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') .. " name=piet file=" .. expand("%:p")<CR>
+nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>
+
+" }}}
+" FOLD {{{
+
+" Set fold options
+nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
+nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
+
+" Toggle fold and foldcolumn
+nnoremap <expr> zi "zizz:silent set foldcolumn="..(&foldenable ? "0" : "auto:3").."\<CR>"
+
+" Show fold level when it changes
+nnoremap zm zm:set foldlevel?<CR>
+nnoremap zr zr:set foldlevel?<CR>
+
+" Fold all except selection
+vnoremap zF :<C-u>call ToggleUnfoldSelection()<CR>
+" Resume
+nnoremap zF :call ToggleUnfoldSelection()<CR>zv
+
+vnoremap \z :call GrayOutOthers()<CR>
+
+" Select current fold
+onoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
+xnoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
+onoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
+xnoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
+
+" Use l to open fold
+nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
+
+" Open fold in next line
+nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
+nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
+
+" Go to next fold and unfold
+nnoremap zJ zjzx
+nnoremap zK zkzx
+
+" Fold file except selection
+autocmd BufEnter * let b:unfold_selection = 0
+function! ToggleUnfoldSelection()
+  if !b:unfold_selection
+    let b:unfold_selection = 1
+    mkview
+    echo 'Unfold'..&foldmethod
+
+    let &foldmethod = "manual"
+    norm! zE
+    execute "1,'<-1fold"
+    execute "'>+1,$fold"
+  else
+    let b:unfold_selection = 0
+    loadview
+  endif
+endfunction
+
+autocmd BufEnter * let b:clear_matches = 0
+function! GrayOutOthers()
+  if b:clear_matches
+    let b:clear_matches = 0
+    call clearmatches()
+  else
+    let b:clear_matches = 1
+    let pos = getpos('.')
+    call matchadd('Folded', '\%<'.line("'<").'l')
+    call matchadd('Folded', '\%>'.line("'>").'l')
+    norm! zR
+    call setpos('.', pos)
+  endif
+endfunction
+
+" }}}
 " REGISTER {{{
 " Paste register 0
 nnoremap <C-p> "0p
@@ -278,49 +410,6 @@ nnoremap <expr> z> ":\<C-u>call ChangeUnfold(1,"..v:count..")\<CR>"
 nnoremap <expr> z< ":\<C-u>call ChangeUnfold(0,"..v:count..")\<CR>"
 
 "}}}
-" TERMINAL {{{
-
-" Use <leader>z to toggle
-let g:alacritty_extra_padding = 0
-function! ToggleWinPadding()
-  if g:alacritty_extra_padding
-    !alacritty msg config --window-id $WINDOWID --reset
-    call SetEmulaterBackground()
-    hi EndOfBuffer None
-    hi MsgArea None
-  else
-    redir => output | hi LineNr | redir END
-    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
-
-    try
-      exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
-      exe "hi MsgArea guibg="..bg_color
-    endtry
-    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
-  endif
-
-  let g:alacritty_extra_padding = !g:alacritty_extra_padding
-endfunc
-nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
-
-" In case ALT key is not working
-" execute "set <M-2>=\e2"
-" execute "set <M-1>=\e1"
-" execute "set <M-3>=\e3"
-" execute "set <M-4>=\e4"
-" execute "set <M-5>=\e5"
-" execute "set <M-6>=\e6"
-" execute "set <M-7>=\e7"
-" execute "set <M-8>=\e8"
-" execute "set <M-9>=\e9"
-" execute "set <M-0>=\e0"
-" execute "set <M-f>=\ef"
-" execute "set <M-b>=\eb"
-" execute "set <M-d>=\ed"
-" execute "set <M-l>=\el"
-" execute "set <M-h>=\eh"
-
-"}}}
 " MANAGE_VIMRC {{{
 
 " source .vimrc
@@ -341,10 +430,17 @@ nnoremap so :set<space>
 nnoremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
 nnoremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
 nnoremap <leader><leader>ts :<C-\>e'set tabstop='..&tabstop<CR>
-nnoremap \e :set expandtab!<CR>:set expandtab?<CR>
+nnoremap \E :set expandtab!<CR>:set expandtab?<CR>
+nnoremap \e :call ToggleEventIgnore()<CR>
 nnoremap \l :set list!<CR>:set list?<CR>
 nnoremap \n :set nu!<CR>:set nu?<CR>
 nnoremap \r :set relativenumber!<CR>:set rnu?<CR>
+
+function! ToggleEventIgnore()
+  let operator = empty(&eventignore) ? "+=" : "-="
+  exe "set eventignore".operator.'all'
+  set eventignore?
+endfunc
 
 " Open a new buffer
 nnoremap <leader>B :enew<CR>
@@ -380,6 +476,7 @@ function! CloseBufferSafely()
   if &modified
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
     if answer == 1 | write | endif
+    if answer == 2 && empty(bufname()) | bd! | return | endif
     if answer == 3 | return | endif
     if answer == "" | return | endif
   endif
@@ -403,7 +500,7 @@ function! Bye()
   elseif &diff
     silent call CloseBuffersForDiff()
   elseif len(windows) >1
-    quit
+    quit!
   else
     call CloseBufferSafely()
     " silent! call CloseBufferSafely()
@@ -520,80 +617,52 @@ function! Tab_MoveRight()
   endif
 endfunc
 " }}}
-" FOLD {{{
+" TERMINAL {{{
 
-" Set fold options
-nnoremap <leader><leader>fm :<C-\>e'set foldmethod='..&foldmethod<CR>
-nnoremap <leader><leader>fc :<C-\>e'set foldcolumn='..&foldcolumn<CR>
-
-" Toggle fold and foldcolumn
-nnoremap <expr> zi "zizz:silent set foldcolumn="..(&foldenable ? "0" : "auto:3").."\<CR>"
-
-" Show fold level when it changes
-nnoremap zm zm:set foldlevel?<CR>
-nnoremap zr zr:set foldlevel?<CR>
-
-" Fold all except selection
-vnoremap zF :<C-u>call ToggleUnfoldSelection()<CR>
-" Resume
-nnoremap zF :call ToggleUnfoldSelection()<CR>zv
-
-nnoremap \z :call GrayOutOtherFolds()<CR>
-
-" Select current fold
-onoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
-xnoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
-onoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
-xnoremap iz :<C-U>silent! keepjumps normal![zjV]zk<CR>
-
-" Use l to open fold
-nnoremap <expr> l foldclosed('.') == -1 ? 'l' : 'zo'
-
-" Open fold in next line
-nnoremap <expr> zo foldclosed('.') == -1 ? 'zjzo' : 'zo'
-nnoremap <expr> zO foldclosed('.') == -1 ? 'zjzO' : 'zO'
-
-" Go to next fold and unfold
-nnoremap zJ zjzx
-nnoremap zK zkzx
-
-" Fold file except selection
-autocmd BufEnter * let b:unfold_selection = 0
-function! ToggleUnfoldSelection()
-  if !b:unfold_selection
-    let b:unfold_selection = 1
-    mkview
-    echo 'Unfold'..&foldmethod
-
-    let &foldmethod = "manual"
-    norm! zE
-    execute "0,'<-1fold"
-    execute "'>+1,$fold"
+" Use <leader>z to toggle
+let g:alacritty_extra_padding = 0
+function! ToggleWinPadding()
+  if g:alacritty_extra_padding
+    !alacritty msg config --window-id $WINDOWID --reset
+    call SetEmulaterBackground()
+    hi EndOfBuffer None
+    hi MsgArea None
   else
-    let b:unfold_selection = 0
-    loadview
-  endif
-endfunction
+    redir => output | hi LineNr | redir END
+    let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
 
-autocmd BufEnter * let b:clear_matches = 0
-function! GrayOutOtherFolds()
-  if b:clear_matches
-    let b:clear_matches = 0
-    call clearmatches()
-  else
-    let b:clear_matches = 1
-    let pos = getpos('.')
-    exe "norm! [zV]z\<C-c>"
-    call matchadd('Folded', '\%<'.line("'<").'l')
-    call matchadd('Folded', '\%>'.line("'>").'l')
-    norm! zR
-    call setpos('.', pos)
+    try
+      exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
+      exe "hi MsgArea guibg="..bg_color
+    endtry
+    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
-endfunction
 
-" }}}
+  let g:alacritty_extra_padding = !g:alacritty_extra_padding
+endfunc
+nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
+
+" In case ALT key is not working
+" execute "set <M-2>=\e2"
+" execute "set <M-1>=\e1"
+" execute "set <M-3>=\e3"
+" execute "set <M-4>=\e4"
+" execute "set <M-5>=\e5"
+" execute "set <M-6>=\e6"
+" execute "set <M-7>=\e7"
+" execute "set <M-8>=\e8"
+" execute "set <M-9>=\e9"
+" execute "set <M-0>=\e0"
+" execute "set <M-f>=\ef"
+" execute "set <M-b>=\eb"
+" execute "set <M-d>=\ed"
+" execute "set <M-l>=\el"
+" execute "set <M-h>=\eh"
+
+"}}}
 " HIGHLIGHT {{{
 
+nnoremap <leader>I :Inspect<CR>
 nnoremap <expr> \sy exists("g:syntax_on") ? ":syntax off <CR>" : ":syntax enable<CR>"
 
 " Toggle conceallevel0/2
@@ -630,39 +699,6 @@ nnoremap <silent> <leader>gh :call matchadd('MultiLineHighlight', '\%'.line('.')
 nnoremap <silent> <leader>gH :call clearmatches()<CR>
 
 " }}}
-" SURROUND {{{
-
-inoremap ' ''<Left>
-inoremap " ""<Left>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
-
-vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
-vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
-vnoremap [ <ESC>`<i[<ESC>`>la]<ESC>
-vnoremap { <ESC>`<i{<ESC>`>la}<ESC>
-vnoremap Q <ESC>`<i「<ESC>`>la」<ESC>
-" vnoremap ' <ESC>`<i'<ESC>`>la'<ESC>
-" vnoremap ` <ESC>`<i`<ESC>`>la`<ESC>
-
-function! AddSpaceForSelection()
-  " If visual selection by lines, add empty space at top and bottom
-  if line("'<") != line("'>") || (col("'<") == 1 && col("'>") == len(getline('.'))+1)
-    '< norm! O
-    '> norm! o
-    exe "norm! "..(line("'<")-1).."GV"..(line("'>")+1).."G"
-    " Otherwise, add space at start and end column
-  else
-    call cursor('.', col("'<"))
-    execute "norm! i\<space>"
-    call cursor('.', col("'>")+1)
-    execute "norm! a\<space>"
-  endif
-endfunction
-vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>
-
-" }}}
 " QUICKFIX {{{
 
 nnoremap <leader>cn :cn<CR>
@@ -693,34 +729,6 @@ endfunction
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 command! -nargs=1 -complete=command R silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
-" }}}
-" SEARCH/SUBSTITUTE {{{
-
-" Search for selected test
-vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
-
-nnoremap g/ gv<esc>/\%V
-vnoremap g/ <esc>/\%V
-
-" Substitue across file
-vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
-
-" Usage: Press <TAB> n times for area, and <CR> for substitute
-let g:search_selection = 0
-" When leaving visual mode, resume search_selection
-autocmd Modechanged [vV\x16]*:* let g:search_selection = 0
-xmap <expr> <TAB> g:search_selection ? "//e<CR>" : "*:let g:search_selection = 1<CR>gv//e<CR>"
-xmap <expr> <S-TAB> g:search_selection ? "??<CR>" : "*:let g:search_selection = 1<CR>gv??<CR>" 
-vnoremap <CR> :s//<C-R>0/g<Left><Left>
-
-" }}}
-" SIGN {{{
-
-nnoremap <leader><leader>sc :<C-\>e'set signcolumn='..&signcolumn<CR>
-
-nnoremap <leader>si :exe ":sign place " .. line('.') .. " line=" .. line('.') .. " name=piet file=" .. expand("%:p")<CR>
-nnoremap <leader>sI :exe ":sign unplace * file=" .. expand("%:p")<CR>
-
 " }}}
 " GIT_TIG {{{
 

@@ -137,7 +137,6 @@ augroup InitFileTypes
       if has_key(shebangMatch, l:filetype)
         let l:filetype = shebangMatch[l:filetype]
       endif
-      echo "filetype from shebang: ".l:filetype
       execute "set filetype=".l:filetype
     endif
   endfunc
@@ -151,6 +150,8 @@ augroup InitFileTypes
     au FileType markdown call InitMarkdownFile()
     function! InitMarkdownFile()
       setlocal wrap sw=2 ts=2
+      let g:markdown_apply_heading_level = 0
+      nnoremap \fl :let markdown_apply_heading_level = !markdown_apply_heading_level<CR>zX
 
       let b:in_frontmatter = 0
       setlocal foldexpr=MarkdownLevel() foldmethod=expr
@@ -159,7 +160,7 @@ augroup InitFileTypes
       call MarkdownHighlights()
     endfunc
 
-    function MarkdownHighlights()
+    function! MarkdownHighlights()
       syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
       syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
       syn match MarkdownHtmlSummaryEnd '</summary>' conceal
@@ -184,8 +185,9 @@ augroup InitFileTypes
       " Fold for heading and the following contents
       let hash_num = matchstr(getline(v:lnum), '^#\+')
       if !empty(hash_num)
+        let foldlevel = g:markdown_apply_heading_level ? len(hash_num) - 1 : 1
         " HEADING
-        return len(hash_num) == 1 ? 0 : '>1'
+        return len(hash_num) == 1 ? 0 : '>'.foldlevel
       else
         " Contents
         return "="
@@ -201,7 +203,7 @@ augroup InitFileTypes
       " For heading, foltext()
       let origin = split(MarkdownFoldText()[2:], ' ')
       let heading = substitute(join(origin[:-3], ' '), '\#', '  ', 'g')
-      let lines = join(origin[-2:], ' ')[1:-2]
+      let lines = origin[-2][1:]
       let fills = repeat('.', 48 - strwidth(heading) - len(lines))
       return heading.."  "..fills.."  "..lines
     endfunc

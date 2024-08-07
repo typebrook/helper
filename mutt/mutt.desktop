@@ -5,3 +5,4 @@ Exec=alacritty -e mutt %u
 MimeType=x-scheme-handler/mailto
 Terminal=true
 Type=Application
+Categories=Email;Office;Network;
