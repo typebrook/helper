@@ -28,5 +28,3 @@ else
   LoadScript init/plugins.vim
   LoadScript init/style.vim
 endif
-
-highlight CursorLineNr term=bold cterm=bold ctermfg=226 gui=bold guifg=#eeee00

@@ -134,6 +134,7 @@ alias k='kill %1'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 alias m='mutt'
+alias h='himalaya'
 alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
 alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized

@@ -475,14 +475,13 @@ function! CloseBufferSafely()
   " Ask Saving
   if &modified
     let answer = confirm("Save changes?", "&Yes\n&No\n&Cancel")
-    if answer == 1 | write | endif
-    if answer == 2 && empty(bufname()) | bd! | return | endif
+    if answer == 1 | call s:WriteOrEnterFileName() | endif
     if answer == 3 | return | endif
     if answer == "" | return | endif
   endif
 
   let bufnr = bufnr()
-  if len(t:bufs) == 1
+  if !has_key(t:, 'bufs') || len(t:bufs) == 1
     " Close tab for last buffer
     tabclose
   else
@@ -491,11 +490,14 @@ function! CloseBufferSafely()
     exe "b "..next_buf
     call filter(t:bufs, 'v:val != '..bufnr)
   endif
+
+  " Remove unnamed buffer
+  if empty(bufname(bufnr)) | silent! exe 'bd! '.bufnr | endif
 endfunction
 function! Bye()
   let windows = gettabinfo(tabpagenr())[0]['windows']
 
-  if len(t:bufs) <= 1 && len(windows) == 1
+  if len(gettabinfo()) == 1 && len(t:bufs) <= 1 && len(windows) == 1
     call QuitWithCheck()
   elseif &diff
     silent call CloseBuffersForDiff()
@@ -630,12 +632,13 @@ function! ToggleWinPadding()
   else
     redir => output | hi LineNr | redir END
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
+    if empty(bg_color) | let bg_color = "#14161b" | endif
 
     try
       exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
       exe "hi MsgArea guibg="..bg_color
     endtry
-    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=300 'colors.primary.background=\"\\"..bg_color.."\"'"
+    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=270 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
   let g:alacritty_extra_padding = !g:alacritty_extra_padding
@@ -706,7 +709,7 @@ nnoremap <leader>cp :cp<CR>
 nnoremap <leader>cw :cw 10<CR>
 
 " }}}
-" REDIRECTION_WITH_BUFFER {{{
+" REDIRECTION {{{
 
 " Usage:
 " 	:Redir hi ............. show the full output of command ':hi' in a scratch window

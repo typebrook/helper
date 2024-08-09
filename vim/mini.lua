@@ -152,9 +152,7 @@ end, { buffer = bufnr, desc = "Toggle diff" })
 -- }}}
 -- mini.map {{{
 require("mini.map").setup()
-vim.keymap.set("n", "\\m", function()
-  require("mini.map").toggle()
-end, { desc = "Minimap", buffer = bufnr })
+vim.keymap.set("n", "\\M", function() require("mini.map").toggle() end, { desc = "Minimap", buffer = bufnr })
 -- }}}
 -- mini.visits {{{
 
@@ -971,20 +969,24 @@ require("lazy").setup({
     end,
   },
 -- }}}
-  -- -- markview.nvim {{{
-  -- {
-  --   "OXY2DEV/markview.nvim",
-  --   enable = false,
-  --   ft = "markdown",
-  --
-  --   dependencies = {
-  --     -- You may not need this if you don't lazy load
-  --     -- Or if the parsers are in your $RUNTIMEPATH
-  --     "nvim-treesitter/nvim-treesitter",
-  --
-  --     "nvim-tree/nvim-web-devicons"
-  --   },
-  -- },-- }}}
+  -- markview.nvim {{{
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    ft = "markdown",
+
+    dependencies = {
+      -- You may not need this if you don't lazy load
+      -- Or if the parsers are in your $RUNTIMEPATH
+      "nvim-treesitter/nvim-treesitter",
+
+      "nvim-tree/nvim-web-devicons"
+    },
+    config = function()
+      vim.keymap.set( 'n', '\\m', ":Markview<CR>", { buffer = bufnr, desc = '' })
+    end
+  },
+  -- }}}
 
   -- lspconfig {{{
   -- Use :help lspconfig-all to check servers
