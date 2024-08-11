@@ -59,6 +59,8 @@ set winaltkeys=no       " Allow alt key for mapping
 set undofile
 set undodir=~/.vim/.undodir
 
+set verbosefile=/tmp/nvim.log
+
 " Apply plugin and indent by filetype
 filetype plugin indent on
 
