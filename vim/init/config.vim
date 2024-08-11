@@ -145,71 +145,66 @@ augroup InitFileTypes
   " }}}
   " Markdown {{{
 
-  augroup Config_Markdown
-    au!
+  au FileType markdown call InitMarkdownFile()
+  function! InitMarkdownFile()
+    setlocal wrap sw=2 ts=2
+    let g:markdown_apply_heading_level = 0
+    nnoremap \fl :let markdown_apply_heading_level = !markdown_apply_heading_level<CR>zX
 
-    au FileType markdown call InitMarkdownFile()
-    function! InitMarkdownFile()
-      setlocal wrap sw=2 ts=2
-      let g:markdown_apply_heading_level = 0
-      nnoremap \fl :let markdown_apply_heading_level = !markdown_apply_heading_level<CR>zX
+    let b:in_frontmatter = 0
+    setlocal foldexpr=MarkdownLevel() foldmethod=expr
+    setlocal foldtext=MarkdownFoldTextHeading()
 
-      let b:in_frontmatter = 0
-      setlocal foldexpr=MarkdownLevel() foldmethod=expr
-      setlocal foldtext=MarkdownFoldTextHeading()
+    call MarkdownHighlights()
+  endfunc
 
-      call MarkdownHighlights()
-    endfunc
+  function! MarkdownHighlights()
+    syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
+    syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
+    syn match MarkdownHtmlSummaryEnd '</summary>' conceal
+    syn match MarkdownHtmlDetailsEnd '^</details>' conceal cchar=E
+  endfunc
 
-    function! MarkdownHighlights()
-      syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
-      syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
-      syn match MarkdownHtmlSummaryEnd '</summary>' conceal
-      syn match MarkdownHtmlDetailsEnd '^</details>' conceal cchar=E
-    endfunc
-
-    function! MarkdownLevel()
-      " For frontmatter
-      if v:lnum == 1 && getline(1) =~ '^---'
-        let b:in_frontmatter = 1
-        return '>1'
-      endif
-      if b:in_frontmatter
-        if getline(v:lnum) =~ '^---'
-          let b:in_frontmatter = 0
-          return '<1'
-        else
-          return '='
-        endif
-      endif
-
-      " Fold for heading and the following contents
-      let hash_num = matchstr(getline(v:lnum), '^#\+')
-      if !empty(hash_num)
-        let foldlevel = g:markdown_apply_heading_level ? len(hash_num) - 1 : 1
-        " HEADING
-        return len(hash_num) == 1 ? 0 : '>'.foldlevel
+  function! MarkdownLevel()
+    " For frontmatter
+    if v:lnum == 1 && getline(1) =~ '^---'
+      let b:in_frontmatter = 1
+      return '>1'
+    endif
+    if b:in_frontmatter
+      if getline(v:lnum) =~ '^---'
+        let b:in_frontmatter = 0
+        return '<1'
       else
-        " Contents
-        return "="
+        return '='
       endif
-    endfunc
+    endif
 
-    function! MarkdownFoldTextHeading()
-      " For frontmatter
-      if v:foldstart == 1 && getline(v:foldstart) =~ '^---'
-        return '===FrontMatter==='
-      endif
+    " Fold for heading and the following contents
+    let hash_num = matchstr(getline(v:lnum), '^#\+')
+    if !empty(hash_num)
+      let foldlevel = g:markdown_apply_heading_level ? len(hash_num) - 1 : 1
+      " HEADING
+      return len(hash_num) == 1 ? 0 : '>'.foldlevel
+    else
+      " Contents
+      return "="
+    endif
+  endfunc
 
-      " For heading, foltext()
-      let origin = split(MarkdownFoldText()[2:], ' ')
-      let heading = substitute(join(origin[:-3], ' '), '\#', '  ', 'g')
-      let lines = origin[-2][1:]
-      let fills = repeat('.', 48 - strwidth(heading) - len(lines))
-      return heading.."  "..fills.."  "..lines
-    endfunc
+  function! MarkdownFoldTextHeading()
+    " For frontmatter
+    if v:foldstart == 1 && getline(v:foldstart) =~ '^---'
+      return '===FrontMatter==='
+    endif
 
-  augroup END
+    " For heading, foltext()
+    let origin = split(MarkdownFoldText()[2:], ' ')
+    let heading = substitute(join(origin[:-3], ' '), '\#', '  ', 'g')
+    let lines = origin[-2][1:]
+    let fills = repeat('.', 48 - strwidth(heading) - len(lines))
+    return heading.."  "..fills.."  "..lines
+  endfunc
 
   " }}}
   " HTML {{{
@@ -255,8 +250,11 @@ augroup InitFileTypes
   function! SetPasswordFile()
     setlocal foldminlines=0
     setlocal foldmethod=manual
-    setlocal foldtext="Password"
+    setlocal foldtext=PasswordFoldtext()
     norm! ggzfl
+  endfunc
+  function! PasswordFoldtext()
+    return "---Password---"
   endfunc
   " }}}
   " Beancount {{{

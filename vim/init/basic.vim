@@ -88,10 +88,10 @@ set whichwrap=b,s
 set showtabline=2
 
 " Side column
-set  number relativenumber
+set number relativenumber
 
 " Cursor
-" set cursorline
+set cursorline
 set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
 set matchtime=2
 
@@ -223,15 +223,7 @@ set writebackup
 syntax enable
 set syntax=filetype
 set conceallevel=2
-
-" Defualt highlight for matched parenthesis is so weird in many colorscheme
-" Why the background color is lighter than my caret !?
-" highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
-hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
-
-" Show trailing spaces
-match ExtraWhitespace /\s\+$/
-hi ExtraWhitespace ctermbg=red guibg=red
+set concealcursor=
 
 " }}}
 " MISC {{{

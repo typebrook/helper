@@ -48,7 +48,7 @@ require("mini.extra").setup()
 -- }}}
 -- mini.colors {{{
 require("mini.colors").setup()
-vim.keymap.set("n", "<leader><leader>co", function()
+vim.keymap.set("n", "<leader><leader>color", function()
   require("mini.colors").interactive()
 end)
 -- }}}
@@ -323,6 +323,12 @@ require("mini.pairs").setup()
 -- -- suda {{{
 -- add { source = "lambdalisue/suda.vim" }
 -- }}}
+-- -- undotree {{{
+-- Add {
+--   source = 'mbbill/undotree'
+-- }
+-- vim.cmd("nnoremap <F5> :UndotreeToggle<CR>")
+-- -- }}}
 -- marks.nvim {{{
 Add {
   source = "chentoast/marks.nvim"

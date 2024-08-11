@@ -12,11 +12,11 @@ map <space> /
 inoremap <C-c> <Esc>l
 
 " Set wrap
-nnoremap \w :set wrap!<CR>
+nnoremap \w :set wrap!<CR>:set wrap?<CR>
 
 " Fast saving
 function! s:WriteOrEnterFileName()
-  if !empty(expand('%')) | write! | else | call feedkeys(":w ") | endif
+  if !empty(bufname('%')) | write! | else | call feedkeys(":w ") | endif
 endfunction
 nnoremap <leader>w :call <SID>WriteOrEnterFileName()<CR>
 
@@ -37,7 +37,7 @@ augroup vimrc_CRfix
 augroup END
 
 " Spell
-nnoremap \sp :set spell!<CR>:set spell?<CR>
+nnoremap \\sp :set spell!<CR>:set spell?<CR>
 
 " Show full path by default
 nnoremap <C-g> 1<C-g>
@@ -93,7 +93,6 @@ nnoremap <C-h> 30h
 nnoremap <C-l> 30l
 
 " File under the cursor
-nnoremap <CR> gf
 nnoremap gF :e <cfile><CR>
 
 xnoremap iq i"
@@ -159,6 +158,12 @@ inoremap <silent><M-9> <Esc>:tablast<CR>
 
 " }}}
 " EDIT {{{
+
+" Set text width for auto wrapping
+nnoremap <leader><leader>tw :set fo+=t<CR>:<C-\>e'set tw='..&tw<CR>
+
+" Set columns
+nnoremap <leader><leader>co :<C-\>e'set columns='..&co<CR>
 
 " Move one line up and down
 nnoremap <C-j> ddp
@@ -247,8 +252,6 @@ vnoremap zF :<C-u>call ToggleUnfoldSelection()<CR>
 " Resume
 nnoremap zF :call ToggleUnfoldSelection()<CR>zv
 
-vnoremap \z :call GrayOutOthers()<CR>
-
 " Select current fold
 onoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
 xnoremap az :<C-U>silent! keepjumps normal![zV]z<CR>
@@ -298,6 +301,8 @@ function! GrayOutOthers()
     call setpos('.', pos)
   endif
 endfunction
+vnoremap \z :call GrayOutOthers()<CR>
+nnoremap \z :call GrayOutOthers()<CR>
 
 " }}}
 " REGISTER {{{
@@ -481,7 +486,7 @@ function! CloseBufferSafely()
   endif
 
   let bufnr = bufnr()
-  if !has_key(t:, 'bufs') || len(t:bufs) == 1
+  if !has_key(t:, 'bufs') || len(t:bufs) <= 1
     " Close tab for last buffer
     tabclose
   else
@@ -621,10 +626,10 @@ endfunc
 " }}}
 " TERMINAL {{{
 
-" Use <leader>z to toggle
+" Use <leader>z to toggle window padding for alacritty
 let g:alacritty_extra_padding = 0
-function! ToggleWinPadding()
-  if g:alacritty_extra_padding
+function! ToggleWinPadding(padding)
+  if g:alacritty_extra_padding && !a:padding
     !alacritty msg config --window-id $WINDOWID --reset
     call SetEmulaterBackground()
     hi EndOfBuffer None
@@ -638,12 +643,14 @@ function! ToggleWinPadding()
       exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
       exe "hi MsgArea guibg="..bg_color
     endtry
-    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=270 'colors.primary.background=\"\\"..bg_color.."\"'"
+
+    let padding = a:padding ? a:padding : "270"
+    exe "!alacritty msg config --window-id $WINDOWID window.padding.x=" . padding . " 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
   let g:alacritty_extra_padding = !g:alacritty_extra_padding
 endfunc
-nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
+nnoremap <expr> <leader>z ":\<C-u> silent call ToggleWinPadding(" . v:count . ")\<CR>"
 
 " In case ALT key is not working
 " execute "set <M-2>=\e2"
@@ -666,7 +673,7 @@ nnoremap <leader>z <Cmd>silent call ToggleWinPadding()<CR>
 " HIGHLIGHT {{{
 
 nnoremap <leader>I :Inspect<CR>
-nnoremap <expr> \sy exists("g:syntax_on") ? ":syntax off <CR>" : ":syntax enable<CR>"
+nnoremap <expr> \s exists("g:syntax_on") ? ":syntax off <CR>" : ":syntax enable<CR>"
 
 " Toggle conceallevel0/2
 nnoremap <expr> \c ":set conceallevel="..(&cole ? 0 : 2).."<CR>:set cole?<CR>"
