@@ -1,0 +1,10 @@
+" highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
+hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
+
+" Show trailing spaces
+match ExtraWhitespace /\s\+$/
+hi ExtraWhitespace ctermbg=red guibg=red
+
+hi CursorLine guibg=NONE
+" Only works when :set cursorline in neovim
+hi CursorLineNr term=bold cterm=bold ctermfg=226 gui=bold guifg=#eeee00

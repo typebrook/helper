@@ -28,3 +28,5 @@ else
   LoadScript init/plugins.vim
   LoadScript init/style.vim
 endif
+
+LoadScript init/highlight.vim
