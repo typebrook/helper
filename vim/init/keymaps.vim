@@ -739,6 +739,9 @@ endfunction
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
 command! -nargs=1 -complete=command R silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
+
+" Print Runtimepath
+nnoremap <leader><leader>rtp :Redir echo &rtp<CR>:s/,/\r/g<CR>
 " }}}
 " GIT_TIG {{{
 
