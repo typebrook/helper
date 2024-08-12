@@ -1212,6 +1212,10 @@ require("lazy").setup({
           map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", {silent = true, noremap = true})
           map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", {silent = true, noremap = true})
           map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", {silent = true, noremap = true})
+
+          -- Don't know why... Everytime when modeline is set and insert a single char
+          -- while inside a fold, the fold closes.
+          vim.opt_local.modeline = false
       end,
     })
   end
