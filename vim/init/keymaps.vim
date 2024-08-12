@@ -8,16 +8,10 @@
 " Space for searching
 map <space> /
 
-" Escape normal mode by <C-c>
-inoremap <C-c> <Esc>l
-
-" Set wrap
-nnoremap \w :set wrap!<CR>:set wrap?<CR>
-
 " Fast saving
 function! s:WriteOrEnterFileName()
   if !empty(bufname('%')) | write! | else | call feedkeys(":w ") | endif
-endfunction
+endfunc
 nnoremap <leader>w :call <SID>WriteOrEnterFileName()<CR>
 
 " :W sudo saves the file
@@ -99,7 +93,7 @@ xnoremap iq i"
 xnoremap aq a"
 
 
-" READLINE_FEATURES {{{
+" READLINE {{{
 
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
@@ -124,12 +118,10 @@ cnoremap <C-d> <Del>
 cnoremap <C-h> <BackSpace>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
-cnoremap <C-k> <C-x>d$<C-c>
-cnoremap <M-d> <C-x>de<C-c>
+cnoremap <C-k> <C-x>d$<C-c><space><BS>
+cnoremap <M-d> <C-x>de<C-c><space><BS>
 
 " Moving with wrap
-nnoremap <m-j> gj
-nnoremap <m-k> gk
 inoremap <m-j> <c-\><c-o>gj
 inoremap <m-k> <c-\><c-o>gk
 " }}}
@@ -158,6 +150,22 @@ inoremap <silent><M-9> <Esc>:tablast<CR>
 
 " }}}
 " EDIT {{{
+
+" Escape normal mode by <C-c>
+inoremap <C-c> <Esc>l
+
+" Set wrap
+nnoremap \w :set wrap!<CR>:set wrap?<CR>
+
+" Set line numbers
+nnoremap \n :set nu!<CR>:set nu?<CR>
+nnoremap \r :set relativenumber!<CR>:set rnu?<CR>
+
+nnoremap \l :set list!<CR>:set list?<CR>
+
+" Set options for indent
+nnoremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
+nnoremap <leader><leader>ts :<C-\>e'set tabstop='..&tabstop<CR>
 
 " Set text width for auto wrapping
 nnoremap <leader><leader>tw :set fo+=t<CR>:<C-\>e'set tw='..&tw<CR>
@@ -222,7 +230,7 @@ let g:search_selection = 0
 " When leaving visual mode, resume search_selection
 autocmd Modechanged [vV\x16]*:* let g:search_selection = 0
 xmap <expr> <TAB> g:search_selection ? "//e<CR>" : "*:let g:search_selection = 1<CR>gv//e<CR>"
-xmap <expr> <S-TAB> g:search_selection ? "??<CR>" : "*:let g:search_selection = 1<CR>gv??<CR>" 
+xmap <expr> <S-TAB> g:search_selection ? "??<CR>" : "*:let g:search_selection = 1<CR>gv??<CR>"
 vnoremap <CR> :s//<C-R>0/g<Left><Left>
 
 " }}}
@@ -310,7 +318,7 @@ nnoremap \z :call GrayOutOthers()<CR>
 nnoremap <C-p> "0p
 
 " Toggle paste mode on and off
-map <leader>pp :setlocal paste!<CR>
+nnoremap <leader><leader>p :setlocal paste!<CR>
 
 " Copy from system clipboard
 nnoremap gp "+p
@@ -415,7 +423,7 @@ nnoremap <expr> z> ":\<C-u>call ChangeUnfold(1,"..v:count..")\<CR>"
 nnoremap <expr> z< ":\<C-u>call ChangeUnfold(0,"..v:count..")\<CR>"
 
 "}}}
-" MANAGE_VIMRC {{{
+" MANAGE_SCRIPTS {{{
 
 " source .vimrc
 nnoremap <leader>so V:so<CR>
@@ -424,7 +432,7 @@ vnoremap so :source<CR>
 autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
 
 "  Find scripts
-nnoremap <leader>e :scriptnames<space>
+nnoremap <leader>es :scriptnames<space>
 nnoremap <leader>ee :edit $MYVIMRC<CR>
 
 " }}}
@@ -433,13 +441,8 @@ nnoremap <leader>ee :edit $MYVIMRC<CR>
 " Set options
 nnoremap so :set<space>
 nnoremap <leader><leader>ft :<C-\>e'set filetype='..&filetype<CR>
-nnoremap <leader><leader>sw :<C-\>e'set shiftwidth='..&shiftwidth<CR>
-nnoremap <leader><leader>ts :<C-\>e'set tabstop='..&tabstop<CR>
 nnoremap \E :set expandtab!<CR>:set expandtab?<CR>
 nnoremap \e :call ToggleEventIgnore()<CR>
-nnoremap \l :set list!<CR>:set list?<CR>
-nnoremap \n :set nu!<CR>:set nu?<CR>
-nnoremap \r :set relativenumber!<CR>:set rnu?<CR>
 
 function! ToggleEventIgnore()
   let operator = empty(&eventignore) ? "+=" : "-="
@@ -628,8 +631,8 @@ endfunc
 
 " Use <leader>z to toggle window padding for alacritty
 let g:alacritty_extra_padding = 0
-function! ToggleWinPadding(padding)
-  if g:alacritty_extra_padding && !a:padding
+function! ToggleWinPadding(occupy)
+  if g:alacritty_extra_padding && !a:occupy
     !alacritty msg config --window-id $WINDOWID --reset
     call SetEmulaterBackground()
     hi EndOfBuffer None
@@ -639,12 +642,18 @@ function! ToggleWinPadding(padding)
     let bg_color = matchstr(output, 'guibg=\zs[^\s]\+\ze')
     if empty(bg_color) | let bg_color = "#14161b" | endif
 
+    redir => win_width_str
+    !xdotool getactivewindow getwindowgeometry --shell | grep WIDTH | sed s/WIDTH=//
+    redir END
+    let win_width = str2nr(matchstr(win_width_str, '[0-9]\+'))
+
+    let padding = a:occupy ? (100-a:occupy) / 2 * win_width / 100 : 15 * win_width / 100
+
     try
       exe "hi EndOfBuffer guifg="..bg_color.." guibg="..bg_color
       exe "hi MsgArea guibg="..bg_color
     endtry
 
-    let padding = a:padding ? a:padding : "270"
     exe "!alacritty msg config --window-id $WINDOWID window.padding.x=" . padding . " 'colors.primary.background=\"\\"..bg_color.."\"'"
   endif
 
@@ -737,7 +746,6 @@ function! Redir(cmd)
 endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<q-args>)
-command! -nargs=1 -complete=command R silent call Redir(<q-args>)
 nnoremap <leader>rr :Redir<space>
 
 " Print Runtimepath

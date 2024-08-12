@@ -283,7 +283,7 @@ vp() {
 
 # __GIT__
 unalias gc &> /dev/null # override zsh plugin alias
-gc() { git clone $@; if [ $# == 1 ]; then cd $(basename ${1%.git}); fi }
+gc() { git clone $@; if [ $# = 1 ]; then cd $(basename ${1%.git}); fi }
 gc1() { git clone --depth=1 $1 && cd $(basename $1); }
 gcv() { gc vps:$1; }
 alias gls='git log -S'

@@ -429,6 +429,7 @@ require("lazy").setup({
             }
           },
           custom_filter = function (buf_number)
+            if vim.t.bufs == nil then return false end
             for _, p in ipairs(vim.t.bufs) do
               if p == buf_number then
                 return true
@@ -562,6 +563,13 @@ require("lazy").setup({
       -- config {{{
       require("telescope").setup({
         defaults = {
+          preview = {
+              filesize_hook = function(filepath, bufnr, opts)
+                  local max_bytes = 100000
+                  local cmd = {"head", "-c", max_bytes, filepath}
+                  require('telescope.previewers.utils').job_maker(cmd, bufnr, opts)
+              end
+          },
           mappings = {
             i = {
               -- ["<c-j>"] = "move_selection_next",
@@ -1046,14 +1054,21 @@ require("lazy").setup({
         ensure_installed = { "markdown", "markdown_inline", "lua", "luadoc", "printf", "vim", "vimdoc" },
 
         highlight = {
-          enable = true,
-          use_languagetree = true,
+          enable = false,
           additional_vim_regex_highlighting = true,
+          use_languagetree = true,
+          disable = function(lang, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+              return true
+            end
+          end,
         },
 
         indent = { enable = true },
       })
-    vim.cmd([[
+      vim.cmd([[
       syn match MarkdownHtmlDetails '^<details>' conceal cchar=▶
       syn match MarkdownHtmlSummary '<summary>' conceal cchar= 
       syn match MarkdownHtmlSummaryEnd '</summary>' conceal

@@ -28,6 +28,13 @@ augroup TerminalSize
 augroup END
 
 " }}}
+" Big File {{{
+
+augroup BigFileDisable
+    autocmd!
+    autocmd BufReadPre,FileReadPre * if getfsize(expand("%")) > 512 * 1024 | setlocal eventignore=all | endif
+augroup END
+"}}}
 " X11 {{{
 
 " Change IM to US when exit to Normal mode
