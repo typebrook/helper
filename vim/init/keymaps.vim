@@ -216,11 +216,12 @@ vnoremap <space> :<C-u>call AddSpaceForSelection()<CR>
 " }}}
 " SEARCH/SUBSTITUTE {{{
 
+
 " Search for selected test
 vnoremap * y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 nnoremap g/ gv<esc>/\%V
-vnoremap g/ <esc>/\%V
+vnoremap / <esc>/\%V
 
 " Substitue across file
 vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
@@ -761,6 +762,8 @@ nnoremap <C-t>b <Cmd>TigBlame<CR>
 
 " }}}
 " Tmp: Common system command {{{
+
+nnoremap ! :r !
 
 " Show date selector
 nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
