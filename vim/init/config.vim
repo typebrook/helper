@@ -24,7 +24,7 @@ augroup TerminalSize
     endif
   endfunc
   autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
-  autocmd VimLeave * if g:alacritty_extra_padding | call ToggleWinPadding() | endif
+  autocmd VimLeave,VimSuspend * if g:alacritty_extra_padding | silent call ToggleWinPadding(100) | endif
 augroup END
 
 " }}}

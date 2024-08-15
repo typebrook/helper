@@ -983,24 +983,24 @@ require("lazy").setup({
     end,
   },
   -- }}}
-  -- markview.nvim {{{
-  {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-    ft = "markdown",
-
-    dependencies = {
-      -- You may not need this if you don't lazy load
-      -- Or if the parsers are in your $RUNTIMEPATH
-      "nvim-treesitter/nvim-treesitter",
-
-      "nvim-tree/nvim-web-devicons"
-    },
-    config = function()
-      vim.keymap.set('n', '\\m', ":Markview<CR>", { buffer = bufnr, desc = '' })
-    end
-  },
-  -- }}}
+  -- -- markview.nvim {{{
+  -- {
+  --   "OXY2DEV/markview.nvim",
+  --   lazy = false,
+  --   ft = "markdown",
+  --
+  --   dependencies = {
+  --     -- You may not need this if you don't lazy load
+  --     -- Or if the parsers are in your $RUNTIMEPATH
+  --     "nvim-treesitter/nvim-treesitter",
+  --
+  --     "nvim-tree/nvim-web-devicons"
+  --   },
+  --   config = function()
+  --     vim.keymap.set('n', '\\m', ":Markview<CR>", { buffer = bufnr, desc = '' })
+  --   end
+  -- },
+  -- -- }}}
 
   -- lspconfig {{{
   -- Use :help lspconfig-all to check servers
@@ -1412,39 +1412,39 @@ require("lazy").setup({
   },
 
   -- }}}
-  -- lspsaga {{{
-  {
-    'nvimdev/lspsaga.nvim',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter', -- optional
-      'nvim-tree/nvim-web-devicons',     -- optional
-    },
-    config = function()
-      require('lspsaga').setup({
-        autochdir = true,
-      })
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = custom_autocommands,
-        pattern = "*",
-        callback = function(args)
-          local map = vim.api.nvim_buf_set_keymap
-          map(0, "n", "gd", "<cmd>Lspsaga goto_definition<cr>", { silent = true, noremap = true })
-          map(0, "n", "gR", "<cmd>Lspsaga rename<cr>", { silent = true, noremap = true })
-          map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", { silent = true, noremap = true })
-          map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
-          map(0, "n", "K", "<cmd>Lspsaga hover_doc<cr>", { silent = true, noremap = true })
-          map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", { silent = true, noremap = true })
-          map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", { silent = true, noremap = true })
-          map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", { silent = true, noremap = true })
-
-          -- Don't know why... Everytime when modeline is set and insert a single char
-          -- while inside a fold, the fold closes.
-          vim.opt_local.modeline = false
-        end,
-      })
-    end
-  },
-  -- }}}
+  -- -- lspsaga {{{
+  -- {
+  --   'nvimdev/lspsaga.nvim',
+  --   dependencies = {
+  --     'nvim-treesitter/nvim-treesitter', -- optional
+  --     'nvim-tree/nvim-web-devicons',     -- optional
+  --   },
+  --   config = function()
+  --     require('lspsaga').setup({
+  --       autochdir = true,
+  --     })
+  --     vim.api.nvim_create_autocmd("LspAttach", {
+  --       group = custom_autocommands,
+  --       pattern = "*",
+  --       callback = function(args)
+  --         local map = vim.api.nvim_buf_set_keymap
+  --         map(0, "n", "gd", "<cmd>Lspsaga goto_definition<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gR", "<cmd>Lspsaga rename<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", { silent = true, noremap = true })
+  --         map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "K", "<cmd>Lspsaga hover_doc<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", { silent = true, noremap = true })
+  --
+  --         -- Don't know why... Everytime when modeline is set and insert a single char
+  --         -- while inside a fold, the fold closes.
+  --         vim.opt_local.modeline = false
+  --       end,
+  --     })
+  --   end
+  -- },
+  -- -- }}}
   -- -- conform {{{
   -- {
   --   "stevearc/conform.nvim",

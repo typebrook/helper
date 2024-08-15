@@ -756,9 +756,9 @@ nnoremap <leader><leader>rtp :Redir echo &rtp<CR>:s/,/\r/g<CR>
 
 let g:tig_explorer_keymap_commit_split   = '<C-s>'
 let g:tig_explorer_keymap_commit_vsplit  = '<C-v>'
-nnoremap <C-t> <Cmd>Tig<CR>
-nnoremap <C-t>s <Cmd>TigStatus<CR>
-nnoremap <C-t>b <Cmd>TigBlame<CR>
+nnoremap <C-t> <Cmd>silent! Tig<CR>
+nnoremap <C-t>s <Cmd>silent! TigStatus<CR>
+nnoremap <C-t>b <Cmd>silent! TigBlame<CR>
 
 " }}}
 " Tmp: Common system command {{{

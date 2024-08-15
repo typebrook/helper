@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset='utf-8'>
+  <title>Leader Line with Markdown</title>
+
+  <meta property="og:description" content="Add a default marker to the map." />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.5.2/dist/maplibre-gl.css' />
+
+  <script src='https://unpkg.com/maplibre-gl@4.5.2/dist/maplibre-gl.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/14.0.0/marked.min.js'></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    html,
+    body,
+    #map,
+    #markdown {
+      height: 100%;
+    }
+
+    #map,
+    #markdown {
+      flex: 50%;
+    }
+
+    pre {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <div id="markdown"></div>
+  <pre id="markdown-raw"># Some Markdown rendered Content
+[Place 1]
+
+## Title 2
+
+- item
+- subitem
+- subusb
+
+Text before link [Place 2]
+![](https://i.ibb.co/3N65X9n/2021-05-27-6-21-48.png)
+
+[Place 1]: geo:12.55,55.66
+[Place 2]: geo:13,55.8
+  </pre>
+
+  <script>
+    const map = new maplibregl.Map({
+      container: 'map',
+      style:
+        'https://raw.githubusercontent.com/maplibre/demotiles/gh-pages/style.json',
+      center: [12.550343, 55.665957],
+      zoom: 8
+    });
+
+    document.getElementById('markdown').innerHTML = marked.parse(document.getElementById('markdown-raw').innerHTML);
+
+    const links = Array.from(document.querySelectorAll('#markdown a'))
+    links.forEach(link => {
+      let location = link.href.split('geo:')[1]
+      let lon = Number(location.split(',')[0])
+      let lat = Number(location.split(',')[1])
+      link.marker = new maplibregl.Marker()
+        .setLngLat([lon, lat])
+        .addTo(map)
+        .getElement()
+
+      link.line = new LeaderLine(
+        link,
+        // LeaderLine.mouseHoverAnchor(link),
+        // line.marker.getElement(),
+        LeaderLine.areaAnchor(link.marker, 'circle'),
+        {
+          middleLabel: LeaderLine.captionLabel('MIDDLE'),
+          offset: [-20, 0],
+          startSocket: 'auto',
+        }
+      )
+      link.line.hide()
+
+      link.visibility = false
+
+      link.addEventListener("click", (event) => {
+        link.visibility ? link.line.hide() : link.line.show()
+        // if (link.visibility) {
+        //   link.line.hide()
+        // }
+        // else {
+        //   link.line.show()
+        // }
+        link.visibility = !link.visibility
+      })
+    })
+
+    function isChildOutsideParent(childElement, parentElement) {
+      // 获取边界框信息
+      const childRect = childElement.getBoundingClientRect();
+      const parentRect = parentElement.getBoundingClientRect();
+
+      return (
+        childRect.left < parentRect.left ||
+        childRect.right > parentRect.right ||
+        childRect.top < parentRect.top ||
+        childRect.bottom > parentRect.bottom
+      );
+    }
+    map.on('move', () => {
+      links.forEach(link => {
+        if (isChildOutsideParent(link.marker, map.getCanvas())) {
+          link.line.hide()
+          return
+        } else {
+          if (link.visibility) link.line.show()
+        }
+        link.line.position()
+      })
+    })
+
+  </script>
+</body>
+
+</html>
