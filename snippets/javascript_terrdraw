@@ -1,0 +1,32 @@
+// Events
+draw.on("finish", (id: string, context: { action: string, mode: string }) => {
+  if (action === 'draw') {
+    // Do something for draw finish event
+  } else if (action === 'dragFeature') {
+    // Do something for a drag finish event
+  } else if (action === 'dragCoordinate') {
+    //
+  }else if (action === 'dragCoordinateResize') {
+    //
+  }
+});
+
+draw.on("change", (ids: string[], type: string) => {
+  // Possible type values:
+  // 'create'
+  // 'update'
+  // 'delete'
+  // 'styling'
+  // Do something
+  //...
+});
+
+draw.on("select", (id: string) => {
+  // Do something
+  //...
+});
+
+draw.on("deselect", () => {
+  // Do something
+  //...
+});

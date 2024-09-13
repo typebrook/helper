@@ -39,12 +39,12 @@ bind generic xB +sh -c "echo -n %(blob) | xsel -ib && echo Full Blob Clipped"
 ## Remote
 bind generic Uv +sh -c "git remote -v | grep %(remote)"
 bind generic UV >sh -c "git remote -vv | tig"
-bind generic Ua @git remote add "%(prompt New Github remote name: )" git@github.com:"%(prompt User/Repo: )"
-bind generic UA @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
+bind generic UA @git remote add "%(prompt New Github remote name: )" git@github.com:"%(prompt User/Repo: )"
+bind generic Ua @git remote add "%(prompt New remote name: )" "%(prompt Remote url: )"
 bind generic Ur @git remote rename "%(prompt Rename which remote?: )" "%(prompt Enter new remote name: )"
 bind generic U! @git remote remove "%(prompt Remove which remote?: )"
-bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" git@github.com:"%(prompt User/Repo: )"
-bind generic US @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
+bind generic US @git remote set-url "%(prompt Set url for which remote?: )" git@github.com:"%(prompt User/Repo: )"
+bind generic Us @git remote set-url "%(prompt Set url for which remote?: )" "%(prompt New url: )"
 bind generic Uf ?git fetch "%(prompt Fetch from which remote?: )"
 bind generic UU ?git remote update --prune
 bind generic Ut ?sh -c "git pull %(remote) --tags --force"
@@ -140,9 +140,9 @@ bind main gs ?@git merge %(branch) --squash
 bind main p none # override default pager binding
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
-bind main pr ?git push -u %(remote) %(branch):%(branch)
+bind main pR ?git push -u %(remote) %(branch):%(branch)
 bind main pc ?git push -u %(remote) %(commit):%(branch)
-bind main pR ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
+bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pF ?git push --force
 bind main pd ?git push %(remote) :%(branch)
 bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Which reference? )'

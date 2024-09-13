@@ -30,3 +30,5 @@ else
 endif
 
 LoadScript init/highlight.vim
+
+source ~/.projects.vim

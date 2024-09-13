@@ -73,6 +73,7 @@ fi
 [ -e $HOME/.config/nvm/nvm.sh ] && source "$HOME/.config/nvm/nvm.sh"
 
 # Working DIR
-[[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
+# [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
+cd ~/git/dumbymap
 
 true

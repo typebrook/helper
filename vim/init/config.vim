@@ -188,11 +188,13 @@ augroup InitFileTypes
     endif
 
     " Fold for heading and the following contents
-    let hash_num = matchstr(getline(v:lnum), '^#\+')
+    let hash_num = matchstr(getline(v:lnum), '^\zs#\+\ze\s')
     if !empty(hash_num)
       let foldlevel = g:markdown_apply_heading_level ? len(hash_num) - 1 : 1
       " HEADING
       return len(hash_num) == 1 ? 0 : '>'.foldlevel
+    elseif match(getline(v:lnum), '^----') != -1
+      return "<"
     else
       " Contents
       return "="

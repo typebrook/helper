@@ -92,6 +92,11 @@ nnoremap gF :e <cfile><CR>
 xnoremap iq i"
 xnoremap aq a"
 
+nnoremap ze zszH
+
+nnoremap 0 ^
+nnoremap ^ 0
+
 
 " READLINE {{{
 
@@ -495,8 +500,9 @@ function! CloseBufferSafely()
     tabclose
   else
     " Switch to proper buffer
-    let next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..bufnr)[0]
+    let next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..bufnr)[-1]
     exe "b "..next_buf
+    " exe "buffer ".g:lastbuffer
     call filter(t:bufs, 'v:val != '..bufnr)
   endif
 
