@@ -101,7 +101,10 @@ set matchtime=2
 set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 set laststatus=2            " Always show the status line
 set ruler                    " Show cursor position
-set wildmenu wildoptions=pum,fuzzy
+set wildmenu
+if has('nvim')
+  set wildoptions=pum,fuzzy
+endif
 
 " Format of error message
 set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
@@ -110,7 +113,11 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 set splitright
 
 " Set signcolumn
-set signcolumn=yes:3
+if has('nvim')
+  set signcolumn=yes:3
+else
+  set signcolumn=3
+endif
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 

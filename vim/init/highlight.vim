@@ -2,7 +2,9 @@
 hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
 
 " Show trailing spaces
-match ExtraWhitespace /\s\+$/
+if has('nvim')
+  match ExtraWhitespace /\s\+$/
+endif
 hi ExtraWhitespace ctermbg=red guibg=red
 
 hi CursorLine guibg=NONE

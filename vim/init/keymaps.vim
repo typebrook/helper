@@ -46,10 +46,12 @@ nnoremap q: :
 " WORKING_DIR {{{
 
 let g:last_path = execute("pwd")
-augroup SaveLatestDir
-  au!
-  autocmd DirChangedPre * let g:last_path = split(execute('pwd'), "\n")[0]
-augroup END
+if has('nvim')
+  augroup SaveLatestDir
+    au!
+    autocmd DirChangedPre * let g:last_path = split(execute('pwd'), "\n")[0]
+  augroup END
+endif
 
 " Switch CWD to the directory of the open buffer
 nnoremap cd :cd %:p:h<CR>:pwd<CR>
