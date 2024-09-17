@@ -642,7 +642,14 @@ require("lazy").setup({
       vim.keymap.set(
         "n",
         "<leader>sF",
-        "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
+        function()
+          require("telescope.builtin").find_files({
+              follow = ture,
+              no_ignore = true,
+              hidden = true,
+              file_ignore_patterns = {},
+          })
+        end,
         { desc = "telescope find all files" }
       )
       vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
