@@ -113,11 +113,7 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 set splitright
 
 " Set signcolumn
-if has('nvim')
-  set signcolumn=yes:3
-else
-  set signcolumn=3
-endif
+set signcolumn="yes:3"
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 
