@@ -31,4 +31,4 @@ endif
 
 LoadScript init/highlight.vim
 
-silent source ~/.projects.vim
+silent! source ~/.projects.vim
