@@ -1,0 +1,27 @@
+map.addSource('hillshading', {
+  "type": "raster-dem",
+  "tiles": [
+    "https://osmhacktw.github.io/terrain-rgb/tiles/{z}/{x}/{y}.png"
+  ],
+  "tileSize": 256,
+  "maxzoom": 12
+});
+map.setTerrain({ 'source': 'hillshading', 'exaggeration': 1.5 });
+
+map.addLayer({
+  "id": "hillshading",
+  "type": "hillshade",
+  "source": "hillshading",
+  "minzoom": 6
+});
+
+map.on('load', function () {
+  document.getElementById('slider').addEventListener('input', function (e) {
+    console.log(e.target.value);
+    map.setPaintProperty(
+      'hillshading', 
+      'hillshade-illumination-direction', 
+      parseInt(e.target.value)
+    );
+  });
+});

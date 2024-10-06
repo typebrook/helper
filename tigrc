@@ -140,9 +140,10 @@ bind main gs ?@git merge %(branch) --squash
 bind main p none # override default pager binding
 bind main pp ?git push
 bind main pP ?git push -u %(remote) %(branch):%(branch)
-bind main pR ?git push -u %(remote) %(branch):%(branch)
-bind main pc ?git push -u %(remote) %(commit):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
+bind main pfr ?git push -u '%(prompt Force push to which remote? )' %(branch):%(branch) -f
+bind main pR ?git push -u %(remote) %(branch):%(branch)
+bind main pc ?git push -u '%(prompt Which remote? )' %(commit):%(branch)
 bind main pF ?git push --force
 bind main pd ?git push %(remote) :%(branch)
 bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Which reference? )'
@@ -151,8 +152,7 @@ bind generic pD ?git push '%(prompt Delete from which remote? )' :'%(prompt Whic
 bind main <C-F> ?git fetch %(remote)
 bind main gf ?git fetch '%(prompt Which remote? )'  # Go to Fetch a specific remote
 bind main gF ?git fetch '%(prompt Which remote? )' '%(prompt Which branch? )'
-bind main pu !git pull %(remote) %(branch)
-bind main pf !git pull '%(prompt Pull from witch remote? )' %(branch)
+bind main pu !git pull '%(prompt Pull from witch remote? )' %(branch)
 bind main pU ?git pull --rebase
 
 # reset/rebase/revert

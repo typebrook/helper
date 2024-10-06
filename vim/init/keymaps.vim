@@ -476,6 +476,7 @@ let g:quitVimWhenPressingCtrlC = 1
 function! ToggleQuit()
   let g:quitVimWhenPressingCtrlC = !g:quitVimWhenPressingCtrlC
   let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
+  nnoremap ZZ <C-c>
   echo message
 endfunction
 nnoremap \q :call ToggleQuit()<CR>
@@ -502,7 +503,7 @@ function! CloseBufferSafely()
     tabclose
   else
     " Switch to proper buffer
-    let next_buf = get(t:bufs, bufnr('#')) ? bufnr('#') : filter(t:bufs, 'v:val != '..bufnr)[-1]
+    let next_buf = filter(t:bufs, 'v:val != '..bufnr)[-1]
     exe "b "..next_buf
     " exe "buffer ".g:lastbuffer
     call filter(t:bufs, 'v:val != '..bufnr)

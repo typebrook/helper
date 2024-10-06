@@ -1,0 +1,85 @@
+<style>
+  ._dumby {
+    &::before {
+      content: 'class="Dumby"';
+    }
+    &, & * {
+      display: flex;
+      position: relative;
+      padding-top:2rem;
+      margin: 0.5rem;
+      &::before {
+        position: absolute;
+        top: 0.3rem;
+        left: 1rem;
+      }
+    }
+    
+    border: 5px solid red;
+    width: 100%;
+    background: rgba(255, 0, 0, 20%);
+  }
+  ._SemanticHtml {
+    flex: 80%;
+    display: block;
+    border: 3px solid blue;
+    background: skyblue;
+    &::before {
+      content: 'class="SemanticHtml"';
+    }
+  }
+  ._dumby-block {
+    border: 3px solid gray;
+    background: lightgray;
+    &::before {
+      content: 'class="dumby-block"';
+    }
+  }
+  ._target {
+    border: 3px solid chocolate;
+    background: wheat;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    padding-top: 3rem;
+    &::before {
+      content: 'CUSTOM SELECTOR, by default:\Apre:has(.language-map)';
+      white-space: pre;
+    }
+  }
+  ._map-container {
+    flex: 50%;
+    border: 3px solid steelblue;
+    background: lightCyan;
+    padding: 0.5rem;
+    &::before {
+      transform: rotate(0.13turn) translate(0.7rem, 2.5rem);
+      content: 'class=\A"map-container"';
+      white-space: pre;
+    }
+  }
+  ._Showcase {
+    flex: 30%;
+    border: 3px solid green;
+    background: lightgreen;
+    &::before {
+      content: 'class="Showcase"';
+    }
+  }
+</style>
+
+<div class="_dumby">
+  <div class="_SemanticHtml">
+    <div class="_dumby-block">
+      <div class="_target">
+        <div class="_map-container"></div>
+        <div class="_map-container"></div>
+        <div class="_map-container"></div>
+      </div>
+    </div>
+    <div class="_dumby-block"></div>
+    <div class="_dumby-block"></div>
+  </div>
+  <div class="_Showcase">
+  </div>
+</div>

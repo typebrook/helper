@@ -216,6 +216,34 @@ augroup InitFileTypes
   endfunc
 
   " }}}
+  " Javascript {{{
+
+  au FileType javascript call InitJavascriptFile()
+  function! InitJavascriptFile()
+    setlocal wrap sw=2 ts=2
+
+    setlocal foldexpr=JsdocLevel() foldmethod=expr
+
+    let l:jsdocPrefix = "JSDOC: "
+    setlocal foldtext=JSdocFoldText()
+  endfunc
+
+  function! JsdocLevel()
+    let jsdoc = matchstr(getline(v:lnum), '^\zs\s*\/\*\*\ze')
+    if !empty(jsdoc)
+      let foldlevel = len(matchstr(jsdoc, '^\zs\s*\ze')) + 1
+      return '>'.foldlevel
+    else
+      " Contents
+      return "="
+    endif
+  endfunc
+
+  function! JSdocFoldText()
+    return "JSDOC: ".matchstr(getline(v:foldstart + 1), '^[\* ]*\zs.*\ze')
+  endfunc
+
+  " }}}
   " HTML {{{
 
   " Usage: <leader>cl(ass) or <leader>id to edit html tag attribute
@@ -235,8 +263,11 @@ augroup InitFileTypes
       startinsert
     endif
   endfunc
-  autocmd FileType html,markdown nnoremap <buffer> <leader>cl :call <SID>ChangeAttr("class")<CR>
-  autocmd FileType html,markdown nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
+  autocmd FileType html,markdown,javascript nnoremap <buffer> <leader>cl :call <SID>ChangeAttr("class")<CR>
+  autocmd FileType html,markdown,javascript nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
+  autocmd FileType css,javascript nnoremap <buffer> <F9> :let LINE=line(".")<CR>:silent! %!npx standard --stdin --fix 2>/dev/null<CR>:exe LINE<CR>
+  autocmd FileType css,javascript nmap <buffer> <F8> cdg:let LINE=line(".")<CR>:%!stylelint --fix --stdin 2>/dev/null<CR>:exe LINE<CR>
+  autocmd FileType css,javascript set formatprg=prettier
 
   " Reload preview server
   autocmd BufWrite *.html,*.js,*.css call ReloadServer()
@@ -279,4 +310,5 @@ augroup InitFileTypes
 
 augroup END
 
-" }}}
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1

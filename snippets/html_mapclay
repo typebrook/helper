@@ -1,0 +1,8 @@
+<pre>
+use: Leaflet
+XYZ: https://tile.openstreetmap.jp/styles/osm-bright/512/{z}/{x}/{y}.png
+draw: true
+control:
+  scale: true
+</pre>
+<script data-target="pre" src='http://localhost:8080/mapclay/dist/mapclay.js'></script>

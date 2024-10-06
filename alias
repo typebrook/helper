@@ -208,7 +208,7 @@ date.reset() {
 alias clock.reset='hwclock --systohc'
 unalias gr &>/dev/null
 gr() {
-  grep -IR $@ . --exclude-dir=node_modules
+  grep -IR $@ . | sed '/^.\{2048\}./d'
 }
 alias findn='find . -iname'
 
@@ -478,7 +478,6 @@ alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xse
 # misc
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
-unalias gr &>/dev/null
 alias wcl='wc -l'
 alias x='xdg-open'
 alias yl='youtube-dl'

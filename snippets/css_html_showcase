@@ -1,0 +1,32 @@
+<div style="display: flex; align-items: center; flex-direction: row !important;">
+<pre>
+{
+  use: mapX
+  width: 300px
+  height: 400px
+  center: Taiwan
+}
+</pre>
+<pre>
+ => 
+</pre>
+  
+```map
+use: Maplibre
+width: 300px
+height: 400px
+center: [121,24]
+zoom: 6
+```
+  
+  
+  
+</div>
+
+<style>
+  pre {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.9;
+  }
+</style>

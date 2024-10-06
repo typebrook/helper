@@ -86,6 +86,12 @@ set display=lastline
 set lazyredraw
 set whichwrap=b,s
 
+" linebreak, ref: https://stackoverflow.com/questions/1204149/smart-wrap-in-vim
+set breakindent
+" ident by an additional 2 characters on wrapped lines, when line >= 40 characters, put 'showbreak' at start of line
+set breakindentopt=shift:4,min:40,sbr
+set showbreak=>>
+
 " Tab
 set showtabline=2
 

@@ -564,11 +564,14 @@ require("lazy").setup({
       require("telescope").setup({
         defaults = {
           preview = {
+            filesize_limit = 0.5,
             filesize_hook = function(filepath, bufnr, opts)
-              local max_bytes = 100000
+              local max_bytes = 10000
               local cmd = { "head", "-c", max_bytes, filepath }
               require('telescope.previewers.utils').job_maker(cmd, bufnr, opts)
-            end
+            end,
+            timeout = 50,
+            highlight_limit = 1,
           },
           mappings = {
             i = {
@@ -644,10 +647,10 @@ require("lazy").setup({
         "<leader>sF",
         function()
           require("telescope.builtin").find_files({
-              follow = ture,
-              no_ignore = true,
-              hidden = true,
-              file_ignore_patterns = {},
+            follow = ture,
+            no_ignore = true,
+            hidden = true,
+            file_ignore_patterns = {},
           })
         end,
         { desc = "telescope find all files" }
@@ -826,24 +829,22 @@ require("lazy").setup({
     lazy = false,
     config = function()
       require("which-key").setup({
-        defaults = {
-          win = {
-            -- don't allow the popup to overlap with the cursor
-            no_overlap = false,
-            -- width = 1,
-            height = { min = 10, max = 25 },
-            -- col = 0,
-            -- row = math.huge,
-            -- border = "none",
-            padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
-            title = true,
-            title_pos = "center",
-            zindex = 1000,
-            -- Additional vim.wo and vim.bo options
-            bo = {},
-            wo = {
-              -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-            },
+        win = {
+          -- don't allow the popup to overlap with the cursor
+          no_overlap = false,
+          -- width = 1,
+          height = { min = 10, max = 25 },
+          -- col = 0,
+          -- row = math.huge,
+          -- border = "none",
+          padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+          title = false,
+          title_pos = "center",
+          zindex = 1000,
+          -- Additional vim.wo and vim.bo options
+          bo = {},
+          wo = {
+            -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
           },
         },
       })
@@ -1477,6 +1478,24 @@ require("lazy").setup({
   --   end,
   -- },
   -- -- }}}
+  -- ALE {{{
+  {
+    'dense-analysis/ale',
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_ruby_rubocop_auto_correct_all = 1
+
+      g.ale_linters = {
+        ruby = { 'javascript', 'standard' },
+        lua = { 'lua_language_server' }
+      }
+
+      vim.keymap.set("n", "\a", vim.cmd("ALEDisable"))
+    end
+  },
+  -- }}}
 })
 
 -- KEYMAPS {{{

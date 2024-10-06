@@ -1,0 +1,21 @@
+@media (prefers-reduced-motion: no-preference) {
+  transition:
+    opacity .5s ease-in,
+    scale   .5s ease-in,
+    display .5s ease-in;
+  height  .5s ease-in;
+  transition-behavior: allow-discrete;
+}
+
+@starting-style {
+  opacity: 0;
+  scale: 1.1;
+}
+
+&[hidden] {
+  opacity: 0;
+  scale: .9;
+  display: none !important;
+  transition-duration: .4s;
+  transition-timing-function: ease-out;
+}
