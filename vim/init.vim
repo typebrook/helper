@@ -15,6 +15,9 @@ execute 'set runtimepath+='.s:home
 " Load scripts in home
 command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
 
+if $fullrc == 'false'
+  finish
+endif
 
 " Gerneral scripts
 LoadScript init/basic.vim     " Basic configuration

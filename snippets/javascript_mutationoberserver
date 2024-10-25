@@ -1,12 +1,14 @@
-        new window.MutationObserver((ms) => {
-          for (const m of ms) {
-            console.log(m)
-            console.log('m', m.target.innerHTML)
-            console.log('m', m.target.classList)
-          }
-        }).observe(item, {
-          attributes: true,
-          attributeFilter: ['class'],
-          attributeOldValue: true,
-          characterDataOldValue: true
-        })
+new window.MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    console.log(mutation)
+    console.log('mutation', mutation.target.innerHTML)
+    console.log('mutation', mutation.target.classList)
+  }
+}).observe(item, {
+  attributes: true,
+  attributeFilter: ['class'],
+  attributeOldValue: true,
+  characterDataOldValue: true,
+  childList: true,
+  subtree: true,
+})

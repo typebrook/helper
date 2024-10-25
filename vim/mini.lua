@@ -1420,43 +1420,43 @@ require("lazy").setup({
   },
 
   -- }}}
-  -- lspsaga {{{
-  {
-    'nvimdev/lspsaga.nvim',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter', -- optional
-      'nvim-tree/nvim-web-devicons',     -- optional
-    },
-    config = function()
-      require('lspsaga').setup({
-        autochdir = true,
-        lightbulb = {
-          sign = false,
-          virtual_text = true,
-        },
-      })
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = custom_autocommands,
-        pattern = "*",
-        callback = function(args)
-          local map = vim.api.nvim_buf_set_keymap
-          map(0, "n", "gd", "<cmd>Lspsaga goto_definition<cr>", { silent = true, noremap = true })
-          map(0, "n", "gR", "<cmd>Lspsaga rename<cr>", { silent = true, noremap = true })
-          map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", { silent = true, noremap = true })
-          map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
-          map(0, "n", "K", "<cmd>Lspsaga hover_doc<cr>", { silent = true, noremap = true })
-          map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", { silent = true, noremap = true })
-          map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", { silent = true, noremap = true })
-          map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", { silent = true, noremap = true })
-
-          -- Don't know why... Everytime when modeline is set and insert a single char
-          -- while inside a fold, the fold closes.
-          vim.opt_local.modeline = false
-        end,
-      })
-    end
-  },
-  -- }}}
+  -- -- lspsaga {{{
+  -- {
+  --   'nvimdev/lspsaga.nvim',
+  --   dependencies = {
+  --     'nvim-treesitter/nvim-treesitter', -- optional
+  --     'nvim-tree/nvim-web-devicons',     -- optional
+  --   },
+  --   config = function()
+  --     require('lspsaga').setup({
+  --       autochdir = true,
+  --       lightbulb = {
+  --         sign = false,
+  --         virtual_text = true,
+  --       },
+  --     })
+  --     vim.api.nvim_create_autocmd("LspAttach", {
+  --       group = custom_autocommands,
+  --       pattern = "*",
+  --       callback = function(args)
+  --         local map = vim.api.nvim_buf_set_keymap
+  --         map(0, "n", "gd", "<cmd>Lspsaga goto_definition<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gR", "<cmd>Lspsaga rename<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gx", "<cmd>Lspsaga code_action<cr>", { silent = true, noremap = true })
+  --         map(0, "x", "gx", ":<c-u>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "K", "<cmd>Lspsaga hover_doc<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gj", "<cmd>Lspsaga diagnostic_jump_next<cr>", { silent = true, noremap = true })
+  --         map(0, "n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<cr>", { silent = true, noremap = true })
+  --
+  --         -- Don't know why... Everytime when modeline is set and insert a single char
+  --         -- while inside a fold, the fold closes.
+  --         vim.opt_local.modeline = false
+  --       end,
+  --     })
+  --   end
+  -- },
+  -- -- }}}
   -- -- conform {{{
   -- {
   --   "stevearc/conform.nvim",
@@ -1488,9 +1488,12 @@ require("lazy").setup({
       g.ale_ruby_rubocop_auto_correct_all = 1
 
       g.ale_linters = {
-        ruby = { 'javascript', 'standard' },
+        javascript = { 'javascript', 'standard' },
         lua = { 'lua_language_server' }
       }
+      g.ale_fixers = {javascript = {'standard'}}
+      g.ale_lint_on_save = 1
+      g.ale_fix_on_save = 1
 
       vim.keymap.set("n", "\a", vim.cmd("ALEDisable"))
     end

@@ -221,26 +221,47 @@ augroup InitFileTypes
   au FileType javascript call InitJavascriptFile()
   function! InitJavascriptFile()
     setlocal wrap sw=2 ts=2
-
-    setlocal foldexpr=JsdocLevel() foldmethod=expr
-
-    let l:jsdocPrefix = "JSDOC: "
-    setlocal foldtext=JSdocFoldText()
+    setlocal foldexpr=JsdocLevel() foldmethod=expr foldtext=JSdocFoldText()
   endfunc
 
   function! JsdocLevel()
-    let jsdoc = matchstr(getline(v:lnum), '^\zs\s*\/\*\*\ze')
+    let line = getline(v:lnum)
+    let jsdoc = matchstr(line, '^\zs[ \/]*\/\*\*\ze')
+    let indent = len(matchstr(line, '^\zs\s*\ze')) / 2
+
     if !empty(jsdoc)
-      let foldlevel = len(matchstr(jsdoc, '^\zs\s*\ze')) + 1
+      let foldlevel = indent + 1
       return '>'.foldlevel
     else
-      " Contents
-      return "="
+      let foldlevel = foldlevel(v:lnum - 1)
+      " let lastIndent = len(matchstr(getline(v:lnum - 1), '^\zs\s*\ze')) / 2
+      " let pattern = matchstr(line, '^\s*\zs[})]\+;*\ze$')
+      " if !empty(line) && len(pattern) > 0 && indent + 1 == foldlevel && indent < lastIndent
+      "   return "<".foldlevel
+      if empty(line) && empty(getline(v:lnum - 1))
+        return "<".foldlevel
+      else
+        return "="
+      endif
     endif
   endfunc
 
   function! JSdocFoldText()
-    return "JSDOC: ".matchstr(getline(v:foldstart + 1), '^[\* ]*\zs.*\ze')
+    let line = getline(v:foldstart)
+    let message = matchstr(line, '\*\s\zs.*\ze\s\*\+/$')
+    let lines = v:foldend - v:foldstart
+
+    if empty(message)
+      let line = getline(v:foldstart + 1)
+      let message = "@ ".matchstr(line, '^[\* ]*\zs.*\ze')
+    endif
+
+    let comment = matchstr(line, '^\s*\zs//\ze')
+    if !empty(comment)
+      let message = '/** '.message.' */'
+    endif
+
+    return repeat("   ", v:foldlevel - 1).repeat(" ", 4 - len(lines)).lines." lines -- ".message
   endfunc
 
   " }}}
@@ -265,8 +286,8 @@ augroup InitFileTypes
   endfunc
   autocmd FileType html,markdown,javascript nnoremap <buffer> <leader>cl :call <SID>ChangeAttr("class")<CR>
   autocmd FileType html,markdown,javascript nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
-  autocmd FileType css,javascript nnoremap <buffer> <F9> :let LINE=line(".")<CR>:silent! %!npx standard --stdin --fix 2>/dev/null<CR>:exe LINE<CR>
-  autocmd FileType css,javascript nmap <buffer> <F8> cdg:let LINE=line(".")<CR>:%!stylelint --fix --stdin 2>/dev/null<CR>:exe LINE<CR>
+  autocmd FileType css,javascript nnoremap <buffer> <F9> :let LINE=line(".")<CR>:silent! %!standard --stdin --fix 2>/dev/null<CR>:exe LINE<CR>
+  autocmd FileType css,javascript nmap <buffer> <F8> cdg:let LINE=line(".")<CR>:%!stylelint -c scripts/stylelintrc.json --fix --stdin 2>/dev/null<CR>:exe LINE<CR>
   autocmd FileType css,javascript set formatprg=prettier
 
   " Reload preview server

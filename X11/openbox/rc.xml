@@ -541,7 +541,7 @@
     <keybind key="W-e">
       <action name="Execute">
         <command>
-          alacritty -e nvim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
+          alacritty -o 'env.fullrc="false"' -e nvim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
         </command>
       </action>
     </keybind>
@@ -575,10 +575,7 @@
     <keybind key="W-y">
       <action name="Execute">
         <command>
-          sh -c '
-            zenity --entry --text "Window title" | \
-            xargs -i xdotool set_window --name @{} `xdotool getactivewindow`
-          '
+          sh -c 'yad --entry | xargs -i xdotool set_window --name @{} `xdotool getactivewindow`'
         </command>
       </action>
     </keybind>

@@ -119,7 +119,7 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 set splitright
 
 " Set signcolumn
-set signcolumn="yes:3"
+set signcolumn=yes:3
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 
