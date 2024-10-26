@@ -860,31 +860,28 @@ require("lazy").setup({
     end,
   },
   --}}}
-  -- toggleterm {{{
-  {
-    "akinsho/toggleterm.nvim",
-    config = function()
-      require("toggleterm").setup({
-        persist_size = false,
-        direction = "float",
-      })
-
-      vim.keymap.set({ "n", "t" }, "<A-i>", function()
-        vim.cmd("ToggleTerm direction=float")
-      end, { desc = "terminal toggle floating term" })
-      vim.keymap.set({ "n", "t" }, "<A-e>", function()
-        zoom()
-      end, { desc = "terminal toggle floating term" })
-      vim.keymap.set({ "n", "t" }, "<A-v>", function()
-        vim.cmd("ToggleTerm direction=horizontal")
-      end, { desc = "terminal toggle floating term" })
-      vim.keymap.set("v", ",s", function()
-        require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
-        vim.cmd("ToggleTerm direction=float")
-      end)
-    end,
-  },
-  --}}}
+  -- -- toggleterm {{{
+  -- {
+  --   "akinsho/toggleterm.nvim",
+  --   config = function()
+  --     require("toggleterm").setup({
+  --       persist_size = false,
+  --       direction = "float",
+  --     })
+  --
+  --     vim.keymap.set({ "n", "t" }, "<A-e>", function()
+  --       vim.cmd("ToggleTerm direction=float")
+  --     end, { desc = "terminal toggle floating term" })
+  --     vim.keymap.set({ "n", "t" }, "<A-v>", function()
+  --       vim.cmd("ToggleTerm direction=horizontal")
+  --     end, { desc = "terminal toggle floating term" })
+  --     vim.keymap.set("v", ",s", function()
+  --       require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
+  --       vim.cmd("ToggleTerm direction=float")
+  --     end)
+  --   end,
+  -- },
+  -- --}}}
   -- Markdown: obsidian {{{
   {
     "epwalsh/obsidian.nvim",

@@ -61,6 +61,7 @@ if [[ $- =~ i ]]; then
       #zle -N deer
       #bindkey '\ek' deer
       bindkey -s '\ek' 'fzf_preview'
+      bindkey -s '' 'fg || vl'
     elif [[ $shell == bash ]]; then
       shopt -s extglob
       HISTTIMEFORMAT='%Y-%m-%d %T '
@@ -75,5 +76,6 @@ fi
 # Working DIR
 # [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
 cd ~/git/dumbymap
+source ~/.profile
 
 true

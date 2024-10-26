@@ -59,6 +59,11 @@ key = "U"
 mode = "Vi|~Search"
 mods = "Control"
 
+[[keyboard.bindings]]
+key = "i"
+mods = "Alt"
+chars = "\U0000001A"
+
 [window]
 decorations = "full"
 dynamic_title = true
