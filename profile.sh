@@ -75,7 +75,7 @@ fi
 
 # Working DIR
 # [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
-cd ~/git/dumbymap
+cd ~/git/dumbymap 2>/dev/null || cd ~/Downloads
 source ~/.profile
 
 true
