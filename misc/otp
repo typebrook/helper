@@ -1,0 +1,12 @@
+#! /usr/bin/bash
+
+echo -n "OTP: "
+read -r otp
+
+if grep "^$otp$" /home/pham/.otp; then
+  TEMP=`mktemp`
+  sed "/^$otp$/ d" /home/pham/.otp >$TEMP
+  cat $TEMP > /home/pham/.otp
+  rm $TEMP
+  su pham
+fi
