@@ -13,6 +13,7 @@
 	program = gpg2
 
 [alias]
+    adog = "!git log --abbrev --decorate --oneline --graph"
     reorder = "!GIT_SEQUENCE_EDITOR=\"sed -i -n 'h;1n;2p;g;p'\" git rebase -i HEAD~2"
     stashstaged = !git stash --keep-index && \
                    git stash && \

@@ -86,7 +86,9 @@ nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " Quick move in a line
 nnoremap <C-h> 30h
+vnoremap <C-h> 30h
 nnoremap <C-l> 30l
+vnoremap <C-l> 30l
 
 " File under the cursor
 nnoremap gF :e <cfile><CR>
