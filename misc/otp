@@ -3,7 +3,7 @@
 echo -n "OTP: "
 read -r otp
 
-if grep "^$otp$" /home/pham/.otp; then
+if grep "^$otp$" /home/pham/.otp &>/dev/null; then
   TEMP=`mktemp`
   sed "/^$otp$/ d" /home/pham/.otp >$TEMP
   cat $TEMP > /home/pham/.otp
