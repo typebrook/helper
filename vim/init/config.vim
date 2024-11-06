@@ -159,6 +159,7 @@ augroup InitFileTypes
     nnoremap \fl :let markdown_apply_heading_level = !markdown_apply_heading_level<CR>zX
 
     let b:in_frontmatter = 0
+    let b:insideCodeBlock = 0
     setlocal foldexpr=MarkdownLevel() foldmethod=expr
     setlocal foldtext=MarkdownFoldTextHeading()
 
@@ -173,13 +174,15 @@ augroup InitFileTypes
   endfunc
 
   function! MarkdownLevel()
+    let line = getline(v:lnum)
+
     " For frontmatter
     if v:lnum == 1 && getline(1) =~ '^---'
       let b:in_frontmatter = 1
       return '>1'
     endif
     if b:in_frontmatter
-      if getline(v:lnum) =~ '^---'
+      if line =~ '^---'
         let b:in_frontmatter = 0
         return '<1'
       else
@@ -187,13 +190,21 @@ augroup InitFileTypes
       endif
     endif
 
+    " Codeblock Switching
+    if line =~ '^```'
+      let b:insideCodeBlock = b:insideCodeBlock == 1 ? 0 : 1
+    endif
+    if b:insideCodeBlock == 1
+      return '='
+    endif
+
     " Fold for heading and the following contents
-    let hash_num = matchstr(getline(v:lnum), '^\zs#\+\ze\s')
+    let hash_num = matchstr(line, '^\zs#\+\ze\s')
     if !empty(hash_num)
       let foldlevel = g:markdown_apply_heading_level ? len(hash_num) - 1 : 1
       " HEADING
       return len(hash_num) == 1 ? 0 : '>'.foldlevel
-    elseif match(getline(v:lnum), '^----') != -1
+    elseif match(line, '^----') != -1
       return "<"
     else
       " Contents
