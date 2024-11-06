@@ -564,3 +564,10 @@ vvv() {
     echo "restarting vim...";
   done
 }
+
+ip.neigh() {
+  INTERFACES=$(ifconfig | sed -nE 's/^([^ :]+).*$/\1/p')
+  test -z "$1" && echo $INTERFACES && return 0
+
+  ifconfig | sed -nE "/^${1}/,/^$/ s/^ +inet ([0-9.]+) .*$/\1/p"
+}
