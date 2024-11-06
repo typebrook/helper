@@ -57,7 +57,11 @@ set winaltkeys=no       " Allow alt key for mapping
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
 set undofile
-set undodir=~/.vim/.undodir
+if has('nvim')
+  set undodir=~/.vim/.undodir/nvim
+else
+  set undodir=~/.vim/.undodir/vim
+endif
 
 set verbosefile=/tmp/nvim.log
 
