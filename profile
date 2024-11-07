@@ -29,6 +29,7 @@ find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do sourc
 
 # local
 PATH=$PATH:$HOME/.local/bin
+PATH=$PATH:$HOME/.local/share/gem/ruby/3.2.0/bin
 # go
 PATH=$PATH:$HOME/go/bin
 # android-studio

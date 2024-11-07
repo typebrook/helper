@@ -1,142 +1,42 @@
 # My alias for bash and zsh
 
-# __CONFIG__
-# __NETWORK__
-# __VIM__
-# __SSH__
-# __IMAP__
-# __GIST__
-# __UNIX__
-# __PACMAN__
-# __CD__
-# __BLOG__
-# __GIT__
-# __GITHUB__
-# __TIG__
-
-# __CONFIG__
 alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
+
+# SHELL {{{
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
-alias vimrc='vim ~/.vimrc'
-alias tigrc="$EDITOR ~/.tigrc"
-alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
-alias ala.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
-alias alacritty.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
-alias git.config="$EDITOR ~/.gitconfig"
-alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
-alias ssh.config="$EDITOR ~/.ssh/config"
-alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
-alias ssh.known="$EDITOR ~/.ssh/known_hosts"
-config(){ cd ~/.config/$1; }
-alias tmux.config="$EDITOR ~/.tmux.conf"
-cde() { cd /etc/$@; }
-
-alias cdetc='cde'
-alias ls='ls --color'
-alias lsd='ls -d */'
-alias grep='grep --color'
 alias eof='IGNOREEOF=10'
 
-# __NETWORK__
-alias dig.detail='dig +noall +answer +multiline'
-
-# __VIM__
-if which nvim &>/dev/null; then
-  alias vim='nvim'
-  alias v='nvim'
-  alias vv='/usr/bin/vim'
-else
-  alias v='vim'
-fi
-alias vu='vim -u NONE'
-alias vr='vim -R'
-# Edit last file
-alias vl="vim -c 'norm '"
-# Use Telescope to select recent files
-vll() { vim -c 'Telescope oldfiles'; }
-# Apply defaut session
-alias vS="vim -S /tmp/vim.session"
-alias cdv='cd ~/.config/nvim'
-vs() { which $1 && vim $(which $1); }
-[ "$shell" = zsh ] && compdef vs=which
-alias vim.dos2unix="vim '+set ff=unix' '+x'"
-
-# __SSH__
-alias cdssh='cd ~/.ssh'
-alias ptt='ssh ptt'
-alias sshv='ssh -t vps'
-ssh.tar() {
-  prompt-vim "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+# }}}
+# CUSTOM HELPER {{{
+cdh() { cd $SETTING_DIR/$@; }
+alias chh="tig -C $SETTING_DIR status"
+# }}}
+# Text Encode/Decode{{{
+big52utf8() {
+  iconv -f BIG-5 -t UTF-8
 }
-ssh.up() {
-  set -o pipefail
-  filename=${3:-`basename $1`}
-  # Upload to absolution path
-  if [[ $2 =~ '^/' ]]; then
-    folder=${2%/}
-    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
-    echo Uploaded to ${folder}/${filename}
-  # Upload to relative in ~/public/
-  else
-    folder='~/public/'${2%/}
-    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
-    echo https://topo.tw/p/${2%/}/${filename}
-  fi
+utf82big5() {
+  iconv -t BIG-5 -f UTF-8
 }
-ssh.up.today() {
-  DATE=$(date --iso-8601)
-  ssh vps mkdir -p ~/public/$DATE
-  ssh.up $1 $DATE
+urlencode() {
+  perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg'
+  # Alternative:
+  # curl -Gso /dev/null -w %{url_effective} --data-urlencode @- ""
 }
-ssh.down() {
-  ssh -t vps rm -rf -i ~/public/"$1"
-}
-
-# __IMAP__
-imap.save() {
-  curl "imaps://mail.topo.tw/$1" \
-      --user pham:`pass mail/pham@mail.topo.tw` \
-      -T $2
-}
-imap.save_attachment() {
-  #TEMPFILE=$(mktemp)
-  trap 'rm $TEMPFILE' EXIT
-  mail -a $1 -Sexpandaddr /dev/stdout | \
-  curl imaps://mail.topo.tw/INBOX \
-      --user pham:`pass mail/pham@mail.topo.tw` \
-      -T /dev/stdin
-}
-imap.search.subject() {
-  curl "imaps://mail.topo.tw/$1" \
-    --user pham:`pass mail/pham@mail.topo.tw` \
-    --request "SEARCH SUBJECT $2"
-}
-imap.fetch() {
-  curl "imaps://mail.topo.tw/$1;MAILINDEX=$2" \
-    --user pham:`pass mail/pham@mail.topo.tw` | \
-    dos2unix | \
-    sed -E '0,/^ *$/d'
-}
-
-# __GIST__
-alias g='gist'
-alias gl='gist last'
-unalias gg &>/dev/null
-alias gg='gist grep'
-
-# __UNIX__
+# }}}
+# UNIX {{{
 alias chx='chmod +x'
 alias chr='chmod +r'
+config(){ cd ~/.config/$1; }
 alias k='kill %1'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
-alias m='mutt'
-alias h='himalaya'
-alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
-alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
+alias ls='ls --color'
+alias lsd='ls -d */'
+alias grep='grep --color'
 path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 ps1.swap() {
 	if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
@@ -211,8 +111,105 @@ gr() {
   grep -IR $@ . | sed '/^.\{2048\}./d'
 }
 alias findn='find . -iname'
+alias ce='crontab -e'
+alias cl='crontab -l'
+alias df='df -h'
 
-# __PACMAN__
+# }}}
+# Clipboard{{{
+alias xi='xsel -ib'
+alias xii='`fc -ln -1` | head -1 | xsel -ib'
+alias xo='xsel -ob'
+alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
+# }}}
+# TMUX {{{
+alias tma='tmux a'
+alias tmux.config="$EDITOR ~/.tmux.conf"
+# }}}
+# NETWORK {{{
+
+alias dig.detail='dig +noall +answer +multiline'
+alias co='curl -O'
+alias curl.code='curl -o /dev/null --silent -Iw "%{http_code}"'
+alias p8='ping -c 3 8.8.8.8'
+alias curl.google='curl -v google.com'
+alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'
+ip.neigh() {
+  INTERFACES=$(ifconfig | sed -nE 's/^([^ :]+).*$/\1/p')
+  test -z "$1" && echo $INTERFACES && return 0
+
+  ifconfig | sed -nE "/^${1}/,/^$/ s/^ +inet ([0-9.]+) .*$/\1/p"
+}
+
+# }}}
+# MAIL {{{
+alias m='mutt'
+alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
+alias h='himalaya'
+alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
+alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
+imap.save() {
+  curl "imaps://mail.topo.tw/$1" \
+      --user pham:`pass mail/pham@mail.topo.tw` \
+      -T $2
+}
+imap.save_attachment() {
+  #TEMPFILE=$(mktemp)
+  trap 'rm $TEMPFILE' EXIT
+  mail -a $1 -Sexpandaddr /dev/stdout | \
+  curl imaps://mail.topo.tw/INBOX \
+      --user pham:`pass mail/pham@mail.topo.tw` \
+      -T /dev/stdin
+}
+imap.search.subject() {
+  curl "imaps://mail.topo.tw/$1" \
+    --user pham:`pass mail/pham@mail.topo.tw` \
+    --request "SEARCH SUBJECT $2"
+}
+imap.fetch() {
+  curl "imaps://mail.topo.tw/$1;MAILINDEX=$2" \
+    --user pham:`pass mail/pham@mail.topo.tw` | \
+    dos2unix | \
+    sed -E '0,/^ *$/d'
+}
+
+# }}}
+# SSH {{{
+alias ssh.config="$EDITOR ~/.ssh/config"
+alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
+alias ssh.known="$EDITOR ~/.ssh/known_hosts"
+alias cdssh='cd ~/.ssh'
+alias ptt='ssh ptt'
+alias sshv='ssh -t vps'
+ssh.tar() {
+  prompt-vim "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+}
+ssh.up() {
+  set -o pipefail
+  filename=${3:-`basename $1`}
+  # Upload to absolution path
+  if [[ $2 =~ '^/' ]]; then
+    folder=${2%/}
+    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
+    echo Uploaded to ${folder}/${filename}
+  # Upload to relative in ~/public/
+  else
+    folder='~/public/'${2%/}
+    cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
+    echo https://topo.tw/p/${2%/}/${filename}
+  fi
+}
+ssh.up.today() {
+  DATE=$(date --iso-8601)
+  ssh vps mkdir -p ~/public/$DATE
+  ssh.up $1 $DATE
+}
+ssh.down() {
+  ssh -t vps rm -rf -i ~/public/"$1"
+}
+
+# }}}
+# PACMAN {{{
 alias pac='sudo pacman -S' # pacman install
 alias psy='sudo pacman -Syy'
 alias ys='yay -S'
@@ -238,15 +235,50 @@ psi() {
 }
 pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
-# __CD__
+# }}}
+# Alacritty{{{
+alias ala.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
+alias alacritty.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
+# }}}
+# VIM {{{
+alias vimrc='vim ~/.vimrc'
+if which nvim &>/dev/null; then
+  alias vim='nvim'
+  alias v='nvim'
+  alias vv='/usr/bin/vim'
+else
+  alias v='vim'
+fi
+alias vu='vim -u NONE'
+alias vr='vim -R'
+# Edit last file
+alias vl="vim -c 'norm '"
+# Use Telescope to select recent files
+vll() { vim -c 'Telescope oldfiles'; }
+# Apply defaut session
+alias vS="vim -S /tmp/vim.session"
+alias cdv='cd ~/.config/nvim'
+vs() { which $1 && vim $(which $1); }
+[ "$shell" = zsh ] && compdef vs=which
+alias vim.dos2unix="vim '+set ff=unix' '+x'"
+vvv() {
+  while true; do
+    vim -c 'norm '
+    if [ $? -ne 0 ]; then
+      break
+    fi
+    echo "restarting vim...";
+  done
+}
+
+# }}}
+# CD {{{
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ld='cd -' # last directory
-cdg() {
-  target=$(sed 's# #/#g' <<<"$@")
-  cd ~/git/$target || cd ~/git
-}
 alias cda='mkdir -p ~/data && cd ~/data'
+cde() { cd /etc/$@; }
+alias cdetc='cde'
 alias cdd='cd ~/Downloads'
 alias cdD='cd ~/Documents'
 alias cdP='cd ~/Pictures'
@@ -254,7 +286,8 @@ alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 
-# __BLOG__
+# }}}
+# BLOG {{{
 alias cdb='cd ~/blog'
 vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
@@ -282,19 +315,48 @@ vp() {
   fi
 }
 
-# __GIT__
+# }}}
+# GIT {{{
+alias git.config="$EDITOR ~/.gitconfig"
 unalias gc &> /dev/null # override zsh plugin alias
 gc() { git clone $@; if [ $# = 1 ]; then cd $(basename ${1%.git}); fi }
 gc1() { git clone --depth=1 $1 && cd $(basename $1); }
-gcv() { gc vps:$1; }
 alias gls='git log -S'
+cdg() {
+  target=$(sed 's# #/#g' <<<"$@")
+  cd ~/git/$target || cd ~/git
+}
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 alias ch="/home/pham/helper/bin/git/check-repos.sh"
 alias git.check="/home/pham/helper/bin/git/check-repos.sh"
 
-# __GITHUB__
+# }}}
+# TIG {{{
+alias cdt='cd ~/git/tig'
+alias t='tig'
+alias ts='tig status'
+alias tigrc="$EDITOR ~/.tigrc"
+alias ta='tig --all'
+upload_tig() {
+  github-release.sh \
+    github_api_token=$GITHUB_API_TOKEN \
+    repo=typebrook/tig \
+    tag=LATEST \
+    type=asset \
+    filename=$(which tig)
+    action=overwrite
+}
+# }}}
+# GIST {{{
+alias g='gist'
+alias gl='gist last'
+unalias gg &>/dev/null
+alias gg='gist grep'
+
+# }}}
+# Service: GITHUB {{{
 export GITHUB_API='https://api.github.com'
 export GITHUB_API_TOKEN="~/.ssh/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
@@ -319,49 +381,12 @@ github.raw() {
   curl -O https://raw.githubusercontent.com/$1/$2/$3
 }
 
-# __TIG__
-alias cdt='cd ~/git/tig'
-alias t='tig'
-alias ts='tig status'
-alias ta='tig --all'
-upload_tig() {
-  github-release.sh \
-    github_api_token=$GITHUB_API_TOKEN \
-    repo=typebrook/tig \
-    tag=LATEST \
-    type=asset \
-    filename=$(which tig)
-    action=overwrite
-}
-
-# about custom settings
-cdh() { cd $SETTING_DIR/$@; }
-alias chh="tig -C $SETTING_DIR status"
-
-# about beancount
+# }}}
+# Beancount{{{
 alias cdB='cd $HOME/bean'
 alias b='vim $HOME/bean/main.bean'
-
-# crontab
-alias ce='crontab -e'
-alias cl='crontab -l'
-
-# lf
-alias r='_lf_cd'
-alias l='_lf_cd'
-_lf_cd() {
-  tempfile=$(mktemp -t tmp.XXXXXX)
-  lf --last-dir-path $tempfile
-
-  test -f "$tempfile" && \
-  cd -- "$(cat "$tempfile")" && \
-  rm -f -- "$tempfile"
-}
-
-# disk
-alias df='df -h'
-
-# docker
+# }}}
+# Docker{{{
 alias dk='docker'
 alias dc='docker-compose'
 alias dis='docker images'
@@ -370,8 +395,8 @@ alias dpsa='docker ps -a'
 docker.sh() { docker run --rm -it --entrypoint /bin/sh $@; }
 docker.bash() { docker run --rm -it --entrypoint /bin/bash $@; }
 docker.tags() { curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | tee /dev/tty | jq '.results[]["name"]' | sort; }
-
-# Android
+# }}}
+# Android{{{
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
 alias adb.view='adb shell am start -a android.intent.action.VIEW -d' 
 alias adb.default='adb shell dumpsys package domain-preferred-apps'
@@ -384,19 +409,11 @@ alias adb.input='adb shell input text'
 adb.push() {
   adb push $1 /sdcard/Download
 }
-
-# curl
-alias co='curl -O'
-alias curl.code='curl -o /dev/null --silent -Iw "%{http_code}"'
-
-# python
+# }}}
+# python{{{
 alias pip3='python3 -m pip'
-
-# gdal
-alias oo='ogr2ogr'
-alias oi='ogrinfo -al -so'
-
-# sample file
+# }}}
+# sample file{{{
 alias sample.text='curl http://metaphorpsum.com/paragraphs/3/5'
 alias sample.gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample.geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
@@ -428,8 +445,8 @@ taiwan_dem() {
   xargs curl -Lo taiwan_dem.zip
   unzip -p taiwan_dem.zip dem_20m.tif >20m.tif
 }
-
-# data file
+# }}}
+# DATA (from internet){{{
 alias taiwan='curl -O http://download.geofabrik.de/asia/taiwan-latest.osm.pbf'
 alias data.rudymap='curl -O https://raw.githubusercontent.com/alpha-rudy/taiwan-topo/master/styles/mapsforge_style/MOI_OSM.xml'
 alias data.rudymap_ele='curl -O http://moi.kcwu.csie.org/osm_elevations/ele_taiwan_10_50_100_500_marker-2019.7.o5m'
@@ -450,32 +467,36 @@ alias data.taiwan_town='curl -o town.zip -L  https://data.moi.gov.tw/MoiOD/Syste
 alias data.taiwan_village='curl -o village.zip -L http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx\?DATA\=B8AF344F-B5C6-4642-AF46-1832054399CE'
 alias data.taiwan_poly='curl -O http://download.geofabrik.de/asia/taiwan.poly'
 alias data.taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/data/5/1/RSCD0101.txt | iconv -f BIG-5 -t UTF-8 -'
+# }}}
+# PASS {{{
 
-# clipboard
-alias xi='xsel -ib'
-alias xii='`fc -ln -1` | head -1 | xsel -ib'
-alias xo='xsel -ob'
-alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
-
-# Text Encode/Decode
-big52utf8() {
-  iconv -f BIG-5 -t UTF-8
-}
-utf82big5() {
-  iconv -t BIG-5 -f UTF-8
-}
-urlencode() {
-  perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg'
-  # Alternative:
-  # curl -Gso /dev/null -w %{url_effective} --data-urlencode @- ""
+alias chp='tig -C ~/.password-store'
+alias chpass='tig -C ~/.password-store'
+alias cdpass='cd ~/.password-store'
+alias p='pass'
+alias pc='pass -c'
+alias pe='pass edit'
+alias pgn='pass generate --in-place --clip'
+alias pgc='pass generate --clip'
+words() {
+    cat /usr/share/dict/usa | grep -E "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
 }
 
-# Network
-alias p8='ping -c 3 8.8.8.8'
-alias curl.google='curl -v google.com'
-alias curl.wifi='curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib'
-
-# misc
+# }}}
+# Nginx{{{
+alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
+alias cdngx='cd /etc/nginx'
+# }}}
+# GIS {{{
+alias oo='ogr2ogr'
+alias oi='ogrinfo -al -so'
+TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
+TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
+TAIPEI_BBOX='121.346,24.926,121.676,25.209'
+TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
+# }}}
+# Misc{{{
+alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 alias wcl='wc -l'
@@ -488,7 +509,6 @@ yt.audio() {
 alias editor='select-editor'
 alias hp='http-prompt'
 alias clocg='cloc --vcs=git'
-alias tma='tmux a'
 pbf() {
   protoc --decode_raw
 }
@@ -508,25 +528,8 @@ wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
 alias cdtrash='cd ~/.local/share/Trash'
 trash() { mv $@ ~/.local/share/Trash; }
 alias ge='graph-easy --boxart'
-
-# pass
-alias chp='tig -C ~/.password-store'
-alias chpass='tig -C ~/.password-store'
-alias cdpass='cd ~/.password-store'
-alias p='pass'
-alias pc='pass -c'
-alias pe='pass edit'
-alias pgn='pass generate --in-place --clip'
-alias pgc='pass generate --clip'
-words() {
-    cat /usr/share/dict/usa | grep -E "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
-}
-
-# Nginx
-alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
-alias cdngx='cd /etc/nginx'
-
-# tmp
+# }}}
+# tmp{{{
 alias stew='cd ~/git/mapstew'
 alias vc='vultr-cli'
 alias xkb='cd $SETTING_DIR && make xkb'
@@ -538,36 +541,4 @@ alias md='reveal'
 alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
 alias gpg.bye='gpg-connect-agent reloadagent /bye'
 alias npm='pnpm'
-
-# GIS
-TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
-TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
-TAIPEI_BBOX='121.346,24.926,121.676,25.209'
-TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
-
-# Comment out
-#alias mm='mkvmerge -o out.webm -w 01.webm + 02.webm'
-#alias we='weechat'
-
-LOCAL_ALIAS=~/.config/local.alias
-alias allo="$EDITOR $LOCAL_ALIAS && source $LOCAL_ALIAS"
-if [ -e $LOCAL_ALIAS ]; then
-  source $LOCAL_ALIAS
-fi
-
-vvv() {
-  while true; do
-    vim -c 'norm '
-    if [ $? -ne 0 ]; then
-      break
-    fi
-    echo "restarting vim...";
-  done
-}
-
-ip.neigh() {
-  INTERFACES=$(ifconfig | sed -nE 's/^([^ :]+).*$/\1/p')
-  test -z "$1" && echo $INTERFACES && return 0
-
-  ifconfig | sed -nE "/^${1}/,/^$/ s/^ +inet ([0-9.]+) .*$/\1/p"
-}
+# }}}
