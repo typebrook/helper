@@ -114,6 +114,7 @@ alias findn='find . -iname'
 alias ce='crontab -e'
 alias cl='crontab -l'
 alias df='df -h'
+bak() { cp $1 $1.bak; }
 
 # }}}
 # Clipboard{{{
@@ -520,9 +521,6 @@ mvt.decode() {
     tmp=$1
   fi
   mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
-}
-bak() {
-  cp $1 $1.bak
 }
 wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
 alias cdtrash='cd ~/.local/share/Trash'

@@ -2,9 +2,7 @@
 # https://qiita.com/sfus/items/063797a1dd8fdc7d032f
 # https://github.com/jonas/tig/wiki/Bindings
 
-#====================
-# geineric
-#====================
+# Generic {{{
 # vim-like g binding, 'gp' for git grep
 bind generic g none
 bind generic gp view-grep
@@ -70,9 +68,8 @@ set ignore-case = true
 set line-graphics = utf-8
 set refresh-mode = auto
 
-#====================
-# main view
-#====================
+# }}}
+# View: Main {{{
 set main-view = \
     date:relative \
     author:abbreviated \
@@ -213,23 +210,20 @@ bind main gc >sh -c 'cloc --git %(commit) | tig'
 #bind generic gnn !git notes edit %(commit)
 #bind generic gnr !git notes remove %(commit)
 
-#====================
-# blame view
-#====================
+# }}}
+# blame view {{{
 bind blame m >tig --follow -- %(file)
 bind blame . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 bind blame > >sh -c "git diff --patch-with-stat %(ref) --no-prefix -U1000i -- %(file) | tig"
 
 set blame-view = author:abbreviated date:relative id:yes,color line-number:yes text
 
-#====================
-# blob view
-#====================
+# }}}
+# blob view {{{
 bind blob m >tig --follow -- %(file)
 
-#====================
-# status view
-#====================
+# }}}
+# status view {{{
 bind status j :/^[MCADRUT?]
 bind status k :?^[MCADRUT?]
 
@@ -271,9 +265,8 @@ bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(fi
 # apply patch file
 bind status <C-O> ?git am %(file)
 
-#====================
-# stash view
-#====================
+# }}}
+# stash view {{{
 bind stash a ?git stash apply %(stash)
 bind stash d ?>git stash drop %(stash)
 bind stash p ?>git stash pop %(stash)
@@ -285,17 +278,15 @@ bind stash n @sh -c "git stash drop %(stash) | \
                      tr -d '()' | \
                      xargs git stash store -m '%(prompt Enter stash name: )'"
 
-#====================
-# stage view
-#====================
+# }}}
+# stage view {{{
 bind stage <C-J> :/^@@
 bind stage <C-K> :?^@@
 bind stage <Esc>j :/^diff --(git|cc)
 bind stage <Esc>k :?^diff --(git|cc)
 
-#====================
-# tree view
-#====================
+# }}}
+# tree view {{{
 set tree-view = author:abbreviated date:relative mode file-size:units id:no file-name
 
 bind tree l enter
@@ -313,9 +304,8 @@ bind tree cp +sh -c "git cat-file -p %(blob) >%(file) && echo File copied to %(f
 
 bind tree . >sh -c "git diff --patch-with-stat %(ref) -- %(file) | tig"
 
-#====================
-# refs view
-#====================
+# }}}
+# refs view {{{
 bind refs b none
 bind refs r none
 bind refs C none
@@ -336,15 +326,13 @@ bind refs > >sh -c "git diff --patch-with-stat %(branch) --prefix -U1000 | tig"
 bind refs r none
 bind refs rr !sh -c "git remote | xargs -I{} sh -c 'echo {} $(git ls-remote {} %(ref))' | grep -E ' ' | cut -d' ' -f1"
 
-#====================
-# log view
-#====================
+# }}}
+# log view {{{
 bind log <C-J> :/^commit
 bind log <C-K> :?^commit
 
-#====================
-# diff view
-#====================
+# }}}
+# diff view {{{
 bind diff <C-J> :/^@@
 bind diff <C-K> :?^@@
 bind diff <Esc>j :/^diff --(git|cc)
@@ -353,15 +341,14 @@ bind diff <Esc>k :?^diff --(git|cc)
 bind diff m >tig -- %(file)
 bind diff u @git checkout %(commit)^ -- %(file)
 
-#====================
-# help view
-#====================
+# }}}
+# help view {{{
 
 # edit tigrc
 bind help e >sh -c "$EDITOR ~/.tigrc"
 
-#====================
-# color
-#====================
+# }}}
+# color {{{
 color diff-chunk white magenta
 color cursor	black   green	bold
+# }}}
