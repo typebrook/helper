@@ -1,5 +1,7 @@
 ## Getting Started
+
 **via curl**
+
 ```
 curl -fsS https://raw.githubusercontent.com/typebrook/helper/dev/bin/install.sh | bash
 

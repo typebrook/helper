@@ -65,7 +65,7 @@ crontab:
 
 # Swap Ctrl-Caps in X11
 libinput:
-	sudo ln -sf `pwd`/misc/libinput/* /etc/X11/xorg.conf.d/
+	sudo ln -sf `pwd`/X11/libinput/* /etc/X11/xorg.conf.d/
 
 # Swap Ctrl-Caps in tty2~6
 console:
@@ -104,7 +104,7 @@ alacritty:
 	ln -sf `pwd`/X11/alacritty ~/.config/alacritty
 
 mpd:
-	ln -sf `pwd`/mpd/ncmpcpp ~/.config/ncmpcpp
+	ln -sf `pwd`/X11/mpd/ncmpcpp ~/.config/ncmpcpp
 	rm -rf ~/.ncmpcpp
 
 snippets:
