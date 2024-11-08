@@ -3,11 +3,21 @@
 alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 
 # SHELL {{{
+
+alias eof='IGNOREEOF=10'
+path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
-alias eof='IGNOREEOF=10'
+ps1.swap() {
+  if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
+    PS1="${1:->}"
+    PS1="${PS1%% } "
+  else PS1="$PS1_bak"
+    unset PS1_bak
+  fi
+}
 
 # }}}
 # CUSTOM HELPER {{{
@@ -28,45 +38,9 @@ urlencode() {
 }
 # }}}
 # UNIX {{{
-alias chx='chmod +x'
-alias chr='chmod +r'
 config(){ cd ~/.config/$1; }
-alias k='kill %1'
-alias s='sudo systemctl'
-alias j='sudo journalctl -xeu'
-alias ls='ls --color'
-alias lsd='ls -d */'
-alias grep='grep --color'
-path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
-ps1.swap() {
-	if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
-		PS1="${1:->}"
-		PS1="${PS1%% } "
-	else PS1="$PS1_bak"
-		unset PS1_bak
-	fi
-}
-fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
-port() { sudo lsof -i :$1; }
-alias ports='sudo lsof -i -Pn | grep LISTEN'
-alias ll='ls -lh'
-alias lla='ls -lha'
-alias lld='ls -lh -d */'
-llw() { which $1 | xargs ls -alh; }
-alias hg='history | grep'
-trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
-rmrf() { rm -rf $@; }
-alias rr='_move_to_tmp'
 alias sound="echo -ne '\a'"
-pst(){ pstree -ps ${1:-$$}; }
-alias duu='du -hd 1 . | sort -hr'
-name() { find . -iname "$1"; }
-alias latest='find . -type f | xargs ls -ltr | tail'
-cdp() {
-  [[ ! -d $1 ]] && mkdir -p $1
-  cd $1
-}
-_move_to_tmp() { mv $@ /tmp; }
+alias hg='history | grep'
 prompt-vim() {
   TMPFILE=$(mktemp)
   echo -e "$@" >$TMPFILE \
@@ -74,6 +48,57 @@ prompt-vim() {
   && sed -i '$ q; s/$/ \\/' $TMPFILE \
   && eval $(<$TMPFILE tee /dev/tty)
   rm $TMPFILE
+}
+
+
+# ls
+alias ll='ls -lh'
+alias lla='ls -lha'
+alias lld='ls -lh -d */'
+alias ls='ls --color'
+alias lsd='ls -d */'
+llw() { which $1 | xargs ls -alh; }
+
+# process
+pst(){ pstree -ps ${1:-$$}; }
+alias k='kill %1'
+fd() { echo /proc/$$/fd; ls -l /proc/$$/fd; }
+
+# date
+alias iso8601='date --iso-8601=minutes'
+alias clock.reset='hwclock --systohc'
+date.reset() {
+  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+}
+
+# grep
+alias grep='grep --color'
+unalias gr &>/dev/null
+gr() { grep -IR $@ . | sed '/^.\{2048\}./d'; }
+highlight() { grep --color -E "$1|\$"; }
+
+# cron
+alias ce='crontab -e'
+alias cl='crontab -l'
+
+# file system
+port() { sudo lsof -i :$1; }
+alias ports='sudo lsof -i -Pn | grep LISTEN'
+alias duu='du -hd 1 . | sort -hr'
+_move_to_tmp() { mv $@ /tmp; }
+name() { find . -iname "$1"; }
+alias latest='find . -type f | xargs ls -ltr | tail'
+alias lock='sudo chattr +i' # Make file undeletable
+alias chx='chmod +x'
+alias chr='chmod +r'
+alias findn='find . -iname'
+trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
+rmrf() { rm -rf $@; }
+alias df='df -h'
+bak() { cp $1 $1.bak; }
+cdp() {
+  [[ ! -d $1 ]] && mkdir -p $1
+  cd $1
 }
 file.sort() {
   find $1 -type f -print0 |\
@@ -97,25 +122,11 @@ file.size() {
     printf("%3d%s: %6d\n", a[1],substr("kMGTEPYZ",a[2]+1,1),$2)
   }'
 }
-highlight() { grep --color -E "$1|\$"; }
-alias iso8601='date --iso-8601=minutes'
-# Make file undeletable
-alias lock='sudo chattr +i'
-# Reset clock
-date.reset() {
-  sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
-}
-alias clock.reset='hwclock --systohc'
-unalias gr &>/dev/null
-gr() {
-  grep -IR $@ . | sed '/^.\{2048\}./d'
-}
-alias findn='find . -iname'
-alias ce='crontab -e'
-alias cl='crontab -l'
-alias df='df -h'
-bak() { cp $1 $1.bak; }
 
+# }}}
+# Systemctl {{{
+alias s='sudo systemctl'
+alias j='sudo journalctl -xeu'
 # }}}
 # Clipboard{{{
 alias xi='xsel -ib'
