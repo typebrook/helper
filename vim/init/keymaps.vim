@@ -442,8 +442,8 @@ vnoremap so :source<CR>
 autocmd! BUFWRITEPOST $MYVIMRC source $MYVIMRC
 
 "  Find scripts
-nnoremap <leader>es :scriptnames<space>
-nnoremap <leader>ee :edit $MYVIMRC<CR>
+nnoremap <leader>ee :scriptnames<space>
+nnoremap <leader>e :edit $MYVIMRC<CR>
 
 " }}}
 " MANAGE_BUFFERS {{{

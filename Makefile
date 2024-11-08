@@ -19,6 +19,7 @@ tig:
 
 vim:
 	ln -sf `pwd`/vim/init.vim ~/.vimrc
+	sudo ln -sf `pwd`/vim/init.vim /usr/local/share/vim/vimrc
 	ln -sf `pwd`/vim ~/.config/nvim
 	# vim-plug
 	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
