@@ -27,38 +27,38 @@
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>Sans</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveWindow">
-      <name>Hack Nerd Font</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuHeader">
-      <name>Hack Nerd Font</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
-      <name>Hack Nerd Font</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="ActiveOnScreenDisplay">
-      <name>Hack Nerd Font</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveOnScreenDisplay">
-      <name>Hack Nerd Font</name>
-      <size>20</size>
+      <name>Source Code Pro</name>
+      <size>16</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
@@ -546,26 +546,6 @@
         </command>
       </action>
     </keybind>
-    <keybind key="W-F1">
-      <action name="Execute">
-        <command>
-	  sh -c '
-            xdotool search --name "@inbox" windowactivate || \
-            alacritty --title "@inbox" -e nvim ~/log/inbox.md
-	  '
-        </command>
-      </action>
-    </keybind>
-    <keybind key="W-F2">
-      <action name="Execute">
-        <command>
-	  sh -c '
-            xdotool search --name "@log" windowactivate || \
-            alacritty --title "@log" --working-directory ~/log
-	  '
-        </command>
-      </action>
-    </keybind>
     <keybind key="W-S-e">
       <action name="Execute">
         <command>
@@ -598,6 +578,20 @@
             xdotool search --onlyvisible --classname thunar windowactivate || \
             thunar ~/Downloads
           '
+        </command>
+      </action>
+    </keybind>
+    <keybind key="W-F1">
+      <action name="Execute">
+        <command>
+          ddcutil setvcp 60 0x01
+        </command>
+      </action>
+    </keybind>
+    <keybind key="W-F2">
+      <action name="Execute">
+        <command>
+          ddcutil setvcp 60 0x03
         </command>
       </action>
     </keybind>
@@ -641,8 +635,8 @@
     </keybind>
     <keybind key="W-S-a">
       <action name="Execute">
-      <command>ob-music</command>
-	<backup>
+        <command>ob-music</command>
+        <backup>
 	  sh -c '
 	    xdotool search --name MPD windowquit || \
 	    alacritty --title MPD -e ncmpcpp

@@ -1488,7 +1488,7 @@ require("lazy").setup({
         javascript = { 'javascript', 'standard' },
         lua = { 'lua_language_server' }
       }
-      g.ale_fixers = {javascript = {'standard'}}
+      g.ale_fixers = { javascript = { 'standard' } }
       g.ale_lint_on_save = 1
       g.ale_fix_on_save = 1
 

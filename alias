@@ -232,6 +232,7 @@ alias pss='pacman -Ss'
 alias yss='yay -Ss'
 alias pqi='pacman -Qi'
 alias pql='pacman -Qlq'
+alias pqe='pacman -Qqe'
 pqlb() {
     pacman -Qlq $1 | grep bin
 }
@@ -239,7 +240,6 @@ alias yql='yay -Ql'
 alias pf='pacman -F'
 alias yf='yay -F'
 alias pfl='pacman -Fl'
-alias pqe='pacman -Qqe'
 alias pR='sudo pacman -R'
 psi() {
   [[ $(pacman -Qqe $1) != '' ]] 2>/dev/null && echo -e "$(tput setaf 13)[Installed]$(tput sgr0)"
