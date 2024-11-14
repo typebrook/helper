@@ -1,0 +1,37 @@
+" Avoid load this script twice
+if get(s:, 'loaded', 0) != 0
+  finish
+else
+  let s:loaded = 1
+endif
+
+" Get current dir
+" let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let s:home = '~/helper/vim'
+
+" Add current dir into runtimepath
+execute 'set runtimepath+='.s:home
+
+" Load scripts in home
+command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
+
+" Gerneral scripts
+LoadScript init/basic.vim     " Basic configuration
+LoadScript init/keymaps.vim   " Key mappings
+LoadScript init/config.vim    " Extra config for different contexts
+
+if $fullrc == 'false'
+  finish
+endif
+
+" Different scripts for nvim and vim
+if has('nvim')
+  LoadScript mini.lua
+else
+  LoadScript init/plugins.vim
+  LoadScript init/style.vim
+endif
+
+LoadScript init/highlight.vim
+
+silent! source ~/.projects.vim

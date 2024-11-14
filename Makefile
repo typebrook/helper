@@ -18,9 +18,9 @@ tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
 
 vim:
-	ln -sf `pwd`/vim/init.vim ~/.vimrc
-	sudo ln -sf `pwd`/vim/init.vim /usr/local/share/vim/vimrc
-	ln -sf `pwd`/vim ~/.config/nvim
+	ln -sfT `pwd`/vim  ~/.config/num
+	ln -sfT `pwd`/vim ~/.config/nvim
+	sudo ln -sfT `pwd`/vim /usr/local/share/vim
 	# vim-plug
 	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
@@ -34,15 +34,15 @@ zsh:
 	ln -sf `pwd`/zsh/zshrc ~/.config/zsh/.zshrc
 
 fzf:
-	if [ ! -d "$(HOME)/.fzf" ]; then 
-		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; 
-		~/.fzf/install; 
+	if [ ! -d "$(HOME)/.fzf" ]; then
+		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf;
+		~/.fzf/install;
 	fi
 
 log:
 	# vimwiki
-	if [ ! -d "$(HOME)/.vimwiki" ]; then 
-		git clone vps:~/log ~/log; 
+	if [ ! -d "$(HOME)/.vimwiki" ]; then
+		git clone vps:~/log ~/log;
 	fi
 
 pass:
