@@ -128,12 +128,6 @@ file.size() {
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 # }}}
-# Clipboard{{{
-alias xi='xsel -ib'
-alias xii='`fc -ln -1` | head -1 | xsel -ib'
-alias xo='xsel -ob'
-alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
-# }}}
 # TMUX {{{
 alias tma='tmux a'
 alias tmux.config="$EDITOR ~/.tmux.conf"
@@ -221,7 +215,7 @@ ssh.down() {
 }
 
 # }}}
-# PACMAN {{{
+# Distro: PACMAN {{{
 alias pac='sudo pacman -S' # pacman install
 alias psy='sudo pacman -Syy'
 alias ys='yay -S'
@@ -248,11 +242,17 @@ psi() {
 pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
 # }}}
-# Alacritty{{{
+# X11: Alacritty{{{
 alias ala.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
 alias alacritty.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
 # }}}
-# VIM {{{
+# X11: Clipboard{{{
+alias xi='xsel -ib'
+alias xii='`fc -ln -1` | head -1 | xsel -ib'
+alias xo='xsel -ob'
+alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
+# }}}
+# EDITOR: VIM {{{
 alias vimrc='vim ~/.vimrc'
 if which nvim &>/dev/null; then
   alias vim='nvim'
@@ -328,7 +328,7 @@ vp() {
 }
 
 # }}}
-# GIT {{{
+# GIT: config {{{
 alias git.config="$EDITOR ~/.gitconfig"
 unalias gc &> /dev/null # override zsh plugin alias
 gc() { git clone $@; if [ $# = 1 ]; then cd $(basename ${1%.git}); fi }
@@ -345,7 +345,7 @@ alias ch="/home/pham/helper/bin/git/check-repos.sh"
 alias git.check="/home/pham/helper/bin/git/check-repos.sh"
 
 # }}}
-# TIG {{{
+# GIT: TIG {{{
 alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
@@ -361,14 +361,14 @@ upload_tig() {
     action=overwrite
 }
 # }}}
-# GIST {{{
+# GiT: GIST {{{
 alias g='gist'
 alias gl='gist last'
 unalias gg &>/dev/null
 alias gg='gist grep'
 
 # }}}
-# Service: GITHUB {{{
+# GIT: GITHUB {{{
 export GITHUB_API='https://api.github.com'
 export GITHUB_API_TOKEN="~/.ssh/tokens/github 2>/dev/null)"
 alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
@@ -398,7 +398,7 @@ github.raw() {
 alias cdB='cd $HOME/bean'
 alias b='vim $HOME/bean/main.bean'
 # }}}
-# Docker{{{
+# DEV: Docker{{{
 alias dk='docker'
 alias dc='docker-compose'
 alias dis='docker images'
@@ -408,7 +408,7 @@ docker.sh() { docker run --rm -it --entrypoint /bin/sh $@; }
 docker.bash() { docker run --rm -it --entrypoint /bin/bash $@; }
 docker.tags() { curl -s -S "https://registry.hub.docker.com/v2/repositories/$@/tags/" | tee /dev/tty | jq '.results[]["name"]' | sort; }
 # }}}
-# Android{{{
+# DEV: Android{{{
 alias debug='./gradlew app:installDebug && adb shell am start -n com.geothings.geobingan/.MainActivity_'
 alias adb.view='adb shell am start -a android.intent.action.VIEW -d' 
 alias adb.default='adb shell dumpsys package domain-preferred-apps'
