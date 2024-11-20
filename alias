@@ -149,6 +149,7 @@ ip.neigh() {
 
 # }}}
 # MAIL {{{
+alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf'
 alias m='mutt'
 alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
 alias h='himalaya'
