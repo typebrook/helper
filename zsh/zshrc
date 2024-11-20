@@ -141,11 +141,6 @@ bindkey '^[,' insert-first-word
 # Quick jump to parent folders
 source $SETTING_DIR/zsh/bd.zsh
 
-
-# Load my general settings
-source $SETTING_DIR/bin/init/load-settings.sh
-
-
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
@@ -163,3 +158,5 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+source $SETTING_DIR/profile

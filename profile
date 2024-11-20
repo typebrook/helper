@@ -37,7 +37,7 @@ fi
 # Set zsh or bash
 if [[ $- =~ i ]]; then
     if [[ $shell == zsh ]]; then
-      setopt extended_glob
+      setopt extended_glob interactive_comments
       fpath=($SETTING_DIR/zsh $fpath)
       alias history='history -i'
       autoload compinit; compinit
