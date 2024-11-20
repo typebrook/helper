@@ -154,7 +154,7 @@ set backspace=eol,start,indent  " Set Backspace behaviors
 
 " TAB and special Chars {{{
 
-set tabstop=8 softtabstop=8
+set tabstop=4 softtabstop=4
 set expandtab
 
 " Invisible chars

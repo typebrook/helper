@@ -1,8 +1,6 @@
 # trap 'exit.sh' EXIT
 
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
-export BIN_DIR=~/bin
-export PATH=$BIN_DIR:$PATH
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
@@ -26,20 +24,6 @@ source $SETTING_DIR/alias
 # sourcr rc files in private/ and bin/
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
-
-# local
-PATH=$PATH:$HOME/.local/bin
-PATH=$PATH:$HOME/.local/share/gem/ruby/3.2.0/bin
-# go
-PATH=$PATH:$HOME/go/bin
-# android-studio
-PATH=$PATH:$HOME/android-studio/bin
-# cargo
-PATH=$PATH:$HOME/.cargo/bin
-# yarn
-PATH=$PATH:$HOME/.yarn/bin
-# gem
-PATH=$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin
 
 # fzf
 if which fzf &>/dev/null; then

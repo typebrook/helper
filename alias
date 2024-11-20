@@ -5,7 +5,7 @@ alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 # SHELL {{{
 
 alias eof='IGNOREEOF=10'
-path() { echo $PATH; } # Should not use alias, because $PATH is not initialized
+path() { echo $PATH | tr : '\n' } # Should not use alias, because $PATH is not initialized
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
@@ -18,6 +18,7 @@ ps1.swap() {
     unset PS1_bak
   fi
 }
+alias zsh.sourced='zsh -o SOURCE_TRACE'
 
 # }}}
 # CUSTOM HELPER {{{
@@ -49,7 +50,8 @@ prompt-vim() {
   && eval $(<$TMPFILE tee /dev/tty)
   rm $TMPFILE
 }
-
+alias wcl='wc -l'
+alias battery='cat /sys/class/power_supply/CMB0/capacity'
 
 # ls
 alias ll='ls -lh'
@@ -74,7 +76,7 @@ date.reset() {
 # grep
 alias grep='grep --color'
 unalias gr &>/dev/null
-gr() { grep -IR $@ . | sed '/^.\{2048\}./d'; }
+gr() { grep --exclude-dir='\.git' -r $@ . | sed '/^.\{2048\}./d'; }
 highlight() { grep --color -E "$1|\$"; }
 
 # cron
@@ -128,9 +130,10 @@ file.size() {
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 # }}}
-# TMUX {{{
+# TTY {{{
 alias tma='tmux a'
 alias tmux.config="$EDITOR ~/.tmux.conf"
+alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
 # }}}
 # NETWORK {{{
 
@@ -147,6 +150,10 @@ ip.neigh() {
   ifconfig | sed -nE "/^${1}/,/^$/ s/^ +inet ([0-9.]+) .*$/\1/p"
 }
 
+# }}}
+# GPG {{{
+alias gpg.bye='gpg-connect-agent reloadagent /bye'
+alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
 alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf'
@@ -253,7 +260,12 @@ alias xii='`fc -ln -1` | head -1 | xsel -ib'
 alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 # }}}
+# X11: Misc {{{
+alias x='xdg-open'
+alias ob.rc='vim ~/.config/openbox/rc.xml'
+# }}}
 # EDITOR: VIM {{{
+alias editor='select-editor'
 alias vimrc='vim ~/.vimrc'
 if which nvim &>/dev/null; then
   alias vim='nvim'
@@ -298,7 +310,7 @@ alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
-
+alias cdtrash='cd ~/.local/share/Trash'
 # }}}
 # BLOG {{{
 alias cdb='cd ~/blog'
@@ -362,7 +374,7 @@ upload_tig() {
     action=overwrite
 }
 # }}}
-# GiT: GIST {{{
+# GIT: GIST {{{
 alias g='gist'
 alias gl='gist last'
 unalias gg &>/dev/null
@@ -395,10 +407,6 @@ github.raw() {
 }
 
 # }}}
-# Beancount{{{
-alias cdB='cd $HOME/bean'
-alias b='vim $HOME/bean/main.bean'
-# }}}
 # DEV: Docker{{{
 alias dk='docker'
 alias dc='docker-compose'
@@ -423,10 +431,16 @@ adb.push() {
   adb push $1 /sdcard/Download
 }
 # }}}
+# Beancount{{{
+alias cdB='cd $HOME/bean'
+alias b='vim $HOME/bean/main.bean'
+# }}}
 # python{{{
 alias pip3='python3 -m pip'
 # }}}
 # sample file{{{
+alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
+alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 alias sample.text='curl http://metaphorpsum.com/paragraphs/3/5'
 alias sample.gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample.geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
@@ -507,21 +521,6 @@ TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
 TAIPEI_BBOX='121.346,24.926,121.676,25.209'
 TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
-# }}}
-# Misc{{{
-alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
-alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
-alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
-alias wcl='wc -l'
-alias x='xdg-open'
-alias yl='youtube-dl'
-alias yla='youtube-dl -x --audio-format mp3'
-yt.audio() {
-  yt-dlp --verbose -x --audio-format mp3 --add-metadata $1
-}
-alias editor='select-editor'
-alias hp='http-prompt'
-alias clocg='cloc --vcs=git'
 pbf() {
   protoc --decode_raw
 }
@@ -535,20 +534,18 @@ mvt.decode() {
   mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
 }
 wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
-alias cdtrash='cd ~/.local/share/Trash'
+# }}}
+# Misc{{{
+alias yl='youtube-dl'
+alias yla='youtube-dl -x --audio-format mp3'
+yt.audio() {
+  yt-dlp --verbose -x --audio-format mp3 --add-metadata $1
+}
+alias hp='http-prompt'
+alias clocg='cloc --vcs=git'
 trash() { mv $@ ~/.local/share/Trash; }
 alias ge='graph-easy --boxart'
-# }}}
-# tmp{{{
-alias stew='cd ~/git/mapstew'
-alias vc='vultr-cli'
-alias xkb='cd $SETTING_DIR && make xkb'
-alias thsr='curl -L google.com >/tmp/foo.html && xdg-open /tmp/foo.html'
-todo() { cd ~/log && grep -R ' TODO ' --exclude-dir=logseq/; }
-fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias ffmpeg='ffmpeg -hide_banner'
-alias md='reveal'
-alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
-alias gpg.bye='gpg-connect-agent reloadagent /bye'
 alias npm='pnpm'
+fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 # }}}
