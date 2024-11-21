@@ -157,10 +157,11 @@ alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
 alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf'
-alias mail.conf='sudo vim /etc/smtpd/smtpd.conf'
 alias mail.pass='sudo vim /etc/mail/passwd'
-alias mail.queue='sudo smtpctl show queue'
-alias mail.show='sudo smtpctl show'
+alias smtp.queue='sudo smtpctl show queue'
+alias smtp.show='sudo smtpctl show'
+alias smtp.ctl='sudo smtpctl'
+alias imap.conf='sudo vim /etc/dovecot/dovecot.conf'
 alias m='mutt'
 alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
 alias h='himalaya'
