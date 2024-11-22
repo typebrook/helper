@@ -195,6 +195,7 @@ imap.fetch() {
 # }}}
 # SSH {{{
 alias ssh.config="$EDITOR ~/.ssh/config"
+alias sshd.config="sudo $EDITOR /etc/ssh/sshd_config"
 alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
 alias ssh.known="$EDITOR ~/.ssh/known_hosts"
 alias cdssh='cd ~/.ssh'

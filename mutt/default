@@ -17,7 +17,6 @@ set reverse_realname = yes
 alternates = @topo.tw
 
 # Interface
-set editor = "nvim"
 set charset = "utf-8"
 set send_charset = "us-ascii:utf-8"
 set header = no

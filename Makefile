@@ -18,7 +18,7 @@ tig:
 	ln -sf `pwd`/tigrc ~/.tigrc
 
 vim:
-	ln -sfT `pwd`/vim  ~/.config/num
+	ln -sfT `pwd`/vim  ~/.config/vim
 	ln -sfT `pwd`/vim ~/.config/nvim
 	sudo ln -sfT `pwd`/vim /usr/local/share/vim
 	# vim-plug
