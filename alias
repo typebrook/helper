@@ -38,6 +38,9 @@ urlencode() {
   # curl -Gso /dev/null -w %{url_effective} --data-urlencode @- ""
 }
 # }}}
+# ADMIN {{{
+alias pass.list='sudo vim /etc/passwd'
+# }}}
 # UNIX {{{
 config(){ cd ~/.config/$1; }
 alias sound="echo -ne '\a'"
@@ -198,6 +201,7 @@ alias ssh.config="$EDITOR ~/.ssh/config"
 alias sshd.config="sudo $EDITOR /etc/ssh/sshd_config"
 alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
 alias ssh.known="$EDITOR ~/.ssh/known_hosts"
+alias ssh.pub="cat ~/.ssh/id_ed25519.pub"
 alias cdssh='cd ~/.ssh'
 alias ptt='ssh ptt'
 alias sshv='ssh -t vps'
@@ -272,7 +276,7 @@ alias ob.rc='vim ~/.config/openbox/rc.xml'
 # }}}
 # EDITOR: VIM {{{
 alias editor='select-editor'
-alias vimrc='vim ~/.vimrc'
+alias vimrc='vim ~/.config/vim/vimrc'
 if which nvim &>/dev/null; then
   alias vim='nvim'
   alias v='nvim'
@@ -518,6 +522,8 @@ words() {
 # }}}
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
+alias ng.conf='sudo vim /etc/nginx/nginx.conf'
+alias ng.log='tail -f /var/log/nginx/access.log'
 alias cdngx='cd /etc/nginx'
 # }}}
 # GIS {{{

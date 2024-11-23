@@ -37,3 +37,6 @@
 
 [receive]
 	denyCurrentBranch = false
+
+[http]
+    receivepack = true

@@ -7,7 +7,7 @@ endif
 
 " Get current dir
 " let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-let s:home = '~/helper/vim'
+let s:home = '/home/pham/helper/vim'
 
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home
@@ -28,6 +28,7 @@ endif
 if has('nvim')
   LoadScript mini.lua
 else
+  colo desert
   "LoadScript init/plugins.vim
   "LoadScript init/style.vim
 endif
