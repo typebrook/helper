@@ -131,7 +131,8 @@ set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
 set sidebar_short_path = yes
 set sidebar_new_mail_only = yes
 set sidebar_width = 17
-bind index,pager B sidebar-toggle-visible
+bind index,pager b sidebar-toggle-visible
+bind index,pager B bounce-message
 bind index \Cp sidebar-prev
 bind index \Cn sidebar-next
 bind index,pager \Co sidebar-open
