@@ -40,3 +40,5 @@
 
 [http]
     receivepack = true
+[core]
+	excludesFile = /srv/git/web/gitignore
