@@ -478,7 +478,7 @@ let g:quitVimWhenPressingCtrlC = 1
 function! ToggleQuit()
   let g:quitVimWhenPressingCtrlC = !g:quitVimWhenPressingCtrlC
   let message = g:quitVimWhenPressingCtrlC ? "Unlock" : "Lock"
-  nnoremap ZZ <C-c>
+  nnoremap ZZ :w<CR><C-c>
   echo message
 endfunction
 nnoremap \q :call ToggleQuit()<CR>

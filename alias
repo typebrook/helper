@@ -132,6 +132,7 @@ file.size() {
 # Systemctl {{{
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
+alias jf='sudo journalctl -xfeu'
 # }}}
 # TTY {{{
 alias tma='tmux a'
