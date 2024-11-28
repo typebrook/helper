@@ -56,6 +56,7 @@ alias cdngx='cd /etc/nginx'
 alias www.git='/srv/git/create.sh'
 alias www='make -f ~/site/www/Makefile'
 alias cdwww='cd ~/site/www'
+alias cds='cd ~/site'
 vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
 
