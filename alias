@@ -91,12 +91,12 @@ port() { sudo lsof -i :$1; }
 alias ports='sudo lsof -i -Pn | grep LISTEN'
 alias duu='du -hd 1 . | sort -hr'
 _move_to_tmp() { mv $@ /tmp; }
-name() { find . -iname "$1"; }
 alias latest='find . -type f | xargs ls -ltr | tail'
 alias lock='sudo chattr +i' # Make file undeletable
 alias chx='chmod +x'
 alias chr='chmod +r'
 alias findn='find . -iname'
+name() { find . -iname "$1"; }
 trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
 rmrf() { rm -rf $@; }
 alias df='df -h'
@@ -456,6 +456,7 @@ alias pip3='python3 -m pip'
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
 alias sample.text='curl http://metaphorpsum.com/paragraphs/3/5'
+alias sample.bible='curl https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/bibles.json | jq .; echo https://github.com/wldeh/bible-api'
 alias sample.gpx='curl -O https://docs.mapbox.com/help/data/run.gpx'
 alias sample.geojson='curl -O https://docs.mapbox.com/help/data/stations.geojson'
 alias sample.gpkg='curl -O http://www.geopackage.org/data/sample1_1.gpkg'
