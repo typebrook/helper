@@ -1,0 +1,9 @@
+.ONESHELL:
+.PHONY: some-target
+ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
+all:
+	echo bar
+
+some-target:
+	echo foo

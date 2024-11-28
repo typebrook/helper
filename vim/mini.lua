@@ -907,6 +907,7 @@ require("lazy").setup({
       vim.keymap.set("v", "<leader>on", ":ObsidianLinkNew<CR>", {})
       vim.keymap.set("n", "<leader>ol", ":ObsidianLinks<CR>", {})
       require("obsidian").setup({
+        disable_frontmatter = true,
         workspaces = {
           {
             name = "log",

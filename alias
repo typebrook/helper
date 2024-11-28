@@ -39,9 +39,51 @@ urlencode() {
 }
 # }}}
 # ADMIN {{{
+
 alias etc.passwd='sudo vim /etc/passwd'
+alias s='sudo systemctl'
+alias j='sudo journalctl -xeu'
+alias jf='sudo journalctl -xfeu'
+
+# }}}
+# Nginx{{{
+alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
+alias ng.conf='sudo vim /etc/nginx/nginx.conf'
+alias ng.log='tail -f /var/log/nginx/access.log'
+alias cdngx='cd /etc/nginx'
+# }}}
+# Web {{{
+alias www.git='/srv/git/create.sh'
+alias www='make -f ~/site/www/Makefile'
+alias cdwww='cd ~/site/www'
+vp() {
+  [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
+
+  filename="${1%.md}.md"
+  post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
+
+  if [ -z "$post" ]; then
+    echo "sh -c 'cd ~/blog && hugo new posts/$filename'" | eval ${PREFIX}
+    post="~/blog/content/posts/$filename"
+  fi
+
+  shift
+  if [[ $HOST = vultr ]]; then
+    vim $@ "$post"
+  else
+    # Copy from vps
+    tmpfile=$(mktemp --suffix .md)
+    scp vps:"$post" $tmpfile
+
+    # Edit locally
+    vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
+    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'Update with vim'" && \
+    rm $tmpfile
+  fi
+}
 # }}}
 # UNIX {{{
+
 config(){ cd ~/.config/$1; }
 alias sound="echo -ne '\a'"
 alias hg='history | grep'
@@ -128,11 +170,6 @@ file.size() {
   }'
 }
 
-# }}}
-# Systemctl {{{
-alias s='sudo systemctl'
-alias j='sudo journalctl -xeu'
-alias jf='sudo journalctl -xfeu'
 # }}}
 # TTY {{{
 alias tma='tmux a'
@@ -272,6 +309,10 @@ alias xo='xsel -ob'
 alias xl='history | tail -1 | grep -oP "^\s*[0-9]+\s\s\K.*" | xsel -ib && echo Copied to clipboard && xsel -ob'
 # }}}
 # X11: Misc {{{
+alias cdD='cd ~/Documents'
+alias cdP='cd ~/Pictures'
+alias cdV='cd ~/Videos'
+alias cdM='cd ~/Music'
 alias x='xdg-open'
 alias ob.rc='vim ~/.config/openbox/rc.xml'
 # }}}
@@ -315,42 +356,9 @@ alias ld='cd -' # last directory
 alias cda='mkdir -p ~/data && cd ~/data'
 cde() { cd /etc/$@; }
 alias cdetc='cde'
-alias cdd='cd ~/Downloads'
-alias cdD='cd ~/Documents'
-alias cdP='cd ~/Pictures'
 alias cdpu='cd ~/public'
-alias cdV='cd ~/Videos'
-alias cdM='cd ~/Music'
+alias cdd='cd ~/Downloads'
 alias cdtrash='cd ~/.local/share/Trash'
-# }}}
-# website {{{
-alias cdb='cd ~/site/www'
-vp() {
-  [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
-
-  filename="${1%.md}.md"
-  post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
-
-  if [ -z "$post" ]; then
-    echo "sh -c 'cd ~/blog && hugo new posts/$filename'" | eval ${PREFIX}
-    post="~/blog/content/posts/$filename"
-  fi
-
-  shift
-  if [[ $HOST = vultr ]]; then
-    vim $@ "$post"
-  else
-    # Copy from vps
-    tmpfile=$(mktemp --suffix .md)
-    scp vps:"$post" $tmpfile
-
-    # Edit locally
-    vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
-    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'Update with vim'" && \
-    rm $tmpfile
-  fi
-}
-
 # }}}
 # GIT: config {{{
 alias git.config="$EDITOR ~/.gitconfig"
@@ -368,9 +376,6 @@ alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to 
 alias ch="/home/pham/helper/bin/git/check-repos.sh"
 alias git.check="/home/pham/helper/bin/git/check-repos.sh"
 
-# }}}
-# GIT: Web {{{
-alias git.web='/srv/git/create.sh'
 # }}}
 # GIT: TIG {{{
 alias cdt='cd ~/git/tig'
@@ -445,13 +450,6 @@ adb.push() {
   adb push $1 /sdcard/Download
 }
 # }}}
-# Beancount{{{
-alias cdB='cd $HOME/bean'
-alias b='vim $HOME/bean/main.bean'
-# }}}
-# python{{{
-alias pip3='python3 -m pip'
-# }}}
 # sample file{{{
 alias foo='echo bar > foo && echo File foo is created && ls -lh foo'
 alias bar='echo foo > bar && echo File bar is created && ls -lh bar'
@@ -524,11 +522,12 @@ words() {
 }
 
 # }}}
-# Nginx{{{
-alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
-alias ng.conf='sudo vim /etc/nginx/nginx.conf'
-alias ng.log='tail -f /var/log/nginx/access.log'
-alias cdngx='cd /etc/nginx'
+# Beancount{{{
+alias cdB='cd $HOME/bean'
+alias b='vim $HOME/bean/main.bean'
+# }}}
+# python{{{
+alias pip3='python3 -m pip'
 # }}}
 # GIS {{{
 alias oo='ogr2ogr'
