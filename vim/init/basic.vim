@@ -59,11 +59,11 @@ set winaltkeys=no       " Allow alt key for mapping
 set undofile
 if has('nvim')
   set undodir=~/.vim/.undodir/nvim
+  set verbosefile=/tmp/nvim.log
 else
   set undodir=~/.vim/.undodir/vim
 endif
 
-set verbosefile=/tmp/nvim.log
 
 " Apply plugin and indent by filetype
 filetype plugin indent on
@@ -158,7 +158,7 @@ set tabstop=4 softtabstop=4
 set expandtab
 
 " Invisible chars
-set nolist
+set list
 set listchars=tab:»·,extends:>,precedes:<
 
 " }}}

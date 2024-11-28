@@ -39,4 +39,4 @@
 	denyCurrentBranch = false
 
 [core]
-	excludesFile = /srv/git/web/gitignore
+	excludesFile = /srv/git/www/gitignore

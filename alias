@@ -39,7 +39,7 @@ urlencode() {
 }
 # }}}
 # ADMIN {{{
-alias pass.list='sudo vim /etc/passwd'
+alias etc.passwd='sudo vim /etc/passwd'
 # }}}
 # UNIX {{{
 config(){ cd ~/.config/$1; }
@@ -199,7 +199,7 @@ imap.fetch() {
 # }}}
 # SSH {{{
 alias ssh.config="$EDITOR ~/.ssh/config"
-alias sshd.config="sudo $EDITOR /etc/ssh/sshd_config"
+alias sshd.config="sudo vim /etc/ssh/sshd_config"
 alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
 alias ssh.known="$EDITOR ~/.ssh/known_hosts"
 alias ssh.pub="cat ~/.ssh/id_ed25519.pub"
@@ -323,8 +323,8 @@ alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 alias cdtrash='cd ~/.local/share/Trash'
 # }}}
-# BLOG {{{
-alias cdb='cd ~/blog'
+# website {{{
+alias cdb='cd ~/site/www'
 vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
 
