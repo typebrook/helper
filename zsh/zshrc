@@ -159,4 +159,4 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-source $SETTING_DIR/profile
+source ~/.profile

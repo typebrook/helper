@@ -44,17 +44,21 @@ alias etc.passwd='sudo vim /etc/passwd'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 alias jf='sudo journalctl -xfeu'
+alias fb.conf='sudo vim /etc/fail2ban/jail.d/jail.local'
+alias fb='sudo fail2ban-client'
 
 # }}}
 # Nginx{{{
-alias vgx='sudo vim /etc/nginx/sites-enabled/vps && sudo nginx -t && sudo systemctl reload nginx'
-alias ng.conf='sudo vim /etc/nginx/nginx.conf'
-alias ng.log='tail -f /var/log/nginx/access.log'
+alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
+alias ng.conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
+alias ng.log='setterm --linewrap off; tail -n 200 -f /var/log/nginx/access.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
 # }}}
 # Web {{{
+alias cdsrv='cd /srv'
 alias www.git='/srv/git/create.sh'
 alias www='make -f ~/site/www/Makefile'
+alias www.conf='vim ~/site/www/scripts/build.sh'
 alias cdwww='cd ~/site/www'
 alias cds='cd ~/site'
 vp() {
@@ -198,7 +202,7 @@ alias gpg.bye='gpg-connect-agent reloadagent /bye'
 alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
-alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf'
+alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'
 alias mail.pass='sudo vim /etc/mail/passwd'
 alias smtp.queue='sudo smtpctl show queue'
 alias smtp.show='sudo smtpctl show'
@@ -563,7 +567,7 @@ alias clocg='cloc --vcs=git'
 trash() { mv $@ ~/.local/share/Trash; }
 alias ge='graph-easy --boxart'
 alias ffmpeg='ffmpeg -hide_banner'
-alias npm='pnpm'
+#alias npm='pnpm'
 fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias monitor.light='ddcutil --permit-unknown-feature setvcp 10'
 # }}}

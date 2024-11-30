@@ -1,5 +1,6 @@
 # trap 'exit.sh' EXIT
 
+export PATH=~/.local/bin:$PATH
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
@@ -60,7 +61,6 @@ fi
 
 # Working DIR
 # [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
-cd ~/git/dumbymap 2>/dev/null || cd ~/Downloads
-source ~/.profile 2>/dev/null
+#cd ~/git/dumbymap 2>/dev/null || cd ~/Downloads
 
 true
