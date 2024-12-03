@@ -178,7 +178,7 @@ file.size() {
 # }}}
 # TTY {{{
 alias tma='tmux a'
-alias tmux.config="$EDITOR ~/.tmux.conf"
+alias tmux.conf="$EDITOR ~/.tmux.conf"
 alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
 # }}}
 # NETWORK {{{
