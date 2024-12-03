@@ -1,7 +1,7 @@
 # about vimwiki
 alias cdl='cd ~/log'
 alias chw='tig -C ~/log'
-ww() { entry="${1:-plan.context}"; vim ~/log/${entry%%.md}.md; }
+ww() { entry="${1:-inbox}"; vim ~/log/${entry%%.md}.md; }
 wj() { echo "$@" >>~/log/buffer.md; }
 wg() { grep -r "$@" --color --exclude-dir={logseq,.git,.obsidian} ~/log; }
 wi() { cat ~/log/${1%%.md}.md; }

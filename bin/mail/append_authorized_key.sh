@@ -13,7 +13,7 @@ MAIL="$(cat)"
 test -f ~/.config/passphase || exit 1
 PASSPHASE="$(cat ~/.config/passphase)"
 
-# Only execute the following script when header matched
+# Check passphase, or exit 0
 grep -qE "^Passphase: ${PASSPHASE}" <<<"$MAIL" || exit 0
 
 # Append comment and last line to ~/.ssh/authorized_keys

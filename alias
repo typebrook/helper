@@ -22,7 +22,7 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 
 # }}}
 # CUSTOM HELPER {{{
-cdh() { cd $SETTING_DIR/$@; }
+cdh() { set -x; cd $SETTING_DIR/${*// //}; set +x; }
 alias chh="tig -C $SETTING_DIR status"
 # }}}
 # Text Encode/Decode{{{
@@ -51,7 +51,7 @@ alias fb='sudo fail2ban-client'
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
 alias ng.conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
-alias ng.log='setterm --linewrap off; tail -n 200 -f /var/log/nginx/access.log; setterm --linewrap on'
+alias ng.log='setterm --linewrap off; tail -f /var/log/nginx/access.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
 # }}}
 # Web {{{
@@ -208,6 +208,7 @@ alias smtp.queue='sudo smtpctl show queue'
 alias smtp.show='sudo smtpctl show'
 alias smtp.ctl='sudo smtpctl'
 alias imap.conf='sudo vim /etc/dovecot/dovecot.conf'
+alias cdmail='cd ~/Maildir'
 alias m='mutt'
 alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
 alias h='himalaya'

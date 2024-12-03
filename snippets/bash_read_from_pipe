@@ -1,0 +1,4 @@
+shopt -s lastpipe; set +m;
+
+echo bar | read foo
+echo $foo
