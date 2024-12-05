@@ -135,7 +135,7 @@ bind main gs ?@git merge %(branch) --squash
 
 # push
 bind main p none # override default pager binding
-bind main pp ?git push
+bind main pp ?bash -c 'git push || git remote update --prune'
 bind main pP ?git push -u %(remote) %(branch):%(branch)
 bind main pr ?git push -u '%(prompt Which remote? )' %(branch):%(branch)
 bind main pfr ?git push -u '%(prompt Force push to which remote? )' %(branch):%(branch) -f
