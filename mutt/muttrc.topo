@@ -27,7 +27,7 @@ set move = yes
 set record = "+Sent"
 set trash = "+Trash"
 set postponed = "+Drafts"
-set mask="!(tmp|new|cur|dovecot.*|\\..*)"
+set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 
 # Sidebar
 mailboxes  -label '📭 [i]' + \

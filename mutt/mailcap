@@ -1,5 +1,4 @@
-text/html;                  surf '%s'; test=test -n "$DISPLAY"; copiousoutput;
-# text/html;                  w3m -I %{charset} -T text/html; copiousoutput;
+text/html;                  w3m -I %{charset} -T text/html; copiousoutput;
 text/plain;                 surf '%s'; test=test -n "$DISPLAY"; needsterminal;
 application/json;           jq . %s | less -N; copiousoutput;
 application/pdf;            firefox '%s'; test=test -n "$DISPLAY"; needsterminal;

@@ -22,7 +22,7 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 
 # }}}
 # CUSTOM HELPER {{{
-cdh() { set -x; cd $SETTING_DIR/${*// //}; set +x; }
+cdh() { cd $SETTING_DIR/${*// //}; }
 alias chh="tig -C $SETTING_DIR status"
 # }}}
 # Text Encode/Decode{{{

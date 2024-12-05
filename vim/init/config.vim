@@ -43,6 +43,40 @@ augroup InitFileTypes
   autocmd FileType quickfix setlocal nonumber
 
   " }}}
+  " Shell {{{
+
+  ""au FileType bash call InitBash()
+  ""function! InitBash()
+  ""  setlocal foldexpr=ShellLevel() foldmethod=expr
+  ""endfunc
+
+  ""function! ShellLevel()
+  ""  let line = getline(v:lnum)
+  ""  let hash_num = matchstr(line, '^\zs\s*#\ze[^!]')
+  ""  if !empty(hash_num)
+  ""    let foldlevel = (len(hash_num) - 1)/2 + 1
+  ""    return '>'.foldlevel
+  ""  else
+  ""    return "="
+  ""  endif
+  ""endfunc
+  ""function! CountSubfolds(start, end)
+  ""  let count = 0
+  ""  let current_level = foldlevel(a:start)
+  ""  for lnum in range(a:start + 1, a:end + 1)
+  ""    if foldlevel(lnum) > current_level
+  ""      let count += 1
+  ""    endif
+  ""  endfor
+  ""  return count
+  ""endfunction
+
+  ""function! MyFoldText()
+  ""  let lines = v:foldend - v:foldstart + 1
+  ""  let subfolds = CountSubfolds(v:foldstart, v:foldend)
+  ""  return printf('%d lines, %d subfolds', lines, subfolds)
+  ""endfunction
+  " }}}
   " Markdown {{{
 
   au FileType markdown call InitMarkdownFile()
