@@ -4,18 +4,33 @@
 # Usage:
 #   echo '|<PATH_TO_THIS_SCRIPT>' >>~/.forward
 
-mailto=${mailto:-$(whoami)@${HOSTNAME:?HOSTNAME is not specified}}
-output_dir=${output_dir:-/srv/http}
+set -x
+exec 2>>/dev/pts/1
+env >&2
+
+while [[ "$1" =~ ^-- && ! "$1" == "--" ]]; do
+  case $1 in
+    --mailto ) shift; mailto=$1 ;;
+    --output_dir ) shift; output_dir=$1 ;;
+  esac
+  shift
+done
+
+mailto=${mailto:-`whoami`@${HOSTNAME:?HOSTNAME is not specified}}
+[ -z "$mailto" ] && echo --mailto is not specified}
+[ -z "$output_dir" ] && echo --output_dir is not specified}
+markdown_bin=${markdown:-markdown}
+[ -x $(which $markdown_bin) ] || markdown_bin=cat
 
 # Check mail is for comment {{{
 
 # Restore mail into variable
-MAIL="$(tr -d '\r')"
+MAIL="$(tee /tmp/mail | tr -d '\r')"
 header="$(<<<"$MAIL" sed '/^$/ q')"
 body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 
 # determine mail is for comment by pattern
-pattern='^Subject: .*comment on (https?://)?([^/]+)?/([^ ]+)$'
+pattern='^Subject: .*comment on (https?://)?([^/]+/)?([^ ]+)$'
 <<<"$header" grep -E "$pattern" >/dev/null || exit 0
 
 # }}}
@@ -62,8 +77,7 @@ if [[ "$CONTENT_TYPE" =~ mixed ]]; then
 
   # print content of first mail part
   boundaryPat="\\|^--${boundary}\$|"
-  <<<"$body" sed -n "${boundaryPat},${boundaryPat} p" | sed -n "1,4d; ${boundaryPat} q; p" \
-  | read body
+  body="$(<<<"$body" sed -n "${boundaryPat},${boundaryPat} p" | sed -n "1,4d; ${boundaryPat} q; p")"
 fi
 
 # }}}
@@ -84,7 +98,7 @@ fi
 	<time datetime="${DATE}">${DATE}</time>
 	<a href="mailto:${mailto}?subject=comment on ${path}&in-reply-to=${MESSAGE_ID}">[reply]</a>
 
-	$(<<<"${body}" markdown)
+	$(<<<"${body}" ${markdown_bin})
 
 	<ul>
 	<!-- ${MESSAGE_ID} -->
