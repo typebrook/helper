@@ -83,7 +83,7 @@ bind main F none
 bind generic <C-T> :toggle commit-title-refs
 
 # edit tigrc
-bind main e >sh -c "$EDITOR ~/.tigrc"
+bind main e >sh -c "$EDITOR ~/.tigrc && source ~/.tigrc"
 
 # move
 bind main <C-J> :move-next-merge
