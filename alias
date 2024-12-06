@@ -5,8 +5,8 @@ alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 # SHELL {{{
 
 alias eof='IGNOREEOF=10'
-path() { 
-  echo $PATH | tr : '\n' 
+path() {
+  echo $PATH | tr : '\n'
 }
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
