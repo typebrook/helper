@@ -32,7 +32,7 @@ if which fzf &>/dev/null; then
   export FZF_CTRL_T_OPTS='--no-multi --bind=ctrl-c:print-query'
   export FZF_CTRL_R_OPTS='--bind=ctrl-c:print-query'
   fzf_preview() { fzf --preview 'cat {}'; }
-  source ~/.fzf.${shell}
+  [ -f ~/.fzf.${shell} ] && source ~/.fzf.${shell}
 fi
 
 # Set zsh or bash
