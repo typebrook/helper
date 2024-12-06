@@ -126,9 +126,11 @@ if [ ! -f $output ] || ! xmllint --html --nofixup-base-uris $output &>/dev/null;
 	  }
 	  .replies {
 	    display: none;
-	    cursor: pointer;
 	    &:has(li) {
 	      display: block;
+	    }
+	    summary {
+	      cursor: pointer;
 	    }
 	    ul {
 	      padding-inline: 1rem 0;
