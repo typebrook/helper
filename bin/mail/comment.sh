@@ -2,7 +2,22 @@
 
 # Save incoming mail as comment
 # Usage:
-#   echo '|<PATH_TO_THIS_SCRIPT> --output_dir=<PATH_OF_HTML_FILES>' >>~/.forward
+#   Step1. Add script into forward(5) for MDA
+#     echo '|<PATH_TO_THIS_SCRIPT> --output_dir=<PATH_OF_HTML_FILES>' >>~/.forward
+#
+#   Step2. Insert related html file into target page, the following example use <object> element
+#          Please replace <PATH> for your target page:
+#     <div style="border-radius: 6px; background: lightyellow">
+#       <a style="display: inline-block; margin: 0.5em 0.5em 0 0; float: right" href="mailto:comment@topo.tw?subject=Comment on page: ${path}">[Comment on this page]</a>
+#       <object type="text/html" data="/<PATH>.comment.html" onload="observeResize(this)" style="width: 100%;"></object>
+#       <script>
+#         function observeResize(commentBlock) {
+#           new ResizeObserver((entries) => {
+#             commentBlock.style.height = entries[-1].clientHeight + 'px';
+#           }).observe(commentBlock.contentDocument.documentElement);
+#         }
+#       </script>
+#     </div>
 
 # 1. Check mail is for comment {{{
 
