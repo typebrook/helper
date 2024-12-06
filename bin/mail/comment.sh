@@ -53,7 +53,7 @@ done
 
 export PATH=/bin:/usr/bin:/usr/local/bin:~/.local/bin
 output_dir=${output_dir:-$(dirname $0)}
-markdown_bin=${markdown_bin:-$(which markdown)}
+markdown_bin=${markdown_bin:-$(which markdown 2>/dev/null)}
 [ -x "$markdown_bin" ] || markdown_bin=cat
 
 # }}}
