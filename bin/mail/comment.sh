@@ -3,21 +3,29 @@
 # Save incoming mail as comment
 # Usage:
 #   Step1. Add script into forward(5) for MDA
-#     echo '|<PATH_TO_THIS_SCRIPT> --output_dir=<PATH_OF_HTML_FILES>' >>~/.forward
+#          Some MDA won't accept arguments for command. If --output_dir is not specified,
+#          directory of this script would be used instead
+#
+#     echo '|<PATH_TO_THIS_SCRIPT> --output_dir <PATH_OF_HTML_FILES>' >>~/.forward
 #
 #   Step2. Insert related html file into target page, the following example use <object> element
-#          Please replace <PATH> for your target page:
+#          * Please replace <PATH> for your target page, relative to value of --output_dir
+#          * Set <RECIPIENT> for mail address which can achive MDA
+#          * Change <PATH> in data attribute of <object> based on routing if necessary
+#
+#     <!-- START OF COMMENT BLOCK -->
 #     <div style="border-radius: 6px; background: lightyellow">
-#       <a style="display: inline-block; margin: 0.5em 0.5em 0 0; float: right" href="mailto:comment@topo.tw?subject=Comment on page: ${path}">[Comment on this page]</a>
-#       <object type="text/html" data="/<PATH>.comment.html" onload="observeResize(this)" style="width: 100%;"></object>
+#       <a style="display: inline-block; margin: 0.5em 0.5em 0 0; float: right" href="mailto:<RECIPIENT>?subject=Comment on page: <PATH>">[Comment on this page]</a>
+#       <object type="text/html" data="<PATH>.comment.html" onload="observeResize(this)" style="width: 100%;"></object>
 #       <script>
 #         function observeResize(commentBlock) {
 #           new ResizeObserver((entries) => {
-#             commentBlock.style.height = entries[-1].clientHeight + 'px';
+#             commentBlock.style.height = entries[0].target.clientHeight + 'px';
 #           }).observe(commentBlock.contentDocument.documentElement);
 #         }
 #       </script>
 #     </div>
+#     <!-- END OF COMMENT BLOCK -->
 
 # 1. Check mail is for comment {{{
 
@@ -43,9 +51,10 @@ while [[ "$1" =~ ^-- && ! "$1" == "--" ]]; do
   shift
 done
 
-output_dir=${output_dir:?}
-markdown_bin=${markdown_bin:-markdown}
-[ -x $(which $markdown_bin) ] || markdown_bin=cat
+export PATH=/bin:/usr/bin:/usr/local/bin:~/.local/bin
+output_dir=${output_dir:-$(dirname $0)}
+markdown_bin=${markdown_bin:-$(which markdown)}
+[ -x "$markdown_bin" ] || markdown_bin=cat
 
 # }}}
 # 3. Read header fields {{{
@@ -74,10 +83,11 @@ if [ $path = "" ]; then
 fi
 
 # get output path
-[[ "$path" =~ '/$' ]] && path+=index
+[[ "$path" =~ /$ ]] && path+=index
 path=${path#/}
 path=${path/.html}
 output=$output_dir/${path}.comment.html
+umask 022; mkdir -p $(dirname $output)
 
 # }}}
 # 5. Get comment from mail body {{{
@@ -93,6 +103,7 @@ fi
 # }}}
 # 6. Write comment to output file {{{
 
+umask 133
 # add basic html layout for output file if necessary {{{
 if [ ! -f $output ] || ! xmllint --html --nofixup-base-uris $output &>/dev/null; then
   <<-LAYOUT cat >$output
@@ -161,4 +172,4 @@ COMMENT
 
 # }}}
 
-# vim:fdm=marker
+# vim:fdm=marker fdl=0
