@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Mutt
-Comment=My beloved mail client
-Exec=alacritty -e mutt %u
-MimeType=x-scheme-handler/mailto
-Terminal=true
 Type=Application
-Categories=Email;Office;Network;
+Name=Mutt Email Client
+Exec=alacritty --title Mutt -e mutt %u
+Terminal=false
+MimeType=message/rfc822;application/mbox;application/pgp-encrypted;application/pkcs7-mime;application/x-pkcs7-mime;application/vnd.ms-outlook;application/pdf;image/*;text/html;text/plain;application/octet-stream;
+Icon=mutt # Replace with the actual icon path if you have one
+Categories=Network;Email;

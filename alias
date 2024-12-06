@@ -5,7 +5,9 @@ alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
 # SHELL {{{
 
 alias eof='IGNOREEOF=10'
-path() { echo $PATH | tr : '\n' } # Should not use alias, because $PATH is not initialized
+path() { 
+  echo $PATH | tr : '\n' 
+}
 eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
@@ -321,6 +323,9 @@ alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 alias x='xdg-open'
 alias ob.rc='vim ~/.config/openbox/rc.xml'
+desktop() {
+  $EDITOR ~/.local/share/applications/${1}.desktop
+}
 # }}}
 # EDITOR: VIM {{{
 alias editor='select-editor'
@@ -342,7 +347,7 @@ vll() { vim -c 'Telescope oldfiles'; }
 alias vS="vim -S /tmp/vim.session"
 alias cdv='cd ~/.config/nvim'
 vs() { which $1 && vim $(which $1); }
-[ "$shell" = zsh ] && compdef vs=which
+[ ${0##*/} = 'zsh' ] && compdef vs=which
 alias vim.dos2unix="vim '+set ff=unix' '+x'"
 vvv() {
   while true; do
