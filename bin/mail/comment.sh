@@ -6,9 +6,10 @@
 
 # 1. Check mail is for comment {{{
 
-# Restore mail into variable
+# Restore mail into variables
 MAIL="$(tr -d '\r')"
-header="$(<<<"$MAIL" sed '/^$/ q')"
+# join multi-line field value into one line
+header="$(<<<"$MAIL" sed '/^$/ q; :a; N; s/\n\s\+//; ta')"
 body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 
 # determine mail is for comment by pattern
@@ -38,8 +39,9 @@ markdown_bin=${markdown_bin:-markdown}
 shopt -s lastpipe; set +m;
 
 # save each field of header into variables
-<<<"$header" grep '^[a-zA-Z]' \
-| while read field value; do
+echo "$header" | \
+while read field value; do
+  echo "$field" "$value" >>/tmp/header
   declare field=$(<<<$field tr [:lower:] [:upper:] | tr '-' '_' | tr -d ':')
   declare $field="${value}"
 done
@@ -66,13 +68,8 @@ output=$output_dir/${path}.comment.html
 # 5. Get comment from mail body {{{
 
 # check mail includes multiple part
-if [[ "$CONTENT_TYPE" =~ mixed ]]; then
-  boundary="$(<<<"$CONTENT_TYPE" sed -En 's/^.*boundary="(.*)".*$/\1/p')"
-  if [ $boundary = "" ]; then
-    echo 'cannot get boundary from mail header' >&2
-    exit 1
-  fi
-
+boundary="$(<<<"$CONTENT_TYPE" sed -En 's/^.*boundary="?([^"]+)"?.*$/\1/p')"
+if [ -n "${boundary}" ]; then
   # print content of first mail part
   boundaryPat="\\|^--${boundary}\$|"
   body="$(<<<"$body" sed -n "${boundaryPat},${boundaryPat} p" | sed -n "1,4d; ${boundaryPat} q; p")"
@@ -85,10 +82,17 @@ fi
 if [ ! -f $output ] || ! xmllint --html --nofixup-base-uris $output &>/dev/null; then
   <<-LAYOUT cat >$output
 	<style>
+	   ul {
+	     padding-inline: 1rem;
+	     li {
+	       margin-block: 1rem;
+	     }
+	   }
 	  .comment-body {
+	    margin-top: 0.5rem;
 	    padding: 0.5rem;
-	    width: fit-content;
-	    border-radius: 8px;
+	    overflow-x: scroll;
+	    border-radius: 4px;
 	    background: lightblue;
 	    p {
 	      margin: 0.5rem;
@@ -99,6 +103,9 @@ if [ ! -f $output ] || ! xmllint --html --nofixup-base-uris $output &>/dev/null;
 	    cursor: pointer;
 	    &:has(li) {
 	      display: block;
+	    }
+	    ul {
+	      padding-inline: 1rem 0;
 	    }
 	  }
 	</style>
@@ -113,6 +120,8 @@ if [ -n "${IN_REPLY_TO}" ]; then
 fi
 # }}}
 # insert comment into output file {{{
+
+# FIXME prevent pattern <!-- ${MESSAGE_ID} --> shown in <pre> block
 <<-COMMENT sed -i "${line:-/<ul>/}r /dev/stdin" $output
 	<li>
 
@@ -136,3 +145,5 @@ COMMENT
 # }}}
 
 # }}}
+
+# vim:fdm=marker
