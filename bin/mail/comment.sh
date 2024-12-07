@@ -25,6 +25,20 @@
 #     </div>
 #     <!-- END OF COMMENT BLOCK -->
 
+# 0. Work as CGI {{{
+
+# Print this script as HTTP Response
+if [ -n "$REQUEST_METHOD" ]; then
+  <<-RESPONSE cat
+	Status: 200
+	Content-Type: text/plain
+
+	$(cat $0)
+	RESPONSE
+  exit 0
+fi
+
+# }}}
 # 1. Check mail is for comment {{{
 
 # Restore mail into variables
