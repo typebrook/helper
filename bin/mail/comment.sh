@@ -3,10 +3,8 @@
 # Save incoming mail as comment
 # Usage:
 #   Step1. Add script into forward(5) for MDA
-#          Some MDA won't accept arguments for command. If --output_dir is not specified,
-#          directory of this script would be used instead
 #
-#     echo '|<PATH_TO_THIS_SCRIPT> --output_dir <PATH_OF_HTML_FILES>' >>~/.forward
+#     echo '|"<PATH_TO_THIS_SCRIPT> --output_dir <PATH_OF_HTML_FILES>"' >>~/.forward
 #
 #   Step2. Insert related html file into target page, the following example use <object> element
 #          * Please replace <PATH> for your target page, relative to value of --output_dir
@@ -36,7 +34,7 @@ header="$(<<<"$MAIL" sed '/^$/ q; :a; N; s/\n\s\+//; ta')"
 body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 
 # determine mail is for comment by pattern
-pattern='^Subject: .*[cC]omment on page: (https?://)?([^/]+/)?([^ ]+)$'
+pattern='^Subject: .*[cC]omment on page:? +(https?://[^/]+)?(/?[^ ]+).*$'
 <<<"$header" grep -E "$pattern" >/dev/null || exit 0
 
 # }}}
@@ -74,7 +72,7 @@ DATE=${DATE:+$(date --rfc-3339 seconds --date "$DATE")}
 # }}}
 # 4. Get path of output file {{{
 
-path=$(<<<"$header" sed -En "\\|${pattern}| {s//\\3/p; q}")
+path=$(<<<"$header" sed -En "\\|${pattern}| {s//\\2/p; q}")
 
 # sender want comment on some page, but find no path for this
 if [ $path = "" ]; then
@@ -92,18 +90,26 @@ umask 022; mkdir -p $(dirname $output)
 # }}}
 # 5. Get comment from mail body {{{
 
+printTextPart() {
+  boundary=$1
+  beginPat="\\|^--${boundary}\$|"
+  endPat="\\|^--${boundary}(--)?\$|"
+  sed -En "${beginPat},${endPat} { \@^Content-Type: text/plain@,$ {1,/^$/d; ${beginPat}d; p} }"
+}
+
 # check mail includes multiple part
 boundary="$(<<<"$CONTENT_TYPE" sed -En 's/^.*boundary="?([^"]+)"?.*$/\1/p')"
 if [ -n "${boundary}" ]; then
-  # print content of first mail part
-  boundaryPat="\\|^--${boundary}\$|"
-  body="$(<<<"$body" sed -n "${boundaryPat},${boundaryPat} p" | sed -n "1,4d; ${boundaryPat} q; p")"
+  # print mail part in MIME: text/plain
+  body="$(<<<"$body" printTextPart ${boundary})"
 fi
 
 # }}}
 # 6. Write comment to output file {{{
 
+# set STDOUT to $output, with readable permission for everyone
 umask 133
+
 # add basic html layout for output file if necessary {{{
 if [ ! -f $output ] || ! xmllint --html --nofixup-base-uris $output &>/dev/null; then
   <<-LAYOUT cat >$output
@@ -165,7 +171,7 @@ fi
 	<ul>
 	<!-- ${MESSAGE_ID} -->
 	</ul>
-    </details>
+	</details>
 
 	</li>
 COMMENT
