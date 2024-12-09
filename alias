@@ -58,6 +58,8 @@ alias cdngx='cd /etc/nginx'
 # }}}
 # Web {{{
 alias cdsrv='cd /srv'
+alias cdcgi='cd /srv/cgi'
+alias cdhttp='cd /srv/http'
 alias www.git='/srv/git/create.sh'
 alias www='make -f ~/site/www/Makefile'
 alias www.conf='vim ~/site/www/scripts/build.sh'
