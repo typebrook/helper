@@ -1,10 +1,5 @@
 source ~/.config/mutt/default
 
-# IMAP/SMTP settings
-set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
-set folder = "/home/pham/Maildir"
-set smtp_url = "smtp://$my_user:25"
-
 # Identify meself
 set from = "pham@topo.tw"
 set realname = "謝晉凡 Hsieh Chin Fan"
