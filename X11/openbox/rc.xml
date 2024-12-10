@@ -588,13 +588,13 @@
         </command>
       </action>
     </keybind>
-    <keybind key="W-F2">
-      <action name="Execute">
-        <command>
-          ddcutil setvcp 60 0x03
-        </command>
-      </action>
-    </keybind>
+    <!-- <keybind key="W-F2"> -->
+    <!--   <action name="Execute"> -->
+    <!--     <command> -->
+    <!--       ddcutil setvcp 60 0x03 -->
+    <!--     </command> -->
+    <!--   </action> -->
+    <!-- </keybind> -->
     <keybind key="C-A-f">
       <action name="Execute">
         <command>
