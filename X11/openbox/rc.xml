@@ -651,7 +651,7 @@
             xdotool search --name "@Mutt" windowactivate || \
             alacritty --title @Mutt \
             --working-directory=/home/pham/Downloads \
-            -e ssh -t vps -- mutt
+            -e mutt
           '
       </command>
       </action>

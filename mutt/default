@@ -42,7 +42,7 @@ index-format-hook  date  "~d<1y"    "%[%b %d]"
 index-format-hook  date  "~A"       "%[%Y-%m]"
 
 # Preference
-alternative_order text/plain text/enriched text/html
+alternative_order text/html text/plain text/enriched
 # Auto convert text/html MIME type to text/plain
 auto_view text/html
 # Macro to open html with css
