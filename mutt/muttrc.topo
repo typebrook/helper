@@ -75,3 +75,4 @@ macro index,pager,browser   ga      "<change-folder>+arch-general<Return>" "Swit
 macro index,pager,browser   gk      "<change-folder>+keep<Return>" "Switch to keep folder"
 macro index,pager,browser   gu      "<change-folder>+update<Return>" "Switch to update folder"
 macro index,pager,browser   gf      "<change-folder>+feedback<Return>" "Switch to feedback folder"
+macro index,pager,browser   gj      "<change-folder>+JOB<Return>"
