@@ -93,6 +93,15 @@ vp() {
 # }}}
 # UNIX {{{
 
+rm() {
+  target=${@: -1}
+  list=~/helper/.unremovable
+  if [[ $@ =~ '-rf' ]] && [ -f "${list}" ]; then
+    grep target $list && echo target unremovable && exit 1
+  fi
+
+  /bin/rm $@
+}
 config(){ cd ~/.config/$1; }
 alias sound="echo -ne '\a'"
 alias hg='history | grep'
@@ -340,6 +349,7 @@ else
   alias v='vim'
 fi
 alias vu='vim -u NONE'
+alias sv='sudo vim'
 alias vr='vim -R'
 # Edit last file
 alias vl="vim -c 'norm '"
