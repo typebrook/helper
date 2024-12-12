@@ -131,7 +131,6 @@ endif
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 
-
 " }}}
 " EDIT {{{
 
