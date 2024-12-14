@@ -233,7 +233,7 @@ nnoremap g/ gv<esc>/\%V
 vnoremap / <esc>/\%V
 
 " Substitue across file
-vnoremap <leader>s y:%s//<C-R>0/g<LEFT><LEFT>
+vnoremap <leader>s *#y:%s//<C-R>0/g<LEFT><LEFT>
 
 " Usage: Press <TAB> n times for area, and <CR> for substitute
 let g:search_selection = 0
