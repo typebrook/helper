@@ -56,8 +56,10 @@ alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !n
 alias ng.log='setterm --linewrap off; tail -f /var/log/nginx/access.log; setterm --linewrap on'
 alias ng.error='setterm --linewrap off; tail -f /var/log/nginx/error.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
+
 # }}}
 # Web {{{
+
 alias cdsrv='cd /srv'
 alias cdcgi='cd /srv/cgi'
 alias cdhttp='cd /srv/http'
@@ -67,7 +69,7 @@ alias www='make -f ~/site/www/Makefile'
 alias www.rss='make -f ~/site/www/Makefile rss'
 alias www{.,''}conf='vim ~/site/www/scripts/build.sh'
 alias cdwww='cd ~/site/www'
-alias cds='cd ~/site'
+cds() { cd ~/site/${*// //}; }
 vp() {
   [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
 
