@@ -143,7 +143,7 @@ date.reset() {
 alias grep='grep --color'
 unalias gr &>/dev/null
 gr() { grep --exclude-dir='\.git' -r $@ . | sed '/^.\{2048\}./d'; }
-highlight() { grep --color -E "$1|\$"; }
+grep.color() { grep --color -E "$1|\$"; }
 
 # cron
 alias ce='crontab -e'
