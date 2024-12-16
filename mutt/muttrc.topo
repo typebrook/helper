@@ -1,5 +1,3 @@
-source ~/.config/mutt/default
-
 # Identify meself
 set from = "pham@topo.tw"
 set realname = "謝晉凡 Hsieh Chin Fan"

@@ -46,24 +46,26 @@ alias etc.passwd='sudo vim /etc/passwd'
 alias s='sudo systemctl'
 alias j='sudo journalctl -xeu'
 alias jf='sudo journalctl -xfeu'
-alias fb.conf='sudo vim /etc/fail2ban/jail.d/jail.local'
+alias fb{.,''}conf='sudo vim /etc/fail2ban/jail.d/jail.local'
 alias fb='sudo fail2ban-client'
 
 # }}}
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
-alias ng.conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
+alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
 alias ng.log='setterm --linewrap off; tail -f /var/log/nginx/access.log; setterm --linewrap on'
+alias ng.error='setterm --linewrap off; tail -f /var/log/nginx/error.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
 # }}}
 # Web {{{
 alias cdsrv='cd /srv'
 alias cdcgi='cd /srv/cgi'
 alias cdhttp='cd /srv/http'
+alias cdrss='cd /srv/rss'
 alias www.git='/srv/git/create.sh'
 alias www='make -f ~/site/www/Makefile'
 alias www.rss='make -f ~/site/www/Makefile rss'
-alias www.conf='vim ~/site/www/scripts/build.sh'
+alias www{.,''}conf='vim ~/site/www/scripts/build.sh'
 alias cdwww='cd ~/site/www'
 alias cds='cd ~/site'
 vp() {
@@ -192,7 +194,7 @@ file.size() {
 # }}}
 # TTY {{{
 alias tma='tmux a'
-alias tmux.conf="$EDITOR ~/.tmux.conf"
+alias tmux{.,''}conf="$EDITOR ~/.tmux.conf"
 alias terminal.color='printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}'
 # }}}
 # NETWORK {{{
@@ -213,18 +215,18 @@ ip.neigh() {
 # }}}
 # GPG {{{
 alias gpg.bye='gpg-connect-agent reloadagent /bye'
-alias gpg.config="$EDITOR ~/.gnupg/gpg-agent.conf"
+alias gpg{.,''}conf="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
-alias smtp.conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'
+alias smtp{.,''}conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'
 alias mail.pass='sudo vim /etc/mail/passwd'
 alias smtp.queue='sudo smtpctl show queue'
 alias smtp.show='sudo smtpctl show'
 alias smtp.ctl='sudo smtpctl'
-alias imap.conf='sudo vim /etc/dovecot/dovecot.conf'
+alias imap{.,''}conf='sudo vim /etc/dovecot/dovecot.conf'
 alias cdmail='cd ~/Maildir'
 alias m='mutt'
-alias mutt.rc="$EDITOR ~/.config/mutt/muttrc"
+alias mutt{.,''}rc="$EDITOR ~/.config/mutt/muttrc"
 alias h='himalaya'
 alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
 alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
@@ -255,8 +257,8 @@ imap.fetch() {
 
 # }}}
 # SSH {{{
-alias ssh.config="$EDITOR ~/.ssh/config"
-alias sshd.config="sudo vim /etc/ssh/sshd_config"
+alias ssh{.,''}conf{ig,''}="$EDITOR ~/.ssh/config"
+alias sshd{.,''}conf{ig,''}="sudo vim /etc/ssh/sshd_config"
 alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
 alias ssh.known="$EDITOR ~/.ssh/known_hosts"
 alias ssh.pub="cat ~/.ssh/id_ed25519.pub"
@@ -319,8 +321,7 @@ pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
 
 # }}}
 # X11: Alacritty{{{
-alias ala.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
-alias alacritty.rc="$EDITOR ~/.config/alacritty/alacritty.toml"
+alias ala{critty,''}{.,''}rc="$EDITOR ~/.config/alacritty/alacritty.toml"
 # }}}
 # X11: Clipboard{{{
 alias xi='xsel -ib'
@@ -334,14 +335,14 @@ alias cdP='cd ~/Pictures'
 alias cdV='cd ~/Videos'
 alias cdM='cd ~/Music'
 alias x='xdg-open'
-alias ob.rc='vim ~/.config/openbox/rc.xml'
+alias ob{.,''}rc='vim ~/.config/openbox/rc.xml'
 desktop() {
   $EDITOR ~/.local/share/applications/${1}.desktop
 }
 # }}}
 # EDITOR: VIM {{{
 alias editor='select-editor'
-alias vimrc='vim ~/.config/vim/vimrc'
+alias vim{.,''}rc='vim ~/.config/vim/vimrc'
 if which nvim &>/dev/null; then
   alias vim='nvim'
   alias v='nvim'
@@ -399,13 +400,14 @@ alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 alias ch="/home/pham/helper/bin/git/check-repos.sh"
 alias git.check="/home/pham/helper/bin/git/check-repos.sh"
+alias cgit{.,''}rc='sudo vim /etc/cgitrc'
 
 # }}}
 # GIT: TIG {{{
 alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
-alias tigrc="$EDITOR ~/.tigrc"
+alias tig{.,''}rc="$EDITOR ~/.tigrc"
 alias ta='tig --all'
 upload_tig() {
   github-release.sh \
