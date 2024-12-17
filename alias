@@ -24,8 +24,11 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 
 # }}}
 # CUSTOM HELPER {{{
+
 cdh() { cd $SETTING_DIR/${*// //}; }
 alias chh="tig -C $SETTING_DIR status"
+alias profile='$EDITOR ~/helper/profile'
+
 # }}}
 # Text Encode/Decode{{{
 big52utf8() {
@@ -43,17 +46,17 @@ urlencode() {
 # ADMIN {{{
 
 alias etc.passwd='sudo vim /etc/passwd'
-alias s='sudo systemctl'
-alias j='sudo journalctl -xeu'
-alias jf='sudo journalctl -xfeu'
+alias s='sudo -i systemctl'
+alias j='sudo -i journalctl -xeu'
+alias jf='sudo -i journalctl -xfeu'
 alias fb{.,''}conf='sudo vim /etc/fail2ban/jail.d/jail.local'
-alias fb='sudo fail2ban-client'
+alias fb='sudo -i fail2ban-client'
 
 # }}}
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
 alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
-alias ng.log='setterm --linewrap off; tail -f /var/log/nginx/access.log; setterm --linewrap on'
+ng.log() { setterm --linewrap off; tail -n ${1:-30} -f /var/log/nginx/access.log; setterm --linewrap on; }
 alias ng.error='setterm --linewrap off; tail -f /var/log/nginx/error.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
 
