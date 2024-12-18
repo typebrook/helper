@@ -65,6 +65,7 @@ alias cdngx='cd /etc/nginx'
 
 alias cdsrv='cd /srv'
 alias cdcgi='cd /srv/cgi'
+alias cdgit='cd /srv/git'
 alias cdhttp='cd /srv/http'
 alias cdrss='cd /srv/rss'
 alias www.git='/srv/git/create.sh'
