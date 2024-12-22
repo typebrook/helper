@@ -13,4 +13,4 @@ hi CursorLineNr term=bold cterm=bold ctermfg=226 gui=bold guifg=#eeee00
 
 hi Folded guifg=#848089 guibg=#37343a ctermfg=lightblue ctermbg=black
 
-hi NonText guifg=black guibg=white ctermfg=black ctermbg=white
+hi NonText guifg=black guibg=#2d2a2e ctermfg=black ctermbg=black
