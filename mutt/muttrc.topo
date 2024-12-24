@@ -25,8 +25,8 @@ set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 # Sidebar
 mailboxes  -label '📭 [i]' + \
            -label '📥 [m]' +mbox \
-           -label '👀 [d]' +dev \
-           -label '💬 [D]' +DeltaChat \
+           -label '👀 [D]' +dev \
+           -label '💬 [d]' +DeltaChat \
            +github \
            +JOB \
            +promotion \
@@ -40,7 +40,8 @@ mailboxes  -label '📭 [i]' + \
            -label '💲 [p]' +pay \
            -label '🍺 [k]' +keep \
            -label '📤 [s]' +Sent \
-           -label '🗑  [t]' -poll +Trash \
+           -label '🗑  [T]' -poll +Trash \
+           +talk \
            +login \
            +update \
            +service \
@@ -65,9 +66,10 @@ macro index,pager,browser   gP      "<change-folder>+promotion<Return>" "Switch 
 macro index,pager,browser   gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
 macro index,pager,browser   gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
 macro index,pager,browser   gS      "<change-folder>+spam<Return>" "Switch to spam folder"
-macro index,pager,browser   gd      "<change-folder>+dev<Return>" "Switch to DEV folder"
-macro index,pager,browser   gD      "<change-folder>+DeltaChat<Return>" "Switch to DeltaChat folder"
-macro index,pager,browser   gt      "<change-folder>+Trash<Return>" "Switch to Trash folder"
+macro index,pager,browser   gD      "<change-folder>+dev<Return>" "Switch to DEV folder"
+macro index,pager,browser   gd      "<change-folder>+DeltaChat<Return>" "Switch to DeltaChat folder"
+macro index,pager,browser   gt      "<change-folder>+talk<Return>" "Switch to Trash folder"
+macro index,pager,browser   gT      "<change-folder>+Trash<Return>" "Switch to Trash folder"
 macro index,pager,browser   gl      "<change-folder>+login<Return>" "Switch to login folder"
 macro index,pager,browser   ga      "<change-folder>+arch-general<Return>" "Switch to arch-general folder"
 macro index,pager,browser   gk      "<change-folder>+keep<Return>" "Switch to keep folder"

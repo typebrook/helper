@@ -273,7 +273,7 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh ptt'
 alias sshv='ssh -t vps'
 ssh.tar() {
-  prompt-vim "tar cf - foo | ssh vps 'cd ~/Downloads; tar xf -' \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+  prompt-vim "FOLDER=foo TARGET=~/Downloads tar cf - $FOLDER | pv -s $(du -sb $FOLDER | cut -f1) | ssh vps \"cd $TARGET; tar xf -\" \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
 }
 ssh.up() {
   set -o pipefail
@@ -307,8 +307,8 @@ alias ys='yay -S'
 alias pqs='pacman -Qs'
 alias pqi='pacman -Qi'
 alias ysi='yay -Si'
-alias pss='pacman -Ss'
-alias yss='yay -Ss'
+pss(){ pacman -Ss $@ | grep $1 -C2; }
+yss(){ yay -Ss $@ | grep $1 -C2; }
 alias pqi='pacman -Qi'
 alias pql='pacman -Qlq'
 alias pqe='pacman -Qqe'

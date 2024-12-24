@@ -3,8 +3,9 @@ alias cdl='cd ~/log'
 alias chw='tig -C ~/log'
 ww() {
   entry="${1:-inbox}"
-  entry="${entry%.md}"
+  export entry="${entry%.md}"
   file=$(find ~/log -name "${entry}*" | head -1)
+  file=${file:-$HOME/log/$entry.md}
   $EDITOR $file
 }
 wj() { echo "$@" >>~/log/buffer.md; }

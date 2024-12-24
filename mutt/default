@@ -54,7 +54,6 @@ macro index q '<change-folder>?'
 bind index o sort-reverse
 bind index O sort-mailbox
 bind index E edit-type
-bind index,pager N search-opposite
 bind index,pager <Return> sync-mailbox
 bind index y edit-label
 bind index x tag-entry
@@ -70,7 +69,8 @@ bind index,pager,browser,attach \cf next-page
 bind index,pager,browser,attach \cb previous-page
 bind index,pager,browser,attach \cd half-down
 bind index,pager,browser,attach \cu half-up
-bind index,pager <Tab> previous-new-then-unread
+bind index,pager <BackTab> previous-new-then-unread
+bind index,pager <Tab> next-new-then-unread
 bind index } bottom-page
 bind index p parent-message
 bind index P print-message
@@ -105,6 +105,9 @@ macro pager U "\
 |less\n\
 :set pipe_decode=\$my_tmp_pipe_decode\n\
 :unset my_tmp_pipe_decode\n"
+macro index A \
+    "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" \
+    "mark all new as read"
 #macro pager U "<pipe-message>less<enter>" "CHECK"
 # Quick jump to other mailboxes
 bind index,pager            g       noop
