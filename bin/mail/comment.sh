@@ -76,10 +76,10 @@ shopt -s lastpipe; set +m;
 
 # save each field of header into variables
 echo "$header" | \
-while read field value; do
-  echo "$field" "$value" >>/tmp/header
-  declare field=$(<<<$field tr [:lower:] [:upper:] | tr '-' '_' | tr -d ':')
-  declare $field="${value}"
+while IFS=: read field value; do
+  field="${field^^}"
+  field="${field//-/_}"
+  export declare $field="${value}"
 done
 DATE=${DATE:+$(date --rfc-3339 seconds --date "$DATE")}
 
