@@ -25,7 +25,7 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 # }}}
 # CUSTOM HELPER {{{
 
-cdh() { cd $SETTING_DIR/${*// //}; }
+cdh() { IFS=/; cd ~/helper/"$*"; IFS=' '; }
 alias chh="tig -C $SETTING_DIR status"
 alias profile='$EDITOR ~/helper/profile'
 
