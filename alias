@@ -162,6 +162,7 @@ alias duu='du -hd 1 . | sort -hr'
 _move_to_tmp() { mv $@ /tmp; }
 alias latest='find . -type f | xargs ls -ltr | tail'
 alias lock='sudo chattr +i' # Make file undeletable
+alias unlock='sudo chattr -i'
 alias chx='chmod +x'
 alias chr='chmod +r'
 alias findn='find . -iname'
