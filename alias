@@ -226,6 +226,7 @@ alias gpg{.,''}conf="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
 alias smtp{.,''}conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'
+alias mu='mailutils'
 alias mail.pass='sudo vim /etc/mail/passwd'
 alias smtp.queue='sudo smtpctl show queue'
 alias smtp.show='sudo smtpctl show'
@@ -600,3 +601,5 @@ alias ffmpeg='ffmpeg -hide_banner'
 fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias monitor.light='ddcutil --permit-unknown-feature setvcp 10'
 # }}}
+
+# vim:fdm=marker fdl=0
