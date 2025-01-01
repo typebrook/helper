@@ -460,6 +460,27 @@ github.raw() {
 }
 
 # }}}
+# GIS {{{
+alias oo='ogr2ogr'
+alias oi='ogrinfo -al -so'
+TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
+TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
+TAIPEI_BBOX='121.346,24.926,121.676,25.209'
+TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
+pbf() {
+  protoc --decode_raw
+}
+mvt.decode() {
+  if [[ ! -t 0 ]]; then
+    cat >$tmp
+    tmp=$(mktemp)
+  else
+    tmp=$1
+  fi
+  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
+}
+wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
+# }}}
 # DEV: Docker{{{
 alias dk='docker'
 alias dc='docker-compose'
@@ -563,27 +584,6 @@ alias b='vim $HOME/bean/main.bean'
 # }}}
 # python{{{
 alias pip3='python3 -m pip'
-# }}}
-# GIS {{{
-alias oo='ogr2ogr'
-alias oi='ogrinfo -al -so'
-TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
-TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
-TAIPEI_BBOX='121.346,24.926,121.676,25.209'
-TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
-pbf() {
-  protoc --decode_raw
-}
-mvt.decode() {
-  if [[ ! -t 0 ]]; then
-    cat >$tmp
-    tmp=$(mktemp)
-  else
-    tmp=$1
-  fi
-  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
-}
-wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
 # }}}
 # Misc{{{
 alias yl='youtube-dl'
