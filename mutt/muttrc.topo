@@ -23,31 +23,22 @@ set postponed = "+Drafts"
 set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 
 # Sidebar
-mailboxes  -label '📭 [i]' + \
-           -label '📥 [m]' +mbox \
-           -label '👀 [D]' +dev \
-           -label '💬 [d]' +DeltaChat \
-           +github \
-           +JOB \
-           +promotion \
-           "+---- Watch -----" \
-           -label CivilDEF +civildef \
-           +hometeach \
-           -label OSM +osm \
-           +STOCK \
-           -label '📢 [f]' +feedback \
-           "+-- Permanent ---" \
-           -label '💲 [p]' +pay \
-           -label '🍺 [k]' +keep \
-           -label '📤 [s]' +Sent \
-           -label '🗑  [T]' -poll +Trash \
-           +talk \
-           +login \
-           +update \
-           +service \
-           +Drafts \
-           +test \
-           +spam
+mailboxes   +do +box +done \
+            +JOB \
+            +promotion \
+            "+-- Permanent ---" \
+            -label '[p]ay 💲' +pay \
+            -label '[t]alk 🍺' +talk \
+            -label 'de[v]' +dev \
+            -label '[s]ent 📤' +Sent \
+            -label '[k]eep' +keep \
+            -label '[f]eedback 📢' +feedback \
+            -label '[T]rash 🗑' -poll +Trash \
+            -label '[l]ogin' +login \
+            +update \
+            +service \
+            +Drafts \
+            +spam
 
 # Keybinding
 macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.topo<enter><change-folder>!<enter>'
@@ -59,20 +50,20 @@ macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttr
 #folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
 
 # Change mailboxes
-macro index,pager,browser   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
-macro index,pager,browser   gm      "<change-folder>+mbox<Return>" "Switch to mbox folder"
-macro index,pager,browser   gp      "<change-folder>+pay<Return>" "Switch to pay folder"
-macro index,pager,browser   gP      "<change-folder>+promotion<Return>" "Switch to promotion folder"
-macro index,pager,browser   gh      "<change-folder>+hometeach<Return>" "Switch to hometeach folder"
-macro index,pager,browser   gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
-macro index,pager,browser   gS      "<change-folder>+spam<Return>" "Switch to spam folder"
-macro index,pager,browser   gD      "<change-folder>+dev<Return>" "Switch to DEV folder"
-macro index,pager,browser   gd      "<change-folder>+DeltaChat<Return>" "Switch to DeltaChat folder"
-macro index,pager,browser   gt      "<change-folder>+talk<Return>" "Switch to Trash folder"
-macro index,pager,browser   gT      "<change-folder>+Trash<Return>" "Switch to Trash folder"
-macro index,pager,browser   gl      "<change-folder>+login<Return>" "Switch to login folder"
-macro index,pager,browser   ga      "<change-folder>+arch-general<Return>" "Switch to arch-general folder"
-macro index,pager,browser   gk      "<change-folder>+keep<Return>" "Switch to keep folder"
-macro index,pager,browser   gu      "<change-folder>+update<Return>" "Switch to update folder"
-macro index,pager,browser   gf      "<change-folder>+feedback<Return>" "Switch to feedback folder"
-macro index,pager,browser   gj      "<change-folder>+JOB<Return>"
+macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
+macro index,pager   gd      "<change-folder>+do<Return>"
+macro index,pager   gb      "<change-folder>+box<Return>"
+macro index,pager   gt      "<change-folder>+talk<Return>" "Switch to Trash folder"
+
+macro index,pager   gs      "<change-folder>+Sent<Return>" "Switch to Sent folder"
+macro index,pager   gS      "<change-folder>+spam<Return>" "Switch to spam folder"
+macro index,pager   gk      "<change-folder>+keep<Return>" "Switch to keep folder"
+
+macro index,pager   gp      "<change-folder>+pay<Return>" "Switch to pay folder"
+macro index,pager   gP      "<change-folder>+promote<Return>" "Switch to promotion folder"
+macro index,pager   gT      "<change-folder>+Trash<Return>" "Switch to Trash folder"
+macro index,pager   gl      "<change-folder>+login<Return>" "Switch to login folder"
+macro index,pager   gu      "<change-folder>+update<Return>" "Switch to update folder"
+macro index,pager   gf      "<change-folder>+feedback<Return>" "Switch to feedback folder"
+macro index,pager   gj      "<change-folder>+JOB<Return>"
+macro index,pager   gv      "<change-folder>+dev<Return>"
