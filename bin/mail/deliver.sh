@@ -26,7 +26,7 @@ tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
 cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
 
-# Restore mail into variables
+# Restore mail into vars
 MAIL="$(decodemail ${tmp_mailbox})"
 # TODO process multi-line header field
 header="$(<<<"$MAIL" sed '/^$/ q; /^[[:blank:]]/ d;')"
@@ -59,7 +59,7 @@ while IFS=': ' read field value; do
 done <<<"$header"
 
 # save to mailbox
-if [[ "$SENDER" = pham@topo.tw && -n $Chat_Version ]]; then
+if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
   heading="$(head -1 <<<"${body}")"
 
   if [[ "${heading}" =~ ^"." ]]; then
@@ -80,25 +80,31 @@ if [[ "$SENDER" = pham@topo.tw && -n $Chat_Version ]]; then
 		$(sed 1d <<<"$body")
 	MAIL
   }
+elif [[ "$FROM" =~ notifications@github.com || "$RETURN_PATH" =~ noreply@github.com ]]; then
+  mailbox=DEV/github
 elif [[ "$SUBJECT" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
   mailbox=pay
-elif [[ "$TO" = dmarc@topo.tw ]]; then
+elif [[ "$SUBJECT" =~ 未讀|unread ]]; then
+  mailbox=update
+elif [[ "$TO" =~ dmarc@topo.tw ]]; then
   mailbox=DEV/dmarc
 elif [[ "$LIST_ID" =~ ^'Open Street Map Taiwan' ]]; then
   mailbox=FOSS/osm
+elif [[ "$TO" =~ talk-ja@openstreetmap.org ]]; then
+  mailbox=LIST/talk-ja
 elif [[ "$LIST_ID" =~ ^~rjarry/aerc-discuss ]]; then
   mailbox=LIST/aerc
 elif [[ "$LIST_ID" =~ '<mutt-users.mutt.org>' ]]; then
   mailbox=LIST/mutt
-elif [[ -n "${LIST_ID}" ]]; then
+elif [[ -n "${LIST_ID}" || "$SUBJECT" =~  電子報|newsletter|快訊 ]]; then
   mailbox=news
 elif [[ "$SUBJECT" =~ login|verify|sign-in|密碼|安全性警示|登入 ]]; then
   mailbox=login
-elif [[ "$SUBJECT" =~  電子報|newsletter ]]; then
-  mailbox=news
 elif [[ "$TO" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ "$SUBJECT" =~ eDM ]]; then
+elif [[ "$SUBJECT" =~ summary ]]; then
+  mailbox=update
+elif [[ "${SUBJECT}${FROM}" =~ eDM ]]; then
   mailbox=MISC/promote
 fi
 
@@ -106,4 +112,4 @@ fi
 set_stdout && print_mail
 
 # log to stderr
-echo -e ${date} ${mailbox:-INBOX} '\t' ${heading:-${SUBJECT}} >&2
+echo -e ${date} ${mailbox:-INBOX} '\t' "${heading:-${SUBJECT}}" >&2
