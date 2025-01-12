@@ -35,6 +35,7 @@ mailboxes   -label 'INBOX' -poll + \
             -poll -label '[l]ogin' +login \
             -poll -label '[J]OB' +JOB \
             -poll -label '[p]ay 💲' +pay \
+            -poll -label '[u]pdate' +update \
 
 # Keybinding
 macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.topo<enter><change-folder>!<enter>'
@@ -66,3 +67,4 @@ macro index,pager   gf      "<change-folder>+feedback<Return>"
 macro index,pager   gj      "<change-folder>+JOB<Return>"
 macro index,pager   gr      "<change-folder>+riverbien<Return>"
 macro index,pager   gv      "<change-folder>+DEV<Return>"
+macro index,pager   gu      "<change-folder>+update<Return>"
