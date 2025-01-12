@@ -80,32 +80,33 @@ if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
 		$(sed 1d <<<"$body")
 	MAIL
   }
-elif [[ "$FROM" =~ notifications@github.com || "$RETURN_PATH" =~ noreply@github.com ]]; then
+elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]]; then
   mailbox=DEV/github
-elif [[ "$SUBJECT" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
+elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
   mailbox=pay
-elif [[ "$SUBJECT" =~ 未讀|unread ]]; then
-  mailbox=update
-elif [[ "$TO" =~ dmarc@topo.tw ]]; then
+elif [[ "${TO}" =~ dmarc@topo.tw ]]; then
   mailbox=DEV/dmarc
-elif [[ "$LIST_ID" =~ ^'Open Street Map Taiwan' ]]; then
+elif [[ "${LIST_ID}" =~ ^'Open Street Map Taiwan' ]]; then
   mailbox=FOSS/osm
-elif [[ "$TO" =~ talk-ja@openstreetmap.org ]]; then
+elif [[ "${TO}" =~ talk-ja@openstreetmap.org ]]; then
   mailbox=LIST/talk-ja
-elif [[ "$LIST_ID" =~ ^~rjarry/aerc-discuss ]]; then
+elif [[ "${LIST_ID}" =~ ^~rjarry/aerc-discuss ]]; then
   mailbox=LIST/aerc
-elif [[ "$LIST_ID" =~ '<mutt-users.mutt.org>' ]]; then
+elif [[ "${LIST_ID}" =~ '<mutt-users.mutt.org>' ]]; then
   mailbox=LIST/mutt
-elif [[ -n "${LIST_ID}" || "$SUBJECT" =~  電子報|newsletter|快訊 ]]; then
+elif [[ -n "${LIST_ID}" || "${SUBJECT}" =~  電子報|newsletter|快訊 ]]; then
   mailbox=news
-elif [[ "$SUBJECT" =~ login|verify|sign-in|密碼|安全性警示|登入 ]]; then
+elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入 ]]; then
   mailbox=login
-elif [[ "$TO" = cloudflare@topo.tw ]]; then
+elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ "$SUBJECT" =~ summary ]]; then
+elif [[ "${SUBJECT}" =~ 未讀|快訊|更新|核對表|unread|summary ]]; then
   mailbox=update
-elif [[ "${SUBJECT}${FROM}" =~ eDM ]]; then
+elif [[ "${SUBJECT}${FROM}" =~ eDM|願望清單 ]]; then
   mailbox=MISC/promote
+# This is for greenpeace
+elif [[ ${TO} =~ tienling.chou@topo.tw ]]; then
+  mailbox=update
 fi
 
 # deliver mail to mailbox
