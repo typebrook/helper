@@ -25,14 +25,15 @@ set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 # Sidebar
 mailboxes   -label 'INBOX' -poll + \
             -poll +do \
+            -poll +on \
             -poll +box \
-            -poll +done \
-            +JOB \
+            -poll +riverbien \
             "+-- Permanent ---" \
             -poll -label 'de[v]' +DEV \
             -label '[t]alk 🍺' +talk \
             -label '[n]ews 📰' +news \
             -poll -label '[l]ogin' +login \
+            -poll -label '[J]OB' +JOB \
             -poll -label '[p]ay 💲' +pay \
 
 # Keybinding
@@ -47,10 +48,12 @@ macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttr
 # Change mailboxes
 macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
 macro index,pager   gd      "<change-folder>+do<Return>"
+macro index,pager   go      "<change-folder>+on<Return>"
 macro index,pager   gb      "<change-folder>+box<Return>"
 macro index,pager   gt      "<change-folder>+talk<Return>"
 
 macro index,pager   gs      "<change-folder>+Sent<Return>"
+macro index,pager   gD      "<change-folder>+Drafts<Return>"
 macro index,pager   gS      "<change-folder>+spam<Return>"
 macro index,pager   gk      "<change-folder>+keep<Return>"
 macro index,pager   gn      "<change-folder>+news<Return>"
@@ -61,4 +64,5 @@ macro index,pager   gT      "<change-folder>+Trash<Return>"
 macro index,pager   gl      "<change-folder>+login<Return>"
 macro index,pager   gf      "<change-folder>+feedback<Return>"
 macro index,pager   gj      "<change-folder>+JOB<Return>"
+macro index,pager   gr      "<change-folder>+riverbien<Return>"
 macro index,pager   gv      "<change-folder>+DEV<Return>"

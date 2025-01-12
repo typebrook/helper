@@ -37,6 +37,10 @@ big52utf8() {
 utf82big5() {
   iconv -t BIG-5 -f UTF-8
 }
+urldecode() {
+  encoded="$(cat)"
+  echo ${encoded//\%/\\x}
+}
 urlencode() {
   perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg'
   # Alternative:
