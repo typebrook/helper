@@ -16,7 +16,7 @@ if [ -z $log ]; then
 fi
 
 exec 2>>$log
-shopt -s nocasematch
+shopt -s nocasematch extglob
 
 # update index for dovecot
 trap 'doveadm force-resync ${mailbox:-/}' EXIT
@@ -52,7 +52,10 @@ print_mail() {
 
 # save each field of header into vars
 # TODO Use GNU MailUtils to save header
-while IFS=': ' read field value; do
+while read line; do
+  [[ "${line}" =~ ^" " ]] && ${field}+=" ${line##*( )}" && continue
+
+  IFS=': ' read field value <<<"${line}"
   field="${field^^}"
   field="${field//-/_}"
   declare ${field}="${value}"
