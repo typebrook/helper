@@ -27,14 +27,13 @@ mailboxes   -label 'INBOX' -poll + \
             -poll +do \
             -poll +on \
             -poll +box \
-            -poll +riverbien \
+            -poll -label '[r]' +river \
             "+-- Permanent ---" \
             -poll -label 'de[v]' +DEV \
-            -label '[t]alk 🍺' +talk \
-            -label '[n]ews 📰' +news \
+            -poll -label '[t]alk 🍺' +talk \
+            -poll -label '[n]ews 📰' +news \
+            -poll -label '[p]ay  💲' +pay \
             -poll -label '[l]ogin' +login \
-            -poll -label '[J]OB' +JOB \
-            -poll -label '[p]ay 💲' +pay \
             -poll -label '[u]pdate' +update \
 
 # Keybinding
@@ -64,7 +63,6 @@ macro index,pager   gP      "<change-folder>+MISC/promote<Return>"
 macro index,pager   gT      "<change-folder>+Trash<Return>"
 macro index,pager   gl      "<change-folder>+login<Return>"
 macro index,pager   gf      "<change-folder>+feedback<Return>"
-macro index,pager   gj      "<change-folder>+JOB<Return>"
-macro index,pager   gr      "<change-folder>+riverbien<Return>"
+macro index,pager   gr      "<change-folder>+river<Return>"
 macro index,pager   gv      "<change-folder>+DEV<Return>"
 macro index,pager   gu      "<change-folder>+update<Return>"

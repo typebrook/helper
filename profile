@@ -25,6 +25,7 @@ source $SETTING_DIR/alias
 # sourcr rc files in private/ and bin/
 [[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
 find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
+find $SETTING_DIR/bin -mindepth 1 -type d | while read dir; do PATH+=:${dir}; done
 
 # fzf
 if which fzf &>/dev/null; then
