@@ -53,7 +53,7 @@ print_mail() {
 # save each field of header into vars
 # TODO Use GNU MailUtils to save header
 while read line; do
-  [[ "${line}" =~ ^" " ]] && ${field}+=" ${line##*( )}" && continue
+  [[ "${line}" =~ ^" "|^"	" ]] && ${field}+=" ${line##*( )}" && continue
 
   IFS=': ' read field value <<<"${line}"
   field="${field^^}"
@@ -95,17 +95,17 @@ elif [[ "${TO}" =~ talk-ja@openstreetmap.org ]]; then
   mailbox=LIST/talk-ja
 elif [[ "${LIST_ID}" =~ ^~rjarry/aerc-discuss ]]; then
   mailbox=LIST/aerc
-elif [[ "${LIST_ID}" =~ '<mutt-users.mutt.org>' ]]; then
+elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
   mailbox=LIST/mutt
-elif [[ -n "${LIST_ID}" || "${SUBJECT}" =~  電子報|newsletter|快訊 ]]; then
+elif [[ "${SUBJECT}" =~  電子報|快訊|newsletter ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存取 ]]; then
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ "${SUBJECT}" =~ 未讀|快訊|更新|核對表|unread|summary ]]; then
+elif [[ "${SUBJECT}" =~ 未讀|快訊|更新|核對表|unread|summary|introduc ]]; then
   mailbox=update
-elif [[ "${SUBJECT}${FROM}" =~ eDM|願望清單 ]]; then
+elif [[ "${SUBJECT}${FROM}" =~ 願望清單|eDM ]]; then
   mailbox=MISC/promote
 # This is for greenpeace
 elif [[ ${TO} =~ tienling.chou@topo.tw ]]; then
