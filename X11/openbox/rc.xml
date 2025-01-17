@@ -543,7 +543,7 @@
       <action name="Execute">
         <!-- Copy to CLIPBOARD -->
         <command>
-          alacritty -o 'env.fullrc="false"' -e nvim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
+          alacritty --title @CLIPBORD -o 'env.fullrc="false"' -e nvim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
         </command>
       </action>
     </keybind>
