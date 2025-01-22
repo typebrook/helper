@@ -1,0 +1,26 @@
+{
+  "version": 8,
+  "name": "simple",
+  "id": "simple",
+  "bearing": 0,
+  "pitch": 0,
+  "sources": {
+    "nlsc": {
+      "type": "raster",
+      "maxzoom": 15,
+      "tiles": [
+        "https://wmts.nlsc.gov.tw/wmts/B5000/default/GoogleMapsCompatible/{z}/{y}/{x}"
+      ]
+    }
+  },
+  "glyphs": "https://tile.openstreetmap.jp/fonts/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8f4f0"
+      }
+    }
+  ]
+}

@@ -61,6 +61,8 @@ bind index,browser l select-entry
 bind index \\ limit
 bind index \cj next-entry
 bind index \ck previous-entry
+bind pager \ce next-line
+bind pager \cy previous-line
 bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser gg first-entry
@@ -119,6 +121,7 @@ bind generic                zt      current-top
 bind generic                zz      current-middle
 bind generic                zb      current-bottom
 bind index                  za      collapse-thread
+bind index                  zc      collapse-thread
 bind index                  zA      collapse-all
 #bind generic,pager          \Cy     previous-line
 #bind generic,index,pager    \Ce     next-line

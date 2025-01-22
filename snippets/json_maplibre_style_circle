@@ -1,0 +1,19 @@
+    {
+      "id": "points",
+      "type": "circle",
+      "source": "power.points",
+      "paint": {
+        "circle-color": "red",
+        "circle-radius": [
+          "interpolate", ["linear"], ["zoom"],
+          10, 3,
+          18, 10
+        ],
+        "circle-stroke-width": [
+          "interpolate", ["linear"], ["zoom"],
+          8, 1,
+          13, 3
+        ],
+        "circle-stroke-color": "white"
+      }
+    }

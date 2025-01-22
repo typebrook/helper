@@ -54,3 +54,6 @@ DMARC
 DKIM
 Github
 Disqus
+fifo
+fifo
+mkfifo
