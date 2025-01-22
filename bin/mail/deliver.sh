@@ -97,19 +97,24 @@ elif [[ "${LIST_ID}" =~ ^~rjarry/aerc-discuss ]]; then
   mailbox=LIST/aerc
 elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
   mailbox=LIST/mutt
-elif [[ "${SUBJECT}" =~  電子報|快訊|newsletter ]]; then
+elif [[
+        "${SUBJECT}" =~  電子報|快訊|newsletter ||
+        "${TO}" =~ substack
+        "${FROM}" =~ service@kucw.io
+  ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存取 ]]; then
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ "${SUBJECT}" =~ 未讀|快訊|更新|核對表|unread|summary|introduc ]]; then
+elif [[ "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc ]]; then
   mailbox=update
-elif [[ "${SUBJECT}${FROM}" =~ 願望清單|eDM ]]; then
+elif [[
+        "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|eDM ||
+        -n "${LIST_ID}" ||
+        ${TO} =~ tienling.chou@topo.tw \
+  ]]; then
   mailbox=MISC/promote
-# This is for greenpeace
-elif [[ ${TO} =~ tienling.chou@topo.tw ]]; then
-  mailbox=update
 fi
 
 # deliver mail to mailbox
