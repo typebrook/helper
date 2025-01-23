@@ -66,7 +66,7 @@ if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
   heading="$(head -1 <<<"${body}")"
 
   if [[ "${heading}" =~ ^"." ]]; then
-     mailbox=do
+     mailbox=act
      heading=${heading#.}
   else
     mailbox=box
@@ -83,6 +83,9 @@ if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
 		$(sed 1d <<<"$body")
 	MAIL
   }
+elif [[ "${TO}" =~ '+'|'=' ]]; then
+  mailbox=${TO#*[+=]}   # remove chars before symbol of mailbox
+  mailbox=${mailbox%@*}     # remove suffix for mail address
 elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]]; then
   mailbox=DEV/github
 elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
@@ -99,8 +102,7 @@ elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
   mailbox=LIST/mutt
 elif [[
         "${SUBJECT}" =~  電子報|快訊|newsletter ||
-        "${TO}" =~ substack
-        "${FROM}" =~ service@kucw.io
+        "${FROM}${TO}" =~ substack|service@kucw.io \
   ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存取 ]]; then
@@ -111,7 +113,7 @@ elif [[ "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc ]
   mailbox=update
 elif [[
         "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|eDM ||
-        -n "${LIST_ID}" ||
+        -n "${LIST_ID}${LIST_UNSUBSCRIBE}" ||
         ${TO} =~ tienling.chou@topo.tw \
   ]]; then
   mailbox=MISC/promote
