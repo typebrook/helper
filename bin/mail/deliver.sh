@@ -88,6 +88,8 @@ elif [[ "${TO}" =~ '+'|'=' ]]; then
   mailbox=${mailbox%@*}     # remove suffix for mail address
 elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]]; then
   mailbox=DEV/github
+elif [[ "${FROM}" =~ jgbsmart.com ]]; then
+  mailbox=rent
 elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
   mailbox=pay
 elif [[ "${TO}" =~ dmarc@topo.tw ]]; then
@@ -109,7 +111,10 @@ elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存�
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc ]]; then
+elif [[ 
+        "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc  ||
+        "${FROM}" =~ no-reply@hackmd.io \
+  ]]; then
   mailbox=update
 elif [[
         "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|eDM ||
