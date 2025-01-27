@@ -1,9 +1,9 @@
 #! /bin/bash
 
-# Process each incoming mail
+# Deliver incoming mail to proper mailbox
 # TODO image/audio mail part
 
-# message for logging delivery
+# log each delivery {{{
 log=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
 if [ -z $log ]; then
   log=~/Maildir/cur/deliver.log
@@ -14,7 +14,8 @@ if [ -z $log ]; then
 
 	HEADER
 fi
-
+# }}}
+# shell opt/trap {{{
 exec 2>>$log
 shopt -s nocasematch extglob
 
@@ -25,8 +26,8 @@ trap 'doveadm force-resync ${mailbox:-/}' EXIT
 tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
 cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
-
-# Restore mail into vars
+# }}}
+# vars about message {{{
 MAIL="$(decodemail ${tmp_mailbox})"
 # TODO process multi-line header field
 header="$(<<<"$MAIL" sed '/^$/ q; /^[[:blank:]]/ d;')"
@@ -36,8 +37,8 @@ body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 date=$(date --iso=seconds)
 maildir=${HOME}/Maildir
 mailbox=
-
-# Set set_stdout
+# }}}
+# FUNCTION: Set set_stdout {{{
 set_stdout() {
   filename=${Subject// /_}
   path=${maildir}/${mailbox}${mailbox:+/}new/${date//:/}.${filename//[^[:alnum:]_]/}
@@ -45,34 +46,10 @@ set_stdout() {
 
   exec 1>$path
 }
-
+# }}}
+# FUNCTION: print mail {{{
 print_mail() {
-  echo "$MAIL"
-}
-
-# save each field of header into vars
-# TODO Use GNU MailUtils to save header
-while read line; do
-  [[ "${line}" =~ ^" "|^"	" ]] && ${field}+=" ${line##*( )}" && continue
-
-  IFS=': ' read field value <<<"${line}"
-  field="${field^^}"
-  field="${field//-/_}"
-  declare ${field}="${value}"
-done <<<"$header"
-
-# save to mailbox
-if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
-  heading="$(head -1 <<<"${body}")"
-
-  if [[ "${heading}" =~ ^"." ]]; then
-     mailbox=act
-     heading=${heading#.}
-  else
-    mailbox=box
-  fi
-
-  print_mail() {
+  if [ "$private" = true ]; then
     <<-MAIL cat
 		From: me
 		Date: $(date --rfc-email)
@@ -82,9 +59,42 @@ if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
 
 		$(sed 1d <<<"$body")
 	MAIL
-  }
+  else
+    echo "$MAIL"
+  fi
+}
+# }}}
+# FUNCTION: save as private message {{{
+private_message() {
+  heading="$(head -1 <<<"${body}")"
+
+  if [[ "${heading}" =~ ^"." ]]; then
+    mailbox=act
+    heading=${heading#.}
+  else
+    mailbox=box
+  fi
+
+  private=true
+}
+# }}}
+
+# save each header field into vars {{{
+# TODO Use GNU MailUtils to save header
+while read line; do
+  [[ "${line}" =~ ^" "|^"	" ]] && ${field}+=" ${line##*( )}" && continue
+
+  IFS=': ' read field value <<<"${line}"
+  field="${field^^}"
+  field="${field//-/_}"
+  declare ${field}="${value}"
+done <<<"$header"
+# }}}
+# decide mailbox by vars {{{
+if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
+  private_message
 elif [[ "${TO}" =~ '+'|'=' ]]; then
-  mailbox=${TO#*[+=]}   # remove chars before symbol of mailbox
+  mailbox=${TO#*[+=]}       # remove chars before symbol of mailbox
   mailbox=${mailbox%@*}     # remove suffix for mail address
 elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]]; then
   mailbox=DEV/github
@@ -111,7 +121,7 @@ elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存�
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
-elif [[ 
+elif [[
         "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc  ||
         "${FROM}" =~ no-reply@hackmd.io \
   ]]; then
@@ -123,6 +133,7 @@ elif [[
   ]]; then
   mailbox=MISC/promote
 fi
+# }}}
 
 # deliver mail to mailbox
 set_stdout && print_mail
