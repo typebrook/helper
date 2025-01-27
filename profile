@@ -60,8 +60,4 @@ fi
 # Apply nvm
 [ -e $HOME/.config/nvm/nvm.sh ] && source "$HOME/.config/nvm/nvm.sh"
 
-# Working DIR
-# [[ `pwd` == $HOME ]] && test -d ~/Downloads && cd ~/Downloads
-#cd ~/git/dumbymap 2>/dev/null || cd ~/Downloads
-
 true
