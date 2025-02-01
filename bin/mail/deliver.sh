@@ -2,7 +2,8 @@
 
 # Deliver incoming mail to proper mailbox
 # TODO image/audio mail part
-mail_date="$(date --rfc-email)"
+date=$(date +%s)
+mail_date="$(date --rfc-email -d @${date})"
 
 # shell opt/trap {{{
 shopt -s nocasematch extglob
@@ -16,8 +17,9 @@ cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # log each delivery {{{
-log=~/Maildir/cur/deliver.log
+log=~/Maildir/cur/deliver.log.${date}
 exec 2>>$log
+trap 'doveadm force-resync /' EXIT
 
 logfile=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
 if [ -z "$logfile" ]; then
