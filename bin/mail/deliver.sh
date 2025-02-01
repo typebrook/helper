@@ -2,21 +2,9 @@
 
 # Deliver incoming mail to proper mailbox
 # TODO image/audio mail part
+mail_date="$(date --rfc-email)"
 
-# log each delivery {{{
-log=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
-if [ -z $log ]; then
-  log=~/Maildir/cur/deliver.log
-  <<-HEADER cat >$log
-	From: MDA
-	Content-Type: text/plain; charset=UTF-8
-	Subject: Delivery Log
-
-	HEADER
-fi
-# }}}
 # shell opt/trap {{{
-exec 2>>$log
 shopt -s nocasematch extglob
 
 # update index for dovecot
@@ -26,6 +14,25 @@ trap 'doveadm force-resync ${mailbox:-/}' EXIT
 tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
 cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
+# }}}
+# log each delivery {{{
+log=~/Maildir/cur/deliver.log
+exec 2>>$log
+
+logfile=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
+if [ -z "$logfile" ]; then
+  <<-HEADER cat >&2
+	From: MDA <pham@topo.tw>
+	Date: ${mail_date}
+	Message-ID: <deliver.log>
+	Content-Type: text/plain; charset=UTF-8
+	Subject: Delivery Log
+
+	HEADER
+else
+  mv $logfile $log 2>/dev/null
+  sed -i "1,/^$/ s/^Date: .*/Date: ${mail_date}/" $log
+fi
 # }}}
 # vars about message {{{
 MAIL="$(decodemail ${tmp_mailbox})"
@@ -51,9 +58,10 @@ set_stdout() {
 print_mail() {
   if [ "$private" = true ]; then
     <<-MAIL cat
-		From: me
-		Date: $(date --rfc-email)
+		From: me <pham@topo.tw>
+		Date: ${mail_date}
 		Message-ID: ${Message_ID}
+		Content-Type: text/plain; charset=UTF-8
 		Self: true
 		Subject: ${heading}
 
@@ -140,3 +148,5 @@ set_stdout && print_mail
 
 # log to stderr
 echo -e ${date} ${mailbox:-INBOX} '\t' "${heading:-${SUBJECT}}" >&2
+
+# vim:fdm=marker fdl=0
