@@ -153,6 +153,8 @@ fi
 set_stdout && print_mail
 
 # log to stderr
-echo -e ${date} ${mailbox:-INBOX} '\t' "${heading:-${SUBJECT}}" >&2
+declare -i width_mailbox=$(wc -c <<<"${mailbox:-INBOX}")
+spaces="$(printf %$(( 18 - ${width_mailbox} ))s)"
+echo -e ${date} ${mailbox:-INBOX} "$spaces" "${heading:-${SUBJECT}}" >&2
 
 # vim:fdm=marker fdl=0
