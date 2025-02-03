@@ -2,8 +2,9 @@
 
 # Deliver incoming mail to proper mailbox
 # TODO image/audio mail part
-date=$(date +%s)
-mail_date="$(date --rfc-email -d @${date})"
+
+epoch=$(date +%s)
+mail_date="$(date --rfc-email -d @${epoch})"
 
 # shell opt/trap {{{
 shopt -s nocasematch extglob
@@ -17,24 +18,27 @@ cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # log each delivery {{{
-log=~/Maildir/cur/deliver.log.${date}
-exec 2>>$log
+log=~/Maildir/cur/deliver.log.${epoch}
 trap 'doveadm force-resync /' EXIT
 
-logfile=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
-if [ -z "$logfile" ]; then
-  <<-HEADER cat >&2
+# add a new log file, or reuse existing log file
+outdated_log=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
+if [ -z "$outdated_log" ]; then
+  <<-HEADER cat >${log}
 	From: MDA <pham@topo.tw>
 	Date: ${mail_date}
-	Message-ID: <deliver.log>
+	Message-ID: <$log>
 	Content-Type: text/plain; charset=UTF-8
 	Subject: Delivery Log
 
 	HEADER
 else
-  mv $logfile $log 2>/dev/null
-  sed -i "1,/^$/ s/^Date: .*/Date: ${mail_date}/" $log
+  mv "$outdated_log" $log
+  sed -i "1,/^$/ {s#^Date: .*#Date: ${mail_date}#; s#^Message-ID: .*#Message-ID: <${log}>#}" $log
 fi
+
+# Set stderr after process $log properly
+exec 2>>$log
 # }}}
 # vars about message {{{
 MAIL="$(decodemail ${tmp_mailbox})"
@@ -127,7 +131,7 @@ elif [[
         "${FROM}${TO}" =~ substack|service@kucw.io \
   ]]; then
   mailbox=news
-elif [[ "${SUBJECT}" =~ login|verify|sign-in|密碼|安全性警示|登入|存取 ]]; then
+elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verify|sign-in ]]; then
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
