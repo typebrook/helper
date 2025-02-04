@@ -47,14 +47,14 @@ header="$(<<<"$MAIL" sed '/^$/ q; /^[[:blank:]]/ d;')"
 body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 
 # vars about output
-date=$(date --iso=seconds)
+iso_date=$(date --iso=seconds -d @${epoch})
 maildir=${HOME}/Maildir
 mailbox=
 # }}}
 # FUNCTION: Set set_stdout {{{
 set_stdout() {
   filename=${Subject// /_}
-  path=${maildir}/${mailbox}${mailbox:+/}new/${date//:/}.${filename//[^[:alnum:]_]/}
+  path=${maildir}/${mailbox}${mailbox:+/}new/${iso_date//:/}.${filename//[^[:alnum:]_]/}
   mkdir -p $(dirname $path)
 
   exec 1>$path
@@ -154,7 +154,7 @@ set_stdout && print_mail
 
 # log to stderr
 declare -i width_mailbox=$(wc -c <<<"${mailbox:-INBOX}")
-spaces="$(printf %$(( 18 - ${width_mailbox} ))s)"
-echo -e ${date} ${mailbox:-INBOX} "$spaces" "${heading:-${SUBJECT}}" >&2
+spaces="$(printf %$(( 16 - ${width_mailbox} ))s)"
+echo -e $(date '+%m-%d %H:%M' -d @${epoch}) "=> ${mailbox:-INBOX}" "$spaces" "${heading:-${SUBJECT}}" >&2
 
 # vim:fdm=marker fdl=0
