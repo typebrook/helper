@@ -141,7 +141,7 @@ elif [[
   ]]; then
   mailbox=update
 elif [[
-        "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|eDM ||
+        "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
         -n "${LIST_ID}${LIST_UNSUBSCRIBE}" ||
         ${TO} =~ tienling.chou@topo.tw \
   ]]; then
