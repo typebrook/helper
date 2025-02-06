@@ -145,7 +145,7 @@ elif [[
         -n "${LIST_ID}${LIST_UNSUBSCRIBE}" ||
         ${TO} =~ tienling.chou@topo.tw \
   ]]; then
-  mailbox=MISC/promote
+  mailbox=promote
 fi
 # }}}
 
