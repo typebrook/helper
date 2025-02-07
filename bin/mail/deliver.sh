@@ -136,7 +136,7 @@ elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verify
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
 elif [[
-        "${SUBJECT}" =~ 未讀|更新|核對表|嘟文|unread|summary|introduc  ||
+        "${SUBJECT}" =~ 未讀|更新|核對|嘟文|unread|summary|introduc  ||
         "${FROM}" =~ no-reply@hackmd.io \
   ]]; then
   mailbox=update
@@ -155,6 +155,6 @@ set_stdout && print_mail
 # log to stderr
 declare -i width_mailbox=$(wc -c <<<"${mailbox:-INBOX}")
 spaces="$(printf %$(( 16 - ${width_mailbox} ))s)"
-echo -e $(date '+%m-%d %H:%M' -d @${epoch}) "=> ${mailbox:-INBOX}" "$spaces" "${heading:-${SUBJECT}}" >&2
+echo -e $(date '+%m/%d %H:%M' -d @${epoch}) "=> ${mailbox:-INBOX}" "$spaces" "${heading:-${SUBJECT}}" >&2
 
 # vim:fdm=marker fdl=0

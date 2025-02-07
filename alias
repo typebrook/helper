@@ -605,6 +605,7 @@ alias npm='pnpm'
 fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias monitor.light='ddcutil --permit-unknown-feature setvcp 10'
 alias cdosm='cd /srv/osm'
+alias y='yazi'
 # }}}
 
 # vim:fdm=marker fdl=0
