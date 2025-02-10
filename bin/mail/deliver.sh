@@ -64,7 +64,6 @@ set_stdout() {
 print_mail() {
   if [ "$private" = true ]; then
     <<-MAIL cat
-		From: me <pham@topo.tw>
 		Date: ${mail_date}
 		Message-ID: ${Message_ID}
 		Content-Type: text/plain; charset=UTF-8
@@ -126,6 +125,8 @@ elif [[ "${LIST_ID}" =~ ^~rjarry/aerc-discuss ]]; then
   mailbox=LIST/aerc
 elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
   mailbox=LIST/mutt
+elif [[ "${SUBJECT}" =~ 啟用 ]]; then
+  mailbox=service
 elif [[
         "${SUBJECT}" =~  電子報|快訊|newsletter ||
         "${FROM}${TO}" =~ substack|service@kucw.io \
@@ -136,8 +137,8 @@ elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verify
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
 elif [[
-        "${SUBJECT}" =~ 未讀|更新|核對|嘟文|unread|summary|introduc  ||
-        "${FROM}" =~ no-reply@hackmd.io \
+        "${SUBJECT}" =~ 通知|提及|未讀|更新|核對|嘟文|unread|summary|mention|introduc  ||
+        "${FROM}" =~ notification[s]?@|no-reply@hackmd.io \
   ]]; then
   mailbox=update
 elif [[
