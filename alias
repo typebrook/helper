@@ -606,6 +606,9 @@ fix() { which $1 && grep -Po 'FIXME.*' $(which $1); }
 alias monitor.light='ddcutil --permit-unknown-feature setvcp 10'
 alias cdosm='cd /srv/osm'
 alias y='yazi'
+acme.issue() {
+  acme.sh --issue -d $1 -w $2
+}
 # }}}
 
 # vim:fdm=marker fdl=0
