@@ -27,16 +27,17 @@ mailboxes   -label 'INBOX' -poll + \
             -poll +act\
             -poll +box \
             -poll +continue \
-            -poll -label '[r]' +river \
-            -poll -label '[h]' +hiking \
+            -poll -label '[r]'          +river \
+            -poll -label '[R]ent'       +rent \
             "+-- Permanent ---" \
-            -poll -label 'de[v]' +DEV \
-            -poll -label '[t]alk 🍺' +talk \
-            -poll -label '[n]ews 📰' +news \
-            -poll -label '[p]ay  💲' +pay \
-            -poll -label '[l]ogin' +login \
-            -poll -label '[u]pdate' +update \
-            -poll -label '[R]ent' +rent \
+            -poll -label '[n]ews 📰'    +news \
+            -poll -label '[p]ay  💲'    +pay \
+            -poll -label '[t]alk 🍺'    +talk \
+            -poll -label 'de[v]'        +DEV \
+            -poll -label '[u]pdate'     +update \
+            -poll -label '[l]ogin'      +login \
+            -poll -label '[P]romote'    +promote \
+            -poll -label '[C]omment'    +comment \
 
 # Keybinding
 macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/mutt/muttrc.topo<enter><change-folder>!<enter>'
@@ -64,9 +65,10 @@ macro index,pager   gr      "<change-folder>+river<Return>"
 macro index,pager   gv      "<change-folder>+DEV<Return>"
 macro index,pager   gu      "<change-folder>+update<Return>"
 
-macro index,pager   gP      "<change-folder>+MISC/promote<Return>"
+macro index,pager   gP      "<change-folder>+promote<Return>"
 macro index,pager   gT      "<change-folder>+Trash<Return>"
 macro index,pager   gl      "<change-folder>+login<Return>"
 macro index,pager   gf      "<change-folder>+feedback<Return>"
 macro index,pager   gR      "<change-folder>+rent<Return>"
 macro index,pager   gS      "<change-folder>+spam<Return>"
+macro index,pager   gC      "<change-folder>+comment<Return>"
