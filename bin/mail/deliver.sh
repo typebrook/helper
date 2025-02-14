@@ -115,7 +115,7 @@ elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]
   mailbox=DEV/github
 elif [[ "${FROM}" =~ jgbsmart.com ]]; then
   mailbox=rent
-elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|Invoice|Billing ]]; then
+elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|簽帳|Invoice|Billing ]]; then
   mailbox=pay
 elif [[ "${TO}" =~ dmarc@topo.tw ]]; then
   mailbox=DEV/dmarc
@@ -145,7 +145,8 @@ elif [[
   mailbox=update
 elif [[
         "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
-        -n "${LIST_ID}${LIST_UNSUBSCRIBE}" ||
+        -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}" ||
+        ${FROM} =~ cora.computer ||
         ${TO} =~ tienling.chou@topo.tw \
   ]]; then
   mailbox=promote
