@@ -130,8 +130,8 @@ elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
 elif [[ "${SUBJECT}" =~ 啟用 ]]; then
   mailbox=service
 elif [[
-        "${SUBJECT}" =~  電子報|快訊|newsletter ||
-        "${FROM}${TO}" =~ substack|service@kucw.io \
+  "${SUBJECT}" =~  電子報|快訊|newsletter ||
+  "${FROM}${TO}" =~ substack|service@kucw.io \
   ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verify|sign-in ]]; then
@@ -139,15 +139,14 @@ elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verify
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
 elif [[
-        "${SUBJECT}" =~ 通知|提及|未讀|更新|核對|嘟文|unread|summary|mention|introduc  ||
-        "${FROM}" =~ notification[s]?@|no-reply@hackmd.io \
+  "${SUBJECT}" =~ 通知|提及|未讀|更新|核對|嘟文|unread|summary|mention|introduc  ||
+  "${FROM}" =~ notification[s]?@|no-reply@hackmd.io \
   ]]; then
   mailbox=update
 elif [[
-        "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
-        -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}" ||
-        ${FROM} =~ cora.computer ||
-        ${TO} =~ tienling.chou@topo.tw \
+  "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
+  ${FROM} =~ cora.computer ||
+  -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}${THREAD_INDEX}${X_MAILGUN_TAG}" \
   ]]; then
   mailbox=promote
 fi
