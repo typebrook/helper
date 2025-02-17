@@ -2,6 +2,7 @@
 
 # Deliver incoming mail to proper mailbox
 # TODO image/audio mail part
+# TODO CJK Subject in index/pager mode: tofo or backslash
 
 epoch=$(date +%s)
 mail_date="$(date --rfc-email -d @${epoch})"
@@ -146,7 +147,7 @@ elif [[
 elif [[
   "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
   ${FROM} =~ cora.computer ||
-  -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}${THREAD_INDEX}${X_MAILGUN_TAG}" \
+  -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}${THREAD_INDEX}${X_MAILGUN_TAG}${X_SFMC_STACK}" \
   ]]; then
   mailbox=promote
 fi
