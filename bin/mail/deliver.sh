@@ -107,7 +107,7 @@ done <<<"$header"
 # decide mailbox by vars {{{
 if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
   private_message
-elif [[ "${FROM}" =~ MAILER-DAEMON ]]; then
+elif [[ "${FROM}" =~ MAILER-DAEMON|accounts ]]; then
   mailbox=
 elif [[ "${TO}" =~ '+'|'=' ]]; then
   mailbox=${TO#*[+=]}       # remove chars before symbol of mailbox
