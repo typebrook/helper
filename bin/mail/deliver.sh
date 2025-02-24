@@ -123,11 +123,11 @@ elif [[ "${TO}" =~ dmarc@topo.tw ]]; then
 elif [[ "${LIST_ID}" =~ ^'Open Street Map Taiwan' ]]; then
   mailbox=FOSS/osm
 elif [[ "${TO}" =~ talk-ja@openstreetmap.org ]]; then
-  mailbox=LIST/talk-ja
-elif [[ "${LIST_ID}" =~ ^~rjarry/aerc-discuss ]]; then
-  mailbox=LIST/aerc
+  mailbox=zl/talk-ja
+elif [[ "${TO}" =~ ^~rjarry/aerc-discuss ]]; then
+  mailbox=zl/aerc
 elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
-  mailbox=LIST/mutt
+  mailbox=zl/mutt
 elif [[ "${SUBJECT}" =~ 啟用 ]]; then
   mailbox=service
 elif [[
