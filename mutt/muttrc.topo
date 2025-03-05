@@ -28,12 +28,12 @@ mailboxes   -label 'INBOX' -poll + \
             -poll +box \
             -poll +continue \
             -poll -label '[r]'          +river \
-            -poll -label '[R]ent'       +rent \
+            -poll -label '[h]ome'       +home \
             "+-- Permanent ---" \
             -poll -label '[n]ews 📰'    +news \
             -poll -label '[p]ay  💲'    +pay \
             -poll -label '[t]alk 🍺'    +talk \
-            -poll -label 'de[v]'        +DEV \
+            -poll -label '[d]ev'        +zd \
             -poll -label '[u]pdate'     +update \
             -poll -label '[l]ogin'      +login \
             -poll -label '[P]romote'    +promote \
@@ -53,22 +53,21 @@ macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
 macro index,pager   ga      "<change-folder>+act<Return>"
 macro index,pager   gb      "<change-folder>+box<Return>"
 macro index,pager   gc      "<change-folder>+continue<Return>"
-macro index,pager   gd      "<change-folder>+done<Return>"
+macro index,pager   gD      "<change-folder>+done<Return>"
 
 macro index,pager   gt      "<change-folder>+talk<Return>"
 macro index,pager   gk      "<change-folder>+keep<Return>"
 macro index,pager   gn      "<change-folder>+news<Return>"
-macro index,pager   gh      "<change-folder>+hiking<Return>"
+macro index,pager   gH      "<change-folder>+hiking<Return>"
 macro index,pager   gp      "<change-folder>+pay<Return>"
 macro index,pager   gs      "<change-folder>+Sent<Return>"
 macro index,pager   gr      "<change-folder>+river<Return>"
-macro index,pager   gv      "<change-folder>+DEV<Return>"
+macro index,pager   gd      "<change-folder>+zd<Return>"
 macro index,pager   gu      "<change-folder>+update<Return>"
+macro index,pager   gh      "<change-folder>+home<Return>"
 
 macro index,pager   gP      "<change-folder>+promote<Return>"
 macro index,pager   gT      "<change-folder>+Trash<Return>"
 macro index,pager   gl      "<change-folder>+login<Return>"
 macro index,pager   gf      "<change-folder>+feedback<Return>"
-macro index,pager   gR      "<change-folder>+rent<Return>"
-macro index,pager   gS      "<change-folder>+spam<Return>"
 macro index,pager   gC      "<change-folder>+comment<Return>"
