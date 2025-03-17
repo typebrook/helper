@@ -224,8 +224,8 @@ bind blob m >tig --follow -- %(file)
 
 # }}}
 # status view {{{
-bind status j :/^[MCADRUT?]
-bind status k :?^[MCADRUT?]
+bind status j :/^[MADRT?]
+bind status k :?^[MADRT?]
 
 # use vscode to edit a file
 bind status E !>code %(file)
