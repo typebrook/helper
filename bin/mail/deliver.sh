@@ -141,6 +141,7 @@ elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
 elif [[
   "${SUBJECT}" =~ 通知|提及|未讀|更新|核對|嘟文|unread|summary|mention|introduc  ||
+  "${FROM}" =~ iservice@narlabs.org.tw ||
   "${FROM}" =~ notification[s]?@|no-reply@hackmd.io \
   ]]; then
   mailbox=update
