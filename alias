@@ -363,9 +363,10 @@ if which nvim &>/dev/null; then
 else
   alias v='vim'
 fi
-alias vu='vim -u NONE'
+alias vu='vim -u NONE "+set nowrap"'
 alias sv='sudo vim'
 alias vr='vim -R'
+alias vm='vim Makefile'
 # Edit last file
 alias vl="vim -c 'norm '"
 # Use Telescope to select recent files
