@@ -113,13 +113,13 @@ elif [[ "${TO}" =~ '+'|'=' ]]; then
   mailbox=${TO#*[+=]}       # remove chars before symbol of mailbox
   mailbox=${mailbox%@*}     # remove suffix for mail address
 elif [[ "${FROM}${RETURN_PATH}" =~ notifications@github.com|noreply@github.com ]]; then
-  mailbox=DEV/github
+  mailbox=zd/github
 elif [[ "${FROM}" =~ jgbsmart.com ]]; then
   mailbox=rent
 elif [[ "${SUBJECT}" =~ 帳單|轉帳|對帳|付款|發票|消費|繳費|收據|費用|簽帳|Invoice|Billing ]]; then
   mailbox=pay
 elif [[ "${TO}" =~ dmarc@topo.tw ]]; then
-  mailbox=DEV/dmarc
+  mailbox=zd/dmarc
 elif [[ "${LIST_ID}" =~ ^'Open Street Map Taiwan' ]]; then
   mailbox=FOSS/osm
 elif [[ "${TO}" =~ talk-ja@openstreetmap.org ]]; then
@@ -132,7 +132,7 @@ elif [[ "${SUBJECT}" =~ 啟用 ]]; then
   mailbox=service
 elif [[
   "${SUBJECT}" =~  電子報|快訊|newsletter ||
-  "${FROM}${TO}" =~ substack|service@kucw.io \
+  "${FROM}${TO}" =~ substack|service@kucw.io
   ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verif|sign-in ]]; then
@@ -142,13 +142,13 @@ elif [[ "${TO}" = cloudflare@topo.tw ]]; then
 elif [[
   "${SUBJECT}" =~ 通知|提及|未讀|更新|核對|嘟文|unread|summary|mention|introduc  ||
   "${FROM}" =~ iservice@narlabs.org.tw ||
-  "${FROM}" =~ notification[s]?@|no-reply@hackmd.io \
+  "${FROM}" =~ notification[s]?@|no-reply@hackmd.io
   ]]; then
   mailbox=update
 elif [[
-  "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM ||
-  ${FROM} =~ cora.computer ||
-  -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}${THREAD_INDEX}${X_MAILGUN_TAG}${X_SFMC_STACK}" \
+  "${SUBJECT}${FROM}" =~ 優惠|快訊|願望清單|期待|活動|eDM|invitation ||
+  ${FROM} =~ cora.computer|noreply@steampowered.com ||
+  -n "${LIST_ID}${LIST_UNSUBSCRIBE}${FEEDBACK_ID}${THREAD_INDEX}${X_MAILGUN_TAG}${X_SFMC_STACK}"
   ]]; then
   mailbox=promote
 fi
