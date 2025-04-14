@@ -40,3 +40,6 @@
 
 [core]
 	excludesFile = /srv/git/www/gitignore
+
+[safe]
+	directory = ~/Downloads/recall171

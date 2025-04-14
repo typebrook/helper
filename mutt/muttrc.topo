@@ -29,6 +29,7 @@ mailboxes   -label 'INBOX' -poll + \
             -poll +continue \
             -poll -label '[r]'          +river \
             -poll -label '[h]ome'       +home \
+            -poll -label '[R]ecall'     +recall \
             "+-- Permanent ---" \
             -poll -label '[n]ews 📰'    +news \
             -poll -label '[p]ay  💲'    +pay \
@@ -62,6 +63,7 @@ macro index,pager   gH      "<change-folder>+hiking<Return>"
 macro index,pager   gp      "<change-folder>+pay<Return>"
 macro index,pager   gs      "<change-folder>+Sent<Return>"
 macro index,pager   gr      "<change-folder>+river<Return>"
+macro index,pager   gR      "<change-folder>+recall<Return>"
 macro index,pager   gd      "<change-folder>+zd<Return>"
 macro index,pager   gu      "<change-folder>+update<Return>"
 macro index,pager   gh      "<change-folder>+home<Return>"
