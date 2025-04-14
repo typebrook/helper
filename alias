@@ -610,6 +610,7 @@ alias y='yazi'
 acme.issue() {
   acme.sh --issue -d $1 -w $2
 }
+alias recall='cd /srv/recall'
 # }}}
 
 # vim:fdm=marker fdl=0

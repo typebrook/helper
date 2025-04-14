@@ -109,6 +109,8 @@ if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
   private_message
 elif [[ "${FROM}" =~ MAILER-DAEMON|accounts ]]; then
   mailbox=
+elif [[ "${FROM}" =~ taiwandreamer|imtaiwanese18741130|recall ]]; then
+  mailbox=recall
 elif [[ "${TO}" =~ '+'|'=' ]]; then
   mailbox=${TO#*[+=]}       # remove chars before symbol of mailbox
   mailbox=${mailbox%@*}     # remove suffix for mail address
