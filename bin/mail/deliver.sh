@@ -107,6 +107,8 @@ done <<<"$header"
 # decide mailbox by vars {{{
 if [[ "$SENDER" = pham@topo.tw && -n $CHAT_VERSION ]]; then
   private_message
+elif [[ "${FROM}" =~ riverbien ]]; then
+  mailbox=river
 elif [[ "${FROM}" =~ MAILER-DAEMON|accounts ]]; then
   mailbox=
 elif [[ "${FROM}" =~ taiwandreamer|imtaiwanese18741130|recall ]]; then
