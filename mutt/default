@@ -54,6 +54,7 @@ macro index,pager c '<change-folder>='
 macro index q '<change-folder>?'
 bind attach g exit
 bind index o sort-reverse
+bind index R group-chat-reply
 bind index O sort-mailbox
 bind index,pager <Return> sync-mailbox
 bind index x tag-entry
@@ -197,6 +198,7 @@ color index         blue            green         "~N~v~(~F)"                 # 
 color index         yellow          red           "~v~(~D)"                   # thread with deleted (doesn't differentiate between all or partial)
 color index         magenta         black         "~h Stay"                   # marked as Stay
 color index         lightblack            black         "~h Done"                   # marked as Done
+color index         lightblack            black         "~y done"                   # marked as Done
 
 # color header
 color header        green           black         "^(From)"

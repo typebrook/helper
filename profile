@@ -1,6 +1,7 @@
 # trap 'exit.sh' EXIT
 
 export PATH=~/.local/bin:$PATH
+export PATH=~/go/bin:$PATH
 export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config

@@ -55,6 +55,7 @@ alias j='sudo -i journalctl -xeu'
 alias jf='sudo -i journalctl -xfeu'
 alias fb{.,''}conf='sudo vim /etc/fail2ban/jail.d/jail.local'
 alias fb='sudo -i fail2ban-client'
+alias vps.test='curl -sL https://yabs.sh | bash'
 
 # }}}
 # Nginx{{{

@@ -5,12 +5,12 @@
   <meta charset='utf-8'>
   <title>Leader Line with Markdown</title>
 
-  <meta property="og:description" content="Add a default marker to the map." />
+  <meta property="og:description" content="門牌分布地圖" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.5.2/dist/maplibre-gl.css' />
+  <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.css' />
 
-  <script src='https://unpkg.com/maplibre-gl@4.5.2/dist/maplibre-gl.js'></script>
+  <script src='https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/14.0.0/marked.min.js'></script>
   <style>
@@ -26,12 +26,13 @@
     #markdown {
       height: 100%;
     }
-
-    #map,
-    #markdown {
-      flex: 50%;
+    #map {
+      flex: 70%;
     }
-
+    #markdown {
+      flex: 30%;
+      padding: 0.5em 1em;
+    }
     pre {
       display: none;
     }
