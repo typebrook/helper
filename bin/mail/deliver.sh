@@ -132,6 +132,8 @@ elif [[ "${LIST_ID}" =~ rjarry/aerc-discuss ]]; then
   mailbox=zl/aerc
 elif [[ "${LIST_ID}" =~ mutt-users.mutt.org ]]; then
   mailbox=zl/mutt
+elif [[ "${LIST_ID}" =~ archlinux.org ]]; then
+  mailbox=zl/arch
 elif [[ "${SUBJECT}" =~ 啟用 ]]; then
   mailbox=service
 elif [[
