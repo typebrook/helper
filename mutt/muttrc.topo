@@ -27,13 +27,13 @@ mailboxes   -label 'INBOX' -poll + \
             -poll +act\
             -poll +box \
             -poll +continue \
-            -poll -label '[r]'          +river \
+            -poll -label '[r]iver'      +river \
             -poll -label '[h]ome'       +home \
             -poll -label '[R]ecall'     +recall \
             "+-- Permanent ---" \
-            -poll -label '[n]ews 📰'    +news \
-            -poll -label '[p]ay  💲'    +pay \
-            -poll -label '[t]alk 🍺'    +talk \
+            -poll -label '[n]ews'       +news \
+            -poll -label '[p]ay'        +pay \
+            -poll -label '[t]alk'       +talk \
             -poll -label '[d]ev'        +zd \
             -poll -label '[u]pdate'     +update \
             -poll -label '[l]ogin'      +login \
