@@ -36,17 +36,6 @@ _comp_options+=(globdots) # With hidden files
 zstyle ':completion:*' menu select
 zstyle ':completion::complete:*' gain-privileges 1
 
-# Set variable CONTEXT
-function _get_context() {
-  CONTEXT_FILE=${CONTEXT_FILE:-~/.task/context}
-
-  LAST_MODIFY_TIME=$(stat -c %y "$CONTEXT_FILE")
-  if [ ! "$MODIFY_TIME" = "$LAST_MODIFY_TIME" ]; then
-    CONTEXT=$(cat "$CONTEXT_FILE")
-    MODIFY_TIME="$LAST_MODIFY_TIME"
-  fi
-}
-
 function _already_sync_after_wakeup() {
   WAKEUP="$HOME/.wakeup"
   [ ! -e "$WAKEUP" ] && return 0
@@ -78,7 +67,6 @@ function precmd() {
   # RIGHT PROMPT
   # Show context and git status of tracking repos at right
   UNSYNC_REPOS=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
-  _get_context
   NEED_SYNC=$(_already_sync_after_wakeup || echo S)
   RPROMPT="%B%K{blue}%F{yellow}${CONTEXT:+ $CONTEXT }%f%k%K{red}%F{black}${UNSYNC_REPOS}${NEED_SYNC}%f%k%b"
 
