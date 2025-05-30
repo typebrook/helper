@@ -612,6 +612,7 @@ acme.issue() {
   acme.sh --issue -d $1 -w $2
 }
 alias recall='cd /srv/recall'
+alias river='rclone mount r2:/river ~/Downloads/river'
 # }}}
 
 # vim:fdm=marker fdl=0
