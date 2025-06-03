@@ -470,6 +470,7 @@ github.raw() {
 # GIS {{{
 alias oo='ogr2ogr'
 alias oi='ogrinfo -al -so'
+alias oseq='ogr2ogr -f GEOJSONSeq /vsistdout/'
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
 TAIPEI_BBOX='121.346,24.926,121.676,25.209'
