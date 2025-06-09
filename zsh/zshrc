@@ -36,29 +36,6 @@ _comp_options+=(globdots) # With hidden files
 zstyle ':completion:*' menu select
 zstyle ':completion::complete:*' gain-privileges 1
 
-# Set variable CONTEXT
-function _get_context() {
-  CONTEXT_FILE=${CONTEXT_FILE:-~/.task/context}
-
-  LAST_MODIFY_TIME=$(stat -c %y "$CONTEXT_FILE")
-  if [ ! "$MODIFY_TIME" = "$LAST_MODIFY_TIME" ]; then
-    CONTEXT=$(cat "$CONTEXT_FILE")
-    MODIFY_TIME="$LAST_MODIFY_TIME"
-  fi
-}
-
-function _already_sync_after_wakeup() {
-  WAKEUP="$HOME/.wakeup"
-  [ ! -e "$WAKEUP" ] && return 0
-
-  latest=$(date -d @`stat -c %X "$WAKEUP"` +%s)
-  # If sync time is older than wakeup time (timestamp in file), then return false
-  if [ $latest -gt "$(cat $WAKEUP)" ]; then
-    return 0
-  else
-    return 1
-  fi
-}
 
 autoload -Uz add-zsh-hook
 autoload -Uz parameter
@@ -74,14 +51,6 @@ function precmd() {
     jobstring="($jobstring)"
   fi
   PROMPT="%B%(?:%F{green}%m%f:%K{red}%F{black}%m%f%k)%f%F{cyan} %c%f%b${jobstring} "
-
-  # RIGHT PROMPT
-  # Show context and git status of tracking repos at right
-  UNSYNC_REPOS=$(NUM=$($SETTING_DIR/bin/git/check-repos.sh -n); (( $NUM != 0 )) && echo $NUM)
-  _get_context
-  NEED_SYNC=$(_already_sync_after_wakeup || echo S)
-  RPROMPT="%B%K{blue}%F{yellow}${CONTEXT:+ $CONTEXT }%f%k%K{red}%F{black}${UNSYNC_REPOS}${NEED_SYNC}%f%k%b"
-
 
   [ -n "$PRE_POPULATE" ] && print -z "$PRE_POPULATE"
 }
@@ -159,4 +128,8 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-source ~/.profile
+source ~/.profile 2>/dev/null
+
+# Makefile
+zstyle ':completion:*:make:*:targets' call-command true
+zstyle ':completion:*:*:make:*' tag-order 'targets' 2>/dev/null
