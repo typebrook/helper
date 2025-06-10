@@ -15,6 +15,19 @@ export VISUAL=$EDITOR
 export TIG_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
 
+# IM for GUI
+export LANG="zh-CN.UTF-8"
+export LC_ALL="en_US.UTF-8"
+#  fcitx
+export GTK_IM_MODULE="fcitx"
+export QT_IM_MODULE="fcitx"
+export XMODIFIERS="@im=fcitx"
+export INPUT_METHOD="fcitx"
+export XIM="fcitx"
+export XIM_PROGRAM="fcitx"
+export SDL_IM_MODULE="fcitx"
+export GLFW_IM_MODULE="ibus"
+
 # Get current shell
 shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
 export shell=${shell##*/}
