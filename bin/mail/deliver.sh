@@ -141,7 +141,7 @@ elif [[
   "${FROM}${TO}" =~ substack|service@kucw.io
   ]]; then
   mailbox=news
-elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|login|verif|sign-in ]]; then
+elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|確認|login|verif|sign-in ]]; then
   mailbox=login
 elif [[ "${TO}" = cloudflare@topo.tw ]]; then
   mailbox=SRV/cloudflare
