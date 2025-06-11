@@ -651,7 +651,7 @@
           sh -c '
             xdotool search --name "@Mutt" windowactivate || \
             alacritty --title @Mutt \
-            --working-directory=/home/pham/Downloads \
+            --working-directory ~/Downloads \
             -e mutt
           '
       </command>
