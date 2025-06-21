@@ -138,7 +138,7 @@ elif [[ "${SUBJECT}" =~ 啟用 ]]; then
   mailbox=service
 elif [[
   "${SUBJECT}" =~  電子報|快訊|newsletter ||
-  "${FROM}${TO}" =~ substack|service@kucw.io
+  "${FROM}${TO}" =~ substack|service@kucw.io|linuxhandbook
   ]]; then
   mailbox=news
 elif [[ "${SUBJECT}" =~ 密碼|安全性警示|登入|存取|驗證|確認|login|verif|sign-in ]]; then
