@@ -112,7 +112,7 @@
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=70" \
             -o 'env.fullrc="false"' \
-            -e nvim ~/.config/openbox/rc.xml;
+            -e vim ~/.config/openbox/rc.xml;
             openbox --reconfigure
           '
         </command>
@@ -543,7 +543,7 @@
       <action name="Execute">
         <!-- Copy to CLIPBOARD -->
         <command>
-          alacritty --title @CLIPBORD -o 'env.fullrc="false"' -e nvim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
+          alacritty --title @CLIPBORD -o 'env.fullrc="false"' -e vim -c 'r !xsel -ob' -c 'normal A' -c 'startinsert' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
         </command>
       </action>
     </keybind>
@@ -758,7 +758,7 @@
     </keybind>
     <keybind key="C-A-n">
       <action name="Execute">
-        <command>alacritty -e nvim</command>
+        <command>alacritty -e vim</command>
       </action>
     </keybind>
     <keybind key="W-S-r">
