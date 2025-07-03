@@ -616,7 +616,7 @@
     <!-- Rofi -->
     <keybind key="A-F1">
       <action name="Execute">
-        <command>launcher</command>
+        <command>rofi -show drun -modes run</command>
       </action>
     </keybind>
     <keybind key="W-n">
@@ -702,7 +702,7 @@
     </keybind>
     <keybind key="W-r">
       <action name="Execute">
-        <command>runner</command>
+        <command>rofi -show run</command>
       </action>
     </keybind>
     <keybind key="W-g">
