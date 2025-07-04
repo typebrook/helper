@@ -73,7 +73,6 @@ console:
 	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf
 	sudo systemctl restart systemd-vconsole-setup.service
 
-
 task:
 	ln -sf $(HOME)/.task/taskrc $(HOME)/.taskrc
 	if [ ! -d "$(HOME)/.task/.git" ]; then
@@ -91,6 +90,12 @@ theme:
 
 openbox: theme
 	ln -sf `pwd`/X11/openbox/rc.xml ~/.config/openbox/
+	cat <<EOF >~/.xprofile
+	export XMODIFIERS=@im=fcitx
+	export QT_IM_MODULE=fcitx
+	export GTK_IM_MODULE=fcitx
+	fcitx
+	EOF
 
 rofi:
 	ln -sf `pwd`/X11/rofi/config.rasi ~/.config/rofi/config.rasi
