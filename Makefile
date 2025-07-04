@@ -59,7 +59,7 @@ mutt: ~/.local/share/application
 	pass mail/mutt.hooks >mutt/hooks.topo
 
 tmux:
-	ln -sf `pwd`/misc/tmux.conf ~/.tmux.conf
+	ln -sf `pwd`/tmux/tmux.conf ~/.tmux.conf
 
 crontab:
 	(crontab -l 2>/dev/null; cat bin/cron/* | sed '/^#/ d') | crontab -
