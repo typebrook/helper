@@ -5,6 +5,7 @@ set imap_pass = `pass mail/$my_user`
 set smtp_url = "smtp://$my_user:587"
 set smtp_pass = `pass mail/$my_user`
 
+# user info in mail
 set from = "pham@topo.tw"
 set realname = "謝晉凡 Hsieh Chin Fan"
 set signature = "~/.config/mutt/.signature"
@@ -77,5 +78,5 @@ macro index,pager   gh      "<change-folder>+home<Return>"
 macro index,pager   gP      "<change-folder>+promote<Return>"
 macro index,pager   gT      "<change-folder>+Trash<Return>"
 macro index,pager   gl      "<change-folder>+login<Return>"
-macro index,pager   gf      "<change-folder>+feedback<Return>"
+macro index,pager   gf      "<change-folder>+MISC/feedback<Return>"
 macro index,pager   gC      "<change-folder>+comment<Return>"

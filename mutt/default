@@ -11,6 +11,7 @@ set message_cachedir = ~/.cache/mutt.message
 set edit_headers = yes
 set mailcap_path = ~/.config/mutt/mailcap
 set recall = no
+set editor = vim
 
 # This allows to reply with "To: " in header
 set reverse_name = yes
