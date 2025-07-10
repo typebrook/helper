@@ -7,7 +7,7 @@ endif
 
 " Get current dir
 " let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-let s:home = '/home/pham/helper/vim'
+let s:home = '~/helper/vim'
 
 " Add current dir into runtimepath
 execute 'set runtimepath+='.s:home

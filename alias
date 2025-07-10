@@ -414,7 +414,7 @@ cdg() {
 alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
-alias ch="/home/pham/helper/bin/git/check-repos.sh"
+ch() { list=~/helper/bin/git/check-repos.sh; test -f $list && $list; }
 alias git.check="/home/pham/helper/bin/git/check-repos.sh"
 alias cgit{.,''}rc='sudo vim /etc/cgitrc'
 
