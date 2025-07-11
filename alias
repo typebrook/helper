@@ -370,7 +370,7 @@ alias sv='sudo vim'
 alias vr='vim -R'
 alias vm='vim Makefile'
 # Edit last file
-alias vl="vim -c 'norm '"
+alias vl="vim -c 'norm '"
 # Use Telescope to select recent files
 vll() { vim -c 'Telescope oldfiles'; }
 # Apply defaut session
@@ -470,7 +470,7 @@ github.raw() {
 # }}}
 # GIS {{{
 alias oo='ogr2ogr'
-alias oi='ogrinfo -al -so'
+oi(){ ogrinfo -al -so $1 | grep -vE '^( |FID Column|Extent|PROJCRS|Data axis|WKT|Layer SRS|Geometry Column)'; }
 alias oseq='ogr2ogr -f GEOJSONSeq /vsistdout/'
 TAIWAN_BBOX='118.1036,20.72799,122.9312,26.60305'
 TAIWAN_BBOX_V='20.72799,118.1036,26.60305,122.9312'
@@ -615,6 +615,8 @@ acme.issue() {
 }
 alias recall='cd /srv/recall'
 alias river='rclone mount r2:/river ~/Downloads/river'
+alias cdl='cd ~/log'
+alias cdbin='cd ~/.local/bin'
 # }}}
 
 # vim:fdm=marker fdl=0

@@ -659,7 +659,7 @@
     </keybind>
     <keybind key="W-x">
       <action name="Execute">
-        <command>powermenu</command>
+        <command>pkill -9 openbox</command>
       </action>
     </keybind>
     <keybind key="W-z">
