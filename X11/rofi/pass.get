@@ -61,9 +61,9 @@ elif [ -f "$HOME/.password-store/$1.gpg" ]; then
   # Password exist but command fails, must be something wrong with GPG decryption
   # Most of the time it is because passphrase is not cached by gpg-agent
 
-  # Use zenity for passphrase input
+  # Use yad for passphrase input
   coproc(
-    RESULT="$( zenity --password | gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
+    RESULT="$(yad --entry --hide-text | gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
     _save_to_clipboard "$RESULT"
     _show_extra "$RESULT" "$1"
   )

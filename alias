@@ -617,6 +617,7 @@ alias recall='cd /srv/recall'
 alias river='rclone mount r2:/river ~/Downloads/river'
 alias cdl='cd ~/log'
 alias cdbin='cd ~/.local/bin'
+cdta(){ cd ~/data/$(sed 's# #/#g' <<<"$@"); }
 # }}}
 
 # vim:fdm=marker fdl=0
