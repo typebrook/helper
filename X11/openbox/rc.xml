@@ -705,7 +705,7 @@
         <command>rofi -show run</command>
       </action>
     </keybind>
-    <keybind key="W-g">
+    <keybind key="W-S-g">
       <action name="Execute">
         <command>
           alacritty --hold --title GPT \
@@ -715,9 +715,9 @@
         </command>
       </action>
     </keybind>
-    <keybind key="W-S-g">
+    <keybind key="W-g">
       <action name="Execute">
-        <command>ob-colorpicker</command>
+        <command>/home/pham/helper/X11/openbox/scripts/ob-colorpicker</command>
       </action>
     </keybind>
     <keybind key="W-v">
