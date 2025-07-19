@@ -53,6 +53,7 @@ set nocompatible        " Disable vi compatible, today is 2RemoveBufFromTabXX
 set path=.,**           " Allow :find with completion
 set mouse=              " Disable mouse selection
 set winaltkeys=no       " Allow alt key for mapping
+set modelineexpr
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
@@ -79,8 +80,6 @@ set spellfile="/tmp/spell"
 
 " }}}
 " VISUAL {{{
-
-" colorscheme desert
 
 " Editing Area
 set nowrap              " disable wrap by default

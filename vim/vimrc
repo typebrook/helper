@@ -28,7 +28,8 @@ endif
 if has('nvim')
   LoadScript mini.lua
 else
-  colo desert
+  colorscheme gruvbox
+  set background=dark
   "LoadScript init/plugins.vim
   "LoadScript init/style.vim
 endif

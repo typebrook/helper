@@ -360,8 +360,8 @@ alias editor='select-editor'
 alias vim{.,''}rc='vim ~/.config/vim/vimrc'
 if which nvim &>/dev/null; then
   alias vim='nvim'
-  alias v='nvim'
-  alias vv='/usr/bin/vim'
+  alias vv='nvim'
+  alias v='/usr/bin/vim'
 else
   alias v='vim'
 fi
