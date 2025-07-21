@@ -618,6 +618,7 @@ alias river='rclone mount r2:/river ~/Downloads/river'
 alias cdl='cd ~/log'
 alias cdbin='cd ~/.local/bin'
 cdta(){ cd ~/data/$(sed 's# #/#g' <<<"$@"); }
+ww(){ file=$(find ~/log -type f -name "*$1*" | head -1); vim $file; }
 # }}}
 
 # vim:fdm=marker fdl=0
