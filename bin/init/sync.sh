@@ -3,10 +3,6 @@
 # If git is working in other process, then don't sync again
 pidof git >/dev/null && exit 0
 
-# Print information about ~/.wakeup
-echo 'latest:    ' $(date -d @`stat -c %Y ~/.wakeup` --iso-8601=seconds)
-echo 'wakeup at: ' $(cat ~/.wakeup | xargs -i date -d @{} --iso-8601=seconds)
-
 # Sync a repo
 sync() {
   cd "$1" || return
@@ -30,9 +26,6 @@ while true; do
     break
   fi
 done
-
-touch ~/.wakeup
-
 
 # others repo
 #check_upstream ~/git/tig || echo in `pwd` >/dev/tty &
