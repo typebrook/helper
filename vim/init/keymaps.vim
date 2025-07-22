@@ -332,7 +332,7 @@ nnoremap <leader><leader>p :setlocal paste!<CR>
 
 " Copy from system clipboard
 nnoremap gp "+p
-vnoremap Y "+y
+vnoremap Y :!tee >(xsel -ib)<CR>
 
 " }}}
 " MARKS {{{
