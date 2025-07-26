@@ -24,13 +24,14 @@ if $fullrc == 'false'
   finish
 endif
 
+colorscheme gruvbox
+set background=dark
+
 " Different scripts for nvim and vim
 if has('nvim')
   LoadScript mini.lua
 else
-  colorscheme gruvbox
-  set background=dark
-  "LoadScript init/plugins.vim
+  LoadScript init/plugins.vim
   "LoadScript init/style.vim
 endif
 
