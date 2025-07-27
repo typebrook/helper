@@ -13,5 +13,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf.vim'
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sg :GFiles<CR>
+nnoremap <leader>co :Colors<CR>
+nnoremap <leader><leader>ft :Filetypes<CR>
+nnoremap <leader>b :Buffers<CR>
 
 call plug#end()

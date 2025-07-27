@@ -8,9 +8,9 @@ set -o emacs
 echo -n '\e[1 q'
 
 # helper repo
-export SETTING_DIR=$HOME/helper
-fpath=($SETTING_DIR/zsh $fpath)
-source $SETTING_DIR/zsh/completion.zsh
+export HELPER_DIR=$HOME/helper
+fpath=($HELPER_DIR/zsh $fpath)
+source $HELPER_DIR/zsh/completion.zsh
 
 # Reload zshrc
 function .() {
@@ -108,7 +108,7 @@ bindkey '^[,' insert-first-word
 
 
 # Quick jump to parent folders
-source $SETTING_DIR/zsh/bd.zsh
+source $HELPER_DIR/zsh/bd.zsh
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.

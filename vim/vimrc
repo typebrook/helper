@@ -20,12 +20,13 @@ LoadScript init/basic.vim     " Basic configuration
 LoadScript init/keymaps.vim   " Key mappings
 LoadScript init/config.vim    " Extra config for different contexts
 
+" Color Scheme
+colorscheme gruvbox
+set background=dark
+
 if $fullrc == 'false'
   finish
 endif
-
-colorscheme gruvbox
-set background=dark
 
 " Different scripts for nvim and vim
 if has('nvim')

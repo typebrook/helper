@@ -3,7 +3,7 @@
 set -e
 
 # Default settings
-SETTING_DIR=${SETTING_DIR:-~/helper}
+HELPER_DIR=${HELPER_DIR:-~/helper}
 REPO=${REPO:-typebrook/helper}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-dev}
@@ -20,8 +20,8 @@ case "$(basename $SHELL)" in
 esac
 
 # If ~/helper doesn't exist, do git clone
-if [ ! -d $SETTING_DIR ]; then
-	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$SETTING_DIR" || {
+if [ ! -d $HELPER_DIR ]; then
+	git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$HELPER_DIR" || {
 		error "git clone of helper repo failed"
 		exit 1
 	}
@@ -32,11 +32,11 @@ sed -i "\^$COMMENT_IN_RCFILE^, /^$/ d" $RCFILE
 cat >>$RCFILE <<EOF
 
 $COMMENT_IN_RCFILE
-export SETTING_DIR=$SETTING_DIR
-source \$SETTING_DIR/$PROFILE
+export HELPER_DIR=$HELPER_DIR
+source \$HELPER_DIR/$PROFILE
 
 EOF
 
 echo Add profile into $RCFILE
-cd "$SETTING_DIR" || exit 1
+cd "$HELPER_DIR" || exit 1
 make

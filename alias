@@ -1,6 +1,6 @@
 # My alias for bash and zsh
 
-alias al="$EDITOR $SETTING_DIR/alias && source $SETTING_DIR/alias"
+alias al="$EDITOR $HELPER_DIR/alias && source $HELPER_DIR/alias"
 
 # SHELL {{{
 
@@ -26,7 +26,7 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 # CUSTOM HELPER {{{
 
 cdh() { IFS=/; cd ~/helper/"$*"; IFS=' '; }
-alias chh="tig -C $SETTING_DIR status"
+alias chh="tig -C $HELPER_DIR status"
 alias profile='$EDITOR ~/helper/profile'
 
 # }}}
@@ -243,8 +243,8 @@ alias cdmail='cd ~/Maildir'
 alias m='mutt'
 alias mutt{.,''}rc="$EDITOR ~/.config/mutt/muttrc"
 alias h='himalaya'
-alias gmail="mutt -F $SETTING_DIR/mutt/muttrc.gmail"
-alias ntu="mutt -F $SETTING_DIR/mutt/muttrc.b97602041"
+alias gmail="mutt -F $HELPER_DIR/mutt/muttrc.gmail"
+alias ntu="mutt -F $HELPER_DIR/mutt/muttrc.b97602041"
 imap.save() {
   curl "imaps://mail.topo.tw/$1" \
       --user pham:`pass mail/pham@mail.topo.tw` \
@@ -359,7 +359,6 @@ desktop() {
 alias editor='select-editor'
 alias vim{.,''}rc='vim ~/.config/vim/vimrc'
 if which nvim &>/dev/null; then
-  alias vim='nvim'
   alias vv='nvim'
   alias v='/usr/bin/vim'
 else

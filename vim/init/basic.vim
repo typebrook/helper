@@ -17,7 +17,6 @@ augroup END
 "}}}
 " For Vimscript {{{
 
-" Usage: type --- for foldmark
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker foldlevel=0
@@ -54,6 +53,7 @@ set path=.,**           " Allow :find with completion
 set mouse=              " Disable mouse selection
 set winaltkeys=no       " Allow alt key for mapping
 set modelineexpr
+set hidden              " Allow switch buffer without saving
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
@@ -62,6 +62,7 @@ if has('nvim')
   set undodir=~/.vim/.undodir/nvim
   set verbosefile=/tmp/nvim.log
 else
+  silent! call mkdir(expand('~/.vim/.undodir/vim'), "p", 0755)
   set undodir=~/.vim/.undodir/vim
 endif
 

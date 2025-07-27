@@ -613,9 +613,6 @@ nnoremap <leader>tc :tabclose<CR>
 nnoremap <leader>tm :tabmove<SPACE>
 nnoremap <leader>to :tabonly<CR>
 
-nnoremap <silent><m-h> :call Tab_MoveLeft()<CR>
-nnoremap <silent><m-l> :call Tab_MoveRight()<CR>
-
 " Let <leader>tl toggle between this and the last accessed tab
 let g:lasttab = 1
 nnoremap <Leader>tl :exe "tabn ".g:lasttab<CR>
@@ -626,7 +623,7 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 nnoremap <leader>te :tabedit <C-r>=expand("%:p:h")<CR>
 
 " Tab move functions
-function! Tvab_MoveLeft()
+function! Tab_MoveLeft()
   let l:tabnr = tabpagenr() - 2
   if l:tabnr >= 0
     exec 'tabmove '.l:tabnr
@@ -638,6 +635,9 @@ function! Tab_MoveRight()
     exec 'tabmove '.l:tabnr
   endif
 endfunc
+
+nnoremap <silent><m-h> :call Tab_MoveLeft()<CR>
+nnoremap <silent><m-l> :call Tab_MoveRight()<CR>
 " }}}
 " TERMINAL {{{
 

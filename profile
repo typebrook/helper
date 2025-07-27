@@ -1,8 +1,7 @@
 # trap 'exit.sh' EXIT
 
 export PATH=~/.local/bin:$PATH
-export PATH=~/go/bin:$PATH
-export SETTING_DIR=${SETTING_DIR:=$HOME/helper}
+export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
@@ -34,12 +33,12 @@ shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
 export shell=${shell##*/}
 
 # load custom aliases
-source $SETTING_DIR/alias
+source $HELPER_DIR/alias
 
 # sourcr rc files in private/ and bin/
-[[ -d $SETTING_DIR/private ]] && for f in $SETTING_DIR/private/*; do source $f; done
-find $SETTING_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
-find $SETTING_DIR/bin -mindepth 1 -type d | while read dir; do PATH+=:${dir}; done
+[[ -d $HELPER_DIR/private ]] && for f in $HELPER_DIR/private/*; do source $f; done
+find $HELPER_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
+find $HELPER_DIR/bin -mindepth 1 -type d | while read dir; do PATH+=:${dir}; done
 
 # fzf
 if which fzf &>/dev/null; then
@@ -54,7 +53,7 @@ fi
 if [[ $- =~ i ]]; then
     if [[ $shell == zsh ]]; then
       setopt extended_glob interactive_comments
-      fpath=($SETTING_DIR/zsh $fpath)
+      fpath=($HELPER_DIR/zsh $fpath)
       alias history='history -i'
       autoload compinit; compinit
 
