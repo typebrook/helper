@@ -2,10 +2,8 @@
 hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
 
 " Show trailing spaces
-if has('nvim')
-  match ExtraWhitespace /\s\+$/
-endif
 hi ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
 
 hi CursorLine guibg=NONE
 " Only works when :set cursorline in neovim
