@@ -14,8 +14,6 @@ execute 'set runtimepath+='.s:home
 
 " Load scripts in home
 command! -nargs=1 LoadScript exec 'source '.s:home.'/'.'<args>'
-
-" Gerneral scripts
 LoadScript init/basic.vim     " Basic configuration
 LoadScript init/keymaps.vim   " Key mappings
 LoadScript init/config.vim    " Extra config for different contexts
@@ -24,6 +22,7 @@ LoadScript init/config.vim    " Extra config for different contexts
 colorscheme gruvbox
 set background=dark
 
+" Disable plugins by ENV
 if $fullrc == 'false'
   finish
 endif
