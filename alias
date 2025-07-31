@@ -242,6 +242,7 @@ alias imap{.,''}conf='sudo vim /etc/dovecot/dovecot.conf && doveconf >/dev/null 
 alias cdmail='cd ~/Maildir'
 alias m='mutt'
 alias mutt{.,''}rc="$EDITOR ~/.config/mutt/muttrc"
+alias {mb,i}sync{.,''}rc="$EDITOR ~/.config/isyncrc"
 alias h='himalaya'
 alias gmail="mutt -F $HELPER_DIR/mutt/muttrc.gmail"
 alias ntu="mutt -F $HELPER_DIR/mutt/muttrc.b97602041"
