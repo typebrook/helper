@@ -659,12 +659,12 @@
     </keybind>
     <keybind key="W-x">
       <action name="Execute">
-        <command>systemctl suspend</command>
+        <command>pkill -9 openbox</command>
       </action>
     </keybind>
     <keybind key="W-S-x">
       <action name="Execute">
-        <command>pkill -9 openbox</command>
+        <command>systemctl suspend</command>
       </action>
     </keybind>
     <keybind key="W-z">

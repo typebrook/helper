@@ -280,8 +280,8 @@ augroup TerminalSize
       silent! set laststatus& showtabline=2 signcolumn& scrolloff&
     endif
   endfunc
-  "autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
-  "autocmd VimLeave,VimSuspend * if g:alacritty_extra_padding | silent call ToggleWinPadding(100) | endif
+  " autocmd VimEnter,VimResized * silent call LayoutForSmallTerminal(20)
+  " autocmd VimLeave,VimSuspend * if g:alacritty_extra_padding | silent call ToggleWinPadding(100) | endif
 augroup END
 
 " }}}
