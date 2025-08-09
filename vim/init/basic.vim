@@ -5,6 +5,7 @@
 "======================================================================
 
 " Initial for terminal emulator {{{
+
 augroup Enter
   au!
   function! SetEmulaterBackground()
@@ -14,15 +15,8 @@ augroup Enter
   endfunc
   autocmd VimEnter * silent! call SetEmulaterBackground()
 augroup END
+
 "}}}
-" For Vimscript {{{
-
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker foldlevel=0
-augroup END
-
-" }}}
 " For Buffer and Tab {{{
 augroup tabinfo
   au!

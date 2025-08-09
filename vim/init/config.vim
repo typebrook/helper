@@ -17,6 +17,7 @@ augroup END
 augroup InitFileTypes
 
   au!
+  autocmd FileType vim setlocal foldmethod=marker foldlevel=0
 
   " Shebeng: Set filetype from shebeng {{{
   function! s:ApplyShebang()
