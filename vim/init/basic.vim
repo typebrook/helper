@@ -18,6 +18,7 @@ augroup END
 
 "}}}
 " For Buffer and Tab {{{
+
 augroup tabinfo
   au!
 
@@ -38,16 +39,17 @@ augroup tabinfo
   endfunc
 
 augroup END
+
 "}}}
 " GERERNAL {{{
 
 let mapleader = ","     " Always use comma as leader key
-set nocompatible        " Disable vi compatible, today is 2RemoveBufFromTabXX
+set nocompatible        " Disable vi compatible, today is 20XX !
 set path=.,**           " Allow :find with completion
 set mouse=              " Disable mouse selection
 set winaltkeys=no       " Allow alt key for mapping
-set modelineexpr
 set hidden              " Allow switch buffer without saving
+set modelineexpr        " More support in modeline
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
@@ -59,7 +61,6 @@ else
   silent! call mkdir(expand('~/.vim/.undodir/vim'), "p", 0755)
   set undodir=~/.vim/.undodir/vim
 endif
-
 
 " Apply plugin and indent by filetype
 filetype plugin indent on
@@ -80,7 +81,7 @@ set spellfile="/tmp/spell"
 set nowrap              " disable wrap by default
 set scrolloff=3         " Leave some buffer when scrolling down
 set showmatch           " Show pairing brackets
-set display=lastline
+set display=truncate
 set lazyredraw
 set whichwrap=b,s
 
