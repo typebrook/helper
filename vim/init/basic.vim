@@ -166,6 +166,7 @@ set suffixesadd=.md                     " Enable reference markdown file without
 " }}}
 " SEARCH {{{
 
+set shortmess-=S                " Show count of search result
 set ignorecase smartcase        " Search case without case sensation
 set hlsearch                    " Highlight all matched texts
 set incsearch                   " Show matched strings when typing

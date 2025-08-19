@@ -16,7 +16,7 @@ export TIG_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
 
 # IM for GUI
-export LANG="zh-CN.UTF-8"
+export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 #  fcitx
 export GTK_IM_MODULE="fcitx"
