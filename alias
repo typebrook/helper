@@ -619,6 +619,7 @@ alias cdl='cd ~/log'
 alias cdbin='cd ~/.local/bin'
 cdta(){ cd ~/data/$(sed 's# #/#g' <<<"$@"); }
 ww(){ file=$(find ~/log -type f -name "*$1*" | head -1); vim $file; }
+alias gitea{.,''}conf='sudo vim /etc/gitea/app.ini -c "autocmd BufWritePost * !sudo systemctl restart gitea.service"'
 # }}}
 
 # vim:fdm=marker fdl=0
