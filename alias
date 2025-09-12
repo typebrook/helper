@@ -594,6 +594,7 @@ alias b='vim $HOME/bean/main.bean'
 # }}}
 # python{{{
 alias pip3='python3 -m pip'
+alias py{,thon}.http='python -m http.server'
 # }}}
 # Misc{{{
 alias yl='youtube-dl'
