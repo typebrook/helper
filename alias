@@ -60,7 +60,7 @@ alias vps.test='curl -sL https://yabs.sh | bash'
 # }}}
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
-alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
+alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx" -c "set fdm=marker" -c "set fdl=0"'
 ng.log() { setterm --linewrap off; tail -n ${1:-30} -f /var/log/nginx/access.log; setterm --linewrap on; }
 alias ng.error='setterm --linewrap off; tail -f /var/log/nginx/error.log; setterm --linewrap on'
 alias cdngx='cd /etc/nginx'
