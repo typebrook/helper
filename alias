@@ -279,7 +279,7 @@ alias ssh.auth="$EDITOR ~/.ssh/authorized_keys"
 alias ssh.known="$EDITOR ~/.ssh/known_hosts"
 alias ssh.pub="cat ~/.ssh/id_ed25519.pub"
 alias cdssh='cd ~/.ssh'
-alias ptt='ssh ptt'
+alias ptt='ssh bbsu@ptt.cc'
 alias sshv='ssh -t vps'
 ssh.tar() {
   prompt-vim "FOLDER=foo TARGET=~/Downloads tar cf - $FOLDER | pv -s $(du -sb $FOLDER | cut -f1) | ssh vps \"cd $TARGET; tar xf -\" \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
@@ -394,6 +394,7 @@ vvv() {
 # CD {{{
 alias ..='cd ..'
 alias ...='cd ../..'
+alias {this,cdt}='cd ~/this'
 alias ld='cd -' # last directory
 alias cda='mkdir -p ~/data && cd ~/data'
 cde() { cd /etc/$@; }
@@ -421,7 +422,6 @@ alias cgit{.,''}rc='sudo vim /etc/cgitrc'
 
 # }}}
 # GIT: TIG {{{
-alias cdt='cd ~/git/tig'
 alias t='tig'
 alias ts='tig status'
 alias tig{.,''}rc="$EDITOR ~/.tigrc"
@@ -595,7 +595,7 @@ alias b='vim $HOME/bean/main.bean'
 # }}}
 # python{{{
 alias pip3='python3 -m pip'
-alias py{,thon}.http='python -m http.server'
+alias py{,thon}.http='python -m http.server 8888'
 # }}}
 # Misc{{{
 alias yl='youtube-dl'
@@ -623,6 +623,7 @@ alias cdbin='cd ~/.local/bin'
 cdta(){ cd ~/data/$(sed 's# #/#g' <<<"$@"); }
 ww(){ file=$(find ~/log -type f -name "*$1*" | head -1); vim $file; }
 alias gitea{.,''}conf='sudo vim /etc/gitea/app.ini -c "autocmd BufWritePost * !sudo systemctl restart gitea.service"'
+alias ods2csv='libreoffice --headless --convert-to "csv:Text - txt - csv (StarCalc):,76,UTF8,1,,0,false,true,true,false,false,-1"'
 # }}}
 
 # vim:fdm=marker fdl=0
