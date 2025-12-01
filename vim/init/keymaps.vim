@@ -21,6 +21,7 @@ command! W execute 'w !sudo -S tee %' <bar> edit!
 " Quit
 nnoremap <leader>q :q<CR>
 nnoremap cq :cq<CR>
+nnoremap cc :%! 
 
 " Remap <CR> in Quickfix, Cmdwin Location list
 augroup vimrc_CRfix
