@@ -107,6 +107,7 @@ vp() {
 # }}}
 # UNIX {{{
 
+alias p='parallel'
 rm() {
   target=${@: -1}
   list=~/helper/.unremovable
