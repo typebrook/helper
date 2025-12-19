@@ -179,8 +179,10 @@ rmrf() { rm -rf $@; }
 alias df='df -h'
 bak() { cp $1 $1.bak; }
 cdp() {
-  [[ ! -d $1 ]] && mkdir -p $1
-  cd $1
+  [[ ! -d $1 && ! -z "$1" ]] && \
+  mkdir -p "$1" && \
+  cd ~/public/"$1" || \
+  cd ~/public
 }
 file.sort() {
   find $1 -type f -print0 |\
