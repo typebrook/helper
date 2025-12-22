@@ -5,12 +5,8 @@ export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
-export MAIL=$HOME/Maildir
-if which nvim &>/dev/null; then
-  export EDITOR=nvim
-else
-  export EDITOR=vim
-fi
+export MAIL=$HOME/Mail
+export EDITOR=vim
 export VISUAL=$EDITOR
 export TIG_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
