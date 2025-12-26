@@ -1,5 +1,9 @@
 # trap 'exit.sh' EXIT
 
+if which tmux &>/dev/null; then
+  test -z "$TMUX" && tmux attach
+fi
+
 export PATH=~/.local/bin:$PATH
 export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
 export TERM=xterm-256color
