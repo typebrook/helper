@@ -582,9 +582,6 @@ alias data.taiwan_county_code='curl --silent https://www.ris.gov.tw/documents/da
 alias chp='tig -C ~/.password-store'
 alias chpass='tig -C ~/.password-store'
 alias cdpass='cd ~/.password-store'
-alias p='pass'
-alias pc='pass -c'
-alias pe='pass edit'
 alias pgn='pass generate --in-place --clip'
 alias pgc='pass generate --clip'
 words() {
