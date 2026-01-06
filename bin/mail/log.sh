@@ -1,35 +1,33 @@
 #! /bin/bash
 
-# Restore mail in variable
-MAIL="$(cat)"
+# Get time of receiving mail
+epoch=$(date +%s)
+mail_date="$(date --rfc-email -d @${epoch})"
+
+# shell opt/trap {{{
+shopt -s nocasematch extglob
+
+# update index for dovecot
+trap 'doveadm force-resync ${mailbox:-/}' EXIT
+
+# temp file for decodemail (GNU Mailutils)
+tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
+cat >${tmp_mailbox}/cur/mail
+trap 'rm -rf ${tmp_mailbox}' EXIT
+# }}}
+# vars about message {{{
+MAIL="$(decodemail ${tmp_mailbox})"
 
 # Only execute the following script when mail receiver is log@topo.tw
-grep -qE "^X-Original-To: .*log@topo.tw[>]?$" <<<"$MAIL" || exit 0
-# A little hacky way to check if mail is sent from me
-sed -nE '/^Received: /p;/^$/q' <<<"$(MAIL)" | wc -l | xargs -i test {} -lt 2 || exit 0
+grep -qE "^Delivered-To: log@topo.tw$" <<<"$MAIL" && \
+grep -qE "^Subject: Message from Pham$" <<<"$MAIL" || \
+exit 0
 
-# Write a log
-date >>~/Downloads/log.log
-echo $$ >>~/Downloads/log.log
-awk -v RS= 'NR>1' <<<"$MAIL"  >>~/Downloads/log.log
+<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p >>~/LOG
+# }}}
 
-#LOG=~/log/`date +%y.w%W.md`
-LOG=~/log/inbox.md
-TODAY="`date '+%a %b.%d'`"
+#declare -i width_mailbox=$(wc -c <<<"${mailbox:-INBOX}")
+#spaces="$(printf %$(( 16 - ${width_mailbox} ))s)"
+#echo -e $(date '+%m/%d %H:%M' -d @${epoch}) "=> ${mailbox:-INBOX}" "$spaces" "${heading:-${SUBJECT}}" >&2
 
-# If header of today doesn't exist
-# Create it and separate with 2 empty lines
-grep -Eq "^## ${TODAY}$" ${LOG} || \
-cat <<EOF >>${LOG}
-
-
-## $TODAY
-EOF
-
-
-# Save content to log file of current week
-echo >>${LOG}
-awk -v RS= 'NR>1' <<<"$MAIL" >>${LOG}
-
-# git commit
-{ cd ~/log && git add `basename ${LOG}` && git commit -m "Update by mail"; } >>~/Downloads/log.log
+# vim:fdm=marker fdl=0

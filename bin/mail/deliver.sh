@@ -19,11 +19,11 @@ cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # log each delivery {{{
-log=~/Maildir/cur/deliver.log.${epoch}
+log=${maildir}/INBOX/cur/deliver.log.${epoch}
 trap 'doveadm force-resync /' EXIT
 
 # add a new log file, or reuse existing log file
-outdated_log=$(grep -rlE 'From:\s+<?MDA' ~/Maildir/cur | head -1)
+outdated_log=$(grep -rlE 'From:\s+<?MDA' ${maildir}/INBOX/cur | head -1)
 if [ -z "$outdated_log" ]; then
   <<-HEADER cat >${log}
 	From: MDA <pham@topo.tw>
@@ -49,7 +49,7 @@ body="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed '1d')"
 
 # vars about output
 iso_date=$(date --iso=seconds -d @${epoch})
-maildir=${HOME}/Maildir
+maildir=${HOME}/Mail
 mailbox=
 # }}}
 # FUNCTION: Set set_stdout {{{
