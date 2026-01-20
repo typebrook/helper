@@ -22,7 +22,7 @@ source ~/.config/mutt/alias.topo
 source ~/.config/mutt/hooks.topo
 
 ## Basic Mailbox
-set spoolfile = "+INBOX"
+set spoolfile = "+"
 #set mbox= "+mbox"
 #set move = yes
 set record = "+Sent"
