@@ -513,7 +513,7 @@
     <!-- Apps -->
     <keybind key="W-Return">
       <action name="Execute">
-        <command>alacritty --title _untitled</command>
+        <command>alacritty --title _untitled -e bash --rcfile ~pham/.profile</command>
       </action>
     </keybind>
     <keybind key="W-S-b">
