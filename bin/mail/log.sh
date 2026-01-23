@@ -12,6 +12,7 @@ cat >${tmp_mailbox}/cur/mail
 trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # vars about message {{{
+# TODO another way to decode mail without making tmp mailbox
 MAIL="$(decodemail ${tmp_mailbox})"
 
 # Only execute the following script when mail receiver is log@topo.tw
@@ -23,7 +24,9 @@ MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
 # write message to log {{{
 
 if [[ ! "$MESSAGE" =~ ^[/:#] ]]; then
+  # HELP: "." to add tag #todo
   [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
+  # HELP: "+" to add tag #buy
   [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
 
   echo "$MESSAGE" >>~/LOG
@@ -34,7 +37,8 @@ fi
 if [[ "$MESSAGE" =~ ^: ]]; then
   line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
   case "$MESSAGE" in
-    # mark specific line as #done
+    # HELP: ":d <LINE> 3" to tag as #done:<3 days before>
+    # HELP: ":d <LINE> wed" to tag as #done:<last wednesday>
     :d* )
       time=$(<<<"$MESSAGE" cut -d" " -f3)
       case "$time" in
@@ -44,17 +48,17 @@ if [[ "$MESSAGE" =~ ^: ]]; then
       esac
       sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
       ;;
-    # rewrite specific line
+    # HELP: ":r <LINE> <CONTENT>" to rewrite specific line
     :r* )
       content="$(cut -d' ' -f3- <<<"$MESSAGE")"
       sed -i "$line_num s/^.*$/$content/" ~/LOG
       ;;
-    # append contents to specific line
+    # HELP: ":a <LINE> <CONTENT>" to append contents
     :a* )
       content="$(cut -d' ' -f3- <<<"$MESSAGE")"
       sed -i "$line_num s/\$/ $content/" ~/LOG
       ;;
-    # substitute a word on specific line
+    # HELP: ":s <TARGET> <DEST>" to substitute a word
     :s* )
       target="$(cut -d' ' -f3 <<<"$MESSAGE")"
       dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
@@ -66,12 +70,16 @@ fi
 # }}}
 # Query something {{{
 
-# special char for help
+# special char for metadata
 if [[ "$MESSAGE" =~ ^# ]]; then
+  # HELP: "#t" to list all tags
   if [ "$MESSAGE" = '#t' ]; then
     REPLY="$(<LOG grep -Eo '#[^#: ]+' | sort | uniq -c | sort -n)"
+  elif [ "$MESSAGE" = '#c' ]; then
+    REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
   fi
 else
+  # HELP: "/<WORD>" to search by string
   REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
 fi
 
