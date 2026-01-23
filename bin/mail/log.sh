@@ -22,7 +22,7 @@ MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
 # }}}
 # write message to log {{{
 
-if [[ ! "$MESSAGE" =~ ^[/:] ]]; then
+if [[ ! "$MESSAGE" =~ ^[/:#] ]]; then
   [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
   [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
 
@@ -32,33 +32,49 @@ fi
 # }}}
 # special char for commands {{{
 if [[ "$MESSAGE" =~ ^: ]]; then
-  line=$(cut -d' ' -f2 <<<"$MESSAGE")
+  line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
   case "$MESSAGE" in
     # mark specific line as #done
     :d* )
-      sed -i "$line s/ #todo/ #done:$(date --iso)/" ~/LOG
+      time=$(<<<"$MESSAGE" cut -d" " -f3)
+      case "$time" in
+        [[:digit:]]* ) date=$(date --iso --date="-${time}days") ;;
+        [[:alpha:]]* ) date=$(date --iso --date="last ${time}") ;;
+        * ) date=$(date --iso) ;;
+      esac
+      sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
       ;;
     # rewrite specific line
     :r* )
       content="$(cut -d' ' -f3- <<<"$MESSAGE")"
-      sed -i "$line s/^.*$/$content/" ~/LOG
+      sed -i "$line_num s/^.*$/$content/" ~/LOG
       ;;
     # append contents to specific line
     :a* )
       content="$(cut -d' ' -f3- <<<"$MESSAGE")"
-      sed -i "$line s/\$/ $content/" ~/LOG
+      sed -i "$line_num s/\$/ $content/" ~/LOG
       ;;
-    # substitute word on specific line
+    # substitute a word on specific line
     :s* )
       target="$(cut -d' ' -f3 <<<"$MESSAGE")"
       dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
-      sed -i "$line s/$target/$dest/" ~/LOG
+      sed -i "$line_num s/$target/$dest/" ~/LOG
       ;;
   esac
   exit 0
 fi
 # }}}
-# special char for search {{{
+# Query something {{{
+
+# special char for help
+if [[ "$MESSAGE" =~ ^# ]]; then
+  if [ "$MESSAGE" = '#t' ]; then
+    REPLY="$(<LOG grep -Eo '#[^#: ]+' | sort | uniq -c | sort -n)"
+  fi
+else
+  REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
+fi
+
 smtp pham@topo.tw <<EOF
 From: <log@topo.tw>
 Content-Type: text/plain; charset="utf-8"
@@ -68,7 +84,7 @@ Chat-Version: 1.0
 Chat-Disposition-Notification-To: pham@topo.tw
 Subject: Message from log@topo.tw
 
-$(<~/LOG nl | grep -i "${MESSAGE#/}")
+$REPLY
 EOF
 # }}}
 
