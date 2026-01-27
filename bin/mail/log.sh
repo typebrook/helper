@@ -2,18 +2,7 @@
 
 # shell opt/trap {{{
 shopt -s nocasematch extglob
-
-# update index for dovecot
-trap 'doveadm force-resync ${mailbox:-/}' EXIT
-
-# temp file for decodemail (GNU Mailutils)
-tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
-cat >${tmp_mailbox}/cur/mail
-trap 'rm -rf ${tmp_mailbox}' EXIT
-# }}}
-# vars about message {{{
-# TODO another way to decode mail without making tmp mailbox
-MAIL="$(decodemail ${tmp_mailbox})"
+MAIL="$(cat)"
 
 # Only execute the following script when mail receiver is log@topo.tw
 grep -qE -e '^Delivered-To: log@topo.tw$' -e '^ChatVersion' <<<"$MAIL" \
@@ -38,7 +27,7 @@ if [[ "$MESSAGE" =~ ^: ]]; then
   line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
   case "$MESSAGE" in
     # HELP: ":d <LINE> 3" to tag as #done:<3 days before>
-    # HELP: ":d <LINE> wed" to tag as #done:<last wednesday>
+    # HELP: ":d <LINE> wed" to tag as #done:<last >
     :d* )
       time=$(<<<"$MESSAGE" cut -d" " -f3)
       case "$time" in
