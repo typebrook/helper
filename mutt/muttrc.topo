@@ -58,7 +58,7 @@ macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttr
 #folder-hook ~/Maildir 'source ~/.config/mutt/muttrc.b97602041'
 
 # Change mailboxes
-macro index,pager   gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
+macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
 macro index,pager   ga      "<change-folder>+act<Return>"
 macro index,pager   gb      "<change-folder>+box<Return>"
 macro index,pager   gc      "<change-folder>+continue<Return>"
