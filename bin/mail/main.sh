@@ -8,8 +8,8 @@ trap 'rm -rf ${tmp_mailbox}' EXIT
 decodemail ${tmp_mailbox} | \
 sed '/^$/q' | \
 grep -E '^To: .*info@topo.tw.*$' && \
-exit 0
+SPAM=fraud/
 
 decodemail ${tmp_mailbox} | \
 tee >(~/helper/bin/mail/log.sh) \
->~/Mail/new/$(date +%s)
+>~/Mail/${SPAM}new/$(date +%s)
