@@ -1,5 +1,4 @@
 # Identify meself
-<<<<<<< HEAD
 set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
 #set folder = "imaps://$my_user:993"
 #set imap_pass = `pass mail/$my_user`
