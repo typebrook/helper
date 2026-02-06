@@ -375,6 +375,7 @@ alias vr='vim -R'
 alias vm='vim Makefile'
 # Edit last file
 alias vl="vim -c 'norm '"
+alias vo="vim -c 'browse oldfiles'"
 # Use Telescope to select recent files
 vll() { vim -c 'Telescope oldfiles'; }
 # Apply defaut session
