@@ -10,24 +10,12 @@ grep -qE -e '^Delivered-To: log@topo.tw$' -e '^ChatVersion' <<<"$MAIL" \
 
 MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
 # }}}
-# write message to log {{{
-
-if [[ ! "$MESSAGE" =~ ^[/:#] ]]; then
-  # HELP: "." to add tag #todo
-  [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
-  # HELP: "+" to add tag #buy
-  [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
-
-  echo "$MESSAGE" >>~/LOG
-  exit 0
-fi
-# }}}
 # special char for commands {{{
-if [[ "$MESSAGE" =~ ^: ]]; then
+if [[ "$MESSAGE" =~ ^[[:alpha:]]" " ]]; then
   line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
   case "$MESSAGE" in
-    # HELP: ":d <LINE> 3" to tag as #done:<3 days before>
-    # HELP: ":d <LINE> wed" to tag as #done:<last >
+    # HELP: ":d <LINE> 3" to tag as #done:<3-DAYS-BEFORE>
+    # HELP: ":d <LINE> wed" to tag as #done:<LAST-WEDNESDAY >
     :d* )
       time=$(<<<"$MESSAGE" cut -d" " -f3)
       case "$time" in
@@ -57,7 +45,7 @@ if [[ "$MESSAGE" =~ ^: ]]; then
   exit 0
 fi
 # }}}
-# Query something {{{
+# reply something from query {{{
 
 # special char for metadata
 if [[ "$MESSAGE" =~ ^# ]]; then
@@ -67,22 +55,48 @@ if [[ "$MESSAGE" =~ ^# ]]; then
   elif [ "$MESSAGE" = '#c' ]; then
     REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
   fi
-else
+elif [[ "$MESSAGE" =~ ^/ ]]; then
   # HELP: "/<WORD>" to search by string
   REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
 fi
 
-smtp pham@topo.tw <<EOF
-From: <log@topo.tw>
-Content-Type: text/plain; charset="utf-8"
-In-Reply-To: $(<<<"$MAIL" grep In-Reply-To: | head -1 | grep -o '<.*>')
-Message-ID: $(date --iso=seconds)
-Chat-Version: 1.0
-Chat-Disposition-Notification-To: pham@topo.tw
-Subject: Message from log@topo.tw
+if [ -n "$REPLY" ]; then
+  smtp pham@topo.tw <<-MAIL
+	From: <log@topo.tw>
+	Content-Type: text/plain; charset="utf-8"
+	In-Reply-To: $(<<<"$MAIL" grep In-Reply-To: | head -1 | grep -o '<.*>')
+	Message-ID: $(date --iso=seconds)
+	Chat-Version: 1.0
+	Chat-Disposition-Notification-To: pham@topo.tw
+	Subject: Message from log@topo.tw
 
-$REPLY
-EOF
+	$REPLY
+	MAIL
+  exit 0
+fi
+# }}}
+# write message to log {{{
+
+# HELP: "@<TIME>" to specify date of message
+if [[ "$MESSAGE" =~ ^@[[:alnum:]]+" ".+$ ]]; then
+  datestring=${MESSAGE%% *}; datestring=${datestring#@}
+  # parse token as N days before
+  [[ $datestring =~ ^[[:digit:]]+$ ]] && DATE=$(date --iso -d "-$datestring days")
+  # parse token as last X weekday
+  [[ $datestring =~ ^[[:alpha:]]+$ ]] && DATE=$(date --iso -d "last $datestring")
+
+  [ -z "$DATE" ] && echo fail to parse date >>~/log.log && break
+
+  line_num=$(grep -n "^## $DATE" | cut -d: -f1)
+  sed -i "${line_num}i $(cut -d' ' -f2-)" ~/LOG
+elif [[ ! "$MESSAGE" =~ ^[/:#]|^@[[:alnum:]]+" ".+$ ]]; then
+  # HELP: "." to add tag #todo
+  [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
+  # HELP: "+" to add tag #buy
+  [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
+
+  echo "$MESSAGE" >>~/LOG
+fi
 # }}}
 
 # vim:fdm=marker fdl=0
