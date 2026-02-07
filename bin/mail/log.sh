@@ -1,5 +1,10 @@
 #! /bin/bash
 
+# DEBUG
+export PS4='Line ${LINENO}: '
+exec &>log.log
+set -x
+
 # shell opt/trap {{{
 shopt -s nocasematch extglob
 MAIL="$(cat)"
@@ -11,38 +16,43 @@ grep -qE -e '^Delivered-To: log@topo.tw$' -e '^ChatVersion' <<<"$MAIL" \
 MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
 # }}}
 # special char for commands {{{
-if [[ "$MESSAGE" =~ ^[[:alpha:]]" " ]]; then
+if [[ "$MESSAGE" =~ ^: ]]; then
   line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
+  content="$(cut -d' ' -f3- <<<"$MESSAGE")"
   case "$MESSAGE" in
     # HELP: ":d <LINE> 3" to tag as #done:<3-DAYS-BEFORE>
     # HELP: ":d <LINE> wed" to tag as #done:<LAST-WEDNESDAY >
     :d* )
-      time=$(<<<"$MESSAGE" cut -d" " -f3)
+      time="$content"
       case "$time" in
         [[:digit:]]* ) date=$(date --iso --date="-${time}days") ;;
         [[:alpha:]]* ) date=$(date --iso --date="last ${time}") ;;
         * ) date=$(date --iso) ;;
       esac
       sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
-      ;;
+      ;;&
     # HELP: ":r <LINE> <CONTENT>" to rewrite specific line
     :r* )
-      content="$(cut -d' ' -f3- <<<"$MESSAGE")"
       sed -i "$line_num s/^.*$/$content/" ~/LOG
-      ;;
+      ;;&
     # HELP: ":a <LINE> <CONTENT>" to append contents
     :a* )
-      content="$(cut -d' ' -f3- <<<"$MESSAGE")"
       sed -i "$line_num s/\$/ $content/" ~/LOG
-      ;;
+      ;;&
     # HELP: ":s <TARGET> <DEST>" to substitute a word
     :s* )
       target="$(cut -d' ' -f3 <<<"$MESSAGE")"
       dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
       sed -i "$line_num s/$target/$dest/" ~/LOG
+      ;;&
+    :o* )
+      content="  $content"
+      sed -Ei "${line_num}"'a\'"$content" ~/LOG
+      ;;&
+    * )
+      exit 0
       ;;
   esac
-  exit 0
 fi
 # }}}
 # reply something from query {{{
@@ -89,7 +99,9 @@ if [[ "$MESSAGE" =~ ^@[[:alnum:]]+" ".+$ ]]; then
 
   line_num=$(grep -n "^## $DATE" | cut -d: -f1)
   sed -i "${line_num}i $(cut -d' ' -f2-)" ~/LOG
-elif [[ ! "$MESSAGE" =~ ^[/:#]|^@[[:alnum:]]+" ".+$ ]]; then
+elif [ -n "$line_num" ] && [ -n "$content" ]; then
+  sed -Ei "${line_num}a $content" ~/LOG
+else [ -n "$MESSAGE" ]
   # HELP: "." to add tag #todo
   [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
   # HELP: "+" to add tag #buy
