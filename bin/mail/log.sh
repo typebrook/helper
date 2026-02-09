@@ -13,7 +13,17 @@ MAIL="$(cat)"
 grep -qE -e '^Delivered-To: log@topo.tw$' -e '^ChatVersion' <<<"$MAIL" \
 || exit 0
 
+# MESSAGE: a single line message
 MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
+
+# DATE: parse @<DATE> as ISO 8601 format
+if [[ "$MESSAGE" =~ ^@ ]]; then
+  datestring=${MESSAGE%% *}; datestring=${datestring#@}
+  # parse token as N days before
+  [[ $datestring =~ ^[[:digit:]]+$ ]] && DATE=$(date --iso -d "-$datestring days")
+  # parse token as last X weekday
+  [[ $datestring =~ ^[[:alpha:]]+$ ]] && DATE=$(date --iso -d "last $datestring")
+fi
 # }}}
 # special char for commands {{{
 if [[ "$MESSAGE" =~ ^: ]]; then
@@ -45,8 +55,9 @@ if [[ "$MESSAGE" =~ ^: ]]; then
       dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
       sed -i "$line_num s/$target/$dest/" ~/LOG
       ;;&
+    # HELP: ":o <LINE> <MESSAGE>" to add a list item
     :o* )
-      content="  $content"
+      content="- $content"
       sed -Ei "${line_num}"'a\'"$content" ~/LOG
       ;;&
     * )
@@ -58,16 +69,17 @@ fi
 # reply something from query {{{
 
 # special char for metadata
-if [[ "$MESSAGE" =~ ^# ]]; then
   # HELP: "#t" to list all tags
-  if [ "$MESSAGE" = '#t' ]; then
-    REPLY="$(<LOG grep -Eo '#[^#: ]+' | sort | uniq -c | sort -n)"
-  elif [ "$MESSAGE" = '#c' ]; then
-    REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
-  fi
+if [ "$MESSAGE" = '#t' ]; then
+  REPLY="$(<LOG grep -Eo '#[^#: ]+' | sort | uniq -c | sort -n)"
+elif [ "$MESSAGE" = '#c' ]; then
+  REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
 elif [[ "$MESSAGE" =~ ^/ ]]; then
   # HELP: "/<WORD>" to search by string
   REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
+elif [[ "$MESSAGE" =~ ^@[[:alnum:]]+$ && -n "$DATE" ]]; then
+  # HELP: "@<DATE>" to print records by date
+  REPLY="$(<~/LOG sed -n "/^## $DATE/,/^$/p")"
 fi
 
 if [ -n "$REPLY" ]; then
@@ -88,26 +100,16 @@ fi
 # write message to log {{{
 
 # HELP: "@<TIME>" to specify date of message
-if [[ "$MESSAGE" =~ ^@[[:alnum:]]+" ".+$ ]]; then
-  datestring=${MESSAGE%% *}; datestring=${datestring#@}
-  # parse token as N days before
-  [[ $datestring =~ ^[[:digit:]]+$ ]] && DATE=$(date --iso -d "-$datestring days")
-  # parse token as last X weekday
-  [[ $datestring =~ ^[[:alpha:]]+$ ]] && DATE=$(date --iso -d "last $datestring")
-
-  [ -z "$DATE" ] && echo fail to parse date >>~/log.log && break
-
-  line_num=$(grep -n "^## $DATE" | cut -d: -f1)
+if [ -n "$DATE" ]; then
+  line_num=$(<~/LOG grep -n "^## $DATE" | cut -d: -f1)
   sed -i "${line_num}i $(cut -d' ' -f2-)" ~/LOG
-elif [ -n "$line_num" ] && [ -n "$content" ]; then
-  sed -Ei "${line_num}a $content" ~/LOG
 else [ -n "$MESSAGE" ]
-  # HELP: "." to add tag #todo
-  [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
-  # HELP: "+" to add tag #buy
-  [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
+# HELP: "." to add tag #todo
+[[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
+# HELP: "+" to add tag #buy
+[[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
 
-  echo "$MESSAGE" >>~/LOG
+echo "$MESSAGE" >>~/LOG
 fi
 # }}}
 
