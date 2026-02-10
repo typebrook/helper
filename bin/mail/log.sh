@@ -3,19 +3,23 @@
 # DEBUG {{{
 export PS4='Line ${LINENO}: '
 set -x
-exec &>log.log
+exec &>>log.log
+echo
+date --iso=seconds
 # }}}
 # shell opt/var {{{
 shopt -s nocasematch extglob
 MAIL="$(cat)"
+echo "$MAIL" >~/log.mail
 
 # Only execute the following script when mail receiver is log@topo.tw
-if [[ ! "$MAIL" =~ ^Delivered-To: log@topo.tw$ || ! "$MAIL" =~ '^ChatVersion' ]]; then
-  exit 0
-fi
+echo mail pattern:
+<<<"$MAIL" grep -o '^Delivered-To: .*log@topo.tw' || exit 0
+<<<"$MAIL" grep -o '^Chat-Version: ' || exit 0
 
-# MESSAGE: a single line message
+# MESSAGE: the first line of mail body
 MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
+echo MESSAGE: $MESSAGE
 
 # DATE: parse @<DATE> as ISO 8601 format
 if [[ "$MESSAGE" =~ ^@ ]]; then
@@ -24,6 +28,7 @@ if [[ "$MESSAGE" =~ ^@ ]]; then
   [[ $datestring =~ ^[[:digit:]]+$ ]] && DATE=$(date --iso -d "-$datestring days")
   # parse token as last X weekday
   [[ $datestring =~ ^[[:alpha:]]+$ ]] && DATE=$(date --iso -d "last $datestring")
+  echo DATE: $DATE
 fi
 # }}}
 # special char for commands {{{
@@ -34,37 +39,37 @@ if [[ "$MESSAGE" =~ ^: ]]; then
     # HELP: ":d <LINE> 3" to tag as #done:<3-DAYS-BEFORE>
     # HELP: ":d <LINE> wed" to tag as #done:<LAST-WEDNESDAY >
     :d* )
-    time="$content"
-    case "$time" in
-      [[:digit:]]* ) date=$(date --iso --date="-${time}days") ;;
-      [[:alpha:]]* ) date=$(date --iso --date="last ${time}") ;;
-      * ) date=$(date --iso) ;;
-    esac
-    sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
-    ;;&
+      time="$content"
+      case "$time" in
+        [[:digit:]]* ) date=$(date --iso --date="-${time}days") ;;
+        [[:alpha:]]* ) date=$(date --iso --date="last ${time}") ;;
+        * ) date=$(date --iso) ;;
+      esac
+      sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
+      ;;&
     # HELP: ":r <LINE> <CONTENT>" to rewrite specific line
     :r* )
-    sed -i "$line_num s/^.*$/$content/" ~/LOG
-    ;;&
+      sed -i "$line_num s/^.*$/$content/" ~/LOG
+      ;;&
     # HELP: ":a <LINE> <CONTENT>" to append contents
     :a* )
-    sed -i "$line_num s/\$/ $content/" ~/LOG
-    ;;&
+      sed -i "$line_num s/\$/ $content/" ~/LOG
+      ;;&
     # HELP: ":s <TARGET> <DEST>" to substitute a word
     :s* )
-    target="$(cut -d' ' -f3 <<<"$MESSAGE")"
-    dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
-    sed -i "$line_num s/$target/$dest/" ~/LOG
-    ;;&
+      target="$(cut -d' ' -f3 <<<"$MESSAGE")"
+      dest="$(cut -d' ' -f4- <<<"$MESSAGE")"
+      sed -i "$line_num s/$target/$dest/" ~/LOG
+      ;;&
     # HELP: ":o <LINE> <MESSAGE>" to add a list item
     :o* )
-    content="- $content"
-    sed -Ei "${line_num}"'a\'"$content" ~/LOG
-    ;;&
-  * )
-    exit 0
-    ;;
-esac
+      content="- $content"
+      sed -Ei "${line_num}"'a\'"$content" ~/LOG
+      ;;&
+    * )
+      exit 0
+      ;;
+  esac
 fi
 # }}}
 # reply something from query {{{
@@ -105,7 +110,7 @@ fi
 if [ -n "$DATE" ]; then
   line_num=$(<~/LOG grep -n "^## $DATE" | cut -d: -f1)
   sed -i "${line_num}i $(cut -d' ' -f2-)" ~/LOG
-elif [ -n "$MESSAGE" ]
+elif [ -n "$MESSAGE" ]; then
   # HELP: "." to add tag #todo
   [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
   # HELP: "+" to add tag #buy
