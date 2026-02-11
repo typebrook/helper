@@ -33,9 +33,16 @@ fi
 # }}}
 # special char for commands {{{
 if [[ "$MESSAGE" =~ ^: ]]; then
-  line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
-  content="$(cut -d' ' -f3- <<<"$MESSAGE")"
   case "$MESSAGE" in
+    # HELP: ":! <LINE> <COMMAND>" to execute a command
+    :!* )
+      command="${MESSAGE#:!}"
+      REPLY=$(<LOG $command)
+      ;;
+    *)
+      line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
+      content="$(cut -d' ' -f3- <<<"$MESSAGE")"
+    ;;&
     # HELP: ":d <LINE> 3" to tag as #done:<3-DAYS-BEFORE>
     # HELP: ":d <LINE> wed" to tag as #done:<LAST-WEDNESDAY >
     :d* )
