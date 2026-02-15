@@ -337,7 +337,7 @@ psi() {
   pacman -Si $1
 }
 pkgbuild() { git clone https://aur.archlinux.org/$1.git; }
-alias pac.list='pacman -Qen | expac --timefmt="%F %T" "%l %n %v" - '
+alias pac{,man}.list='pacman -Qen | expac --timefmt="%F %T" "%l %n %v" - '
 
 # }}}
 # X11: Alacritty{{{

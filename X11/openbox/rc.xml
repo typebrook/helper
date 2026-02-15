@@ -652,7 +652,8 @@
             xdotool search --name "@Mutt" windowactivate || \
             alacritty --title @Mutt \
             --working-directory ~/Downloads \
-            -e ssh -t v "exec env LANG=en_US.UTF-8 mutt"
+           -e mutt
+    <!-- -e ssh -t v "exec env LANG=en_US.UTF-8 mutt" -->
           '
       </command>
       </action>
