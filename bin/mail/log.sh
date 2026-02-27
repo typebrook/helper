@@ -37,7 +37,7 @@ if [[ "$MESSAGE" =~ ^: ]]; then
     # HELP: ":! <LINE> <COMMAND>" to execute a command
     :!* )
       command="${MESSAGE#:!}"
-      REPLY=$(<LOG $command)
+      REPLY="$(<LOG bash -c "$command")"
       ;;
     *)
       line_num=$(cut -d' ' -f2 <<<"$MESSAGE")
@@ -79,7 +79,7 @@ if [[ "$MESSAGE" =~ ^: ]]; then
   esac
 fi
 # }}}
-# reply something from query {{{
+# query something {{{
 
 # special char for metadata
 if [ "$MESSAGE" = '#t' ]; then
@@ -91,11 +91,32 @@ elif [ "$MESSAGE" = '#c' ]; then
 elif [[ "$MESSAGE" =~ ^/ ]]; then
   # HELP: "/<WORD>" to search by string
   REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
+  REPLY=${REPLY:-Nothing Found}
 elif [[ "$MESSAGE" =~ ^@[[:alnum:]]+$ && -n "$DATE" ]]; then
   # HELP: "@<DATE>" to print records by date
   REPLY="$(<~/LOG sed -n "/^## $DATE/,/^$/p")"
 fi
+# }}}
+# write message to log {{{
 
+# HELP: "@<TIME>" to specify date of message
+if [ -z "$REPLY" ]; then
+  if [ -n "$DATE" ]; then
+    line_num=$(<~/LOG awk '$0=="## '$DATE'",$0==""{print NR}' | tail -1)
+    sed -i "${line_num}i $(<<<$MESSAGE cut -d' ' -f2-)" ~/LOG
+  elif [ -n "$MESSAGE" ]; then
+    # HELP: "." to add tag #todo
+    [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
+    # HELP: "+" to add tag #buy
+    [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
+
+    echo "$MESSAGE" >>~/LOG
+  fi
+
+  REPLY="Line: $(wc -l ~/LOG | cut -d' ' -f1)"
+fi
+# }}}
+# reply to sender {{{
 if [ -n "$REPLY" ]; then
   smtp pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
@@ -109,21 +130,6 @@ if [ -n "$REPLY" ]; then
 	$REPLY
 	MAIL
   exit 0
-fi
-# }}}
-# write message to log {{{
-
-# HELP: "@<TIME>" to specify date of message
-if [ -n "$DATE" ]; then
-  line_num=$(<~/LOG grep -n "^## $DATE" | cut -d: -f1)
-  sed -i "${line_num}i $(cut -d' ' -f2-)" ~/LOG
-elif [ -n "$MESSAGE" ]; then
-  # HELP: "." to add tag #todo
-  [[ "$MESSAGE" =~ ^\. ]] && MESSAGE="${MESSAGE#.} #todo"
-  # HELP: "+" to add tag #buy
-  [[ "$MESSAGE" =~ ^\+ ]] && MESSAGE="${MESSAGE#+} #buy"
-
-  echo "$MESSAGE" >>~/LOG
 fi
 # }}}
 
