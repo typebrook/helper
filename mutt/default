@@ -134,7 +134,7 @@ bind index                  zA      collapse-all
 
 
 # Sidebar
-set mail_check = 120
+set mail_check = 30
 set mail_check_stats
 set imap_check_subscribed
 set sidebar_visible = yes

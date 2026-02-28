@@ -513,7 +513,14 @@
     <!-- Apps -->
     <keybind key="W-Return">
       <action name="Execute">
-        <command>alacritty --title _untitled -e bash --rcfile ~pham/.profile</command>
+        <command>
+          sh -c '
+            xdotool search --name "@Work" windowactivate || \
+            alacritty --title @Work \
+            --working-directory ~/Downloads \
+            -e  bash --rcfile ~pham/.profile
+          '
+        </command>
       </action>
     </keybind>
     <keybind key="W-S-b">
