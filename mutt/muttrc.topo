@@ -1,7 +1,7 @@
 # Identify meself
 set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
-#set folder = "imaps://$my_user:993"
-#set imap_pass = `pass mail/$my_user`
+set folder = "imaps://$my_user:993"
+set imap_pass = `pass mail/$my_user`
 set smtp_url = "smtp://$my_user:587"
 set smtp_pass = `pass mail/$my_user`
 
@@ -31,7 +31,7 @@ set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 
 # Sidebar
 mailboxes   -label 'INBOX' -poll + \
-            -poll +act\
+            -poll +archive\
             -poll +box \
             -poll +continue \
             -poll -label '[r]iver'      +river \
@@ -58,7 +58,7 @@ macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/mutt/muttr
 
 # Change mailboxes
 macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
-macro index,pager   ga      "<change-folder>+act<Return>"
+macro index,pager   ga      "<change-folder>+archive<Return>"
 macro index,pager   gb      "<change-folder>+box<Return>"
 macro index,pager   gc      "<change-folder>+continue<Return>"
 macro index,pager   gD      "<change-folder>+done<Return>"
