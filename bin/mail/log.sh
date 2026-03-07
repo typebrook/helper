@@ -3,22 +3,17 @@
 # DEBUG {{{
 export PS4='Line ${LINENO}: '
 set -x
-exec &>>log.log
+test -t || exec &>>log.log
 echo
 date --iso=seconds
 # }}}
 # shell opt/var {{{
 shopt -s nocasematch extglob
-MAIL="$(cat)"
-echo "$MAIL" >~/log.mail
-
-# Only execute the following script when mail receiver is log@topo.tw
-echo mail pattern:
-<<<"$MAIL" grep -o '^Delivered-To: .*log@topo.tw' || exit 0
-<<<"$MAIL" grep -o '^Chat-Version: ' || exit 0
+MESSAGE="$(cat)"
+#echo "$MAIL" >~/log.mail
 
 # MESSAGE: the first line of mail body
-MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
+#MESSAGE="$(<<<"$MAIL" sed -n '/^$/,$ p' | sed -n 2p)"
 echo MESSAGE: $MESSAGE
 
 # DATE: parse @<DATE> as ISO 8601 format
@@ -35,8 +30,8 @@ fi
 if [[ "$MESSAGE" =~ ^: ]]; then
   case "$MESSAGE" in
     # HELP: ":! <LINE> <COMMAND>" to execute a command
-    :!* )
-      command="${MESSAGE#:!}"
+    :!* | ::* )
+      command="$(<<<$MESSAGE cut -b3-)"
       REPLY="$(<LOG bash -c "$command")"
       ;;
     *)
@@ -90,7 +85,7 @@ elif [ "$MESSAGE" = '#c' ]; then
   REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
 elif [[ "$MESSAGE" =~ ^/ ]]; then
   # HELP: "/<WORD>" to search by string
-  REPLY="$(<~/LOG nl --body-numbering=a | grep -i "${MESSAGE#/}")"
+  REPLY=$(<~/LOG awk -v query="${MESSAGE#/}" '/^## /{date="\n"$2" "$3} $0~query{if(date!=""){print date;date=""}print NR,$0}')
   REPLY=${REPLY:-Nothing Found}
 elif [[ "$MESSAGE" =~ ^@[[:alnum:]]+$ && -n "$DATE" ]]; then
   # HELP: "@<DATE>" to print records by date
@@ -117,11 +112,12 @@ if [ -z "$REPLY" ]; then
 fi
 # }}}
 # reply to sender {{{
-if [ -n "$REPLY" ]; then
+echo replyto=$replyto
+if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
   smtp pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
 	Content-Type: text/plain; charset="utf-8"
-	In-Reply-To: $(<<<"$MAIL" grep In-Reply-To: | head -1 | grep -o '<.*>')
+	In-Reply-To: ${replyto}
 	Message-ID: $(date --iso=seconds)
 	Chat-Version: 1.0
 	Chat-Disposition-Notification-To: pham@topo.tw
