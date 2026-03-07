@@ -2,7 +2,7 @@
 set my_user = "pham@mail.topo.tw"; setenv my_user "$my_user"
 #set folder = "imaps://$my_user:993"
 #set imap_pass = `pass mail/$my_user`
-set smtp_url = "smtp://$my_user:465"
+set smtp_url = "smtp://$my_user:587"
 set smtp_pass = `pass mail/$my_user`
 
 # user info in mail
