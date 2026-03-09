@@ -96,8 +96,9 @@ fi
 
 # HELP: "@<TIME>" to specify date of message
 if [ -z "$REPLY" ]; then
+  # write message to a specific date
   if [ -n "$DATE" ]; then
-    line_num=$(<~/LOG awk '$0=="## '$DATE'",$0==""{print NR}' | tail -1)
+    line_num=$(<~/LOG awk '/^## '$DATE'/,$0==""{print NR}' | tail -1)
     sed -i "${line_num}i $(<<<$MESSAGE cut -d' ' -f2-)" ~/LOG
   elif [ -n "$MESSAGE" ]; then
     # HELP: "." to add tag #todo
