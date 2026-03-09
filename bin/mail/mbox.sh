@@ -3,6 +3,5 @@
 exec 1>>~/mbox
 
 echo
-echo From $SENDER
-env
+echo From $SENDER $(date)
 cat
