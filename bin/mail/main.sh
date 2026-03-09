@@ -8,8 +8,7 @@ env
 # }}}
 # make temp file for decodemail (GNU Mailutils) {{{
 tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
-#tee >({ echo $tmp_mailbox; cat; } >mail2.log) >${tmp_mailbox}/cur/mail
-tee $(date +%s%N | cut -b1-13)_$(mktemp -u XXXXXX).mail >${tmp_mailbox}/cur/mail
+cat >${tmp_mailbox}/cur/mail
 #trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # decide mailbox to deliver {{{
@@ -38,6 +37,5 @@ decodemail ${tmp_mailbox} | \
 tee >(log_or_not) | \
 cat >$mail_name
 # }}}
-exit 0
 
 # vim:fdm=marker fdl=0
