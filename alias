@@ -12,6 +12,7 @@ eval "${shell}rc(){
   local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
   vim \$RCFILE && source \$RCFILE
 }"
+# TODO: make it valid with PROMPT_COMMAND
 ps1.swap() {
   if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
     PS1="${1:->}"
