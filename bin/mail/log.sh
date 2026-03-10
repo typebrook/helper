@@ -3,9 +3,8 @@
 # DEBUG {{{
 export PS4='Line ${LINENO}: '
 set -x
-test -t || exec &>>log.log
-echo
-date --iso=seconds
+exec &>>log.log
+{ echo; date --iso=seconds; }
 # }}}
 # shell opt/var {{{
 shopt -s nocasematch extglob
