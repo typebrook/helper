@@ -9,13 +9,13 @@ env
 # make temp file for decodemail (GNU Mailutils) {{{
 tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
 cat >${tmp_mailbox}/cur/mail
-#trap 'rm -rf ${tmp_mailbox}' EXIT
+trap 'rm -rf ${tmp_mailbox}' EXIT
 # }}}
 # decide mailbox to deliver {{{
 HEADER=$(decodemail ${tmp_mailbox} | sed '/^$/q')
 SUBJECT=$(<<<"$HEADER" sed -n '/^Subject:/{s/^Subject: //;p}')
 echo SUBJECT=$SUBJECT
-[[ "$RECIPIENT" = (info|postmaster)@topo.tw ]] && MAILBOX=fraud
+[[ "$RECIPIENT" =~ .*(info|postmaster)@topo.tw.* ]] && MAILBOX=fraud
 <<<$HEADER grep -E '^List-Unsubscribe' && MAILBOX=promote
 <<<$HEADER grep -E '^List-I[dD]: ' && MAILBOX=zl
 MAILBOX=${MAILBOX:+.$MAILBOX/}
@@ -34,7 +34,7 @@ mail_name=~/Mail/${MAILBOX}new/$(date --iso=seconds)-$(<<<$SUBJECT tr '[:upper:]
 echo mail_name $mail_name
 
 decodemail ${tmp_mailbox} | \
-tee >(log_or_not) | \
+#tee >(log_or_not) | \
 cat >$mail_name
 # }}}
 

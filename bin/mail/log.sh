@@ -1,14 +1,29 @@
 #! /bin/bash
 
 # DEBUG {{{
+exec &>>log.log
+printf '%0.s>' {1..30}; echo
+trap "set +x; printf '%0.s<' {1..30}; echo" EXIT
+date --iso=seconds
+
 export PS4='Line ${LINENO}: '
 set -x
-exec &>>log.log
-{ echo; date --iso=seconds; }
 # }}}
 # shell opt/var {{{
 shopt -s nocasematch extglob
-MESSAGE="$(cat)"
+
+if [ -n "$SENDER" ]; then
+  trap 'rm -rf ${tmp_mailbox}' EXIT
+  tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
+  cat >${tmp_mailbox}/cur/mail
+  HEADER=$(decodemail ${tmp_mailbox} | sed '/^$/q')
+  [ "$RECIPIENT" = 'log@topo.tw' ] || exit 0
+  echo -e "$HEADER" | grep -o '^Chat-Version: ' || exit 0
+  export replyto=$(<<<"$HEADER" awk '/^Message-I[Dd]:/{print $2}' )
+  MESSAGE="$(sed -n '/^$/,$ p' | sed -n 2p)"
+else
+  MESSAGE="$(cat)"
+fi
 #echo "$MAIL" >~/log.mail
 
 # MESSAGE: the first line of mail body
@@ -114,19 +129,18 @@ fi
 # reply to sender {{{
 echo replyto=$replyto
 if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
+  id=$(date --iso=seconds)
   smtp pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
 	Content-Type: text/plain; charset="utf-8"
 	In-Reply-To: ${replyto}
-	Message-ID: $(date --iso=seconds)
+	Message-ID: ${id}
 	Chat-Version: 1.0
 	Chat-Disposition-Notification-To: pham@topo.tw
 	Subject: Message from log@topo.tw
 
-	$REPLY
+	${REPLY}
 	MAIL
-  exit 0
 fi
 # }}}
-
 # vim:fdm=marker fdl=0
