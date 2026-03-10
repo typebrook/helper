@@ -24,7 +24,7 @@ MAILBOX=${MAILBOX:+.$MAILBOX/}
 function log_or_not {
   [ "$RECIPIENT" = 'log@topo.tw' ] || return 0
   echo -e "$HEADER" | grep -o '^Chat-Version: ' || return 0
-  export replyto=$(<<<"$HEADER" awk '/^In-Reply-To/{print $2}' )
+  export replyto=$(<<<"$HEADER" awk '/^Message-I[Dd]:/{print $2}' )
 
   sed -n '/^$/,$ p' | sed -n 2p | $(dirname $0)/log.sh
 }
