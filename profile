@@ -1,9 +1,11 @@
 # trap 'exit.sh' EXIT
 
+# attch to tmux session if exists {{{
 if which tmux &>/dev/null; then
   test -z "$TMUX" && tmux attach
 fi
-
+# }}}
+# Global Env {{{
 export PATH=~/.local/bin:$PATH
 export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
 export TERM=xterm-256color
@@ -14,11 +16,12 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export TIG_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
-
-# IM for GUI
+# }}}
+# IM for GUI {{{
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-
+# }}}
+# Custom Helper features {{{
 # Get current shell
 shell=$(</proc/$$/cmdline sed -E 's/(.)-.+$/\1/' | tr -d '[\0\-]')
 export shell=${shell##*/}
@@ -31,7 +34,8 @@ source $HELPER_DIR/alias
 find $HELPER_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
 find $HELPER_DIR/bin -mindepth 1 -type d | while read dir; do PATH+=:${dir}; done
 
-# fzf
+# }}}
+# fzf {{{
 if which fzf &>/dev/null; then
   export FZF_COMPLETION_OPTS='--bind=ctrl-c:print-query'
   export FZF_CTRL_T_OPTS='--no-multi --bind=ctrl-c:print-query'
@@ -39,29 +43,44 @@ if which fzf &>/dev/null; then
   fzf_preview() { fzf --preview 'cat {}'; }
   [ -f ~/.fzf.${shell} ] && source ~/.fzf.${shell}
 fi
+# }}}
 
-# Set zsh or bash
-if [[ $- =~ i ]]; then
-    if [[ $shell == zsh ]]; then
-      setopt extended_glob interactive_comments
-      fpath=($HELPER_DIR/zsh $fpath)
-      alias history='history -i'
-      autoload compinit; compinit
+# Set config for interactive mode {{{
+[[ ! $- =~ i ]] && exit 0
 
-      #autoload -U deer
-      #zle -N deer
-      #bindkey '\ek' deer
-      bindkey -s '\ek' 'fzf_preview'
-      bindkey -s '' 'fg || vl'
-    elif [[ $shell == bash ]]; then
-      shopt -s extglob
-      HISTTIMEFORMAT='%Y-%m-%d %T '
+if [[ $shell == zsh ]]; then
+  setopt extended_glob interactive_comments
+  fpath=($HELPER_DIR/zsh $fpath)
+  alias history='history -i'
+  autoload compinit; compinit
 
-      bind -m emacs-standard -x '"\ek": fzf_preview'
-    fi
+  #autoload -U deer
+  #zle -N deer
+  #bindkey '\ek' deer
+  bindkey -s '\ek' 'fzf_preview'
+  bindkey -s '' 'fg || vl'
 fi
 
-# Apply nvm
-[ -e $HOME/.config/nvm/nvm.sh ] && source "$HOME/.config/nvm/nvm.sh"
+if [[ $shell == bash ]]; then
+  shopt -s extglob
+  HISTTIMEFORMAT='%Y-%m-%d %T '
+
+  bind -m emacs-standard -x '"\ek": fzf_preview'
+
+  _precmd() {
+    local exit_code=$?
+    local jobcount=$(jobs | wc -l)
+    local jobstring=""
+    [ "$jobcount" -gt 0 ] && jobstring="($jobcount)"
+
+    if [ $exit_code -eq 0 ]; then
+        PS1="\[\e[1;32m\]\h\[\e[0;1;36m\] \W\[\e[0m\]${jobstring} "
+    else
+        PS1="\[\e[1;41;30m\]\h\[\e[0;1;36m\] \W\[\e[0m\]${jobstring} "
+    fi
+  }
+  PROMPT_COMMAND=_precmd
+fi
+# }}}
 
 true
