@@ -8,21 +8,21 @@ date --iso=seconds
 
 export PS4='Line ${LINENO}: '
 set -x
+echo ENV:
+env | tr '\n' ' '
 # }}}
 # shell opt/var {{{
 shopt -s nocasematch extglob
 
-if [ -n "$SENDER" ]; then
-  trap 'rm -rf ${tmp_mailbox}' EXIT
-  tmp_mailbox=$(mktemp -d); mkdir -p ${tmp_mailbox}/{tmp,new,cur}
-  cat >${tmp_mailbox}/cur/mail
-  HEADER=$(decodemail ${tmp_mailbox} | sed '/^$/q')
+if [ -n "$RECIPIENT" ]; then
   [ "$RECIPIENT" = 'log@topo.tw' ] || exit 0
-  echo -e "$HEADER" | grep -o '^Chat-Version: ' || exit 0
-  export replyto=$(<<<"$HEADER" awk '/^Message-I[Dd]:/{print $2}' )
-  MESSAGE="$(sed -n '/^$/,$ p' | sed -n 2p)"
+  MAIL="$(cat)"
+  HEADER="$(<<<${MAIL} sed -n '1,/^$/p')"
+  echo -e "$HEADER" | grep -q '^Chat-Version: ' || exit 0
+  replyto=$(<<<"$HEADER" awk '/^Message-I[Dd]:/{print $2}' )
+  MESSAGE="$(<<<$MAIL tac | sed -n 2p)"
 else
-  MESSAGE="$(cat)"
+  MESSAGE="$(tail -1)"
 fi
 #echo "$MAIL" >~/log.mail
 
@@ -130,7 +130,7 @@ fi
 echo replyto=$replyto
 if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
   id=$(date --iso=seconds)
-  smtp pham@topo.tw <<-MAIL
+  smtp -s smtp://localhost pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
 	Content-Type: text/plain; charset="utf-8"
 	In-Reply-To: ${replyto}
