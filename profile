@@ -44,7 +44,6 @@ if which fzf &>/dev/null; then
   [ -f ~/.fzf.${shell} ] && source ~/.fzf.${shell}
 fi
 # }}}
-
 # Set config for interactive mode {{{
 [[ ! $- =~ i ]] && exit 0
 

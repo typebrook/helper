@@ -15,7 +15,7 @@ env | tr '\n' ' '
 shopt -s nocasematch extglob
 
 if [ -n "$RECIPIENT" ]; then
-  [ "$RECIPIENT" = 'log@topo.tw' ] || exit 0
+  [[ "$SENDER$RECIPIENT" =~ .*log@topo.tw.* ]] || exit 0
   MAIL="$(cat)"
   HEADER="$(<<<${MAIL} sed -n '1,/^$/p')"
   echo -e "$HEADER" | grep -q '^Chat-Version: ' || exit 0
@@ -99,7 +99,17 @@ elif [ "$MESSAGE" = '#c' ]; then
   REPLY="$(<$0 sed -En '/^ *# HELP: / {s/[^:]+:(.*)/\1\n/; p}')"
 elif [[ "$MESSAGE" =~ ^/ ]]; then
   # HELP: "/<WORD>" to search by string
-  REPLY=$(<~/LOG awk -v query="${MESSAGE#/}" '/^## /{date="\n"$2" "$3} $0~query{if(date!=""){print date;date=""}print NR,$0}')
+  REPLY=$(<~/LOG awk -v query="${MESSAGE#/}" '
+   /^## /{date="\n"$2" "$3; next}
+   $0~query{
+     if(date!=""){print date;date=""}
+     print NR,$0
+     leading_space=match($0, /[^[:space:]]|$/) - 1
+     next
+   }
+   match($0, /[^[:space:]]|$/)-1 > leading_space { print; next }
+   {leading_space=9999}
+  ')
   REPLY=${REPLY:-Nothing Found}
 elif [[ "$MESSAGE" =~ ^@[[:alnum:]]+$ && -n "$DATE" ]]; then
   # HELP: "@<DATE>" to print records by date
@@ -130,7 +140,7 @@ fi
 echo replyto=$replyto
 if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
   id=$(date --iso=seconds)
-  smtp -s smtp://localhost pham@topo.tw <<-MAIL
+  smtp -s smtp://mail.topo.tw pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
 	Content-Type: text/plain; charset="utf-8"
 	In-Reply-To: ${replyto}

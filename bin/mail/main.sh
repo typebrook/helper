@@ -15,7 +15,7 @@ trap 'rm -rf ${tmp_mailbox}' EXIT
 HEADER=$(decodemail ${tmp_mailbox} | sed '/^$/q')
 SUBJECT=$(<<<"$HEADER" sed -n '/^Subject:/{s/^Subject: //;p}')
 echo SUBJECT=$SUBJECT
-[[ "$RECIPIENT" =~ .*(info|postmaster)@topo.tw.* ]] && MAILBOX=fraud
+[[ "$RECIPIENT" =~ .*(info|postmaster|sammi)@topo.tw.* ]] && MAILBOX=fraud
 <<<$HEADER grep -E '^List-Unsubscribe' && MAILBOX=promote
 <<<$HEADER grep -E '^List-I[dD]: ' && MAILBOX=zl
 MAILBOX=${MAILBOX:+.$MAILBOX/}
