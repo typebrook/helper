@@ -120,6 +120,7 @@ rm() {
 }
 config(){ cd ~/.config/$1; }
 alias cdapp='cd /usr/share/applications/'
+alias localapp='cd ~/.local/share/applications/'
 alias sound="echo -ne '\a'"
 alias hg='history | grep'
 prompt-vim() {

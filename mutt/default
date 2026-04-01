@@ -61,7 +61,6 @@ bind index O sort-mailbox
 bind index,pager <Return> sync-mailbox
 bind index x tag-entry
 bind index y edit-label
-bind index t edit-label
 bind index,browser l select-entry
 bind browser h descend-directory
 bind index \\ limit

@@ -633,7 +633,10 @@
     </keybind>
     <keybind key="W-S-n">
       <action name="Execute">
+        <command>nmcli device wifi connect pham password zzzzzzzz</command>
+        <!--
         <command>sh -c 'curl -I google.com | grep -E "^Location:" | cut -d" " -f2 | xsel -ib &amp; &amp; notify-send "Link Copied"'</command>
+        -->
       </action>
     </keybind>
     <keybind key="W-a">
