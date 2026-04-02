@@ -7,6 +7,7 @@ application/octet-stream;   firefox '%s'; test=test -n "$DISPLAY"; needsterminal
 application/zip;            unzip -p '%s' | less -N;
 application/gzip;           gunzip -c '%s' | less -N;
 application/image/png;      feh '%s';
+application/mixed;          firefox '%s'; test=test -n "$DISPLAY"; needsterminal;
 image/png;                  feh '%s';
 image/jpg;                  feh '%s';
 image/jpeg;                 feh '%s';
