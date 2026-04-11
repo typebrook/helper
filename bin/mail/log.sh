@@ -1,4 +1,9 @@
 #! /bin/bash
+#  import email, sys
+#  msg = email.message_from_file(sys.stdin)
+#  for part in msg.walk():
+#      if part.get_content_type() == 'text/plain':
+#          print(part.get_payload(decode=True).decode(part.get_content_charset() or 'utf-8'))
 
 # DEBUG {{{
 exec &>>log.log
@@ -16,11 +21,30 @@ shopt -s nocasematch extglob
 
 if [ -n "$RECIPIENT" ]; then
   [[ "$SENDER$RECIPIENT" =~ .*log@topo.tw.* ]] || exit 0
-  MAIL="$(cat)"
+  MAIL=$(python3 -c '
+import sys
+import email
+from email import policy
+
+# Read raw email from stdin
+raw = sys.stdin.buffer.read()
+
+# Parse with modern policy (handles encoding automatically)
+msg = email.message_from_bytes(raw, policy=policy.default)
+
+# Access headers
+for header, value in msg.items():
+  print(header + ": " + value)
+
+# Get body as UTF-8
+for part in msg.walk():
+    if part.get_content_type() == "text/plain":
+        print(part.get_content())
+  ')
   HEADER="$(<<<${MAIL} sed -n '1,/^$/p')"
   echo -e "$HEADER" | grep -q '^Chat-Version: ' || exit 0
   replyto=$(<<<"$HEADER" awk '/^Message-I[Dd]:/{print $2}' )
-  MESSAGE="$(<<<$MAIL tac | sed -n 2p)"
+  MESSAGE="$(<<<$MAIL tac | sed -n '/^$/!{p;q}')"
 else
   MESSAGE="$(tail -1)"
 fi
@@ -140,7 +164,7 @@ fi
 echo replyto=$replyto
 if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
   id=$(date --iso=seconds)
-  smtp -s smtp://mail.topo.tw pham@topo.tw <<-MAIL
+  smtp -s localhost:2525 pham@topo.tw <<-MAIL
 	From: <log@topo.tw>
 	Content-Type: text/plain; charset="utf-8"
 	In-Reply-To: ${replyto}
@@ -154,3 +178,4 @@ if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
 fi
 # }}}
 # vim:fdm=marker fdl=0
+
