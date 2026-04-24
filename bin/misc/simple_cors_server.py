@@ -13,6 +13,6 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         return super(CORSRequestHandler, self).end_headers()
 
 
-httpd = HTTPServer(('localhost', 8003), CORSRequestHandler)
-print('check localhost:8003')
+httpd = HTTPServer(('localhost', 8888), CORSRequestHandler)
+print('check localhost:8888')
 httpd.serve_forever()
