@@ -156,8 +156,7 @@ set list
 set listchars=tab:»·,extends:>,precedes:<
 
 " }}}
-
-" Use new buffer to update filtered lines
+" Use new buffer to update filtered lines {{{
 function! FilterToScratch(pattern)
   let l:src_buf = bufnr('%')
 
@@ -185,6 +184,7 @@ function! s:SyncBack(bufnr)
   endfor
 endfunction
 command! -nargs=1 Filter call FilterToScratch(<q-args>)
+" }}}
 
 " }}}
 " JUMP to anoterh file {{{
