@@ -157,6 +157,35 @@ set listchars=tab:»·,extends:>,precedes:<
 
 " }}}
 
+" Use new buffer to update filtered lines
+function! FilterToScratch(pattern)
+  let l:src_buf = bufnr('%')
+
+  let l:lines = systemlist(
+    \ 'awk ''/' . a:pattern . '/{print NR "\t" $0}''',
+    \ getline(1, '$'))
+
+  vnew
+  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
+  call setline(1, l:lines)
+  let b:src_buf = l:src_buf
+
+  augroup ScratchSync
+    autocmd! BufUnload <buffer> call s:SyncBack(+expand('<abuf>'))
+  augroup END
+endfunction
+function! s:SyncBack(bufnr)
+  let l:src = getbufvar(a:bufnr, 'src_buf')
+  for l:line in getbufline(a:bufnr, 1, '$')
+    if l:line =~# '^\d\+'
+      let l:num     = str2nr(matchstr(l:line, '^\d\+'))
+      let l:content = substitute(l:line, '^\d\+\t\?', '', '')
+      call setbufline(l:src, l:num, l:content)
+    endif
+  endfor
+endfunction
+command! -nargs=1 Filter call FilterToScratch(<q-args>)
+
 " }}}
 " JUMP to anoterh file {{{
 
