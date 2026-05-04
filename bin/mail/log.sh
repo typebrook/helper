@@ -20,7 +20,7 @@ env | tr '\n' ' '
 shopt -s nocasematch extglob
 
 if [ -n "$RECIPIENT" ]; then
-  [[ "$SENDER$RECIPIENT" =~ .*log@topo.tw.* ]] || exit 0
+  [[ "$SENDER$RECIPIENT" =~ .*log@topo.tw.* ]] || { cat > /dev/null; exit 0; }
   MAIL=$(python3 -c '
 import sys
 import email

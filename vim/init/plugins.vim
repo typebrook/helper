@@ -17,4 +17,6 @@ nnoremap <leader>co :Colors<CR>
 nnoremap <leader><leader>ft :Filetypes<CR>
 nnoremap <leader>b :Buffers<CR>
 
+Plug 'tpope/vim-surround'
+
 call plug#end()
