@@ -227,7 +227,7 @@ augroup InitFileTypes
   autocmd FileType html,markdown,javascript nnoremap <buffer> <leader>id :call <SID>ChangeAttr("id")<CR>
   autocmd FileType css,javascript nnoremap <buffer> <F9> :let LINE=line(".")<CR>:silent! %!standard --stdin --fix 2>/dev/null<CR>:exe LINE<CR>
   autocmd FileType css,javascript nmap <buffer> <F8> cdg:let LINE=line(".")<CR>:%!stylelint -c scripts/stylelintrc.json --fix --stdin 2>/dev/null<CR>:exe LINE<CR>
-  autocmd FileType css,javascript set formatprg=prettier
+  autocmd FileType css,javascript setlocal formatprg=prettier
 
   " Reload preview server
   autocmd BufWrite *.html,*.js,*.css call ReloadServer()
@@ -256,16 +256,6 @@ augroup InitFileTypes
   function! PasswordFoldtext()
     return "---Password---"
   endfunc
-  " }}}
-  " Beancount {{{
-
-  autocmd BufRead,BufNewFile *.bean call PrepareBean()
-  function! PrepareBean()
-    set filetype=beancount
-    silent !setsid fava ~/bean/main.bean &>/dev/null
-    autocmd VimLeave * silent !killall fava
-  endfunc
-
   " }}}
 
 augroup END

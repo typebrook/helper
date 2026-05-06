@@ -1,6 +1,4 @@
 " highlight MatchParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
-hi LuaParen ctermfg=NONE ctermbg=darkgrey cterm=NONE
-
 " Show trailing spaces
 hi ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/

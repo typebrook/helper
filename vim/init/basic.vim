@@ -55,6 +55,7 @@ set modelineexpr        " More support in modeline
 " means that you can undo even when you close a buffer/VIM
 set undofile
 if has('nvim')
+  silent! call mkdir(expand('~/.vim/.undodir/nvim'), "p", 0755)
   set undodir=~/.vim/.undodir/nvim
   set verbosefile=/tmp/nvim.log
 else
@@ -68,7 +69,7 @@ filetype plugin indent on
 " Set to auto read when a file is changed from the outside
 " Unnamed buffer like CmdWindows should prevent this
 set autoread
-autocmd FocusGained,BufEnter .* checktime
+autocmd FocusGained,BufEnter * checktime
 
 " spell
 set nospell
@@ -264,7 +265,6 @@ set writebackup
 " HIGHLIGHT {{{
 
 syntax enable
-set syntax=filetype
 set conceallevel=2
 set concealcursor=
 
