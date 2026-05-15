@@ -39,7 +39,6 @@ augroup tabinfo
   endfunc
 
 augroup END
-
 "}}}
 " GERERNAL {{{
 
@@ -49,7 +48,10 @@ set path=.,**           " Allow :find with completion
 set mouse=              " Disable mouse selection
 set winaltkeys=no       " Allow alt key for mapping
 set hidden              " Allow switch buffer without saving
-set modelineexpr        " More support in modeline
+
+set modeline
+set modelines=5
+set modelineexpr " More support in modeline
 
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
@@ -116,7 +118,7 @@ endif
 set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 
 " Direction for new window
-set splitright
+set splitright splitbelow
 
 " Set signcolumn
 if has('nvim')
@@ -137,8 +139,7 @@ sign define piet text=>> texthl=Search
 autocmd Filetype * set formatoptions+=mB formatoptions-=cro
 
 set shiftwidth=2
-set autoindent smartindent
-set cindent
+set autoindent cindent
 set ttimeout
 set timeoutlen=500
 
@@ -271,12 +272,15 @@ set concealcursor=
 " }}}
 " MISC {{{
 
+set history=200
+
 " Use Unix way to add newline
 set ffs=unix,dos,mac
 
 " Ignore these suffixes when find/complete
 set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
 
+set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
 set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
 set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux

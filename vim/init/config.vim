@@ -315,6 +315,7 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
+if has('termguicolors') | set termguicolors | endif
 
 " }}}
 " KeyCode {{{
@@ -374,4 +375,8 @@ call s:key_escape('<S-F12>', '[24;2~')
 " Others {{{
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
+
+"  Missing. <C-a>/<C-x> on 007 will increment as octal. Very common silent bug.
+set nrformats-=octal
+
 " }}}

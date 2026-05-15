@@ -193,11 +193,12 @@ nnoremap S S<ESC>
 " }}}
 " SURROUND {{{
 
-inoremap ' ''<Left>
-inoremap " ""<Left>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
+" inoremap ' ''<Left>
+" inoremap " ""<Left>
+" inoremap ( ()<Left>
+" inoremap [ []<Left>
+" inoremap { {}<Left>
+" inoremap ` ``<Left>
 
 vnoremap q <ESC>`<i"<ESC>`>la"<ESC>
 vnoremap ( <ESC>`<i(<ESC>`>la)<ESC>
@@ -432,6 +433,7 @@ function! ChangeUnfold(downward, count)
 endfunc
 nnoremap <expr> z> ":\<C-u>call ChangeUnfold(1,"..v:count..")\<CR>"
 nnoremap <expr> z< ":\<C-u>call ChangeUnfold(0,"..v:count..")\<CR>"
+ set viewoptions=folds,cursor,slash,unix
 
 "}}}
 " MANAGE_SCRIPTS {{{
