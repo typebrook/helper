@@ -190,6 +190,9 @@ nnoremap <C-k> ddkP
 " Clear current line
 nnoremap S S<ESC>
 
+" Inser today in ISO-8601 format
+inoremap <C-x><C-d> <C-r>=strftime('%Y-%m-%d')<CR>
+
 " }}}
 " SURROUND {{{
 
@@ -780,7 +783,7 @@ nnoremap <C-t>b <Cmd>silent! TigBlame<CR>
 nnoremap ! :r !
 
 " Show date selector
-nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y.\%m.\%d" 2>/dev/null'<CR><CR>
+nnoremap <leader>dd :r !sh -c 'LANG=en zenity --calendar --date-format="\%Y-\%m-\%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dD :r !sh -c 'LANG=en zenity --calendar --date-format="\%a \%b \%d" 2>/dev/null'<CR><CR>
 nnoremap <leader>dt :r !date +\%H:\%m<CR>A
 
