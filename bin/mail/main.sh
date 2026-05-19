@@ -17,6 +17,7 @@ SUBJECT=$(<<<"$HEADER" sed -n '/^Subject:/{s/^Subject: //;p}')
 echo SUBJECT=$SUBJECT
 [[ "$RECIPIENT" =~ .*(info|postmaster|sammi)@topo.tw.* ]] && MAILBOX=fraud
 [[ "$SENDER" =~ .*(zhihuigaoxinqu.com).* ]] && MAILBOX=fraud
+[[ "$SUBJECT" =~ .*(密碼|登入|通知).* ]] && MAILBOX=login
 <<<$HEADER grep -E '^List-Unsubscribe' && MAILBOX=promote
 <<<$HEADER grep -E '^List-I[dD]: ' && MAILBOX=zl
 MAILBOX=${MAILBOX:+.$MAILBOX/}
