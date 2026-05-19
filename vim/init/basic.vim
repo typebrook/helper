@@ -186,6 +186,7 @@ function! s:SyncBack(bufnr)
   endfor
 endfunction
 command! -nargs=1 Filter call FilterToScratch(<q-args>)
+command! -nargs=1 F call FilterToScratch(<q-args>)
 " }}}
 
 " }}}
