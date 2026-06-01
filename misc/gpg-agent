@@ -1,3 +1,4 @@
 default-cache-ttl 604800
 max-cache-ttl 604800
 pinentry-program /usr/bin/pinentry-tty
+allow-loopback-pinentry

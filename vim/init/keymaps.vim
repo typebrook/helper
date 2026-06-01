@@ -699,7 +699,7 @@ nnoremap <expr> <leader>z ":\<C-u> silent call ToggleWinPadding(" . v:count . ")
 "}}}
 " HIGHLIGHT {{{
 
-nnoremap <leader>I :Inspect<CR>
+nnoremap <leader>I :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 nnoremap <expr> \s exists("g:syntax_on") ? ":syntax off <CR>" : ":syntax enable<CR>"
 
 " Toggle conceallevel0/2
