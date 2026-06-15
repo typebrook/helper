@@ -19,7 +19,6 @@ tig:
 
 vim:
 	ln -sfT `pwd`/vim  ~/.config/vim
-	ln -sfT `pwd`/vim ~/.config/nvim
 	sudo ln -sfT `pwd`/vim /usr/local/share/vim
 	# vim-plug
 	# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -109,7 +108,7 @@ urlview:
 	ln -sf `pwd`/misc/urlview ~/.urlview
 
 alacritty:
-	ln -sf `pwd`/X11/alacritty ~/.config/alacritty
+	ln -sf `pwd`/X11/alacritty/ ~/.config/alacritty
 
 mpd:
 	ln -sf `pwd`/X11/mpd/ncmpcpp ~/.config/ncmpcpp

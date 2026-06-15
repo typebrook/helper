@@ -20,7 +20,6 @@
                    git stash apply stash@{1} && \
                    git stash show -p | git apply -R && \
                    git stash drop stash@{1}
-    swapprotocol = !swap-protocol.bash
     mergethis = "!f() { git commit-tree HEAD: -p $1 -p HEAD -m \"Merge branch $(git branch --show-current)\" | xargs git branch --force $1; }; f"
 
 [merge]

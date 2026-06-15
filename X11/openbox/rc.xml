@@ -111,7 +111,7 @@
             alacritty --title @OPENBOX_CONFIG \
             -o "window.dimensions.lines=32" \
             -o "window.dimensions.columns=70" \
-            -o 'env.fullrc="false"' \
+            -o "env.fullrc=\"false\"" \
             -e vim ~/.config/openbox/rc.xml;
             openbox --reconfigure
           '
@@ -668,12 +668,12 @@
       </command>
       </action>
     </keybind>
-    <keybind key="W-x">
+    <keybind key="W-S-x">
       <action name="Execute">
         <command>pkill -9 openbox</command>
       </action>
     </keybind>
-    <keybind key="W-S-x">
+    <keybind key="W-x">
       <action name="Execute">
         <command>systemctl suspend</command>
       </action>

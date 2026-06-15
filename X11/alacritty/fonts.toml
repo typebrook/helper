@@ -2,13 +2,13 @@
 size = 18
 
 [font.bold]
-family = "Source Code Pro"
+family = "SauceCodePro Nerd Font Mono"
 
 [font.bold_italic]
-family = "Source Code Pro"
+family = "SauceCodePro Nerd Font Mono"
 
 [font.italic]
-family = "Source Code Pro"
+family = "SauceCodePro Nerd Font Mono"
 
 [font.normal]
-family = "Source Code Pro"
+family = "SauceCodePro Nerd Font Mono"

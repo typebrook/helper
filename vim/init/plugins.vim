@@ -10,6 +10,7 @@
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf.vim'
 nnoremap <leader>sf :Files<CR>
 nnoremap <leader>sg :GFiles<CR>
