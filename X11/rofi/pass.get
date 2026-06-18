@@ -61,9 +61,12 @@ elif [ -f "$HOME/.password-store/$1.gpg" ]; then
   # Password exist but command fails, must be something wrong with GPG decryption
   # Most of the time it is because passphrase is not cached by gpg-agent
 
-  # Use yad for passphrase input
+  # Use pinentry for passphrase input (single pipe via Assuan protocol)
   coproc(
-    RESULT="$(yad --entry --hide-text | gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
+    RESULT="$(printf 'SETDESC Passphrase for %s\nSETPROMPT Passphrase:\nGETPIN\nBYE\n' "$1" |
+      pinentry |
+      sed -n 's/^D //p' |
+      gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
     _save_to_clipboard "$RESULT"
     _show_extra "$RESULT" "$1"
   )
