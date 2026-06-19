@@ -17,6 +17,10 @@ LoadScript init/basic.vim     " Basic configuration
 LoadScript init/keymaps.vim   " Key mappings
 LoadScript init/config.vim    " Extra config for different contexts
 
+" Color Scheme
+set background=dark
+colo gruvbox
+
 " Disable plugins by ENV
 if $fullrc == 'false'
   finish
@@ -29,10 +33,6 @@ else
   LoadScript init/plugins.vim
   "LoadScript init/style.vim
 endif
-
-" Color Scheme
-set background=dark
-colo gruvbox
 
 LoadScript init/highlight.vim
 
