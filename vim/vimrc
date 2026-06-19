@@ -26,14 +26,7 @@ if $fullrc == 'false'
   finish
 endif
 
-" Different scripts for nvim and vim
-if has('nvim')
-  LoadScript mini.lua
-else
-  LoadScript init/plugins.vim
-  "LoadScript init/style.vim
-endif
-
+LoadScript init/plugins.vim
 LoadScript init/highlight.vim
 
 silent! source ~/.projects.vim
