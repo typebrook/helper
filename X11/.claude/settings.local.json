@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ip addr *)",
+      "Bash(awk '{print $2}')",
+      "Bash(nmap -sn 10.40.136.0/24)",
+      "Bash(arp-scan --interface=eno1 --localnet)",
+      "Bash(ip neigh *)"
+    ]
+  }
+}

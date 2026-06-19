@@ -8,17 +8,12 @@ alias eof='IGNOREEOF=10'
 path() {
   echo $PATH | tr : '\n'
 }
-eval "${shell}rc(){
-  local RCFILE=$XDG_CONFIG_HOME/${shell}/.${shell}rc
-  vim \$RCFILE && source \$RCFILE
-}"
-# TODO: make it valid with PROMPT_COMMAND
+alias ${shell}rc="vim ~/.${shell}rc && source ~/.${shell}.rc"
 ps1.swap() {
-  if [ -z "$PS1_bak" ]; then PS1_bak="$PS1"
-    PS1="${1:->}"
-    PS1="${PS1%% } "
-  else PS1="$PS1_bak"
-    unset PS1_bak
+  if [ -z "$_PS1_SIMPLE" ]; then
+    _PS1_SIMPLE="${1:->} "
+  else
+    unset _PS1_SIMPLE
   fi
 }
 alias zsh.sourced='zsh -o SOURCE_TRACE'

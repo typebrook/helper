@@ -67,6 +67,11 @@ if [[ $shell == bash ]]; then
   bind -m emacs-standard -x '"\ek": fzf_preview'
 
   _precmd() {
+    if [ -n "$_PS1_SIMPLE" ]; then
+      PS1="$_PS1_SIMPLE"
+      return
+    fi
+
     local exit_code=$?
     local jobcount=$(jobs | wc -l)
     local jobstring=""

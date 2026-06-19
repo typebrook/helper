@@ -66,7 +66,8 @@ elif [ -f "$HOME/.password-store/$1.gpg" ]; then
     RESULT="$(printf 'SETDESC Passphrase for %s\nSETPROMPT Passphrase:\nGETPIN\nBYE\n' "$1" |
       pinentry |
       sed -n 's/^D //p' |
-      gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg")"
+      gpg --pinentry-mode loopback --passphrase-fd 0 -d "$HOME/.password-store/$1.gpg" &2>/dev/null)"
+    [ -z "$RESULT" ] && coproc ( rofi -e "Wrong Passwd" )
     _save_to_clipboard "$RESULT"
     _show_extra "$RESULT" "$1"
   )
