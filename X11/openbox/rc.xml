@@ -27,38 +27,38 @@
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveWindow">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuHeader">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="ActiveOnScreenDisplay">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveOnScreenDisplay">
-      <name>Source Code Pro</name>
-      <size>16</size>
+      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
@@ -623,7 +623,7 @@
     <!-- Rofi -->
     <keybind key="A-F1">
       <action name="Execute">
-        <command>rofi -show drun -modes run</command>
+        <command>bash -c 'rofi -show drun -modes run -p "$(acpi -b | grep -oP \"[\d]+%\" | head -1)"'</command>
       </action>
     </keybind>
     <keybind key="W-n">

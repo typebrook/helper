@@ -1,10 +1,5 @@
 # trap 'exit.sh' EXIT
 
-# attch to tmux session if exists {{{
-if which tmux &>/dev/null; then
-  test -z "$TMUX" && tmux attach
-fi
-# }}}
 # Global Env {{{
 export PATH=~/.local/bin:$PATH
 export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
@@ -45,7 +40,13 @@ if which fzf &>/dev/null; then
 fi
 # }}}
 # Set config for interactive mode {{{
-[[ ! $- =~ i ]] && exit 0
+[[ ! $- =~ i ]] && return 0
+
+# attch to tmux session if exists {{{
+if which tmux &>/dev/null; then
+  test -z "$TMUX" && tmux attach
+fi
+# }}}
 
 if [[ $shell == zsh ]]; then
   setopt extended_glob interactive_comments
