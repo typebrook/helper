@@ -8,7 +8,7 @@ alias eof='IGNOREEOF=10'
 path() {
   echo $PATH | tr : '\n'
 }
-alias ${shell}rc="vim ~/.${shell}rc && source ~/.${shell}.rc"
+alias ${shell}rc="vim ~/.${shell}rc && source ~/.${shell}rc"
 ps1.swap() {
   if [ -z "$_PS1_SIMPLE" ]; then
     _PS1_SIMPLE="${1:->} "
