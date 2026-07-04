@@ -259,8 +259,10 @@
         <y>0</y>
       </action>
     </keybind>
-    <keybind key="W-z">
-      <action name="MoveToCenter"/>
+    <keybind key="W-1">
+      <action name="Execute">
+        <command>bash -c "notify-send -t 2000 $(date +%H:%M)"</command>
+      </action>
     </keybind>
     <keybind key="W-c">
       <action name="MoveResizeTo">
