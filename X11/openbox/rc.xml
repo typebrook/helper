@@ -261,7 +261,7 @@
     </keybind>
     <keybind key="W-1">
       <action name="Execute">
-        <command>bash -c "notify-send -t 2000 $(date +%H:%M)"</command>
+        <command>~/helper/X11/notify_status.sh</command>
       </action>
     </keybind>
     <keybind key="W-c">
