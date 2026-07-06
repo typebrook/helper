@@ -197,8 +197,6 @@ color index         yellow          green         "~v~(~F~N)"                 # 
 color index         blue            green         "~N~v~(~F~N)"               # collapsed thread with unread parent & flagged
 color index         blue            green         "~N~v~(~F)"                 # collapsed thread with unread parent, no unread inside, but some flagged
 color index         yellow          red           "~v~(~D)"                   # thread with deleted (doesn't differentiate between all or partial)
-color index         magenta         black         "~h Stay"                   # marked as Stay
-color index         lightblack            black         "~h Done"                   # marked as Done
 color index         lightblack            black         "~y done"                   # marked as Done
 
 # color header
