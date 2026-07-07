@@ -252,7 +252,7 @@ ip.neigh() {
 # }}}
 # GPG {{{
 alias gpg.bye='gpg-connect-agent reloadagent /bye'
-alias gpg{.,''}conf="$EDITOR ~/.gnupg/gpg-agent.conf"
+alias gpg.conf="$EDITOR ~/.gnupg/gpg-agent.conf"
 # }}}
 # MAIL {{{
 alias smtp{.,''}conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'

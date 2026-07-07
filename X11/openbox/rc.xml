@@ -119,11 +119,13 @@
       </action>
     </keybind>
     <!-- Change Workspace/Desktop -->
+    <!--
     <keybind key="W-1">
       <action name="GoToDesktop">
         <to>1</to>
       </action>
     </keybind>
+    -->
     <keybind key="W-2">
       <action name="GoToDesktop">
         <to>2</to>
