@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Launch Firefox in the dedicated Tokyo-proxy profile, exiting via host v.
+# The profile's user.js pins the SOCKS proxy; this script just guarantees
+# the SSH tunnel is up first, then starts a separate Firefox instance.
+set -euo pipefail
+
+PROFILE="$HOME/.config/mozilla/firefox-tokyo"
+SOCKS_PORT=1080
+SSH_HOST=v
+
+# 1. Ensure the SOCKS tunnel is listening; start it if not.
+if ! ss -tlnH "sport = :$SOCKS_PORT" 2>/dev/null | grep -q ':'; then
+    echo "Tunnel not up — starting: ssh -fN -D $SOCKS_PORT $SSH_HOST"
+    ssh -fN -D "$SOCKS_PORT" "$SSH_HOST"
+    sleep 1
+fi
+
+# 2. Launch a separate Firefox instance on the Tokyo profile.
+#    -no-remote so it doesn't attach to your normal running Firefox.
+exec /usr/bin/firefox --no-remote --profile "$PROFILE" "$@"
