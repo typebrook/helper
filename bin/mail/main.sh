@@ -32,7 +32,12 @@ function log_or_not {
 }
 # }}}
 # deliver mail to maildir {{{
-mail_name=~/Mail/${MAILBOX}new/$(date --iso=seconds)-$(<<<$SUBJECT tr '[:upper:]' '[:lower:]' | tr ' ' _ | cut -b -30)
+# Maildir reserves ':' as the ':2,<flags>' info separator, so strip colons from
+# the ISO date (T08:20:51-04:00) and sanitize the subject, or Dovecot mis-parses
+# the filename and corrupts size bookkeeping (see deliver.sh set_stdout).
+iso_date=$(date --iso=seconds); iso_date=${iso_date//:/}
+subject_slug=$(<<<$SUBJECT tr '[:upper:]' '[:lower:]' | tr ' ' _ | cut -b -30); subject_slug=${subject_slug//[^[:alnum:]_-]/}
+mail_name=~/Mail/${MAILBOX}new/${iso_date}-${subject_slug}
 echo mail_name $mail_name
 
 decodemail ${tmp_mailbox} | \
