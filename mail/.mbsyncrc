@@ -1,0 +1,41 @@
+# mbsync (isync) configuration for topo.tw
+# Mirrors the IMAP account defined in ~/.muttrc (muttrc.topo)
+#
+# Usage:
+#   mbsync topo        # sync the whole account
+#   mbsync -a          # sync every channel in this file
+#   mbsync -l topo     # list-only: show which folders would sync
+#
+# Local maildir lives under ~/.mail/topo
+#
+# Login note: muttrc's imaps://pham@mail.topo.tw:993 means the LOGIN user is
+# "pham" on host mail.topo.tw; "pham@mail.topo.tw" is only the `pass` entry name.
+
+IMAPAccount topo
+Host mail.topo.tw
+Port 993
+User pham
+PassCmd "pass mail/pham@mail.topo.tw"
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore topo-remote
+Account topo
+
+MaildirStore topo-local
+SubFolders Verbatim
+Inbox ~/Maildir/
+Path ~/Maildir/
+
+Channel topo
+Far :topo-remote:
+Near :topo-local:
+# Sync every folder except the non-selectable mbox namespace container/tree.
+# To skip scratch folders too, append e.g.: !"tmp" !"test" !"imap" !"zl*"
+# "tmp" (and cur/new) collide with the Inbox maildir's reserved staging dirs
+# because Inbox lives at the maildir root, so they must never sync as folders.
+#Patterns * !"mbox" !"mbox/*" !"imap" !"tmp" !"cur" !"new"
+Patterns * !"mbox" !"mbox/*"
+Create Both
+Expunge Both
+SyncState *
