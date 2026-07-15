@@ -8,6 +8,7 @@ export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
 export MAIL=$HOME/Mail
 export EDITOR=vim
+export SYSTEMD_EDITOR=vim
 export VISUAL=$EDITOR
 export TIG_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
@@ -68,12 +69,12 @@ if [[ $shell == bash ]]; then
   bind -m emacs-standard -x '"\ek": fzf_preview'
 
   _precmd() {
+    local exit_code=$?
     if [ -n "$_PS1_SIMPLE" ]; then
       PS1="$_PS1_SIMPLE"
       return
     fi
 
-    local exit_code=$?
     local jobcount=$(jobs | wc -l)
     local jobstring=""
     [ "$jobcount" -gt 0 ] && jobstring="($jobcount)"
