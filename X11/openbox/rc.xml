@@ -125,7 +125,6 @@
         <to>1</to>
       </action>
     </keybind>
-    -->
     <keybind key="W-2">
       <action name="GoToDesktop">
         <to>2</to>
@@ -141,6 +140,7 @@
         <to>4</to>
       </action>
     </keybind>
+    -->
     <!-- Move application to specific desktop -->
     <keybind key="S-W-1">
       <action name="SendToDesktop">
@@ -264,6 +264,16 @@
     <keybind key="W-1">
       <action name="Execute">
         <command>~/helper/X11/notify_status.sh</command>
+      </action>
+    </keybind>
+    <keybind key="W-2">
+      <action name="Execute">
+        <command>notify-send -t 0 "TEST MESSAGE"</command>
+      </action>
+    </keybind>
+    <keybind key="W-q">
+      <action name="Execute">
+        <command>dunstctl close</command>
       </action>
     </keybind>
     <keybind key="W-c">
@@ -683,11 +693,6 @@
         <command>systemctl suspend</command>
       </action>
     </keybind>
-    <keybind key="W-z">
-      <action name="Execute">
-        <command>~/helper/X11/eww/launch_dashboard</command>
-      </action>
-    </keybind>
     <keybind key="W-S-p">
       <action name="Execute">
         <command>polybar-msg cmd toggle</command>
@@ -761,7 +766,7 @@
         <command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
-    <keybind key="W-q">
+    <keybind key="W-3">
       <action name="Execute">
         <command>alacritty --title FLASHCARDS
           -o "window.padding.x=100"
