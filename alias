@@ -253,11 +253,11 @@ ip.neigh() {
 # GPG {{{
 alias gpg.bye='gpg-connect-agent reloadagent /bye'
 alias gpg.conf="$EDITOR ~/.gnupg/gpg-agent.conf"
+alias gpg.v.export="ssh v 'gpg --pinentry-mode loopback --passphrase-fd 0 --armor --export-secret-keys'"
 # }}}
 # MAIL {{{
 alias smtp{.,''}conf='sudo vim /etc/smtpd/smtpd.conf -c "autocmd BufWritePost * !sudo smtpd -n && systemctl restart smtpd.service"'
 alias mu='mailutils'
-alias mail.pass='sudo vim /etc/mail/passwd'
 alias smtp.queue='sudo smtpctl show queue'
 alias smtp.show='sudo smtpctl show'
 alias smtp.ctl='sudo smtpctl'
@@ -445,8 +445,14 @@ alias cdgg='cd $(git rev-parse --show-toplevel)'
 alias cdgw='cdgg && cd .github/workflows'
 alias cdgs='cd $(git submodule status | sed "s/^.//" | cut -d" "  -f2)' # cd to first submodule
 ch() { list=~/helper/bin/git/check-repos.sh; test -f $list && $list; }
-alias git.check="/home/pham/helper/bin/git/check-repos.sh"
 alias cgit{.,''}rc='sudo vim /etc/cgitrc'
+alias git.check="/home/pham/helper/bin/git/check-repos.sh"
+# statistics
+alias git.most-change='git log --format=format: --name-only --since="1 year ago" | sort | uniq -c | sort -nr | head -20'
+alias git.who-built='git shortlog -sn --no-merges'
+alias git.buggy-files='git log -i -E --grep="fix|bug|broken" --name-only --format="" | sort | uniq -c | sort -nr | head -20'
+alias git.monthly-commits="git log --format='%ad' --date=format:'%Y-%m' | sort | uniq -c"
+alias git.hotfix='git log --oneline --since="1 year ago" | grep -iE "revert|hotfix|emergency|rollback"'
 
 # }}}
 # GIT: TIG {{{
