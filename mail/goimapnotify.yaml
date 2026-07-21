@@ -1,0 +1,14 @@
+{
+  "host": "mail.topo.tw",
+  "port": 993,
+  "tls": true,
+  "tlsOptions": {
+    "rejectUnauthorized": false
+  },
+  "username": "pham",
+  "password": "",
+    "passwordCmd": "pass mail/pham@mail.topo.tw | head -n1",
+  "onNewMail": "bash /home/pham/.config/goimapnotify/on-new-mail.sh",
+  "onNewMailPost": "",
+  "boxes": [ "INBOX" ]
+}
