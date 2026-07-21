@@ -166,7 +166,8 @@ function! FilterToScratch(pattern)
     \ 'awk ''/' . a:pattern . '/{print NR "\t" $0}''',
     \ getline(1, '$'))
 
-  vnew
+  topleft vnew
+  vertical resize 120
   setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
   call setline(1, l:lines)
   let b:src_buf = l:src_buf

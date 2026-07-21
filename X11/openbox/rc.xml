@@ -673,12 +673,11 @@
       <action name="Execute">
         <command>
           sh -c '
-            xdotool search --name "@Mutt" windowactivate || \
-            alacritty --title @Mutt \
-            --working-directory ~/Downloads \
-            -e mutt;
-            mbsync topo; notify-send -t 0 "mbsync $?"
-            <!-- -e ssh -t v "exec env LANG=en_US.UTF-8 mutt" -->
+            xdotool search --name "@Mutt" windowactivate || 
+            {
+              alacritty --title @Mutt --working-directory ~/Downloads -e mutt;
+              mbsync topo; notify-send -t 8000 "mbsync $?";
+            }
           '
       </command>
       </action>
