@@ -59,23 +59,12 @@ nnoremap cd :cd %:p:h<CR>:pwd<CR>
 
 nnoremap cd<space> :cd<space>
 nnoremap cdg :call CdToGitRepo()<CR>:pwd<CR>
-nnoremap <C-[> :cd ..<CR>:pwd<CR>
-nnoremap <C-]> :call InCaseCdToLatestDir()<CR>
 
 " Switch CWD to root git directory
 function! CdToGitRepo()
   let l:git_dir = finddir('.git', escape(expand('%:p:h'), ' ') . ';')
   let l:repo = fnameescape(fnamemodify(l:git_dir, ':h'))
   execute "cd" l:repo
-endfunction
-
-function! InCaseCdToLatestDir()
-  try
-    execute "norm! \<C-]>"
-  catch
-    cd -
-    pwd
-  endtry
 endfunction
 
 " }}}
