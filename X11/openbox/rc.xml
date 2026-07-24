@@ -27,37 +27,37 @@
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveWindow">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuHeader">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="ActiveOnScreenDisplay">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
     <font place="InactiveOnScreenDisplay">
-      <name>GTK-NoCSD: LibHandy not found, will try GModule. SauceCodePro Nerd Font Propo</name>
+      <name>SauceCodePro Nerd Font Propo</name>
       <size>18</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
