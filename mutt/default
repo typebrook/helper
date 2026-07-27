@@ -1,5 +1,5 @@
 # Edit rc file and source it. This is the most important thing
-macro index,browser,attach \Cv ":set wait_key=no<Return>!vim ~/.muttrc<Return>:source ~/.config/mutt/muttrc<Return>:set wait_key=yes<Return>"
+macro index,browser,attach \Cv ":set wait_key=no<Return>!vim ~/.muttrc<Return>:source ~/.muttrc<Return>:set wait_key=yes<Return>"
 
 # Connection options
 set ssl_force_tls = yes
@@ -39,10 +39,12 @@ set text_flowed = yes
 #set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
 #set index_format = "%Z %(%g.%m.%d) %-16.16L (%4c) %s"
 set index_format="%4C %7@date@ %-15.15F %Z (%4c) %s"
+set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
 index-format-hook  date  "~d<1d"    "%[%H:%M]"
 index-format-hook  date  "~d<1w"    "%[%a]"
 index-format-hook  date  "~d<1y"    "%[%b %d]"
 index-format-hook  date  "~A"       "%[%Y-%m]"
+# Alternate index_format: %y (labels) in place of %F (From) and %Z (status)
 
 # Preference
 alternative_order text/html text/plain text/enriched
@@ -51,14 +53,14 @@ auto_view text/html
 # Macro to open html with css
 macro pager l "v/(html|zip)<Return>xq<Return>" "Open html file"
 
-# Vim-style key binding, \c means Ctrl
+# Vim-style key binding, \C means Ctrl
 macro attach e "<pipe-entry>vim -<Return>" "edit attachment with vim"
 bind attach g exit
 bind attach x view-mailcap
-macro browser \cn "q\cn"
-macro browser \cp "q\cp"
+macro browser \Cn "q\cn"
+macro browser \Cp "q\cp"
 bind browser h descend-directory
-macro generic,index,pager \cr ":source ~/.config/mutt/muttrc<Return>" "Reload mutt's configuration file"
+macro generic,index,pager \Cr ":source ~/.config/mutt/muttrc<Return>" "Reload mutt's configuration file"
 macro index *a "Tall\n" "Select All"
 bind index } bottom-page
 bind index,browser gg first-entry
@@ -66,22 +68,23 @@ bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser l select-entry
 macro index,browser,pager i ':toggle sidebar_new_mail_only<enter>'
-macro index \ca "Tall\n" "Select All"
-bind index \cj next-entry
-bind index \ck previous-entry
-macro index \cy "\\~y " "Limit to label"
+macro index \Ca "Tall\n" "Select All"
+bind index \Cj next-entry
+bind index \Ck previous-entry
+bind index \Ce next-line
+bind index \Cy previous-line
 macro index d '<tag-prefix><delete-message>' 'Delete'
 macro index h "\\all\n" "All messages"
 macro index I  "<search>~F\n"   "Search for next important"
 bind index \\ limit
-macro index *n "\ctall\n" "Deselect All"
+macro index *n "\Ctall\n" "Deselect All"
 bind index O sort-mailbox
 bind index o sort-reverse
 bind index,pager <BackTab> previous-new-then-unread
-bind index,pager,browser,attach \cb previous-page
-bind index,pager,browser,attach \cd half-down
-bind index,pager,browser,attach \cf next-page
-bind index,pager,browser,attach \cu half-up
+bind index,pager,browser,attach \Cb previous-page
+bind index,pager,browser,attach \Cd half-down
+bind index,pager,browser,attach \Cf next-page
+bind index,pager,browser,attach \Cu half-up
 macro index,pager c '<change-folder>='
 bind index,pager <Return> sync-mailbox
 bind index,pager <Tab> next-new-then-unread
@@ -97,11 +100,16 @@ macro index w '<tag-prefix><set-flag>' 'Set flag'
 bind index x tag-entry
 bind index y edit-label
 macro index Y "\\~y " "Limit to label"
-bind pager \ce next-line
-bind pager \ch display-toggle-weed
-bind pager \cn next-entry
-bind pager \cp previous-entry
-bind pager \cy previous-line
+macro index Z "\
+:set my_index_tmp=\$index_format\n\
+:set index_format=\$my_index_other\n\
+:set my_index_other=\$my_index_tmp\n\
+:unset my_index_tmp\n" "Toggle index_format label view"
+bind pager \Ce next-line
+bind pager \Ch display-toggle-weed
+bind pager \Cn next-entry
+bind pager \Cp previous-entry
+bind pager \Cy previous-line
 bind pager G bottom
 bind pager h skip-headers
 bind pager j next-line
@@ -123,15 +131,12 @@ bind generic                gg      first-entry
 bind generic,index          G       last-entry
 bind pager                  gg      top
 bind pager                  G       bottom
-bind index,pager            gv      sidebar-toggle-visible
-bind generic                zt      current-top
-bind generic                zz      current-middle
-bind generic                zb      current-bottom
+#bind generic                zt      current-top
+#bind generic                zz      current-middle
+#bind generic                zb      current-bottom
 bind index                  za      collapse-thread
 bind index                  zc      collapse-thread
-bind index                  zA      collapse-all
-#bind generic,pager          \Cy     previous-line
-#bind generic,index,pager    \Ce     next-line
+bind index                  zi      collapse-all
 
 
 # Sidebar
@@ -141,7 +146,7 @@ set imap_check_subscribed
 set sidebar_visible = yes
 set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
 set sidebar_short_path = yes
-set sidebar_new_mail_only = yes
+set sidebar_new_mail_only = no
 set sidebar_width = 17
 bind index,pager b sidebar-toggle-visible
 bind index,pager B bounce-message
