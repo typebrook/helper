@@ -564,7 +564,19 @@
       <action name="Execute">
         <!-- Copy to CLIPBOARD -->
         <command>
-          alacritty --title @CLIPBORD -o 'env.fullrc="true"' -e vim -c 'r !xsel -ob' -c 'normal A' -c 'nmap &lt;C-c&gt; :w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
+          alacritty --title @CLIPBORD -e vim -c 'r !xsel -ob' -c 'normal A' -c 'nmap &lt;C-c&gt; :silent! w !xsel -ib&lt;CR&gt;:qa!&lt;CR&gt;'
+        </command>
+      </action>
+    </keybind>
+    <keybind key="W-u">
+      <action name="Execute">
+        <!-- Copy to CLIPBOARD -->
+        <command>
+          alacritty
+            -o "window.dimensions.columns=45"
+            -o "window.dimensions.lines=2"
+            -o "font.size=40"
+	    -e vim -N -u NONE +start -c 'set noruler' -c 'nmap &lt;C-c&gt; :silent! w !setsid ssh v tee -a LOG &amp; &lt;CR&gt;:qa!&lt;CR&gt;'
         </command>
       </action>
     </keybind>

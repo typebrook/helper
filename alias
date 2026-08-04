@@ -396,7 +396,7 @@ alias sv='sudo vim'
 alias vr='vim -R'
 alias vm='vim Makefile'
 # Edit last file
-alias vl="vim -c 'norm '"
+alias vl="vim -c 'normal '"
 vo() {
   vim -c "put = v:oldfiles | nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR> | normal gg"
 }
