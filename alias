@@ -627,6 +627,62 @@ alias b='vim $HOME/bean/main.bean'
 alias pip3='python3 -m pip'
 alias py{,thon}.http='python -m http.server 8888'
 # }}}
+# Image {{{
+# Concatenate image vertically
+img.vertical() {
+  if [ $# = 0 ]; then
+    echo 'Usage: image.vertical input1.jpg input2.jpg'
+    return 0
+  fi
+
+  ext=${1##*.}
+  convert "$@" -append $(basename -s .$ext $1)-$(basename -s .$ext ${@: -1}).${format:-$ext}
+}
+
+# Concatenate image horizontally
+img.horizontal() {
+  if [ ! $# = 0 ]; then
+    echo 'Usage: image.horizontal input1.jpg input2.jpg'
+    return 0
+  fi
+
+  ext=${1##*.}
+  convert "$@" +append output.$ext
+}
+
+# Export image with data url format
+img.from_data_url() {
+  [ -z "$1" ] && echo File name needed && return 1
+  xsel -ob | sed -E 's/^.+,//' | base64 -d >$1
+  identify $1
+}
+
+# Resize image
+img.resize() {
+  if [ ! $# = 2 ]; then
+    echo 'Usage: image.resize INPUT.jpg 80%'
+    return 0
+  fi
+
+  ext=${1##*.}
+  echo OUTPUT: output.$ext
+  convert -resize $2 $1 output.$ext
+}
+
+# Create an image contains text
+img.text() {
+  convert \
+    -size 230x130 \
+    -background lightblue \
+    -font Noto-Sans-Bold \
+    -pointsize 25 \
+    -fill black \
+    -gravity Center \
+    caption:"${1:=foo}" \
+    -flatten \
+    "${2:=foo}".jpg
+}
+# }}}
 # Misc{{{
 alias yl='youtube-dl'
 alias yla='youtube-dl -x --audio-format mp3'
