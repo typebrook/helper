@@ -88,5 +88,8 @@ if [[ $shell == bash ]]; then
   PROMPT_COMMAND=_precmd
 fi
 # }}}
+# claude code {{{
+export CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1
+#}}}
 
 true
