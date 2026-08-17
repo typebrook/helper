@@ -19,6 +19,44 @@ env | tr '\n' ' '
 # shell opt/var {{{
 shopt -s nocasematch extglob
 
+# parse_date <token> [last|next] -> ISO date (YYYY-MM-DD); empty if unrecognised.
+# <dir> (default last) sets the sense of relative tokens: last=past, next=future.
+#   YYYY-MM-DD          absolute date, as-is
+#   MM-DD               nearest that month/day in <dir> (this year or adjacent)
+#   today | now         today
+#   tomorrow            +1 day
+#   yesterday           -1 day
+#   <N>                 N days away in <dir>            (e.g. 3)
+#   <N>d <N>w <N>m <N>y  N days/weeks/months/years in <dir>  (e.g. 2w)
+#   +<N> -<N> (+ opt unit)  explicit signed offset, ignores <dir>  (e.g. +3, -2w)
+#   <weekday>           last/next occurrence of that weekday (e.g. wed)
+parse_date() {
+  local s=$1 dir=${2:-last} sign
+  [ "$dir" = next ] && sign=+ || sign=-
+  if [[ $s =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+    printf '%s\n' "$s"
+  elif [[ $s =~ ^[0-9]{2}-[0-9]{2}$ ]]; then
+    local today y cand
+    today=$(date --iso); y=${today%%-*}; cand="$y-$s"
+    [ "$dir" = next ] && [[ "$cand" < "$today" ]] && cand="$((y+1))-$s"
+    [ "$dir" = last ] && [[ "$cand" > "$today" ]] && cand="$((y-1))-$s"
+    printf '%s\n' "$cand"
+  elif [[ $s == today || $s == now ]]; then
+    date --iso
+  elif [[ $s == tomorrow ]]; then
+    date --iso -d tomorrow
+  elif [[ $s == yesterday ]]; then
+    date --iso -d yesterday
+  elif [[ $s =~ ^([+-]?)([0-9]+)([dwmy]?)$ ]]; then
+    local sg=${BASH_REMATCH[1]} n=${BASH_REMATCH[2]} u=${BASH_REMATCH[3]}
+    case "$u" in w) u=weeks;; m) u=months;; y) u=years;; *) u=days;; esac
+    [ -n "$sg" ] || sg=$sign
+    date --iso -d "${sg}${n} ${u}"
+  elif [[ $s =~ ^[[:alpha:]]+$ ]]; then
+    date --iso -d "$dir $s"
+  fi
+}
+
 if [ -n "$RECIPIENT" ]; then
   [[ "$SENDER$RECIPIENT" =~ .*log@topo.tw.* ]] || { cat > /dev/null; exit 0; }
   MAIL=$(python3 -c '
@@ -57,10 +95,7 @@ echo MESSAGE: $MESSAGE
 # DATE: parse @<DATE> as ISO 8601 format
 if [[ "$MESSAGE" =~ ^@ ]]; then
   datestring=${MESSAGE%% *}; datestring=${datestring#@}
-  # parse token as N days before
-  [[ $datestring =~ ^[[:digit:]]+$ ]] && DATE=$(date --iso -d "-$datestring days")
-  # parse token as last X weekday
-  [[ $datestring =~ ^[[:alpha:]]+$ ]] && DATE=$(date --iso -d "last $datestring")
+  DATE=$(parse_date "$datestring")
   echo DATE: $DATE
 fi
 # }}}
@@ -79,12 +114,7 @@ if [[ "$MESSAGE" =~ ^: ]]; then
     # HELP: ":d <LINE> 3" to tag as #done:<3-DAYS-BEFORE>
     # HELP: ":d <LINE> wed" to tag as #done:<LAST-WEDNESDAY >
     :d* )
-      time="$content"
-      case "$time" in
-        [[:digit:]]* ) date=$(date --iso --date="-${time}days") ;;
-        [[:alpha:]]* ) date=$(date --iso --date="last ${time}") ;;
-        * ) date=$(date --iso) ;;
-      esac
+      date=$(parse_date "$content"); date=${date:-$(date --iso)}
       sed -Ei "$line_num s/ #(todo|done[^ ]*)/ #done:${date}/" ~/LOG
       ;;&
     # HELP: ":r <LINE> <CONTENT>" to rewrite specific line
@@ -140,6 +170,38 @@ elif [[ "$MESSAGE" =~ ^@[[:alnum:]]+$ && -n "$DATE" ]]; then
   REPLY="$(<~/LOG sed -n "/^## $DATE/,/^$/p")"
 fi
 # }}}
+# calendar event {{{
+# HELP: "<TEXT> #cal:YYYY-MM-DD" to add all-day CalDAV event on that date
+# HELP: "<TEXT> #cal:wed" to add all-day event on next Wednesday (also tomorrow, 3, 2w, 12-25 ...)
+if [[ "$MESSAGE" =~ \#cal:([[:alnum:]+-]+) ]]; then
+  caltoken=${BASH_REMATCH[1]}
+  caldate=$(parse_date "$caltoken" next)
+  if [ -z "$caldate" ]; then
+    calnote="Cal FAILED (bad date: ${caltoken})"
+  else
+    dtstart=${caldate//-/}
+    dtend=$(date -d "${caldate} +1 day" +%Y%m%d)
+    # SUMMARY = message minus the #cal tag, trimmed, then ICS-escaped
+    summary="$(sed -E 's/[[:space:]]*#cal:[[:alnum:]+-]+//' <<<"$MESSAGE")"
+    summary="${summary#"${summary%%[![:space:]]*}"}"
+    summary="${summary%"${summary##*[![:space:]]}"}"
+    esc=${summary//\\/\\\\}; esc=${esc//;/\\;}; esc=${esc//,/\\,}
+    uid=$(cat /proc/sys/kernel/random/uuid)
+    ics=$(printf 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//log.sh//cal//EN\r\nBEGIN:VEVENT\r\nSUMMARY:%s\r\nDTSTART;VALUE=DATE:%s\r\nDTEND;VALUE=DATE:%s\r\nDTSTAMP:%s\r\nUID:%s\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n' \
+      "$esc" "$dtstart" "$dtend" "$(date -u +%Y%m%dT%H%M%SZ)" "$uid")
+    code=$(curl -s -o /dev/null -w '%{http_code}' -X PUT \
+      -H 'Content-Type: text/calendar; charset=utf-8' \
+      --data-binary "$ics" \
+      "http://127.0.0.1:8010/dav/user/calendars/calendar/${uid}.ics")
+    echo "cal PUT $code uid=$uid"
+    if [[ "$code" == 20* ]]; then
+      calnote="Cal: ${summary} @ ${caldate}"
+    else
+      calnote="Cal FAILED (HTTP ${code})"
+    fi
+  fi
+fi
+# }}}
 # write message to log {{{
 
 # HELP: "@<TIME>" to specify date of message
@@ -162,6 +224,8 @@ fi
 # }}}
 # reply to sender {{{
 echo replyto=$replyto
+[ -n "$calnote" ] && REPLY="${REPLY:+$REPLY
+}$calnote"
 if [ -n "$REPLY" ] && [ -n "${replyto}" ]; then
   id=$(date --iso=seconds)
   smtp -s localhost:2525 pham@topo.tw <<-MAIL
