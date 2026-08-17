@@ -717,6 +717,9 @@ wifi.connect() {
     sleep 1
     sudo iwctl station wlan0 connect "$1"
 }
+issue.open() {
+  find issues/ -type f -name '*-*md'  | while read f; do grep -q '^state: open' $f || continue; echo -n $f; grep ^labels: $f | cut -d: -f2- ; done | sort | column -t
+}
 # }}}
 
 # vim:fdm=marker fdl=0

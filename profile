@@ -6,7 +6,6 @@ export HELPER_DIR=${HELPER_DIR:=$HOME/helper}
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=~/.config
 export XDG_STATE_HOME=~/.local/share/
-export MAIL=$HOME/Mail
 export EDITOR=vim
 export SYSTEMD_EDITOR=vim
 export VISUAL=$EDITOR
