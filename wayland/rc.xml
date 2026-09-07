@@ -1,0 +1,999 @@
+<?xml version="1.0"?>
+<!--
+  labwc configuration, migrated from ~/helper/X11/openbox/rc.xml (Openbox/Archcraft).
+
+  Translation notes:
+    * Terminal is foot (alacritty is not installed). Flag map:
+        title X              -> -T X
+        -o window.dimensions -> -W COLSxLINES
+        -o window.padding    -> -o main.pad=XxY
+        -o font.size=N       -> -f "Adwaita Mono:size=N"   (family from foot.ini)
+        working-directory D  -> -D D
+        window.startup_mode=Maximized -> the foot "maximized" flag
+        -e is accepted by foot but ignored, so it has been dropped.
+    * Every "xdotool search by name, else launch" pattern is now a native
+      labwc ForEach + <query> + <none> run-or-raise. No xdotool anywhere.
+    * Commands whose binaries are not installed on this machine are kept
+      VERBATIM by request (polybar-msg, dunstctl, thunar, yad, pulsemixer,
+      betterlockscreen, mpc, mutt, ranger, xkill, ob-*, takeshot, ...).
+      See the DEAD BINDINGS comment at the bottom of this file.
+-->
+<labwc_config>
+
+  <core>
+    <decoration>server</decoration>
+    <gap>0</gap>
+    <xwaylandPersistence>no</xwaylandPersistence>
+  </core>
+
+  <!-- Openbox: policy Smart + <center>yes</center> + <monitor>Mouse</monitor> -->
+  <placement>
+    <policy>center</policy>
+  </placement>
+
+  <!-- Openbox <resistance><screen_edge_strength>/<strength> -->
+  <resistance>
+    <screenEdgeStrength>20</screenEdgeStrength>
+    <windowEdgeStrength>10</windowEdgeStrength>
+    <unMaximizeThreshold>150</unMaximizeThreshold>
+  </resistance>
+
+  <!-- Openbox focusNew/focusLast/underMouse/focusDelay have no labwc equivalent -->
+  <focus>
+    <followMouse>no</followMouse>
+    <followMouseRequiresMovement>yes</followMouseRequiresMovement>
+    <raiseOnFocus>no</raiseOnFocus>
+  </focus>
+
+  <resize>
+    <drawContents>yes</drawContents>
+    <popupShow>Always</popupShow>
+  </resize>
+
+  <!--
+    Openbox titleLayout DLIMC == all-desktops, label, iconify, maximize, close.
+    Font family swapped: SauceCodePro Nerd Font Propo is not installed here.
+  -->
+  <theme>
+    <name>Arc-Dark</name>
+    <titlebar>
+      <layout>desk:iconify,max,close</layout>
+      <showTitle>yes</showTitle>
+    </titlebar>
+    <cornerRadius>8</cornerRadius>
+    <keepBorder>yes</keepBorder>
+    <font place="ActiveWindow">
+      <name>JetBrainsMono Nerd Font</name>
+      <size>18</size>
+      <weight>bold</weight>
+      <slant>normal</slant>
+    </font>
+    <font place="InactiveWindow">
+      <name>JetBrainsMono Nerd Font</name>
+      <size>18</size>
+      <weight>normal</weight>
+      <slant>normal</slant>
+    </font>
+    <font place="MenuHeader">
+      <name>JetBrainsMono Nerd Font</name>
+      <size>18</size>
+      <weight>bold</weight>
+      <slant>normal</slant>
+    </font>
+    <font place="MenuItem">
+      <name>JetBrainsMono Nerd Font</name>
+      <size>18</size>
+      <weight>normal</weight>
+      <slant>normal</slant>
+    </font>
+    <!-- Openbox had separate Active/InactiveOnScreenDisplay; labwc has one place -->
+    <font place="OnScreenDisplay">
+      <name>JetBrainsMono Nerd Font</name>
+      <size>18</size>
+      <weight>bold</weight>
+      <slant>normal</slant>
+    </font>
+  </theme>
+
+  <!-- Openbox <bar>no</bar> on every cycling keybind -> hide the switcher OSD -->
+  <windowSwitcher preview="yes" outlines="no">
+    <osd show="yes" />
+  </windowSwitcher>
+
+  <desktops numbers="1">
+    <popupTime>0</popupTime>
+    <names>
+      <name>1</name>
+    </names>
+  </desktops>
+
+  <!--
+    labwc ResizeTo takes pixels only, so the percentage geometry that Openbox
+    expressed with MoveResizeTo lives here instead and is reached via SnapToRegion.
+  -->
+  <regions>
+    <region name="center-60"   x="20%" y="20%" width="60%" height="60%" />
+    <region name="center-tall" x="16%" y="1%"  width="68%" height="98%" />
+    <region name="center-half" x="25%" y="25%" width="50%" height="50%" />
+  </regions>
+
+  <!-- ################################ Keybindings ################################ -->
+  <keyboard>
+    <repeatRate>25</repeatRate>
+    <repeatDelay>600</repeatDelay>
+
+    <!-- Edit this config. reconfigure.vim installs a BufWritePost autocmd that
+         reloads labwc on every save (and refuses to when the XML is broken),
+         so the reload no longer waits for the editor to be closed. -->
+    <keybind key="W-o">
+      <action name="ForEach">
+        <query title="@LABWC_CONFIG" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="sh -c 'env fullrc=false foot -T @LABWC_CONFIG -W 70x32 vim -S ~/.config/labwc/reconfigure.vim ~/.config/labwc/rc.xml'" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- Switch b/w Applications -->
+    <keybind key="A-Tab"><action name="NextWindow" workspace="current" /></keybind>
+    <keybind key="A-S-Tab"><action name="PreviousWindow" workspace="all" /></keybind>
+
+    <keybind key="W-0"><action name="ToggleDecorations" /></keybind>
+    <keybind key="W-9"><action name="ToggleAlwaysOnTop" /></keybind>
+
+    <!-- Window Tiling: Snap feature -->
+    <keybind key="W-h"><action name="SnapToEdge" direction="left" /></keybind>
+    <keybind key="W-l"><action name="SnapToEdge" direction="right" /></keybind>
+    <keybind key="W-k"><action name="Maximize" direction="both" /></keybind>
+    <keybind key="W-S-k"><action name="SnapToRegion" region="center-tall" /></keybind>
+    <keybind key="W-j"><action name="SnapToRegion" region="center-60" /></keybind>
+    <keybind key="W-Down"><action name="SnapToRegion" region="center-60" /></keybind>
+    <keybind key="W-S-j"><action name="Iconify" /></keybind>
+    <keybind key="W-S-h">
+      <action name="MoveToEdge" direction="left" snapWindows="no" />
+      <action name="MoveToEdge" direction="up" snapWindows="no" />
+    </keybind>
+    <keybind key="W-S-l">
+      <action name="MoveToEdge" direction="right" snapWindows="no" />
+      <action name="MoveToEdge" direction="down" snapWindows="no" />
+    </keybind>
+    <!-- Openbox centred on monitor 2; labwc centres on the active output -->
+    <keybind key="W-c"><action name="AutoPlace" policy="center" /></keybind>
+
+    <!-- Move -->
+    <keybind key="W-A-k"><action name="MoveRelative" x="0" y="-20" /></keybind>
+    <keybind key="W-A-j"><action name="MoveRelative" x="0" y="+20" /></keybind>
+    <keybind key="W-A-h"><action name="MoveRelative" x="-20" y="0" /></keybind>
+    <keybind key="W-A-l"><action name="MoveRelative" x="20" y="0" /></keybind>
+
+    <!-- Resize -->
+    <keybind key="C-A-Right"><action name="ResizeRelative" right="+20" /></keybind>
+    <keybind key="C-A-Left"><action name="ResizeRelative" right="-20" /></keybind>
+    <keybind key="C-A-Down"><action name="ResizeRelative" bottom="+20" /></keybind>
+    <keybind key="C-A-Up"><action name="ResizeRelative" bottom="-20" /></keybind>
+
+    <!--
+      Below: the Omarchy/Hyprland features labwc can do natively that had no
+      binding here. None of these keys were in use; where Omarchy's own key was
+      already taken by a live binding in this file, the replacement is noted.
+    -->
+
+    <!-- Screen magnifier - Omarchy SUPER+CTRL+Z / SUPER+CTRL+ALT+Z, same keys.
+         ZoomIn switches the magnifier on at the lowest level when it is off;
+         ToggleMagnify switches it off, which is Hyprland's "zoom fully out".
+         W-S-C-z (step back out) has no Omarchy counterpart. Size and step come
+         from the <magnifier> defaults in labwc-config(5). -->
+    <keybind key="W-C-z"><action name="ZoomIn" /></keybind>
+    <keybind key="W-S-C-z"><action name="ZoomOut" /></keybind>
+    <keybind key="W-z"><action name="ToggleMagnify" /></keybind>
+
+    <!-- Notifications / status -->
+    <keybind key="W-grave"><action name="Execute" command="~/helper/X11/notify_status.sh" /></keybind>
+    <!-- dunst is not installed; omarchy-shell (Quickshell) owns notifications here -->
+    <keybind key="W-q"><action name="Execute" command="omarchy-shell notifications dismissOne" /></keybind>
+    <!-- Invoke the last notification's default action (Hyprland's SUPER+ALT+comma).
+         After "omarchy capture screenshot" that action opens the PNG in the editor. -->
+    <keybind key="W-S-q"><action name="Execute" command="omarchy-shell notifications invokeLast" /></keybind>
+
+    <!--
+      Media Controls - migrated from Hyprland (default/hypr/bindings/media.lua).
+      The ob-volume/mpc commands that used to live here were dead (see the DEAD
+      BINDINGS note at the bottom); the old commands are kept in the comments.
+      Hyprland's `locked = true` becomes allowWhenLocked="yes".
+    -->
+    <keybind key="XF86AudioRaiseVolume" allowWhenLocked="yes">          <!-- was: ob-volume (increase) -->
+      <action name="Execute" command="omarchy-audio-output-volume raise" />
+    </keybind>
+    <keybind key="XF86AudioLowerVolume" allowWhenLocked="yes">          <!-- was: ob-volume (decrease) -->
+      <action name="Execute" command="omarchy-audio-output-volume lower" />
+    </keybind>
+    <keybind key="A-XF86AudioRaiseVolume" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-output-volume +1" />
+    </keybind>
+    <keybind key="A-XF86AudioLowerVolume" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-output-volume -1" />
+    </keybind>
+    <keybind key="XF86AudioMute" allowWhenLocked="yes">                 <!-- was: ob-volume (mute toggle) -->
+      <action name="Execute" command="omarchy-audio-output-volume mute-toggle" />
+    </keybind>
+    <keybind key="S-XF86AudioMute" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-output-switch" />
+    </keybind>
+    <keybind key="XF86AudioMicMute" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-input-mute" />
+    </keybind>
+
+    <!-- Player controls are handled by the Omarchy shell (MPRIS), not mpc -->
+    <keybind key="XF86AudioPlay" allowWhenLocked="yes">                 <!-- was: mpc toggle -->
+      <action name="Execute" command="omarchy-shell media playPause" />
+    </keybind>
+    <keybind key="XF86AudioPause" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-shell media playPause" />
+    </keybind>
+    <keybind key="XF86AudioNext" allowWhenLocked="yes">                 <!-- was: mpc next -->
+      <action name="Execute" command="omarchy-shell media next" />
+    </keybind>
+    <keybind key="XF86AudioPrev" allowWhenLocked="yes">                 <!-- was: mpc prev -->
+      <action name="Execute" command="omarchy-shell media previous" />
+    </keybind>
+    <keybind key="A-XF86AudioPlay" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-shell media next" />
+    </keybind>
+    <keybind key="A-S-XF86AudioPlay" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-shell media previous" />
+    </keybind>
+    <keybind key="S-XF86AudioPlay" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-source-switch" />
+    </keybind>
+    <keybind key="S-XF86AudioPause" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-audio-source-switch" />
+    </keybind>
+    <keybind key="XF86Eject" allowWhenLocked="yes"><action name="Execute" command="eject" /></keybind>
+    <!-- No Hyprland counterpart; still dead (mpd/mpc are not installed) -->
+    <keybind key="XF86AudioStop"><action name="Execute" command="mpc stop" /></keybind>
+
+    <!-- Brightness Control - migrated from Hyprland (was: ob-brightness inc/dec) -->
+    <keybind key="XF86MonBrightnessUp" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display +5%" />
+    </keybind>
+    <keybind key="XF86MonBrightnessDown" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display 5%-" />
+    </keybind>
+    <keybind key="S-XF86MonBrightnessUp" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display 100%" />
+    </keybind>
+    <keybind key="S-XF86MonBrightnessDown" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display 1%" />
+    </keybind>
+    <keybind key="A-XF86MonBrightnessUp" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display +1%" />
+    </keybind>
+    <keybind key="A-XF86MonBrightnessDown" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-display 1%-" />
+    </keybind>
+    <keybind key="XF86KbdBrightnessUp" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-keyboard up" />
+    </keybind>
+    <keybind key="XF86KbdBrightnessDown" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-keyboard down" />
+    </keybind>
+    <keybind key="XF86KbdLightOnOff" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-brightness-keyboard cycle" />
+    </keybind>
+
+    <!-- Touchpad - migrated from Hyprland -->
+    <keybind key="XF86TouchpadToggle" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-toggle-touchpad" />
+    </keybind>
+    <keybind key="XF86TouchpadOn" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-toggle-touchpad on" />
+    </keybind>
+    <keybind key="XF86TouchpadOff" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-toggle-touchpad off" />
+    </keybind>
+
+    <!-- Screenshot Keys -->
+    <!-- Hyprland PRINT; the old command here was a typo ("screent") -->
+    <keybind key="Print"><action name="Execute" command="omarchy-capture-screenshot" /></keybind>
+    <keybind key="W-S-5"><action name="Execute" command="omarchy-labwc-screenshot-delayed 5" /></keybind>
+    <!-- Region screenshot: saved to $XDG_PICTURES_DIR + clipboard, then a
+         notification whose action (W-A-comma above) opens it in the editor. -->
+    <keybind key="W-s"><action name="Execute" command="omarchy capture screenshot region" /></keybind>
+    <keybind key="A-Print"><action name="Execute" command="screenshot" /></keybind>
+
+    <!--
+      ######################## Migrated from Hyprland / Omarchy ########################
+
+      Source of truth: /usr/share/omarchy/default/hypr/bindings/*.lua, with the
+      personal overrides in ~/.config/hypr/bindings.lua applied on top (those are
+      loaded after the defaults, so they win).
+
+      Modifier map: SUPER -> W, ALT -> A, CTRL -> C, SHIFT -> S.
+      Hyprland keycodes: code:10..18 -> 1..9, code:20/21 -> minus/equal,
+      code:34/35 -> bracketleft/bracketright.
+
+      Everything that manages windows (focus/move/swap/resize/float/fullscreen/
+      close, workspaces, scratchpad, groups, monitors) and everything that needs
+      hyprctl to work is deliberately NOT here - see the NOT MIGRATED note at the
+      bottom of this file.
+    -->
+
+    <!-- Capture (utilities.lua) -->
+    <keybind key="A-Print">
+      <action name="Execute" command="sh -c 'omarchy-capture-screenrecording --stop-recording || omarchy-menu toggle trigger.capture.screenrecord'" />
+    </keybind>
+    <!-- Colour picker; replaces the dead ob-colorpicker on W-g -->
+    <keybind key="W-Print"><action name="Execute" command="sh -c 'pkill hyprpicker || hyprpicker -a'" /></keybind>
+    <keybind key="W-C-Print"><action name="Execute" command="omarchy-capture-text" /></keybind>
+    <!-- Personal overrides from hypr/bindings.lua: SUPER+SHIFT+S / SUPER+ALT+S -->
+    <keybind key="W-S-s"><action name="Execute" command="omarchy-capture-text" /></keybind>
+    <keybind key="W-A-s"><action name="Execute" command="capture-text-vertical" /></keybind>
+    <keybind key="W-C-period"><action name="Execute" command="omarchy-transcode" /></keybind>
+
+    <!-- Menus (utilities.lua) -->
+    <keybind key="W-A-space"><action name="Execute" command="omarchy-menu toggle apps" /></keybind>
+    <keybind key="W-Escape"><action name="Execute" command="omarchy-menu toggle system" /></keybind>
+    <keybind key="XF86PowerOff" allowWhenLocked="yes">
+      <action name="Execute" command="omarchy-menu toggle system" />
+    </keybind>
+    <keybind key="W-C-c"><action name="Execute" command="omarchy-menu toggle capture" /></keybind>
+    <keybind key="W-C-o"><action name="Execute" command="omarchy-menu toggle toggle" /></keybind>
+    <keybind key="W-C-h"><action name="Execute" command="omarchy-menu toggle hardware" /></keybind>
+    <keybind key="W-C-space"><action name="Execute" command="omarchy-menu toggle background" /></keybind>
+    <keybind key="W-S-C-space"><action name="Execute" command="omarchy-menu toggle theme" /></keybind>
+    <keybind key="W-C-s"><action name="Execute" command="omarchy-menu toggle share" /></keybind>
+    <keybind key="W-C-e"><action name="Execute" command="omarchy-shell shell toggle omarchy.emojis" /></keybind>
+    <keybind key="W-C-q"><action name="Execute" command="omacalc" /></keybind>
+    <keybind key="XF86Calculator"><action name="Execute" command="omacalc" /></keybind>
+    <!-- These two only use hyprctl to size the menu, and fall back cleanly -->
+    <keybind key="W-A-t"><action name="Execute" command="omarchy-menu-tmux-keybindings" /></keybind>
+    <keybind key="W-C-k"><action name="Execute" command="omarchy-menu-herdr-keybindings" /></keybind>
+
+    <!-- Notifications (utilities.lua); W-A-comma is bound further up -->
+    <keybind key="W-comma"><action name="Execute" command="omarchy-shell notifications dismissOne" /></keybind>
+    <keybind key="W-S-comma"><action name="Execute" command="omarchy-shell notifications dismissAll" /></keybind>
+    <keybind key="W-C-comma"><action name="Execute" command="omarchy-toggle-notification-silencing" /></keybind>
+    <keybind key="W-S-A-comma"><action name="Execute" command="omarchy-shell notifications showHistory" /></keybind>
+    <keybind key="W-C-A-t"><action name="Execute" command="omarchy-notification-time" /></keybind>
+    <keybind key="W-C-A-b"><action name="Execute" command="omarchy-notification-battery" /></keybind>
+    <keybind key="W-C-A-w"><action name="Execute" command="omarchy-notification-weather" /></keybind>
+
+    <!-- Reminders (utilities.lua) -->
+    <keybind key="W-7"><action name="Execute" command="omarchy-menu toggle reminder-set" /></keybind>
+    <keybind key="W-S-7"><action name="Execute" command="omarchy-reminder show" /></keybind>
+    <keybind key="W-A-7"><action name="Execute" command="omarchy-reminder clear" /></keybind>
+
+    <!-- Omarchy shell panels (utilities.lua) -->
+    <keybind key="W-a"><action name="Execute" command="omarchy-shell shell toggle omarchy.audio" /></keybind>
+    <keybind key="W-1"><action name="Execute" command="omarchy-shell shell toggle omarchy.agents" /></keybind>
+    <keybind key="W-2"><action name="Execute" command="omarchy-shell shell toggle omarchy.bluetooth" /></keybind>
+    <keybind key="W-2"><action name="Execute" command="omarchy-shell shell toggle omarchy.bluetooth" /></keybind>
+    <keybind key="W-3"><action name="Execute" command="omarchy-shell shell toggle omarchy.network" /></keybind>
+    <keybind key="W-4"><action name="Execute" command="omarchy-shell shell toggle omarchy.clock" /></keybind>
+    <keybind key="W-5"><action name="Execute" command="omarchy-shell shell toggle omarchy.monitor" /></keybind>
+    <keybind key="W-6"><action name="Execute" command="omarchy-shell shell toggle omarchy.tray" /></keybind>
+    <!--
+      Bar panel 1..9. hypr/bindings.lua remapped these from SUPER+CTRL+N to plain
+      SUPER+N, but W-1/W-3/W-5/W-9 are already taken here, so the Omarchy default
+      chord is used instead.
+    -->
+    <keybind key="W-C-1"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 1" /></keybind>
+    <keybind key="W-C-2"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 2" /></keybind>
+    <keybind key="W-C-3"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 3" /></keybind>
+    <keybind key="W-C-4"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 4" /></keybind>
+    <keybind key="W-C-5"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 5" /></keybind>
+    <keybind key="W-C-6"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 6" /></keybind>
+    <keybind key="W-C-7"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 7" /></keybind>
+    <keybind key="W-C-8"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 8" /></keybind>
+    <keybind key="W-C-9"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 9" /></keybind>
+
+    <!-- System toggles (utilities.lua) -->
+    <keybind key="W-C-i"><action name="Execute" command="omarchy-toggle-idle" /></keybind>
+    <keybind key="W-C-l"><action name="Execute" command="omarchy-system-lock" /></keybind>
+    <keybind key="W-S-C-a"><action name="Execute" command="omarchy-agent --pick" /></keybind>
+
+    <!-- Dictation (voxtype.lua). Both keys toggle: press to record, press again to
+         transcribe. F9 was originally a push-to-talk pair (start on press, stop on
+         release), which labwc silently breaks: deduplicate_key_bindings() in
+         rcxml.c compares only modifiers and keysyms via keybind_the_same(), never
+         onRelease, so of two binds on the same key the later one wins and the
+         "start" bind was deleted at parse time. F9 then only ever ran
+         "record stop" against an idle daemon, a no-op that logs nothing.
+         Even with dedup fixed it would not work: the release path keys off the
+         single cur_keybind captured at press time, so it can only fire a bind that
+         is itself onRelease. Push-to-talk on one key is not expressible in
+         labwc 0.20.2 rc.xml; use voxtype's own evdev [hotkey] if you want it. -->
+    <keybind key="W-C-x"><action name="Execute" command="voxtype record toggle" /></keybind>
+    <keybind key="F9"><action name="Execute" command="voxtype record toggle" /></keybind>
+
+    <!-- ################################ Launch Applications ################################ -->
+
+    <keybind key="C-S-semicolon"><action name="Execute" command="omarchy menu clipboard" /></keybind>
+
+    <!-- Main work terminal (run-or-raise on the @Work title) -->
+    <keybind key="W-Return">
+      <action name="ForEach">
+        <query title="@Work" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="foot -T @Work -D ~/Downloads bash" />
+        </none>
+      </action>
+    </keybind>
+
+    <keybind key="W-S-b">
+      <action name="Execute" command="foot -T BANNER --hold -o main.pad=36x36 -W 35x1 -f 'Adwaita Mono:size=60' ~/helper/bin/unix/center_text.sh" />
+    </keybind>
+
+    <keybind key="W-t"><action name="Execute" command="~/helper/X11/show_timer.sh --context" /></keybind>
+    <keybind key="W-S-t"><action name="Execute" command="~/helper/X11/show_timer.sh" /></keybind>
+
+    <!-- Edit the CLIPBOARD in vim -->
+    <keybind key="W-e">
+      <action name="Execute" command="foot -T @CLIPBORD vim -c 'r !wl-paste -n' -c 'normal A' -c 'nmap &lt;C-c&gt; :silent! w !wl-copy&lt;CR&gt;:qa!&lt;CR&gt;'" />
+    </keybind>
+
+    <!-- Quick note appended to a remote LOG -->
+    <keybind key="W-u">
+      <action name="Execute" command="foot -W 45x2 -f 'Adwaita Mono:size=40' vim -N -u NONE +start -c 'set noruler' -c 'nmap &lt;C-c&gt; :silent! w !setsid ssh v tee -a LOG &amp; &lt;CR&gt;:qa!&lt;CR&gt;'" />
+    </keybind>
+
+    <keybind key="W-S-e"><action name="Execute" command="sh -c 'PRE_POPULATE=&quot;tk &quot; foot'" /></keybind>
+
+    <!--
+      File manager. Hyprland's SUPER+F (hypr/bindings.lua) is a run-or-raise on
+      Files/Nautilus, which is what runs here now; thunar is not installed.
+      Old command: thunar ~/Downloads (query identifier="thunar").
+    -->
+    <keybind key="W-f">
+      <action name="ForEach">
+        <query identifier="org.gnome.Nautilus" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-nautilus" />
+        </none>
+      </action>
+    </keybind>
+    <keybind key="C-A-f"><action name="Execute" command="foot ranger" /></keybind>
+    <keybind key="W-S-r"><action name="Execute" command="foot -T Ranger ranger" /></keybind>
+
+    <!-- Browser -->
+    <keybind key="W-w">
+      <action name="ForEach">
+        <query identifier="firefox" />
+        <query identifier="Navigator" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="firefox" />
+        </none>
+      </action>
+    </keybind>
+
+    <!--
+      ############ Applications migrated from Hyprland (applications.lua) ############
+      omarchy-launch-* are plain launchers and work fine off Hyprland. The
+      "focus = true" variants in Hyprland go through omarchy-launch-or-focus,
+      which needs hyprctl, so they are expressed as native labwc ForEach
+      run-or-raise instead.
+    -->
+    <keybind key="W-C-Return"><action name="Execute" command="omarchy-launch-terminal-herdr" /></keybind>
+    <keybind key="W-S-d"><action name="Execute" command="omarchy-launch-tui lazydocker" /></keybind>
+    <keybind key="W-S-w"><action name="Execute" command="uwsm-app -- omawrite" /></keybind>
+
+    <!-- Activity monitor (SUPER+CTRL+T) - btop in a terminal, run-or-raise -->
+    <keybind key="W-C-t">
+      <action name="ForEach">
+        <query identifier="org.omarchy.btop" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-tui btop" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- Music TUI (SUPER+SHIFT+ALT+M) -->
+    <keybind key="W-S-A-m">
+      <action name="ForEach">
+        <query identifier="org.omarchy.cliamp" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-tui cliamp" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- Obsidian (SUPER+SHIFT+O) -->
+    <keybind key="W-S-o">
+      <action name="ForEach">
+        <query identifier="obsidian" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="uwsm-app -- obsidian" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- ############ Web apps migrated from Hyprland (applications.lua) ############ -->
+    <keybind key="W-S-A-a"><action name="Execute" command="omarchy-launch-webapp 'https://grok.com'" /></keybind>
+    <keybind key="W-S-c"><action name="Execute" command="omarchy-launch-webapp 'https://app.hey.com/calendar/weeks/'" /></keybind>
+    <keybind key="W-S-A-e">
+      <action name="Execute" command="omarchy-launch-webapp 'https://app.hey.com/messages/new?display=standalone&amp;new_window=true'" />
+    </keybind>
+    <keybind key="W-S-y"><action name="Execute" command="omarchy-launch-webapp 'https://youtube.com/'" /></keybind>
+    <keybind key="W-S-A-x"><action name="Execute" command="omarchy-launch-webapp 'https://x.com/compose/post'" /></keybind>
+
+    <!-- WhatsApp / Google Messages are "focus = true" in Hyprland -> run-or-raise -->
+    <keybind key="W-S-A-g">
+      <action name="ForEach">
+        <query title="*WhatsApp*" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-webapp 'https://web.whatsapp.com/'" />
+        </none>
+      </action>
+    </keybind>
+    <keybind key="W-S-C-g">
+      <action name="ForEach">
+        <query title="*Google Messages*" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-webapp 'https://messages.google.com/web/conversations'" />
+        </none>
+      </action>
+    </keybind>
+
+    <keybind key="W-F1"><action name="Execute" command="ddcutil setvcp 60 0x01" /></keybind>
+
+    <!-- Rofi -->
+    <keybind key="A-F1">
+      <action name="Execute" command="bash -c 'rofi -show drun -modes run -p &quot;$(acpi -b | grep -oP \&quot;[0-9]+%\&quot; | head -1)&quot;'" />
+    </keybind>
+    <keybind key="W-r"><action name="Execute" command="rofi -show run" /></keybind>
+    <keybind key="W-p"><action name="Execute" command="~/helper/X11/rofi/rofi-pass" /></keybind>
+
+    <!-- Network -->
+    <keybind key="W-n"><action name="Execute" command="networkmanager_dmenu" /></keybind>
+    <keybind key="W-S-n"><action name="Execute" command="nmcli device wifi connect pham password zzzzzzzz" /></keybind>
+    <keybind key="W-i"><action name="Execute" command="nm-connection-editor" /></keybind>
+    <keybind key="W-S-i">
+      <action name="ForEach">
+        <query title="Network Manager" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="foot -T 'Network Manager' -W 80x30 nmtui" />
+        </none>
+      </action>
+    </keybind>
+    <keybind key="W-b"><action name="Execute" command="blueman-manager" /></keybind>
+
+    <!-- Audio -->
+    <!--
+    <keybind key="W-a"><action name="Execute" command="foot pulsemixer" /></keybind>
+    -->
+    <!-- Was the dead ob-music; now Hyprland's SUPER+SHIFT+A (ChatGPT web app) -->
+    <keybind key="W-S-a"><action name="Execute" command="omarchy-launch-webapp 'https://chatgpt.com'" /></keybind>
+
+    <!-- Mail -->
+    <keybind key="W-m">
+      <action name="ForEach">
+        <query title="@Mutt" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="sh -c 'foot -T @Mutt -D ~/Downloads mutt; mbsync topo; notify-send -t 8000 &quot;mbsync $?&quot;'" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- Calendar: toggle -->
+    <keybind key="W-v">
+      <action name="ForEach">
+        <query title="Calendar" />
+        <then>
+          <action name="Close" />
+        </then>
+        <none>
+          <action name="Execute" command="foot --hold -T Calendar -o main.pad=100x70 -W 64x9 cal -3" />
+        </none>
+      </action>
+    </keybind>
+
+    <keybind key="W-S-g">
+      <action name="Execute" command="foot --hold -T GPT -W 70x30 ~/helper/bin/gpt/gpt" />
+    </keybind>
+    <keybind key="W-g"><action name="Execute" command="/home/pham/helper/X11/openbox/scripts/ob-colorpicker" /></keybind>
+
+    <keybind key="C-A-v"><action name="Execute" command="foot vim" /></keybind>
+    <keybind key="C-A-n"><action name="Execute" command="foot vim" /></keybind>
+    <keybind key="C-A-h"><action name="Execute" command="foot -T htop --maximized htop" /></keybind>
+    <keybind key="C-A-b"><action name="Execute" command="foot bashtop" /></keybind>
+
+    <!-- Lockscreen / power -->
+    <keybind key="W-BackSpace"><action name="Execute" command="betterlockscreen --lock" /></keybind>
+    <keybind key="W-x"><action name="Execute" command="systemctl suspend" /></keybind>
+    <!-- Was the dead polybar-msg; now Hyprland's SUPER+SHIFT+P (Google Photos) -->
+    <keybind key="W-S-p">
+      <action name="ForEach">
+        <query title="*Google Photos*" />
+        <then>
+          <action name="Focus" />
+          <action name="Raise" />
+        </then>
+        <none>
+          <action name="Execute" command="omarchy-launch-webapp 'https://photos.google.com/'" />
+        </none>
+      </action>
+    </keybind>
+
+    <!-- Compositor control -->
+    <keybind key="W-S-x"><action name="Exit" /></keybind>
+    <keybind key="C-S-Escape"><action name="Exit" /></keybind>
+    <!-- labwc has no Restart action; Reconfigure re-reads all config and theme -->
+    <keybind key="C-S-BackSpace"><action name="Reconfigure" /></keybind>
+    <keybind key="C-S-R"><action name="Reconfigure" /></keybind>
+    <keybind key="W-S-Escape"><action name="Execute" command="xkill" /></keybind>
+
+    <!-- Type the primary selection, then clear it (was: xdotool type "$(xsel -oc)") -->
+    <keybind key="W-space">
+      <action name="Execute" command="sh -c 'sleep 0.3; sel=$(wl-paste -p -n); wl-copy -pc; wtype &quot;$sel&quot;'" />
+    </keybind>
+
+    <!-- Windows whose title starts with @ are hidden, not closed -->
+    <keybind key="A-q">
+      <action name="If">
+        <query title="@*" />
+        <then>
+          <action name="Iconify" />
+        </then>
+        <else>
+          <action name="Close" />
+        </else>
+      </action>
+    </keybind>
+    <keybind key="A-S-q"><action name="Close" /></keybind>
+    <keybind key="A-w"><action name="Iconify" /></keybind>
+    <keybind key="W-d"><action name="ToggleShowDesktop" /></keybind>
+
+    <!-- Activate Move/Resize -->
+    <keybind key="A-r"><action name="Resize" /></keybind>
+    <keybind key="A-m"><action name="Move" /></keybind>
+
+    <!-- Menus -->
+    <keybind key="S-W-space"><action name="ShowMenu" menu="root-menu" /></keybind>
+    <keybind key="C-A-space"><action name="ShowMenu" menu="app-menu" /></keybind>
+    <keybind key="A-space"><action name="ShowMenu" menu="client-menu" /></keybind>
+  </keyboard>
+
+  <!-- ################################ Mouse Settings ################################ -->
+  <mouse>
+    <doubleClickTime>400</doubleClickTime>
+
+    <context name="Frame">
+      <mousebind button="A-Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="W-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="A-Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="Unshade" />
+      </mousebind>
+      <mousebind button="A-Right" action="Drag">
+        <action name="Resize" />
+      </mousebind>
+    </context>
+
+    <context name="TitleBar">
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="A-Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="ShowMenu" menu="client-menu" />
+      </mousebind>
+      <!-- Openbox: scroll up shades and drops focus, scroll down unshades -->
+      <mousebind direction="Up" action="Scroll">
+        <action name="Shade" />
+        <action name="Unfocus" />
+        <action name="Lower" />
+      </mousebind>
+      <mousebind direction="Down" action="Scroll">
+        <action name="Unshade" />
+        <action name="Raise" />
+      </mousebind>
+    </context>
+
+    <context name="Title">
+      <!-- labwc un-maximizes on drag by itself (see resistance/unMaximizeThreshold) -->
+      <mousebind button="Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="A-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="Left" action="DoubleClick">
+        <action name="ToggleMaximize" direction="both" />
+      </mousebind>
+    </context>
+
+    <!-- Border covers Top/Bottom/Left/Right and all four corners -->
+    <context name="Border">
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="Unshade" />
+      </mousebind>
+      <mousebind button="Left" action="Drag">
+        <action name="Resize" />
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="ShowMenu" menu="client-menu" />
+      </mousebind>
+    </context>
+
+    <context name="Client">
+      <mousebind button="A-Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="A-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+    </context>
+
+    <context name="Icon">
+      <mousebind button="Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="Unshade" />
+        <action name="ShowMenu" menu="client-menu" />
+      </mousebind>
+    </context>
+
+    <context name="AllDesktops">
+      <mousebind button="Left" action="Click">
+        <action name="ToggleOmnipresent" />
+      </mousebind>
+    </context>
+
+    <context name="Shade">
+      <mousebind button="Left" action="Click">
+        <action name="ToggleShade" />
+      </mousebind>
+    </context>
+
+    <context name="Iconify">
+      <mousebind button="Left" action="Click">
+        <action name="Iconify" />
+      </mousebind>
+    </context>
+
+    <context name="Maximize">
+      <mousebind button="Left" action="Click">
+        <action name="ToggleMaximize" direction="both" />
+      </mousebind>
+      <mousebind button="Right" action="Click">
+        <action name="ToggleMaximize" direction="horizontal" />
+      </mousebind>
+    </context>
+
+    <context name="Close">
+      <mousebind button="Left" action="Click">
+        <action name="Close" />
+      </mousebind>
+    </context>
+
+    <context name="Desktop">
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="root-menu" />
+      </mousebind>
+      <mousebind button="Middle" action="Press">
+        <action name="ShowMenu" menu="client-list-combined-menu" />
+      </mousebind>
+      <mousebind button="A-Right" action="Press">
+        <action name="ShowMenu" menu="client-list-combined-menu" />
+      </mousebind>
+      <mousebind direction="A-Up" action="Scroll">
+        <action name="GoToDesktop" to="left" />
+      </mousebind>
+      <mousebind direction="A-Down" action="Scroll">
+        <action name="GoToDesktop" to="right" />
+      </mousebind>
+    </context>
+  </mouse>
+
+  <!-- ################################ Input Devices ################################ -->
+  <libinput>
+    <!-- "non-touch" = traditional mice (Logitech Wireless Mouse PID:4022 here).
+         Natural scrolling: wheel down moves the content down. -->
+    <device category="non-touch">
+      <naturalScroll>yes</naturalScroll>
+    </device>
+  </libinput>
+
+  <!-- ################################ Menu Settings ################################ -->
+  <menu>
+    <ignoreButtonReleasePeriod>250</ignoreButtonReleasePeriod>
+    <showIcons>no</showIcons>
+  </menu>
+
+  <!-- ################################ Window Rules ################################ -->
+  <!--
+    Openbox <applications> -> labwc <windowRules>.
+    Dropped: the class="*" rule (its only effect was centring, now done by
+    <placement><policy>center</policy>) and the "obconf" rule (openbox-only tool).
+  -->
+  <windowRules>
+    <!-- No titlebar by default, but keep the border (cyan when focused, see
+         themerc-override). Per-app rules below can override this. -->
+    <windowRule identifier="*">
+      <action name="SetDecorations" decorations="border" forceSSD="no" />
+    </windowRule>
+
+    <windowRule title="TIMER">
+      <skipTaskbar>yes</skipTaskbar>
+      <action name="MoveToEdge" direction="right" snapWindows="no" />
+      <action name="MoveToEdge" direction="down" snapWindows="no" />
+      <action name="ToggleAlwaysOnTop" />
+    </windowRule>
+
+    <!-- Openbox asked for 50% x 50%; ResizeTo is pixels-only, so use a region -->
+    <windowRule title="Network Connections">
+      <action name="SnapToRegion" region="center-half" />
+    </windowRule>
+  </windowRules>
+
+  <!--
+    ############################ DEAD BINDINGS ############################
+    Kept verbatim by request; the binary is NOT installed on this machine:
+
+      W-a            foot pulsemixer                (pulsemixer)
+      W-n            networkmanager_dmenu           (Archcraft script)
+      W-i            nm-connection-editor           (nm-connection-editor)
+      W-b            blueman-manager                (blueman)
+      W-BackSpace    betterlockscreen (lock)        (betterlockscreen; W-C-l runs omarchy-system-lock)
+      W-S-Escape     xkill                          (xkill; labwc's <action name="Kill"/> is the native replacement)
+      W-F1           ddcutil setvcp 60 0x01         (ddcutil)
+      A-F1           rofi ... acpi ...              (acpi; rofi itself is installed but is an X11 build)
+      W-m            ... mutt ... mbsync            (mutt, isync)
+      C-A-f, W-S-r   ranger                         (ranger)
+      C-A-h          htop                           (htop; W-C-t runs btop instead)
+      C-A-b          bashtop                        (bashtop)
+      XF86AudioStop  mpc stop                       (mpc/mpd absent; no Hyprland counterpart)
+      C-Print        ~/helper/X11/image/takeshot    (script exists but needs maim/xclip/xrandr/dunstify - grim+slurp are installed)
+      C-A-Print      screenshot                     (Archcraft script)
+      W-g            ob-colorpicker                 (script exists but needs xcolor/xclip; W-Print runs hyprpicker)
+      W-t, W-S-t     show_timer.sh                  (script exists but drives windows with xdotool)
+
+    Dead bindings that the Hyprland migration replaced (old command kept in a
+    comment next to each keybind):
+      W-S-a          ob-music              -> ChatGPT web app
+      W-S-p          polybar-msg cmd toggle-> Google Photos web app
+      W-f            thunar ~/Downloads    -> Files/Nautilus run-or-raise
+      Print          "omarchy capture screent fullscreen" (typo) -> omarchy-capture-screenshot
+      W-5            takeshot (in5 flag)   -> omarchy-labwc-screenshot-delayed 5
+      XF86Audio*     ob-volume / mpc       -> omarchy-audio-* / omarchy-shell media
+      XF86MonBright* ob-brightness         -> omarchy-brightness-display
+
+    ############################ DROPPED BINDINGS ############################
+      W-y    yad prompt, then xdotool set_window (rename) to @NAME
+      W-S-y  strip the leading @ from the current window's name
+    Renaming another client's title is not possible under Wayland - there is no
+    protocol for it - so both bindings were removed rather than translated.
+    (W-S-y is free again and now opens the YouTube web app.)
+
+    ################## HYPRLAND BINDINGS NOT MIGRATED ##################
+
+    1. Window / workspace management - excluded by request. Everything in
+       default/hypr/bindings/tiling.lua: split, pseudo, float, tiled fullscreen
+       (fullscreen inside the window), full width, save/restore width, workspace
+       layout toggle, directional focus, scratchpad, move-workspace-to-monitor,
+       swap window, resize chords (SUPER +/- minus/equal), mouse binds, window
+       grouping, and monitor scaling. Also the window-management overrides in
+       hypr/bindings.lua (ALT+Q close, SUPER+K maximize, SUPER+T float,
+       SUPER+O pop out, SUPER+D restore to tiling, ALT+TAB switcher) - the
+       labwc equivalents are already defined above.
+
+       Since added, because labwc has native actions for them (see the block
+       after the resize chords): fullscreen (W-C-f), sticky/pop-out (W-8),
+       screen zoom (W-C-z / W-S-C-z / W-C-A-z), monitor focus (C-A-Tab),
+       and workspaces 1-4 - jump (W-Tab / W-S-Tab / W-C-Tab, W-A-1..4) and
+       move window (W-S-1..4, W-S-A-1..4).
+
+       Still absent because labwc has no such concept: tiling layouts and
+       window groups, directional focus (no "focus left" action exists),
+       scratchpad, close-all-windows, and per-window transparency or gaps.
+
+    2. Needs hyprctl / Hyprland IPC - excluded by request:
+       SUPER+BACKSPACE, SUPER+SHIFT+BACKSPACE     window transparency / gaps toggle
+       SUPER+CTRL+BACKSPACE                       single-window square aspect
+       SUPER+CTRL+DELETE, +ALT+DELETE             laptop display / mirroring
+       SUPER+CTRL+N                               nightlight (hyprctl hyprsunset)
+       SUPER+K / SUPER+SHIFT+K                    omarchy-menu-keybindings (reads
+                                                  Hyprland's own bind list)
+       SUPER+ALT+SHIFT+F                          Files in terminal cwd
+                                                  (hyprctl activewindow)
+       SUPER+ALT+[ / ]                            webcam overlay resize
+       SUPER+C / SUPER+V / SUPER+X                universal copy/paste/cut - these
+                                                  inject keys with Hyprland's
+                                                  sendkeystate dispatcher; labwc
+                                                  has no equivalent action
+       switch:on/off:Lid Switch                   lid handling; not a keybind, and
+                                                  labwc has no switch bindings
+       RETURN/TAB/arrows inside a slurp selection Hyprland binds these only while
+                                                  the selection layer is open
+
+    3. Key already taken by a live binding in this file - NOT migrated, listed
+       here so the choice is visible:
+       SUPER+SPACE           Omarchy menu        (W-space types the primary selection)
+       SUPER+SHIFT+SPACE     Toggle top bar      (S-W-space opens the root menu)
+       SUPER+RETURN          Terminal            (W-Return raises the @Work terminal)
+       SUPER+SHIFT+B         Browser             (W-S-b is the BANNER terminal;
+                                                  W-S-Return and W-w open a browser)
+       SUPER+SHIFT+N         Editor              (W-S-n joins the "pham" wifi)
+       SUPER+SHIFT+G         Signal              (W-S-g opens the GPT terminal)
+       SUPER+SHIFT+E         Email web app       (W-S-e opens a "tk " terminal)
+       SUPER+SHIFT+X         X web app           (W-S-x exits labwc)
+       SUPER+CTRL+1..9       Bar panels          (hypr/bindings.lua moved these to
+                                                  SUPER+1..9, but W-1/3/5/9 are
+                                                  taken here, so W-C-1..9 is used)
+       SUPER+S               Screenshot          (W-s takes a region screenshot)
+
+    4. Deliberately dropped upstream by hypr/bindings.lua and therefore not
+       migrated: SUPER+SHIFT+SLASH (1Password) and SUPER+SHIFT+F (File manager,
+       moved to SUPER+F -> W-f).
+  -->
+
+</labwc_config>

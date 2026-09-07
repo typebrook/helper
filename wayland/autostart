@@ -1,0 +1,62 @@
+# labwc autostart
+
+# Omarchy's shell (Quickshell) is the notification daemon on this machine - it
+# owns org.freedesktop.Notifications - and also draws the status bar and OSD.
+# Under Hyprland it is started by omarchy-launch-shell as a child of the
+# compositor; nothing starts it under labwc, so do it here.
+#
+# Deliberately NOT using omarchy-launch-shell: its crash-restart supervisor
+# probes the compositor with `hyprctl -j monitors`, which always fails under
+# labwc, so it would give up instead of relaunching. It also assumes
+# $OMARCHY_PATH is exported into the session. Calling quickshell directly
+# avoids both. Logging matches omarchy's (journal, tag omarchy-shell).
+#
+# Verified by running it under a nested labwc: the shell starts, loads its
+# config and brings up its idle service. What degrades is narrow -- Quickshell
+# logs "Compositor does not support hyprland-toplevel-mapping-v1", so the
+# widgets that import Quickshell.Hyprland (bar/widgets/Workspaces.qml,
+# bar/widgets/KeyboardLayout.qml, and toplevel-derived bits of Bar.qml and
+# Ui/PopupCard.qml) will be inert. The notifications plugin does NOT import it,
+# and the lock plugin uses Quickshell's own session-lock (a wlroots protocol
+# labwc supports), so both should work.
+#
+# The nested test could not prove the notification-daemon role, because the
+# Hyprland instance already held org.freedesktop.Notifications. Quickshell
+# logged "Registration will be attempted again if the active service is
+# unregistered", so in a real labwc session -- with no Hyprland running -- it
+# should claim the name. Confirm with `notify-send hello` once you are in.
+QS_DISABLE_FILE_WATCHER=1 QS_NO_RELOAD_POPUP=1 \
+  systemd-cat -t omarchy-shell -- quickshell -n -p /usr/share/omarchy/shell &
+
+# Background colour, stands in for the Archcraft ~/.fehbg until swaybg is installed.
+# swaybg -c '#2F343F' >/dev/null 2>&1 &
+
+# Activate the session target, the way `uwsm start Hyprland` does for the
+# Hyprland session. labwc ships labwc-session.target (BindsTo
+# graphical-session.target) but deliberately does not activate it -- see
+# labwc(1) "SYSTEMD INTEGRATION". Without this, every user unit that is
+# WantedBy=graphical-session.target stays dead in a labwc session, which is why
+# voxtype.service never came up here even though it is enabled.
+#
+# This starts voxtype.service (the push-to-talk daemon behind the F9 and
+# W-C-x binds in rc.xml) plus the other omarchy graphical-session units.
+# Verified in a live labwc session on 2026-09-02:
+#
+#   voxtype                          active   (model loaded, `voxtype status` -> idle)
+#   bt-agent                         active
+#   omarchy-fcitx5                   active
+#   omarchy-migrate-notify           ran and exited (oneshot)
+#   omarchy-crash-watch              skipped, toggles/crash-capture-off is set
+#   omarchy-sleep-lock               skipped, ConditionEnvironment=OMARCHY_PATH unset
+#   omarchy-recover-internal-monitor skipped, its toggle file does not exist
+#
+# The skips are each unit's own Condition= doing its job, not breakage.
+#
+# labwc has already run `systemctl --user import-environment` by the time this
+# script executes, so WAYLAND_DISPLAY / DISPLAY / XDG_CURRENT_DESKTOP are in
+# the user manager's environment and the daemons inherit a usable session.
+#
+# The old worry about clashing with the uwsm/Hyprland session does not apply:
+# only one graphical session owns the user manager at a time, and ~/.config/
+# labwc/shutdown tears the target back down on exit.
+systemctl --user --no-block start labwc-session.target
