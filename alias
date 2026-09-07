@@ -193,8 +193,7 @@ alias lock='sudo chattr +i' # Make file undeletable
 alias unlock='sudo chattr -i'
 alias chx='chmod +x'
 alias chr='chmod +r'
-alias findn='find . -iname'
-name() { find . -iname "$1"; }
+alias name='find . -iname'
 trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
 rmrf() { rm -rf $@; }
 alias df='df -h'
@@ -719,6 +718,7 @@ wifi.connect() {
 issue.open() {
   find issues/ -type f -name '*-*md'  | while read f; do grep -q '^state: open' $f || continue; echo -n $f; grep ^labels: $f | cut -d: -f2- ; done | sort | column -t
 }
+alias os=omarchy-shell
 # }}}
 
 # vim:fdm=marker fdl=0
