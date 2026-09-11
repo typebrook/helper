@@ -117,8 +117,8 @@ cnoremap <C-d> <Del>
 cnoremap <C-h> <BackSpace>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
-cnoremap <C-k> <C-x>d$<C-c><space><BS>
-cnoremap <M-d> <C-x>de<C-c><space><BS>
+cnoremap <C-k> <C-\>estrpart(getcmdline(),0,getcmdpos()-1)<CR>
+cnoremap <M-d> <C-\>estrpart(getcmdline(),0,getcmdpos()-1).substitute(strpart(getcmdline(),getcmdpos()-1),'^\s*\S*','','')<CR>
 
 " Moving with wrap
 inoremap <m-j> <c-\><c-o>gj

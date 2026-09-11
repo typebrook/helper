@@ -56,14 +56,8 @@ set modelineexpr " More support in modeline
 " Turn persistent undo on
 " means that you can undo even when you close a buffer/VIM
 set undofile
-if has('nvim')
-  silent! call mkdir(expand('~/.vim/.undodir/nvim'), "p", 0755)
-  set undodir=~/.vim/.undodir/nvim
-  set verbosefile=/tmp/nvim.log
-else
-  silent! call mkdir(expand('~/.vim/.undodir/vim'), "p", 0755)
-  set undodir=~/.vim/.undodir/vim
-endif
+silent! call mkdir(expand('~/.vim/.undodir/vim'), "p", 0755)
+set undodir=~/.vim/.undodir/vim
 
 " Apply plugin and indent by filetype
 filetype plugin indent on
@@ -71,7 +65,7 @@ filetype plugin indent on
 " Set to auto read when a file is changed from the outside
 " Unnamed buffer like CmdWindows should prevent this
 set autoread
-autocmd FocusGained,BufEnter * checktime
+autocmd FocusGained,BufEnter * if getcmdwintype() == '' | checktime | endif
 
 " spell
 set nospell
@@ -110,9 +104,6 @@ set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:
 set laststatus=2            " Always show the status line
 set ruler                    " Show cursor position
 set wildmenu
-if has('nvim')
-  set wildoptions=pum,fuzzy
-endif
 
 " Format of error message
 set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
@@ -121,11 +112,8 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 set splitright splitbelow
 
 " Set signcolumn
-if has('nvim')
-  set signcolumn=yes:3
-else
-  set signcolumn=yes
-endif
+set signcolumn=yes
+
 " Custom sign from help page :h sign
 sign define piet text=>> texthl=Search
 
@@ -231,12 +219,7 @@ set foldlevel=2
 set fillchars=fold:\ ,foldopen:▽,foldsep:│,foldclose:▶
 set foldopen-=search fdo-=mark
 
-let g:defaut_foldcolumn = ""
-if has('nvim')
-  let g:defaut_foldcolumn = "auto:3"
-else
-  let g:defaut_foldcolumn = 3
-endif
+let g:defaut_foldcolumn = 3
 let &foldcolumn = g:defaut_foldcolumn
 
 " }}}

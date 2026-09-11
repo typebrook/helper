@@ -914,7 +914,7 @@
         <action name="Focus"/>
         <action name="Raise"/>
       </mousebind>
-      <mousebind action="Drag" button="W-Left">
+      <mousebind action="Drag" button="A-Left">
         <action name="Move"/>
       </mousebind>
       <mousebind action="Press" button="A-Right">
