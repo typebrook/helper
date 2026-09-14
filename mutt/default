@@ -9,7 +9,7 @@ unset ssl_starttls
 set header_cache = ~/.cache/mutt
 set message_cachedir = ~/.cache/mutt.message
 set edit_headers = yes
-set mailcap_path = ~/.config/mutt/mailcap
+set mailcap_path = ~/helper/mutt/mailcap
 set recall = no
 set editor = vim
 
