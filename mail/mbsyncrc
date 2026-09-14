@@ -3,10 +3,11 @@
 #
 # Usage:
 #   mbsync topo        # sync the whole account
-#   mbsync -a          # sync every channel in this file
+#   mbsync topo-fetch  # INBOX only, read-only pull (goimapnotify hook)
+#   mbsync -a          # every channel, i.e. topo + a redundant topo-fetch
 #   mbsync -l topo     # list-only: show which folders would sync
 #
-# Local maildir lives under ~/.mail/topo
+# Local maildir lives under ~/Maildir
 #
 # Login note: muttrc's imaps://pham@mail.topo.tw:993 means the LOGIN user is
 # "pham" on host mail.topo.tw; "pham@mail.topo.tw" is only the `pass` entry name.
@@ -38,4 +39,17 @@ Near :topo-local:
 Patterns * !"mbox" !"mbox/*"
 Create Both
 Expunge Both
+SyncState *
+
+# INBOX-only pull used by the goimapnotify onNewMail hook: it just needs the
+# new message on disk so the hook can read its Subject header, so nothing is
+# ever pushed or expunged upstream. Shares ~/Maildir/.mbsyncstate with "topo"
+# (SyncState lives with the mailbox, not the channel), so the two stay in step.
+Channel topo-fetch
+Far :topo-remote:
+Near :topo-local:
+Patterns "INBOX"
+Sync Pull
+Create Near
+Expunge None
 SyncState *

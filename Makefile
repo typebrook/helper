@@ -57,6 +57,17 @@ mutt: ~/.local/share/application
 	ln -sf `pwd`/mutt/mutt.desktop $<
 	pass mail/mutt.hooks >mutt/hooks.topo
 
+mbsync:
+	ln -sf `pwd`/mail/mbsyncrc ~/.mbsyncrc
+
+goimapnotify: mbsync
+	mkdir -p ~/.config/goimapnotify ~/.config/systemd/user
+	ln -sf `pwd`/mail/goimapnotify.yaml ~/.config/goimapnotify/goimapnotify.yaml
+	ln -sf `pwd`/mail/on-new-mail.sh ~/.config/goimapnotify/on-new-mail.sh
+	ln -sf `pwd`/mail/goimapnotify.service ~/.config/systemd/user/goimapnotify.service
+	systemctl --user daemon-reload
+	systemctl --user enable --now goimapnotify.service
+
 tmux:
 	ln -sf `pwd`/tmux/tmux.conf ~/.tmux.conf
 

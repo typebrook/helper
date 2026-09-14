@@ -1,0 +1,19 @@
+[Unit]
+Description=goimapnotify IMAP IDLE watcher (topo account)
+Documentation=https://gitlab.com/shackra/goimapnotify
+PartOf=graphical-session.target
+After=graphical-session.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/goimapnotify -conf %h/.config/goimapnotify/goimapnotify.yaml
+Restart=always
+RestartSec=10
+
+# pass/gpg-agent and notify-send need the session sockets
+Environment=XDG_RUNTIME_DIR=%t
+Environment=GNUPGHOME=%h/.gnupg
+
+[Install]
+WantedBy=graphical-session.target

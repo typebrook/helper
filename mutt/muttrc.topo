@@ -16,16 +16,16 @@ set signature = "~/.config/mutt/.signature"
 #set autocrypt = yes
 
 # For contacts
-set display_filter = ~/.config/mutt/message_filter.sh
-source ~/.config/mutt/alias.topo
-source ~/.config/mutt/hooks.topo
+set display_filter = ~/helper/mutt/message_filter.sh
+source ~/helper/mutt/alias.topo
+source ~/helper/mutt/hooks.topo
 
 ## Basic Mailbox
 set spoolfile = "+"
-#set mbox= "+mbox"
+set mbox= "+Archive"
 #set move = yes
-#set record = "+Sent"
-#set trash = "+Trash"
+set record = "+Sent"
+set trash = "+Trash"
 #set postponed = "+Drafts"
 set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 
