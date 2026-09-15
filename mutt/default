@@ -52,6 +52,7 @@ alternative_order text/html text/plain text/enriched
 auto_view text/html
 # Macro to open html with css
 macro pager l "v/(html|zip)<Return>xq<Return>" "Open html file"
+set abort_unmodified = ask-no
 
 # Vim-style key binding, \C means Ctrl
 macro attach e "<pipe-entry>vim -<Return>" "edit attachment with vim"
