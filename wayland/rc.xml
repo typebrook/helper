@@ -15,7 +15,7 @@
       labwc ForEach + <query> + <none> run-or-raise. No xdotool anywhere.
     * Commands whose binaries are not installed on this machine are kept
       VERBATIM by request (polybar-msg, dunstctl, thunar, yad, pulsemixer,
-      betterlockscreen, mpc, mutt, ranger, xkill, ob-*, takeshot, ...).
+      betterlockscreen, mpc, ranger, xkill, ob-*, takeshot, ...).
       See the DEAD BINDINGS comment at the bottom of this file.
 -->
 <labwc_config>
@@ -192,7 +192,7 @@
     <keybind key="W-z"><action name="ToggleMagnify" /></keybind>
 
     <!-- Notifications / status -->
-    <keybind key="W-grave"><action name="Execute" command="~/helper/X11/notify_status.sh" /></keybind>
+    <keybind key="W-grave"><action name="Execute" command="omarchy notification time" /></keybind>
     <!-- dunst is not installed; omarchy-shell (Quickshell) owns notifications here -->
     <keybind key="W-q"><action name="Execute" command="omarchy-shell notifications dismissOne" /></keybind>
     <!-- Invoke the last notification's default action (Hyprland's SUPER+ALT+comma).
@@ -328,11 +328,10 @@
     </keybind>
     <!-- Colour picker; replaces the dead ob-colorpicker on W-g -->
     <keybind key="W-Print"><action name="Execute" command="sh -c 'pkill hyprpicker || hyprpicker -a'" /></keybind>
-    <keybind key="W-C-Print"><action name="Execute" command="omarchy-capture-text" /></keybind>
     <!-- Personal overrides from hypr/bindings.lua: SUPER+SHIFT+S / SUPER+ALT+S -->
     <keybind key="W-S-s"><action name="Execute" command="omarchy-capture-text" /></keybind>
     <keybind key="W-A-s"><action name="Execute" command="capture-text-vertical" /></keybind>
-    <keybind key="W-C-period"><action name="Execute" command="omarchy-transcode" /></keybind>
+    <!-- <keybind key="W-C-period"><action name="Execute" command="omarchy-transcode" /></keybind> -->
 
     <!-- Menus (utilities.lua) -->
     <keybind key="W-A-space"><action name="Execute" command="omarchy-menu toggle apps" /></keybind>
@@ -376,20 +375,6 @@
     <keybind key="W-4"><action name="Execute" command="omarchy-shell shell toggle omarchy.clock" /></keybind>
     <keybind key="W-5"><action name="Execute" command="omarchy-shell shell toggle omarchy.monitor" /></keybind>
     <keybind key="W-6"><action name="Execute" command="omarchy-shell shell toggle omarchy.tray" /></keybind>
-    <!--
-      Bar panel 1..9. hypr/bindings.lua remapped these from SUPER+CTRL+N to plain
-      SUPER+N, but W-1/W-3/W-5/W-9 are already taken here, so the Omarchy default
-      chord is used instead.
-    -->
-    <keybind key="W-C-1"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 1" /></keybind>
-    <keybind key="W-C-2"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 2" /></keybind>
-    <keybind key="W-C-3"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 3" /></keybind>
-    <keybind key="W-C-4"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 4" /></keybind>
-    <keybind key="W-C-5"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 5" /></keybind>
-    <keybind key="W-C-6"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 6" /></keybind>
-    <keybind key="W-C-7"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 7" /></keybind>
-    <keybind key="W-C-8"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 8" /></keybind>
-    <keybind key="W-C-9"><action name="Execute" command="omarchy-shell -q shell togglePanelAt right 9" /></keybind>
 
     <!-- System toggles (utilities.lua) -->
     <keybind key="W-C-i"><action name="Execute" command="omarchy-toggle-idle" /></keybind>
@@ -460,7 +445,7 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="omarchy-launch-nautilus" />
+          <action name="Execute" command="nautilus file:///home/pham/Downloads" />
         </none>
       </action>
     </keybind>
@@ -598,11 +583,6 @@
     <keybind key="W-b"><action name="Execute" command="blueman-manager" /></keybind>
 
     <!-- Audio -->
-    <!--
-    <keybind key="W-a"><action name="Execute" command="foot pulsemixer" /></keybind>
-    -->
-    <!-- Was the dead ob-music; now Hyprland's SUPER+SHIFT+A (ChatGPT web app) -->
-    <keybind key="W-S-a"><action name="Execute" command="omarchy-launch-webapp 'https://chatgpt.com'" /></keybind>
 
     <!-- Mail -->
     <keybind key="W-m">
@@ -613,7 +593,7 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="sh -c 'foot -T @Mutt -D ~/Downloads mutt; mbsync topo; notify-send -t 8000 &quot;mbsync $?&quot;'" />
+          <action name="Execute" command="sh -c 'mbsync topo-fetch &amp;&gt;/dev/null &amp; foot -T @Mutt -D ~/Downloads mutt; mbsync topo; omarchy notification send &quot;mbsync $?&quot;'" />
         </none>
       </action>
     </keybind>
@@ -907,7 +887,6 @@
       W-S-Escape     xkill                          (xkill; labwc's <action name="Kill"/> is the native replacement)
       W-F1           ddcutil setvcp 60 0x01         (ddcutil)
       A-F1           rofi ... acpi ...              (acpi; rofi itself is installed but is an X11 build)
-      W-m            ... mutt ... mbsync            (mutt, isync)
       C-A-f, W-S-r   ranger                         (ranger)
       C-A-h          htop                           (htop; W-C-t runs btop instead)
       C-A-b          bashtop                        (bashtop)
