@@ -3,10 +3,26 @@
 GENERATION_HINT="Generate with default config"
 
 _save_to_clipboard() {
-  # Copy the given password into PRIMARY selection and kill it in 30s
-  echo "$1" | sed -n 1p | tr -d '\n' | xsel -i -t 30000
-  # Copy the second non-empty line (most of the time, account name) into CLIPBOARD selection
-  echo "$1" | sed -n '1d;/^./{p;q}' | tr -d '\n' | xsel -ib
+  # First line is the password, second non-empty line is usually the account name
+  local password account wl_pid
+  password="$(echo "$1" | sed -n 1p | tr -d '\n')"
+  account="$(echo "$1" | sed -n '1d;/^./{p;q}' | tr -d '\n')"
+
+  if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    # Copy the password into PRIMARY selection and kill it in 30s
+    # wl-copy is kept in the foreground so it can be killed later, it also
+    # exits on its own once another client takes over the selection
+    printf %s "$password" | wl-copy --sensitive --primary --foreground >/dev/null 2>&1 &
+    wl_pid=$!
+    ( sleep 30; kill $wl_pid ) >/dev/null 2>&1 &
+    # Copy the account name into CLIPBOARD selection
+    [ -n "$account" ] && printf %s "$account" | wl-copy >/dev/null 2>&1
+  else
+    # Copy the password into PRIMARY selection and kill it in 30s
+    printf %s "$password" | xsel -i -t 30000
+    # Copy the account name into CLIPBOARD selection
+    printf %s "$account" | xsel -ib
+  fi
 }
 
 # Show extra message
