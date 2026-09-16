@@ -1,0 +1,44 @@
+#! /usr/bin/bash
+#
+# Extract a clip from a YouTube video as WEBM, without downloading the
+# full video to disk first: yt-dlp resolves the direct media URL(s),
+# and ffmpeg streams straight from those URLs, seeking/trimming on
+# the fly. Only the final clip ever touches disk.
+#
+# Usage: yt-clip <video-url> <start-time> <end-time> [output.webm]
+#   times are anything ffmpeg understands, e.g. 90, 00:01:30, 1:30.5
+
+set -euo pipefail
+
+if [ $# -lt 3 ]; then
+  echo "Usage: $(basename "$0") <video-url> <start-time> <end-time> [output.webm]" >&2
+  exit 1
+fi
+
+URL=$1
+START=$2
+END=$3
+OUT=${4:-clip_$(date +%s).webm}
+
+mapfile -t STREAM_URLS < <(yt-dlp -f "bv*+ba/b" -g "$URL")
+
+case "${#STREAM_URLS[@]}" in
+  2)
+    ffmpeg -ss "$START" -to "$END" -i "${STREAM_URLS[0]}" \
+           -ss "$START" -to "$END" -i "${STREAM_URLS[1]}" \
+           -map 0:v:0 -map 1:a:0 \
+           -c:v libx264 -c:a aac -movflags +faststart \
+           "$OUT"
+    ;;
+  1)
+    ffmpeg -ss "$START" -to "$END" -i "${STREAM_URLS[0]}" \
+           -c:v libx264 -c:a aac -movflags +faststart \
+           "$OUT"
+    ;;
+  *)
+    echo "yt-dlp returned an unexpected number of stream URLs" >&2
+    exit 1
+    ;;
+esac
+
+echo "Saved clip to $OUT"
