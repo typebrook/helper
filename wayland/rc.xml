@@ -563,7 +563,7 @@
 
     <!-- Rofi -->
     <keybind key="A-F1">
-      <action name="Execute" command="bash -c 'rofi -show drun -modes run -p &quot;$(acpi -b | grep -oP \&quot;[0-9]+%\&quot; | head -1)&quot;'" />
+      <action name="Execute" command="bash -c 'rofi -show drun -show-icons -modes run -p &quot;$(acpi -b | grep -oP \&quot;[0-9]+%\&quot; | head -1)&quot;'" />
     </keybind>
     <keybind key="W-r"><action name="Execute" command="rofi -show run" /></keybind>
     <keybind key="W-p"><action name="Execute" command="~/helper/X11/rofi/rofi-pass" /></keybind>
@@ -604,7 +604,11 @@
       </action>
     </keybind>
 
-    <!-- Calendar: toggle -->
+    <!-- Calendar: toggle.
+         foot's "hold" flag was enough here, but alacritty drops whatever the
+         child wrote if the child exits at once (plain "-e cal -3" paints an
+         empty window, reproducible with alacritty's ref-test mode), so the
+         shell stays alive on "read" instead. Enter closes it, as does W-v. -->
     <keybind key="W-v">
       <action name="ForEach">
         <query title="Calendar" />
@@ -612,7 +616,7 @@
           <action name="Close" />
         </then>
         <none>
-          <action name="Execute" command="alacritty --hold -T Calendar -o window.padding.x=100 -o window.padding.y=70 -o window.dimensions.columns=64 -o window.dimensions.lines=9 -e cal -3" />
+          <action name="Execute" command="alacritty -T Calendar -o window.padding.x=100 -o window.padding.y=70 -o window.dimensions.columns=64 -o window.dimensions.lines=9 -e sh -c 'cal -3; read -r _'" />
         </none>
       </action>
     </keybind>
