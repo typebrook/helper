@@ -3,14 +3,18 @@
   labwc configuration, migrated from ~/helper/X11/openbox/rc.xml (Openbox/Archcraft).
 
   Translation notes:
-    * Terminal is foot (alacritty is not installed). Flag map:
-        title X              -> -T X
-        -o window.dimensions -> -W COLSxLINES
-        -o window.padding    -> -o main.pad=XxY
-        -o font.size=N       -> -f "Adwaita Mono:size=N"   (family from foot.ini)
-        working-directory D  -> -D D
-        window.startup_mode=Maximized -> the foot "maximized" flag
-        -e is accepted by foot but ignored, so it has been dropped.
+    * Terminal is alacritty (it is what xdg-terminals.list selects). Flag map
+      from the foot commands this file used to carry (XML comments cannot hold
+      a double hyphen, so long options are written without their leading dashes):
+        -T X                 -> -T X            (unchanged, and so is "hold")
+        -W COLSxLINES        -> -o window.dimensions.columns=COLS
+                                -o window.dimensions.lines=LINES
+        -o main.pad=XxY      -> -o window.padding.x=X -o window.padding.y=Y
+        -f 'Adwaita Mono:N'  -> -o font.size=N  (family from alacritty.toml)
+        -D D                 -> working-directory D
+        "maximized" flag     -> -o window.startup_mode="Maximized"
+      foot took the command to run as a positional argument; alacritty needs
+      -e, and -e must be the last flag on the line.
     * Every "xdotool search by name, else launch" pattern is now a native
       labwc ForEach + <query> + <none> run-or-raise. No xdotool anywhere.
     * Commands whose binaries are not installed on this machine are kept
@@ -133,7 +137,7 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="sh -c 'env fullrc=false foot -T @LABWC_CONFIG -W 70x32 vim -S ~/.config/labwc/reconfigure.vim ~/.config/labwc/rc.xml'" />
+          <action name="Execute" command="sh -c 'env fullrc=false alacritty -T @LABWC_CONFIG -o window.dimensions.columns=70 -o window.dimensions.lines=32 -e vim -S ~/.config/labwc/reconfigure.vim ~/.config/labwc/rc.xml'" />
         </none>
       </action>
     </keybind>
@@ -408,13 +412,13 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="foot -T @Work -D ~/Downloads bash" />
+          <action name="Execute" command="alacritty -T @Work --working-directory ~/Downloads -e bash" />
         </none>
       </action>
     </keybind>
 
     <keybind key="W-S-b">
-      <action name="Execute" command="foot -T BANNER --hold -o main.pad=36x36 -W 35x1 -f 'Adwaita Mono:size=60' ~/helper/bin/unix/center_text.sh" />
+      <action name="Execute" command="alacritty -T BANNER --hold -o window.padding.x=36 -o window.padding.y=36 -o window.dimensions.columns=35 -o window.dimensions.lines=1 -o font.size=60 -e ~/helper/bin/unix/center_text.sh" />
     </keybind>
 
     <keybind key="W-t"><action name="Execute" command="~/helper/X11/show_timer.sh --context" /></keybind>
@@ -422,15 +426,15 @@
 
     <!-- Edit the CLIPBOARD in vim -->
     <keybind key="W-e">
-      <action name="Execute" command="foot -T @CLIPBORD vim -c 'r !wl-paste -n' -c 'normal A' -c 'nmap &lt;C-c&gt; :silent! w !wl-copy&lt;CR&gt;:qa!&lt;CR&gt;'" />
+      <action name="Execute" command="alacritty -T @CLIPBORD -e vim -c 'r !wl-paste -n' -c 'normal A' -c 'nmap &lt;C-c&gt; :silent! w !wl-copy&lt;CR&gt;:qa!&lt;CR&gt;'" />
     </keybind>
 
     <!-- Quick note appended to a remote LOG -->
     <keybind key="W-u">
-      <action name="Execute" command="foot -W 45x2 -f 'Adwaita Mono:size=40' vim -N -u NONE +start -c 'set noruler' -c 'nmap &lt;C-c&gt; :silent! w !setsid ssh v tee -a LOG &amp; &lt;CR&gt;:qa!&lt;CR&gt;'" />
+      <action name="Execute" command="alacritty -o window.dimensions.columns=45 -o window.dimensions.lines=2 -o font.size=40 -e vim -N -u NONE +start -c 'set noruler' -c 'nmap &lt;C-c&gt; :silent! w !setsid ssh v tee -a LOG &amp; &lt;CR&gt;:qa!&lt;CR&gt;'" />
     </keybind>
 
-    <keybind key="W-S-e"><action name="Execute" command="sh -c 'PRE_POPULATE=&quot;tk &quot; foot'" /></keybind>
+    <keybind key="W-S-e"><action name="Execute" command="sh -c 'PRE_POPULATE=&quot;tk &quot; alacritty'" /></keybind>
 
     <!--
       File manager. Hyprland's SUPER+F (hypr/bindings.lua) is a run-or-raise on
@@ -449,8 +453,8 @@
         </none>
       </action>
     </keybind>
-    <keybind key="C-A-f"><action name="Execute" command="foot ranger" /></keybind>
-    <keybind key="W-S-r"><action name="Execute" command="foot -T Ranger ranger" /></keybind>
+    <keybind key="C-A-f"><action name="Execute" command="alacritty -e ranger" /></keybind>
+    <keybind key="W-S-r"><action name="Execute" command="alacritty -T Ranger -e ranger" /></keybind>
 
     <!-- Browser -->
     <keybind key="W-w">
@@ -576,7 +580,7 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="foot -T 'Network Manager' -W 80x30 nmtui" />
+          <action name="Execute" command="alacritty -T 'Network Manager' -o window.dimensions.columns=80 -o window.dimensions.lines=30 -e nmtui" />
         </none>
       </action>
     </keybind>
@@ -594,7 +598,7 @@
         </then>
         <none>
           <action name="Execute">
-            <command>sh -c 'mbsync topo-fetch &amp;&gt;/dev/null &amp; foot -T @Mutt -D ~/Downloads mutt; mbsync topo; omarchy notification send "mbsync $?"'</command>
+            <command>sh -c 'mbsync topo-fetch &amp;&gt;/dev/null &amp; alacritty -T @Mutt --working-directory ~/Downloads -e mutt; mbsync topo; omarchy notification send "mbsync $?"'</command>
           </action>
         </none>
       </action>
@@ -608,20 +612,20 @@
           <action name="Close" />
         </then>
         <none>
-          <action name="Execute" command="foot --hold -T Calendar -o main.pad=100x70 -W 64x9 cal -3" />
+          <action name="Execute" command="alacritty --hold -T Calendar -o window.padding.x=100 -o window.padding.y=70 -o window.dimensions.columns=64 -o window.dimensions.lines=9 -e cal -3" />
         </none>
       </action>
     </keybind>
 
     <keybind key="W-S-g">
-      <action name="Execute" command="foot --hold -T GPT -W 70x30 ~/helper/bin/gpt/gpt" />
+      <action name="Execute" command="alacritty --hold -T GPT -o window.dimensions.columns=70 -o window.dimensions.lines=30 -e ~/helper/bin/gpt/gpt" />
     </keybind>
     <keybind key="W-g"><action name="Execute" command="/home/pham/helper/X11/openbox/scripts/ob-colorpicker" /></keybind>
 
-    <keybind key="C-A-v"><action name="Execute" command="foot vim" /></keybind>
-    <keybind key="C-A-n"><action name="Execute" command="foot vim" /></keybind>
-    <keybind key="C-A-h"><action name="Execute" command="foot -T htop --maximized htop" /></keybind>
-    <keybind key="C-A-b"><action name="Execute" command="foot bashtop" /></keybind>
+    <keybind key="C-A-v"><action name="Execute" command="alacritty -e vim" /></keybind>
+    <keybind key="C-A-n"><action name="Execute" command="alacritty -e vim" /></keybind>
+    <keybind key="C-A-h"><action name="Execute" command="alacritty -T htop -o 'window.startup_mode=&quot;Maximized&quot;' -e htop" /></keybind>
+    <keybind key="C-A-b"><action name="Execute" command="alacritty -e bashtop" /></keybind>
 
     <!-- Lockscreen / power -->
     <keybind key="W-BackSpace"><action name="Execute" command="betterlockscreen --lock" /></keybind>
@@ -881,7 +885,7 @@
     ############################ DEAD BINDINGS ############################
     Kept verbatim by request; the binary is NOT installed on this machine:
 
-      W-a            foot pulsemixer                (pulsemixer)
+      W-a            alacritty -e pulsemixer        (pulsemixer)
       W-n            networkmanager_dmenu           (Archcraft script)
       W-i            nm-connection-editor           (nm-connection-editor)
       W-b            blueman-manager                (blueman)
