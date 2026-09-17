@@ -593,7 +593,9 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="sh -c 'mbsync topo-fetch &amp;&gt;/dev/null &amp; foot -T @Mutt -D ~/Downloads mutt; mbsync topo; omarchy notification send &quot;mbsync $?&quot;'" />
+          <action name="Execute">
+            <command>sh -c 'mbsync topo-fetch &amp;&gt;/dev/null &amp; foot -T @Mutt -D ~/Downloads mutt; mbsync topo; omarchy notification send "mbsync $?"'</command>
+          </action>
         </none>
       </action>
     </keybind>
