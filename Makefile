@@ -49,7 +49,7 @@ pass:
 		git clone ssh://vps/~/.password-store ~/.password-store;
 	fi
 
-~/.local/share/application:
+~/.local/share/applications:
 	mkdir -p $@
 
 mutt: ~/.local/share/application
