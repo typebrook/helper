@@ -36,14 +36,91 @@ set markers = no # Remove '+' for long links with limited terminal width
 set text_flowed = yes
 
 # Index format
+# Sender / recipient {{{
+
+#| %a | Author's address |
+#| %A | Reply-To address, else Return-Path |
+#| %c | Number of characters (bytes) in the message |
+#| %f | Sender — full From: line (address + real name) |
+#| %F | Author name; recipient name if the message is *from* you |
+#| %L | To <list-name> if it matches a subscribe address, else same as %F |
+#| %n | Author's real name (address if missing) |
+#| %r | Comma-separated list of To: recipients |
+#| %R | Comma-separated list of Cc: recipients |
+#| %t | To: field (first recipient) |
+#| %u | Author's user/login name |
+#| %v | Author's first name (recipient's, if from you) |
+#| %W | Organization: header |
+
+# }}}
+# Dates {{{
+
+#| %d | Date/time per $date_format, in **sender's** timezone |
+#| %D | Date/time per $date_format, in **local** timezone |
+#| %{fmt} | strftime fmt, sender's timezone |
+#| %[fmt] | strftime fmt, local timezone |
+#| %(fmt) | strftime fmt, local time the message was **received** |
+#| %<fmt> | strftime fmt, current local time (legacy; collides with the conditional syntax below) |
+
+# }}}
+# Status / flags {{{
+#
+#| %S | Single-char status: N O D d ! r * |
+#| %Z | Three-character status flag set (status, crypto, tag) |
+#| %T | Appropriate character from $to_chars (to-me indicator) |
+#| %H | Spam attribute(s) |
+#| %N | Message score |
+
+# }}}
+# Position / counts {{{
+#
+#| %C | Current message number |
+#| %m | Total messages in the mailbox |
+#| %e | Current message number **within the thread** |
+#| %E | Number of messages in the current thread |
+#| %M | Number of hidden messages when thread is collapsed |
+#| %l | Number of lines (unavailable on maildir/mh, often IMAP) |
+#| %X | Number of attachments (can be slow — forces body parse) |
+#| %P | Pager progress indicator |
+
+# }}}
+# Content / labels {{{
+#
+#| %s | Subject |
+#| %i | Message-ID |
+#| %b | Filename of the original folder (mailbox basename) |
+#| %B | Mailing list the message was sent to, else %b |
+#| %O | "Original save folder" — list name, or recipient name if not to a list |
+#| %g | Message labels / notmuch tags |
+#| %J | Message tags (notmuch tags, IMAP keywords) |
+#| %y | X-Label: header |
+#| %Y | X-Label:, but only shown when it differs from the parent/previous thread entry |
+#| %x | X-Comment-To: (news reply) |
+
+# }}}
+# Formatting / control {{{
+#
+#| %>X | Right-justify the remainder, padding with char X |
+#| %\|X | Pad to end of line with char X |
+#| %*X | Soft-fill with char X |
+#| %?c?if&else? | Conditional on expando c being non-zero/non-empty |
+#| %<c?if&else> | Same conditional, newer syntax |
+#| %@name@ | Expand the format string from a matching index-format-hook |
+#| %% | A literal % |
+
+## }}}
+
 #set index_format = "%4C %8Y %Z %(%b %d) %-15.15L (%?l?%4l&%4c?) %s"
 #set index_format = "%Z %(%g.%m.%d) %-16.16L (%4c) %s"
-set index_format="%4C %7@date@ %-15.15F %Z (%4c) %s"
-set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
+#Numbers between `%` and the char set field width, e.g. `%-20.20n` = author name, left-aligned, exactly 20 columns. Add `_` to lowercase (`%_n`) or `:` to replace dots with underscores.
+
 index-format-hook  date  "~d<1d"    "%[%H:%M]"
 index-format-hook  date  "~d<1w"    "%[%a]"
 index-format-hook  date  "~d<1y"    "%[%b %d]"
 index-format-hook  date  "~A"       "%[%Y-%m]"
+
+set index_format="%4C %7@date@ %-15.15F (%4c) %?H?[%2H]? %s"
+set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
 # Alternate index_format: %y (labels) in place of %F (From) and %Z (status)
 
 # Preference
@@ -61,7 +138,7 @@ bind attach x view-mailcap
 macro browser \Cn "q\cn"
 macro browser \Cp "q\cp"
 bind browser h descend-directory
-macro generic,index,pager \Cr ":source ~/.config/mutt/muttrc<Return>" "Reload mutt's configuration file"
+macro generic,index,pager \Cr ":source ~/.muttrc<Return>" "Reload mutt's configuration file"
 macro index *a "Tall\n" "Select All"
 bind index } bottom-page
 bind index,browser gg first-entry
@@ -190,6 +267,13 @@ color index         white           black         "~p!~F"                     # 
 color index         white           black         "~N~p!~F"                   # new messages to me
 color index         brightblue      black         "~U~p!~F"                   # unread messages to me
 color index         white           black         "~R~p!~F"                   # messages to me
+
+# Spam score ([%H] in $index_format, fed by the `spam` rules in muttrc.*)
+color index         cyan        black         "~H ."                      # any spam attribute
+color index         cyan        black         "~H ^[0-9][0-9]"            # spam score >= 10
+color index         cyan        black         "~H ^[0-9][0-9] ~N"         # new, spam score >= 10
+color index         cyan        black         "~H ^[0-9][0-9] ~U"         # unread, spam score >= 10
+
 color index         brightred       black         "~F"                        # flagged messages
 color index         brightred       black         "~F~p"                      # flagged messages to me
 color index         red             black         "~N~F"                      # new flagged messages
