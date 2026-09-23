@@ -124,7 +124,7 @@ set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
 # Alternate index_format: %y (labels) in place of %F (From) and %Z (status)
 
 # Preference
-alternative_order text/html text/plain text/enriched
+alternative_order text/plain text/html text/enriched
 # Auto convert text/html MIME type to text/plain
 auto_view text/html
 # Macro to open html with css

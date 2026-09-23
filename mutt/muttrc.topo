@@ -30,9 +30,6 @@ set trash = "+Trash"
 set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 # }}}
 # Sidebar {{{
-mailboxes   -label 'INBOX' -poll + \
-            -poll +Archive\
-            -poll -label '[p]ay'        +pay \
 # }}}
 # Go to other mailboxes {{{
 macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
@@ -47,5 +44,5 @@ macro index,pager   gk      "<change-folder>+keep<Return>"
 macro index,pager   gp      "<change-folder>+pay<Return>"
 # }}}
 # Spam {{{
-spam "^To:.*info@topo\\.tw" "10"
+spam "^To:.*\(info|sammi\)@topo\\.tw" "10"
 # }}}
