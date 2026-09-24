@@ -196,12 +196,10 @@
     <keybind key="W-z"><action name="ToggleMagnify" /></keybind>
 
     <!-- Notifications / status -->
-    <keybind key="W-grave"><action name="Execute" command="omarchy notification time" /></keybind>
-    <!-- dunst is not installed; omarchy-shell (Quickshell) owns notifications here -->
-    <keybind key="W-q"><action name="Execute" command="omarchy-shell notifications dismissOne" /></keybind>
-    <!-- Invoke the last notification's default action (Hyprland's SUPER+ALT+comma).
-         After "omarchy capture screenshot" that action opens the PNG in the editor. -->
-    <keybind key="W-S-q"><action name="Execute" command="omarchy-shell notifications invokeLast" /></keybind>
+    <!-- Dismiss notification one by one. If tray is empty, show time -->
+    <keybind key="W-grave"><action name="Execute" command="sh -c 'if ls ~/.local/state/omarchy/notifications/*json; then omarchy-shell notifications dismissOne; else omarchy notification time; fi'" /></keybind>
+    <keybind key="W-S-grave"><action name="Execute" command="omarchy-shell notifications showHistory" /></keybind>
+    <keybind key="W-comma"><action name="Execute" command="omarchy-shell notifications invokeLast" /></keybind>
 
     <!--
       Media Controls - migrated from Hyprland (default/hypr/bindings/media.lua).
@@ -357,12 +355,6 @@
     <keybind key="W-C-k"><action name="Execute" command="omarchy-menu-herdr-keybindings" /></keybind>
 
     <!-- Notifications (utilities.lua); W-A-comma is bound further up -->
-    <keybind key="W-comma"><action name="Execute" command="omarchy-shell notifications dismissOne" /></keybind>
-    <keybind key="W-S-comma"><action name="Execute" command="omarchy-shell notifications dismissAll" /></keybind>
-    <keybind key="W-C-comma"><action name="Execute" command="omarchy-toggle-notification-silencing" /></keybind>
-    <keybind key="W-S-A-comma"><action name="Execute" command="omarchy-shell notifications showHistory" /></keybind>
-    <keybind key="W-C-A-t"><action name="Execute" command="omarchy-notification-time" /></keybind>
-    <keybind key="W-C-A-b"><action name="Execute" command="omarchy-notification-battery" /></keybind>
     <keybind key="W-C-A-w"><action name="Execute" command="omarchy-notification-weather" /></keybind>
 
     <!-- Reminders (utilities.lua) -->
