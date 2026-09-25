@@ -618,27 +618,11 @@
     </keybind>
     <keybind key="W-g"><action name="Execute" command="/home/pham/helper/X11/openbox/scripts/ob-colorpicker" /></keybind>
 
-    <keybind key="C-A-v"><action name="Execute" command="alacritty -e vim" /></keybind>
-    <keybind key="C-A-n"><action name="Execute" command="alacritty -e vim" /></keybind>
     <keybind key="C-A-h"><action name="Execute" command="alacritty -T htop -o 'window.startup_mode=&quot;Maximized&quot;' -e htop" /></keybind>
-    <keybind key="C-A-b"><action name="Execute" command="alacritty -e bashtop" /></keybind>
 
     <!-- Lockscreen / power -->
     <keybind key="W-BackSpace"><action name="Execute" command="betterlockscreen --lock" /></keybind>
     <keybind key="W-x"><action name="Execute" command="systemctl suspend" /></keybind>
-    <!-- Was the dead polybar-msg; now Hyprland's SUPER+SHIFT+P (Google Photos) -->
-    <keybind key="W-S-p">
-      <action name="ForEach">
-        <query title="*Google Photos*" />
-        <then>
-          <action name="Focus" />
-          <action name="Raise" />
-        </then>
-        <none>
-          <action name="Execute" command="omarchy-launch-webapp 'https://photos.google.com/'" />
-        </none>
-      </action>
-    </keybind>
 
     <!-- Compositor control -->
     <keybind key="W-S-x"><action name="Exit" /></keybind>
