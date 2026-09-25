@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+  Menus for labwc. The Openbox config pointed <menu><file> at "menu-icons.xml",
+  which was supplied by the Archcraft package and does not exist on this machine,
+  so root-menu and app-menu are rebuilt here from the keybindings in rc.xml.
+
+  client-menu and client-list-combined-menu are built into labwc: re-declaring
+  them here is an error, so client-list-combined-menu is reached through the
+  desktop mousebinds (middle-click / Alt+right-click) instead of the root menu.
+
+  app-menu is defined inline below so that it exists exactly once; it is still
+  addressable on its own via <action name="ShowMenu" menu="app-menu" /> (C-A-space).
+-->
+<openbox_menu>
+
+<menu id="root-menu">
+  <separator label="labwc" />
+  <item label="Terminal">
+    <action name="Execute" command="foot" />
+  </item>
+  <item label="Run...">
+    <action name="Execute" command="rofi -show run" />
+  </item>
+
+  <menu id="app-menu" label="Applications">
+    <item label="Terminal">
+      <action name="Execute" command="foot" />
+    </item>
+    <item label="Files (ranger)">
+      <action name="Execute" command="foot -T Ranger ranger" />
+    </item>
+    <item label="Browser">
+      <action name="Execute" command="firefox" />
+    </item>
+    <item label="Mail">
+      <action name="Execute" command="sh -c 'foot -T @Mutt -D ~/Downloads mutt'" />
+    </item>
+    <item label="GPT">
+      <action name="Execute" command="foot --hold -T GPT -W 70x30 ~/helper/bin/gpt/gpt" />
+    </item>
+    <item label="Flashcards">
+      <action name="Execute" command="foot -T FLASHCARDS -o main.pad=100x70 -W 64x15 ~/helper/bin/misc/flash.sh" />
+    </item>
+    <item label="Calendar">
+      <action name="Execute" command="foot --hold -T Calendar -o main.pad=100x70 -W 64x9 cal -3" />
+    </item>
+    <separator />
+    <item label="Network">
+      <action name="Execute" command="foot -T 'Network Manager' -W 80x30 nmtui" />
+    </item>
+    <item label="Audio">
+      <action name="Execute" command="foot pulsemixer" />
+    </item>
+    <item label="Process monitor">
+      <action name="Execute" command="foot -T htop --maximized htop" />
+    </item>
+  </menu>
+
+  <separator />
+  <item label="Edit config">
+    <action name="Execute" command="sh -c 'foot -T @LABWC_CONFIG -W 70x32 vim ~/.config/labwc/rc.xml; labwc --reconfigure'" />
+  </item>
+  <item label="Reconfigure">
+    <action name="Reconfigure" />
+  </item>
+  <separator />
+  <item label="Suspend">
+    <action name="Execute" command="systemctl suspend" />
+  </item>
+  <item label="Exit">
+    <action name="If">
+      <prompt message="Exit labwc?" />
+      <then>
+        <action name="Exit" />
+      </then>
+    </action>
+  </item>
+</menu>
+
+</openbox_menu>

@@ -1,0 +1,5 @@
+# Overrides on top of <theme><name> in rc.xml. See labwc-theme(5).
+
+# Cyan border on the focused window.
+border.width: 2
+window.active.border.color: #00ffff

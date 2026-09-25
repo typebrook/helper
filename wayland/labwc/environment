@@ -1,0 +1,15 @@
+# labwc environment
+# Parsed before the compositor starts; "variable=value" per line, no export.
+
+# labwc sets this itself, listed for completeness.
+# XDG_CURRENT_DESKTOP=labwc:wlroots
+
+# Match the cursor the rest of the desktop uses.
+XCURSOR_SIZE=24
+
+# GTK4 needs this to compose without an input method running.
+GTK_IM_MODULE=simple
+
+# CapsLock acts as an extra Ctrl key (X11's "ctrl:nocaps"), matching the
+# kb_options set in ~/.config/hypr/input.lua.
+XKB_DEFAULT_OPTIONS=ctrl:nocaps

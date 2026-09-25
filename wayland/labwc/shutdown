@@ -1,0 +1,15 @@
+# labwc shutdown
+#
+# Executed as a shell script when labwc is preparing to terminate. Tears down
+# what ~/.config/labwc/autostart brought up via labwc-session.target.
+#
+# Stopping graphical-session.target (rather than labwc-session.target) is what
+# labwc(1) "SYSTEMD INTEGRATION" prescribes: labwc-session.target BindsTo it,
+# so this is the handle that actually stops the units underneath -- including
+# voxtype.service, which is PartOf=graphical-session.target and would otherwise
+# survive the session holding a stale WAYLAND_DISPLAY.
+#
+# Not --no-block: we want the units gone before the compositor's wayland socket
+# does. The script still runs asynchronously with labwc's other teardown, so it
+# must not assume the display is usable.
+systemctl --user stop graphical-session.target
