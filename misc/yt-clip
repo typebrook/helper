@@ -27,12 +27,12 @@ case "${#STREAM_URLS[@]}" in
     ffmpeg -ss "$START" -to "$END" -i "${STREAM_URLS[0]}" \
            -ss "$START" -to "$END" -i "${STREAM_URLS[1]}" \
            -map 0:v:0 -map 1:a:0 \
-           -c:v libx264 -c:a aac -movflags +faststart \
+           -c:v libvpx-vp9 -c:a libopus \
            "$OUT"
     ;;
   1)
     ffmpeg -ss "$START" -to "$END" -i "${STREAM_URLS[0]}" \
-           -c:v libx264 -c:a aac -movflags +faststart \
+           -c:v libvpx-vp9 -c:a libopus \
            "$OUT"
     ;;
   *)
