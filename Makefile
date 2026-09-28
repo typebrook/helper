@@ -52,7 +52,7 @@ pass:
 ~/.local/share/applications:
 	mkdir -p $@
 
-mutt: ~/.local/share/application
+mutt: ~/.local/share/applications
 	ln -sf `pwd`/mutt -T ~/.config/mutt
 	ln -sf `pwd`/mutt/mutt.desktop $<
 	pass mail/mutt.hooks >mutt/hooks.topo
