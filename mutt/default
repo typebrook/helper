@@ -281,7 +281,7 @@ color index         red             black         "~U~F~p"                    # 
 color index         brightyellow    black         "~T"                        # tagged messages
 color index         black           brightmagenta "~D"                        # deleted messages
 color index         lightblack      black         "~y done"                   # marked as Done
-color index         black           green         "~v"                        # messages part of a collapsed thread
+color index         lightblack      green         "~v"                        # messages part of a collapsed thread
 
 # color header
 color header        green           black         "^(From)"

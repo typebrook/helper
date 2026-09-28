@@ -137,7 +137,7 @@
           <action name="Raise" />
         </then>
         <none>
-          <action name="Execute" command="sh -c 'alacritty -T @LABWC_CONFIG -o window.dimensions.columns=70 -o window.dimensions.lines=32 -e vim ~/.config/labwc/rc.xml &amp;&amp; labwc --reconfigure'" />
+          <action name="Execute" command="sh -c 'alacritty -o window.dimensions.columns=70 -o window.dimensions.lines=32 -e vim ~/.config/labwc/rc.xml &amp;&amp; labwc -r'" />
         </none>
       </action>
     </keybind>
@@ -304,8 +304,9 @@
     <keybind key="W-S-5"><action name="Execute" command="omarchy-labwc-screenshot-delayed 5" /></keybind>
     <!-- Region screenshot: saved to $XDG_PICTURES_DIR + clipboard, then a
          notification whose action (W-A-comma above) opens it in the editor. -->
-    <keybind key="W-S-s"><action name="Execute" command="omarchy capture screenshot region" /></keybind>
-    <keybind key="W-s"><action name="Execute" command="omarchy-capture-text-translate" /></keybind>
+    <keybind key="W-s"><action name="Execute" command="omarchy capture screenshot region" /></keybind>
+    <keybind key="W-C-s"><action name="Execute" command="omarchy capture screenshot region" /></keybind>
+    <keybind key="W-S-s"><action name="Execute" command="omarchy-capture-text-translate" /></keybind>
     <keybind key="A-Print"><action name="Execute" command="screenshot" /></keybind>
 
     <!--
