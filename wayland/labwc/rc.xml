@@ -453,7 +453,7 @@
     <!-- Browser -->
     <keybind key="W-w">
       <action name="ForEach">
-        <query identifier="firefox" />
+        <query identifier="Firefox" />
         <query identifier="Navigator" />
         <then>
           <action name="Focus" />
