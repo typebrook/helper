@@ -718,6 +718,17 @@ issue.open() {
   find issues/ -type f -name '*-*md'  | while read f; do grep -q '^state: open' $f || continue; echo -n $f; grep ^labels: $f | cut -d: -f2- ; done | sort | column -t
 }
 alias os=omarchy-shell
+app() {
+  files=$(find /usr/share/applications ~/.local/share/applications/ -iname "*$1*")
+
+  if [ -z "$files" ]; then
+    grep -R 'Comment.*=.*'$1'.*' /usr/share/applications ~/.local/share/applications | \
+    cut -d: -f1 | \
+    sort -u
+  else
+    echo $files
+  fi
+}
 # }}}
 
 # vim:fdm=marker fdl=0
