@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# rofi-zhdict — English ⇄ Traditional Chinese quick lookup (CC-CEDICT) in rofi.
+# Type English, 中文 (traditional or simplified) or pinyin; Enter copies the word.
+#   rofi-zhdict           open the picker
+#   rofi-zhdict --update  re-download CC-CEDICT and rebuild the list
+set -euo pipefail
+
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/rofi-zhdict"
+SRC_URL="https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.txt.gz"
+FREQ_URL="https://raw.githubusercontent.com/fxsjy/jieba/master/jieba/dict.txt"
+RAW="$CACHE/cedict.txt.gz"
+FREQ="$CACHE/freq.txt"
+LIST="$CACHE/entries.txt"
+
+build() {
+  mkdir -p "$CACHE"
+  # Same CC-CEDICT export the AUR packages (dict-cedict-git, goldendict-cc-cedict-content) build from.
+  if [[ ! -s $RAW || ${1:-} == force ]]; then
+    notify-send "rofi-zhdict" "Downloading CC-CEDICT…" 2>/dev/null || true
+    curl -fsSL "$SRC_URL" -o "$RAW.tmp" && mv "$RAW.tmp" "$RAW"
+  fi
+  # Word frequencies (jieba) so common words rank first; optional.
+  if [[ ! -s $FREQ || ${1:-} == force ]]; then
+    curl -fsSL "$FREQ_URL" -o "$FREQ.tmp" && mv "$FREQ.tmp" "$FREQ" || rm -f "$FREQ.tmp"
+  fi
+  python3 - "$RAW" "$LIST" "$FREQ" <<'PY'
+import gzip, os, re, sys
+src, dst, freqf = sys.argv[1:]
+freq = {}
+if os.path.exists(freqf):
+    for l in open(freqf, encoding='utf-8'):
+        p = l.split()
+        if len(p) >= 2: freq[p[0]] = int(p[1])
+MARKS = {'a':'āáǎàa','e':'ēéěèe','i':'īíǐìi','o':'ōóǒòo','u':'ūúǔùu','ü':'ǖǘǚǜü'}
+def syl(s):
+    m = re.fullmatch(r"([A-Za-zü:]+)([1-5])", s)
+    if not m: return s
+    w, t = m.group(1).replace('u:', 'ü').replace('U:', 'Ü'), int(m.group(2)) - 1
+    lw = w.lower()
+    if 'a' in lw: v = lw.index('a')
+    elif 'e' in lw: v = lw.index('e')
+    elif 'ou' in lw: v = lw.index('o')
+    else: v = max(i for i, c in enumerate(lw) if c in 'aeiouü') if any(c in 'aeiouü' for c in lw) else -1
+    if v < 0: return w
+    c = MARKS[lw[v]][t]
+    return w[:v] + (c.upper() if w[v].isupper() else c) + w[v+1:]
+line_re = re.compile(r"^(\S+) (\S+) \[([^\]]*)\] /(.*)/\s*$")
+rows = []
+with gzip.open(src, 'rt', encoding='utf-8') as f:
+    for line in f:
+        if line.startswith('#'): continue
+        m = line_re.match(line)
+        if not m: continue
+        trad, simp, py, defs = m.groups()
+        defs = [d for d in defs.split('/') if d and not d.startswith('variant of') and not d.startswith('old variant')]
+        if not defs: continue
+        pinyin = ' '.join(syl(s) for s in py.split())
+        head = trad if trad == simp else f"{trad} ({simp})"
+        # Most frequent words first; unknown words after, shorter first.
+        rows.append((-freq.get(simp, 0), len(trad), f"{head}  [{pinyin}]  {' / '.join(defs)}"))
+rows.sort(key=lambda r: (r[0], r[1]))
+with open(dst, 'w', encoding='utf-8') as out:
+    out.writelines(r[2].replace('\n', ' ') + '\n' for r in rows)
+PY
+}
+
+case "${1:-}" in
+  --update) build force; echo "Rebuilt $LIST ($(wc -l <"$LIST") entries)"; exit 0 ;;
+esac
+[[ -s $LIST ]] || build
+
+# wl-copy needs the Wayland socket; recover it if the caller's env lacks it.
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+if [[ -z ${WAYLAND_DISPLAY:-} ]]; then
+  for sock in "$XDG_RUNTIME_DIR"/wayland-[0-9]; do
+    [[ -S $sock ]] && { export WAYLAND_DISPLAY=${sock##*/}; break; }
+  done
+fi
+
+# rofi's Wayland backend has no text-input support, so fcitx5 can't type into it.
+# Run it on XWayland instead, where it talks to fcitx5 over XIM. rofi picks the
+# Wayland backend whenever WAYLAND_DISPLAY is set, so hide it from rofi only.
+rofi_env=()
+xdisp=${DISPLAY:-}
+if [[ -z $xdisp ]]; then
+  for sock in /tmp/.X11-unix/X[0-9]*; do
+    [[ -S $sock ]] && { xdisp=:${sock##*/X}; break; }
+  done
+fi
+if [[ -n $xdisp ]]; then
+  rofi_env=(env -u WAYLAND_DISPLAY DISPLAY="$xdisp" XMODIFIERS=@im=fcitx)
+fi
+
+choice=$("${rofi_env[@]}" rofi -dmenu -i -p "字典" \
+  -matching normal -normalize-match \
+  -mesg "English · 中文 · pinyin   —   Enter: copy word   Alt+1: copy whole line" \
+  -kb-custom-1 "Alt+1" -l 15 -no-custom <"$LIST") && rc=0 || rc=$?
+
+[[ -n ${choice:-} ]] || exit 0
+case $rc in
+  0)  word=${choice%%"  ["*}; word=${word%%" ("*} ;;  # traditional headword
+  10) word=$choice ;;
+  *)  exit 0 ;;
+esac
+printf '%s' "$word" | wl-copy
+notify-send -t 2500 "Copied" "$word" 2>/dev/null || true

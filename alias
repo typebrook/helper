@@ -729,6 +729,7 @@ app() {
     echo $files
   fi
 }
+alias cdb='cd ~/log/public'
 # }}}
 
 # vim:fdm=marker fdl=0

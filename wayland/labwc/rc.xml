@@ -579,6 +579,7 @@
       </action>
     </keybind>
     <keybind key="W-b"><action name="Execute" command="blueman-manager" /></keybind>
+    <keybind key="W-i"><action name="Execute" command="rofi-zhdict" /></keybind>
 
     <!-- Audio -->
 
@@ -869,12 +870,12 @@
 
       W-a            alacritty -e pulsemixer        (pulsemixer)
       W-n            networkmanager_dmenu           (Archcraft script)
-      W-i            nm-connection-editor           (nm-connection-editor)
+      W-i            nm-connection-editor           (nm-connection-editor; overridden by the later W-i -> rofi-zhdict)
       W-b            blueman-manager                (blueman)
       W-BackSpace    betterlockscreen (lock)        (betterlockscreen; W-C-l runs omarchy-system-lock)
       W-S-Escape     xkill                          (xkill; labwc's <action name="Kill"/> is the native replacement)
       W-F1           ddcutil setvcp 60 0x01         (ddcutil)
-      A-F1           rofi ... acpi ...              (acpi; rofi itself is installed but is an X11 build)
+      A-F1           rofi ... acpi ...              (acpi; rofi 2.0 is installed and runs natively on Wayland)
       C-A-f, W-S-r   ranger                         (ranger)
       C-A-h          htop                           (htop; W-C-t runs btop instead)
       C-A-b          bashtop                        (bashtop)

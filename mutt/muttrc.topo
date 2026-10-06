@@ -18,7 +18,6 @@ set signature = "~/helper/mutt/.signature"
 # Contacts {{{
 set display_filter = ~/helper/mutt/message_filter.sh
 source ~/helper/mutt/alias.topo
-source ~/helper/mutt/hooks.topo
 # }}}
 # Basic Mailbox {{{
 set spoolfile = "+"
@@ -46,3 +45,5 @@ macro index,pager   gp      "<change-folder>+pay<Return>"
 # Spam {{{
 spam "^To:.*\(info|sammi\)@topo\\.tw" "10"
 # }}}
+
+# vim:foldmethod=marker
