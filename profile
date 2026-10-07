@@ -43,7 +43,7 @@ fi
 [[ ! $- =~ i ]] && return 0
 
 # attch to tmux session if exists {{{
-if which tmux &>/dev/null; then
+if which tmux &>/dev/null && [ -z $HERDR_ENV ]; then
   test -z "$TMUX" && tmux attach
 fi
 # }}}
