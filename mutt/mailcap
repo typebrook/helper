@@ -1,3 +1,4 @@
+text/plain;                 firefox '%s'; test=test -n "$DISPLAY"; needsterminal; nametemplate=%s.txt;
 text/plain;                 vim '%s'
 text/html;                  firefox '%s'; test=test -n "$DISPLAY"; needsterminal; nametemplate=%s.html;
 text/html;                  w3m -I %{charset} -T text/html; copiousoutput;
