@@ -279,9 +279,9 @@ color index         red             black         "~N~F"                      # 
 color index         red             black         "~N~F~p"                    # new flagged messages to me
 color index         red             black         "~U~F~p"                    # new flagged messages to me
 color index         brightyellow    black         "~T"                        # tagged messages
-color index         black           brightmagenta "~D"                        # deleted messages
-color index         lightblack      black         "~y done"                   # marked as Done
+color index         lightblack      black         "~y done | ~s 通知"                   # marked as Done
 color index         lightblack      green         "~v"                        # messages part of a collapsed thread
+color index         black           brightmagenta "~D"                        # deleted messages
 
 # color header
 color header        green           black         "^(From)"
