@@ -730,6 +730,7 @@ app() {
   fi
 }
 alias cdb='cd ~/log/public'
+alias cdc='cd ~/.claude'
 # }}}
 
 # vim:fdm=marker fdl=0

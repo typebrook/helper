@@ -119,7 +119,7 @@ index-format-hook  date  "~d<1w"    "%[%a]"
 index-format-hook  date  "~d<1y"    "%[%b %d]"
 index-format-hook  date  "~A"       "%[%Y-%m]"
 
-set index_format="%4C %7@date@ %-15.15F (%4c) %?H?[%2H]? %s"
+set index_format="%4C %7@date@ %-15.15F (%4c) %s"
 set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
 # Alternate index_format: %y (labels) in place of %F (From) and %Z (status)
 

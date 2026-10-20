@@ -25,8 +25,10 @@
 # logged "Registration will be attempted again if the active service is
 # unregistered", so in a real labwc session -- with no Hyprland running -- it
 # should claim the name. Confirm with `notify-send hello` once you are in.
-QS_DISABLE_FILE_WATCHER=1 QS_NO_RELOAD_POPUP=1 \
-  systemd-cat -t omarchy-shell -- quickshell -n -p /usr/share/omarchy/shell &
+#
+# The shell is now launched by ~/.config/systemd/user/omarchy-shell.service
+# (WantedBy=labwc-session.target, started by the systemctl line below), so
+# systemd relaunches it when omarchy-restart-shell kills it during an update.
 
 # Background colour, stands in for the Archcraft ~/.fehbg until swaybg is installed.
 # swaybg -c '#2F343F' >/dev/null 2>&1 &
