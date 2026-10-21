@@ -4,13 +4,13 @@
     signingkey = 6DD8C14A
 
 [sendemail]
-	smtpserver = mail.topo.tw
-	smtpuser = pham
-	smtpencryption = tls
-	smtpserverport = 587
+    smtpserver = mail.topo.tw
+    smtpuser = pham
+    smtpencryption = tls
+    smtpserverport = 587
 
 [gpg]
-	program = gpg2
+    program = gpg2
 
 [alias]
     adog = "!git log --abbrev --decorate --oneline --graph"
@@ -29,16 +29,16 @@
     ff = only
 
 [filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
 
 [receive]
-	denyCurrentBranch = false
+    denyCurrentBranch = false
 
 [core]
-	excludesFile = /srv/git/www/gitignore
+    excludesFile = /srv/git/www/gitignore
 
 [safe]
-	directory = ~/Downloads/recall171
+    directory = ~/Downloads/recall171
