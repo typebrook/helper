@@ -391,7 +391,6 @@
          single cur_keybind captured at press time, so it can only fire a bind that
          is itself onRelease. Push-to-talk on one key is not expressible in
          labwc 0.20.2 rc.xml; use voxtype's own evdev [hotkey] if you want it. -->
-    <keybind key="W-C-x"><action name="Execute" command="voxtype record toggle" /></keybind>
     <keybind key="F9"><action name="Execute" command="voxtype record toggle" /></keybind>
 
     <!-- ################################ Launch Applications ################################ -->

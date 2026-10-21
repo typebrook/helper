@@ -124,7 +124,8 @@ set my_index_other = "%4C %7@date@ %-15.15F #%-9y %s"
 # Alternate index_format: %y (labels) in place of %F (From) and %Z (status)
 
 # Preference
-alternative_order text/plain text/html text/enriched
+unalternative_order *
+alternative_order text/plain text/enriched text/html
 # Auto convert text/html MIME type to text/plain
 auto_view text/html
 # Macro to open html with css
@@ -171,7 +172,6 @@ bind index P print-message
 macro index q '<change-folder>?'
 macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 bind index R group-chat-reply
-macro index <Space> "Wn"
 macro index s '<tag-prefix><save-message>' 'Saved'
 macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
@@ -266,6 +266,7 @@ color index         white           black         "~p!~F"                     # 
 color index         white           black         "~N~p!~F"                   # new messages to me
 color index         brightblue      black         "~U~p!~F"                   # unread messages to me
 color index         white           black         "~R~p!~F"                   # messages to me
+color index         lightblack      black         "~y done | ~s 通知"                   # marked as Done
 
 # Spam score ([%H] in $index_format, fed by the `spam` rules in muttrc.*)
 color index         cyan        black         "~H ."                      # any spam attribute
@@ -273,13 +274,12 @@ color index         cyan        black         "~H ^[0-9][0-9]"            # spam
 color index         cyan        black         "~H ^[0-9][0-9] ~N"         # new, spam score >= 10
 color index         cyan        black         "~H ^[0-9][0-9] ~U"         # unread, spam score >= 10
 
+color index         red             black         "~U~F~p"                    # new flagged messages to me
+color index         brightyellow    black         "~T"                        # tagged messages
 color index         brightred       black         "~F"                        # flagged messages
 color index         brightred       black         "~F~p"                      # flagged messages to me
 color index         red             black         "~N~F"                      # new flagged messages
 color index         red             black         "~N~F~p"                    # new flagged messages to me
-color index         red             black         "~U~F~p"                    # new flagged messages to me
-color index         brightyellow    black         "~T"                        # tagged messages
-color index         lightblack      black         "~y done | ~s 通知"                   # marked as Done
 color index         lightblack      green         "~v"                        # messages part of a collapsed thread
 color index         black           brightmagenta "~D"                        # deleted messages
 
