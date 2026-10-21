@@ -261,19 +261,14 @@
         <y>0</y>
       </action>
     </keybind>
-    <keybind key="W-1">
+    <keybind key="W-grave">
       <action name="Execute">
-        <command>~/helper/X11/notify_status.sh</command>
+        <command>bash -c 'displayed=$(dunstctl count | awk "/Currently displayed:/ { print \$3 }"); if [ "${displayed:-0}" -gt 0 ]; then dunstctl close; else ~/helper/X11/notify_status.sh; fi'</command>
       </action>
     </keybind>
     <keybind key="W-2">
       <action name="Execute">
         <command>notify-send -t 0 "TEST MESSAGE"</command>
-      </action>
-    </keybind>
-    <keybind key="W-q">
-      <action name="Execute">
-        <command>dunstctl close</command>
       </action>
     </keybind>
     <keybind key="W-c">
