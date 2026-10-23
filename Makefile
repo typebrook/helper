@@ -128,3 +128,6 @@ mpd:
 snippets:
 	rm -rf ~/snippets
 	ln -sf `pwd`/snippets ~/snippets
+
+skills:
+	ln -sf $@/* ~/.claude/skills/
