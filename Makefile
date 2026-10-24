@@ -130,4 +130,4 @@ snippets:
 	ln -sf `pwd`/snippets ~/snippets
 
 skills:
-	ln -sf $@/* ~/.claude/skills/
+	ln -sf `pwd`/$@/* ~/.claude/skills/

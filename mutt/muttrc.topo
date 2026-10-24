@@ -24,7 +24,7 @@ set spoolfile = "+"
 set record = "+"
 set mbox= "+Archive"
 set trash = "+Trash"
-#set postponed = "+Drafts"
+set postponed = "+Drafts"
 #set move = yes
 set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 # }}}
