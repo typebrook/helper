@@ -7,12 +7,12 @@ Consider user will sync mailbox, and do this skill in other machine
 
 ## Steps
 
-1. Use notmuch or other CLI in PATH to read messages in @~/Maildir/BOX/
-2. For each unreplied flagged message sent by anyone other than agent:
-  - If their is no matched message, simply end this session
-  - send a sub-agent to resolve issue. Set meaningful session name if possible
-  - If message seems not a clear issue, check "X-Label: " to guess user purpose
-3. Reply to each message after agent finish their session
+1. Read RFC 2822 message by filename in prompt, end session if it is not found
+2  Resolve issue in message. Set meaningful session name if possible
+  - If not sure what to do, check "X-Label: " to guess user purpose
+  - Check other messages in the same thread if necessary
+3. Reply to message after issue resolved or need user decision
+4. ONLY report status of reply. Do not summarize it, user track issue ONLY BY YOUR REPLY
 
 
 ## How to Reply
@@ -21,31 +21,28 @@ Directly write new RFC 2822 message in @~/Maildir/BOX/ in utf-8 plain text inste
 
 ### Header
 
-Context used by user or other sub-agent in the future
+Context used by user or other agent in the future
 
 - Set "From: <MODEL>@<HOSTNAME>" to mark it is sent by an agent
 - Add "Token: " to report token spent
-- If issue context is bound to a host and previous message not specified it, save hostname into "Hostname:"
-  So next agent know when to use ssh to resolve issue
 - If issue context is bound to an working directory, save it into "Working-Directory:"
 
 ### Subject
 
-Summary of solution (Or how sub-agent named its session)
+Summary of your work
 
-- If sub-agent need user decision (More reply by user), add prefix "[Working] "
+- If you need user decision, add prefix "[Working] "
 - If issue is resolved, add prefix "[Resolved] "
 
 ### Body
 
-Contains whole session in ASD-STE100
+Explain your work in ASD-STE100
 
 - Save details (>50 Line or not directly related to summary/decision-making) into attachment(s) and refer them in body
 - If diagram/graph is more conveyable, directly use plain/html as Inline Part instead of plain/text
-- Append "claude -p <SESSION-ID>" at the end, so user can optionaly continue session in interactive mode
+- Append "claude -p <SESSION-ID>" at the end, so user can optionally continue session in interactive mode
 
 
 ## After Reply
 
 1. Unflagged replied message, and flag newly-added reply to let user know latest progress in mail client
-2. Do not report what sub-agents did, just list resolved messages and session id of sub-agents.
