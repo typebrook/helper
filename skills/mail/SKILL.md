@@ -4,17 +4,19 @@ Use local Maildir to let user cowork with agents by mail client
 
 Consider user will sync mailbox, and do this skill in other machine
 
+
 ## Steps
 
-1. Use notmuch or other CLI in PATH to read messages in Maildir @~/Maildir/BOX/
-2. For unreplied flagged messages sent by anyone other than agent, send sub-agents on each of them to resolve issue.
-3. For sub-agents, set meaningful session name if possible
-4. Reply to each message after agent finish their session
+1. Use notmuch or other CLI in PATH to read messages in @~/Maildir/BOX/
+2. For each unreplied flagged message sent by anyone other than agent:
+  - send a sub-agent to resolve issue. Set meaningful session name if possible
+  - If their is no matched message, simply end this session
+3. Reply to each message after agent finish their session
 
 
 ## How to Reply
 
-Directly write new RFC-2822 message in @~/Maildir/BOX/ in utf-8 plain text instead of using sendmail(1)
+Directly write new RFC 2822 message in @~/Maildir/BOX/ in utf-8 plain text instead of using sendmail(1)
 
 ### Header
 
