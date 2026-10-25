@@ -259,7 +259,7 @@ color index         brightcyan      black         "~O"                        # 
 color index         brightmagenta   black         "~Q"                        # messages that have been replied to
 color index         brightblue      black         "~U"                        # unread messages
 color index         brightblue      black         "~U~$"                      # unread, unreferenced messages
-color index         yellow          black         "~P"                        # messages from me
+color index         magenta         black         "~P"                        # messages from me
 color index         white           black         "~p!~F"                     # messages to me
 color index         white           black         "~N~p!~F"                   # new messages to me
 color index         brightblue      black         "~U~p!~F"                   # unread messages to me

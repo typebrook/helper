@@ -9,8 +9,9 @@ Consider user will sync mailbox, and do this skill in other machine
 
 1. Use notmuch or other CLI in PATH to read messages in @~/Maildir/BOX/
 2. For each unreplied flagged message sent by anyone other than agent:
-  - send a sub-agent to resolve issue. Set meaningful session name if possible
   - If their is no matched message, simply end this session
+  - send a sub-agent to resolve issue. Set meaningful session name if possible
+  - If message seems not a clear issue, check "X-Label: " to guess user purpose
 3. Reply to each message after agent finish their session
 
 
@@ -23,6 +24,7 @@ Directly write new RFC 2822 message in @~/Maildir/BOX/ in utf-8 plain text inste
 Context used by user or other sub-agent in the future
 
 - Set "From: <MODEL>@<HOSTNAME>" to mark it is sent by an agent
+- Add "Token: " to report token spent
 - If issue context is bound to a host and previous message not specified it, save hostname into "Hostname:"
   So next agent know when to use ssh to resolve issue
 - If issue context is bound to an working directory, save it into "Working-Directory:"
