@@ -1,3 +1,8 @@
+---
+name: make
+description: Implement or complete Makefile targets from their names, comments and prerequisites, using inline shell or separate scripts. Use when working on a Makefile.
+---
+
 1. Read @Makefile to get full context, and works on it
 2. If no more prompt or prompt match a target, finish command(s) based on target name, comments or prerequisites
 3. Solution for each command based on the following priority:
