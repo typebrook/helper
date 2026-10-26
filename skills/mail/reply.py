@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Write a threaded reply into a Maildir, for the mail skill.
 
-Builds a MIME message (UTF-8 text, optional HTML alternative, attachments),
-sets threading headers from the original message, delivers it via tmp/ -> new/
-(or cur/ when flagged), and optionally moves the flag from original to reply.
+Finds the original by Message-ID, builds a MIME message (UTF-8 text, optional
+HTML alternative, attachments), sets threading headers from the original,
+delivers it via tmp/ -> new/ (or cur/ when flagged), and optionally moves the
+flag from original to reply.
 Prints the path of the delivered reply.
 """
 
@@ -20,12 +21,14 @@ from email.parser import BytesHeaderParser
 from email.utils import formatdate
 from pathlib import Path
 
+from find import find
+
 HOST = socket.gethostname()
 
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument("original", type=Path, help="path of the message to reply to")
+    p.add_argument("original", help="Message-ID of the message to reply to (or its file path)")
     p.add_argument("-s", "--subject", required=True, help='full subject, e.g. "[Resolved] Fix build"')
     p.add_argument("-b", "--body", default="-", help="UTF-8 plain-text body file, '-' for stdin (default)")
     p.add_argument("--html", type=Path, help="HTML file, added as alternative inline part")
@@ -106,9 +109,13 @@ def unflag(path):
 
 def main():
     args = parse_args()
-    if not args.original.is_file():
+    # Resolve right before use: mail client or sync may rename the file by flags
+    original = Path(args.original)
+    if not original.is_file():
+        original = find(args.original)
+    if not original:
         sys.exit(f"error: original message not found: {args.original}")
-    with open(args.original, "rb") as f:
+    with open(original, "rb") as f:
         orig = BytesHeaderParser(policy=policy.default).parse(f)
 
     data = build(args, orig).as_bytes(policy=policy.default)
@@ -118,7 +125,7 @@ def main():
 
     dest = deliver(args.maildir, data, args.flag)
     if args.flag:
-        unflag(args.original)
+        unflag(original)
     print(dest)
 
 
