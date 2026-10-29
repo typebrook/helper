@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Add token usage of a `claude -p --output-format json` run to the agent's reply, for mail-agent.
+"""Add token usage of a `pi -p --mode json` run to the agent's reply, for mail-agent.
 
-Reads the JSON result from stdin, finds the newest flagged message delivered since
+Reads the JSONL event stream from stdin, finds the newest flagged message delivered since
 --since in the thread of MESSAGE-ID, and puts usage into its Subject ("... (123k tokens)")
 and Token: header. Only the header block changes; the body bytes are kept as-is.
 The new copy keeps Message-ID and flags but gets a new file name, so a synced Maildir
@@ -22,12 +22,19 @@ from pathlib import Path
 from find import normalize
 from reply import HOST
 
-KEYS = ("inputTokens", "outputTokens", "cacheReadInputTokens", "cacheCreationInputTokens")
+
+def usages(events):
+    # Each completed message carries the usage of its own response; compaction reports its own
+    for e in events:
+        if e.get("type") == "message_end":
+            yield e["message"].get("usage")
+        elif e.get("type") == "compaction_end":
+            yield (e.get("result") or {}).get("usage")
 
 
-def total_tokens(result):
-    models = result.get("modelUsage") or {}
-    return sum(m.get(k, 0) for m in models.values() for k in KEYS)
+def total_tokens(stream):
+    events = (json.loads(line) for line in stream.split(b"\n") if line.strip())
+    return sum(u.get("totalTokens", 0) for u in usages(events) if u)
 
 
 def human(n):
@@ -76,9 +83,9 @@ def main():
     p.add_argument("-n", "--dry-run", action="store_true", help="print the new headers instead of replacing")
     args = p.parse_args()
 
-    total = total_tokens(json.load(sys.stdin))
+    total = total_tokens(sys.stdin.buffer.read())
     if not total:
-        sys.exit("error: no token usage in JSON result")
+        sys.exit("error: no token usage in JSON events")
     reply = find_reply(normalize(args.message_id), args.since)
     if not reply:
         sys.exit(f"error: no flagged reply since {args.since} in thread of <{normalize(args.message_id)}>")

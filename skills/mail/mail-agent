@@ -1,25 +1,26 @@
 #!/bin/bash
-# Pipe a raw message from mutt; hand its Message-ID to `claude -p` with the mail skill.
+# Pipe a raw message from mutt; hand its Message-ID to `pi -p` with the mail skill.
 #   bound to Alt-a (\ea) in ~/helper/mutt/default
-# -n: only print the command, do not run claude
+# -n: only print the command, do not run pi
 #
 # Returns at once, so mutt is not blocked. A detached session (setsid -f) then:
 #   1. delivers a flagged "[Claim]" reply, so the issue is marked as taken
-#   2. runs claude, logged into ~/.cache/mail-agent/<SESSION>.log
-#   3. if claude succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
+#   2. runs pi, logged into ~/.cache/mail-agent/<SESSION>.log
+#   3. if pi succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
 #      on failure the claim stays, to show the resume command
 set -euo pipefail
 
 SKILL=$HOME/helper/skills/mail
 LOGDIR=$HOME/.cache/mail-agent
 
-agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
+# agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
+agent() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" --mode json --model sonnet; }
 
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
   id=$2 session=$3
   cd "$SKILL"
-  claim=$(echo | ./reply.py --flag -s "[Claim] claude --resume $session  # on $(hostname)" --model none "$id")
+  claim=$(echo | ./reply.py --flag -s "[Claim] pi --session $session  # on $(hostname)" --model none "$id")
   claim_id=$(sed -n '/^$/q; s/^Message-ID: *<\(.*\)>.*/\1/Ip' "$claim")
 
   since=$(date +%s) status=0

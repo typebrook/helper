@@ -33,7 +33,7 @@ def parse_args():
     p.add_argument("-b", "--body", default="-", help="UTF-8 plain-text body file, '-' for stdin (default)")
     p.add_argument("--html", type=Path, help="HTML file, added as alternative inline part")
     p.add_argument("-a", "--attach", type=Path, action="append", default=[], help="attachment file (repeatable)")
-    p.add_argument("--model", required=True, help="agent model name, used as From: <MODEL>@<HOSTNAME>")
+    p.add_argument("--model", required=True, help="agent model name, used as From: <MODEL>@<HOSTNAME> and saved into Agent-Model:")
     p.add_argument("--token", help="token spent, saved into Token:")
     p.add_argument("--workdir", help="saved into Working-Directory: (hostname is prefixed)")
     p.add_argument("--keyword", help="Message-ID keyword (default: derived from subject)")
@@ -66,6 +66,7 @@ def build(args, orig):
         msg["In-Reply-To"] = orig_id
         msg["References"] = " ".join(refs + [orig_id])
 
+    msg["Agent-Model"] = args.model
     if args.token:
         msg["Token"] = args.token
     if args.workdir:

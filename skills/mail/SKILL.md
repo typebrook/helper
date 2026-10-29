@@ -63,7 +63,7 @@ Explain your work in ASD-STE100
 
 - Save details (>50 Line or not directly related to summary/decision-making) into attachment(s) with `-a` and refer them in body
 - If diagram/graph is more conveyable, write it as HTML and add it with `--html`
-- Append "claude --resume <SESSION-ID>  # on <HOSTNAME>" at the end, so user can optionally continue session in interactive mode
+- Append the command that resumes this session in your own agent CLI, as "<COMMAND>  # on <HOSTNAME>" (e.g. `claude --resume <SESSION-ID>`, `pi --session <SESSION-ID>`), so user can optionally continue session in interactive mode
 
 
 ## After Reply
