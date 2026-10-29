@@ -11,6 +11,7 @@ id=$(sed -En '/^Message-I[dD]/{p;n;/^ /{p};q}' | tr -d '[<> \n]' | cut -d: -f2)
 session=$(uuidgen)
 SKILL=$HOME/helper/skills/mail
 cd $SKILL
+echo | ./reply.py --flag -s "[Working] claude --resume ${session}" --model none $id || exit 1
 
 log=$HOME/.cache/mail-agent/$session.log
 cmd=(claude -p "/mail $id" --session-id "$session" --dangerously-skip-permissions --output-format json)
@@ -18,4 +19,3 @@ cmd=(claude -p "/mail $id" --session-id "$session" --dangerously-skip-permission
 
 mkdir -p "${log%/*}"
 setsid nohup "${cmd[@]}" >"$log" 2>&1 </dev/null &
-echo | ./reply.py --flag -s "[Working] claude --resume ${session}" --model none $id

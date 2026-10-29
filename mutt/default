@@ -180,6 +180,7 @@ macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
 bind index x tag-entry
 bind index y edit-label
+bind compose F write-fcc
 macro index Y "\\~y " "Limit to label"
 macro index Z "\
 :set my_index_tmp=\$index_format\n\
