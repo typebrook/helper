@@ -36,7 +36,7 @@ Run `reply.py` next to this SKILL.md. Do not write RFC 2822 message by hand, and
 It sets From, To, Date, Message-ID, In-Reply-To and References, encodes MIME, and delivers into the original's Maildir via tmp/ -> new/.
 
 ```sh
-reply.py <MESSAGE-ID> --model <MODEL> -s "<SUBJECT>" -b <BODY-FILE> [--token N] [--workdir PATH] [--html FILE] [-a FILE]... [--flag]
+reply.py <MESSAGE-ID> --model <MODEL> -s "<SUBJECT>" -b <BODY-FILE> [--workdir PATH] [--html FILE] [-a FILE]... [--flag]
 ```
 
 - Body is read from stdin if `-b` is omitted
@@ -48,7 +48,6 @@ reply.py <MESSAGE-ID> --model <MODEL> -s "<SUBJECT>" -b <BODY-FILE> [--token N] 
 Context used by user or other agent in the future. Set them with options:
 
 - `--model`: "From: <MODEL>@<HOSTNAME>" marks it is sent by an agent
-- `--token`: "Token: " reports token spent
 - `--workdir`: "Working-Directory: <HOSTNAME>:<PATH>", only if issue is bound to a certain directory
 
 ### Subject
@@ -69,5 +68,4 @@ Explain your work in ASD-STE100
 
 ## After Reply
 
-1. Use `--flag` on the final reply: it flags the new reply and unflags the replied message, to let user know latest progress in mail client
-2. If there is another message also reply to issue message, and its subject contains your session id, then it is used to claim issue is taken by you. DELETE it since we don't need it anymore.
+Use `--flag` on the final reply: it flags the new reply and unflags the replied message, to let user know latest progress in mail client

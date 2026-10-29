@@ -207,6 +207,13 @@ macro index A \
     "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" \
     "mark all new as read"
 #macro pager U "<pipe-message>less<enter>" "CHECK"
+# Hand current message to claude with mail skill, in background
+macro index,pager \ea "\
+:set my_tmp_pipe_decode=\$pipe_decode\n\
+:unset pipe_decode wait_key\n\
+<pipe-message>mail-agent\n\
+:set pipe_decode=\$my_tmp_pipe_decode wait_key\n\
+:unset my_tmp_pipe_decode\n" "Launch mail agent on message"
 # Quick jump to other mailboxes
 bind index,pager            g       noop
 bind generic                gg      first-entry

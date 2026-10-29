@@ -1,21 +1,48 @@
 #!/bin/bash
 # Pipe a raw message from mutt; hand its Message-ID to `claude -p` with the mail skill.
-#   macro index,pager \ea "<enter-command>unset pipe_decode wait_key<enter><pipe-message>mail-agent<enter><enter-command>set wait_key<enter>"
+#   bound to Alt-a (\ea) in ~/helper/mutt/default
 # -n: only print the command, do not run claude
+#
+# Returns at once, so mutt is not blocked. A detached session (setsid -f) then:
+#   1. delivers a flagged "[Claim]" reply, so the issue is marked as taken
+#   2. runs claude, logged into ~/.cache/mail-agent/<SESSION>.log
+#   3. if claude succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
+#      on failure the claim stays, to show the resume command
 set -euo pipefail
+
+SKILL=$HOME/helper/skills/mail
+LOGDIR=$HOME/.cache/mail-agent
+
+agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
+
+# Detached part, re-executed by the part below
+if [ "${1:-}" = --run ]; then
+  id=$2 session=$3
+  cd "$SKILL"
+  claim=$(echo | ./reply.py --flag -s "[Claim] claude --resume $session  # on $(hostname)" --model none "$id")
+  claim_id=$(sed -n '/^$/q; s/^Message-ID: *<\(.*\)>.*/\1/Ip' "$claim")
+
+  since=$(date +%s) status=0
+  result=$(agent "$id" "$session") || status=$?
+  echo "$result"
+  [ $status -eq 0 ] || exit $status
+
+  # Resolve the claim again: mail client or sync may have renamed it by flags
+  if path=$(./find.py "$claim_id"); then
+    rm -f "$path"
+  fi
+  ./usage.py "$id" --since "$since" <<<"$result"
+  exit
+fi
 
 # Message-ID from stdin (handles folded headers and any capitalization)
 id=$(sed -En '/^Message-I[dD]/{p;n;/^ /{p};q}' | tr -d '[<> \n]' | cut -d: -f2)
+cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 [ -n "$id" ] || { echo "mail-agent: no Message-ID" >&2; exit 1; }
 
 session=$(uuidgen)
-SKILL=$HOME/helper/skills/mail
-cd $SKILL
-echo | ./reply.py --flag -s "[Working] claude --resume ${session}" --model none $id || exit 1
+[ "${1:-}" = -n ] && { DRY=echo agent "$id" "$session"; exit; }
 
-log=$HOME/.cache/mail-agent/$session.log
-cmd=(claude -p "/mail $id" --session-id "$session" --dangerously-skip-permissions --output-format json)
-
-
-mkdir -p "${log%/*}"
-setsid nohup "${cmd[@]}" >"$log" 2>&1 </dev/null &
+log=$LOGDIR/$session.log
+mkdir -p "$LOGDIR"
+setsid -f "$(realpath "$0")" --run "$id" "$session" >"$log" 2>&1 </dev/null
