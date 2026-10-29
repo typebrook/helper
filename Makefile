@@ -131,3 +131,4 @@ snippets:
 
 skills:
 	ln -sf `pwd`/$@/* ~/.claude/skills/
+	find `pwd`/skills -type f -perm -u=x -exec ln -sf {} ~/.local/bin/ \;
