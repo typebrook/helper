@@ -1,0 +1,21 @@
+#!/bin/bash
+# Pipe a raw message from mutt; hand its Message-ID to `claude -p` with the mail skill.
+#   macro index,pager \ea "<enter-command>unset pipe_decode wait_key<enter><pipe-message>mail-agent<enter><enter-command>set wait_key<enter>"
+# -n: only print the command, do not run claude
+set -euo pipefail
+
+# Message-ID from stdin (handles folded headers and any capitalization)
+id=$(sed -En '/^Message-I[dD]/{p;n;/^ /{p};q}' | tr -d '[<> \n]' | cut -d: -f2)
+[ -n "$id" ] || { echo "mail-agent: no Message-ID" >&2; exit 1; }
+
+session=$(uuidgen)
+SKILL=$HOME/helper/skills/mail
+cd $SKILL
+
+log=$HOME/.cache/mail-agent/$session.log
+cmd=(claude -p "/mail $id" --session-id "$session" --dangerously-skip-permissions --output-format json)
+
+
+mkdir -p "${log%/*}"
+setsid nohup "${cmd[@]}" >"$log" 2>&1 </dev/null &
+echo | ./reply.py --flag -s "[Working] claude --resume ${session}" --model none $id

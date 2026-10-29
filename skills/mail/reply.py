@@ -38,7 +38,7 @@ def parse_args():
     p.add_argument("--workdir", help="saved into Working-Directory: (hostname is prefixed)")
     p.add_argument("--keyword", help="Message-ID keyword (default: derived from subject)")
     p.add_argument("--flag", action="store_true", help="flag the reply and unflag the original")
-    p.add_argument("--maildir", type=Path, default=Path.home() / "Maildir/BOX", help="target Maildir (default: ~/Maildir/BOX)")
+    p.add_argument("--maildir", type=Path, help="target Maildir (default: the Maildir holding the original)")
     p.add_argument("-n", "--dry-run", action="store_true", help="print the message instead of delivering it")
     return p.parse_args()
 
@@ -123,7 +123,8 @@ def main():
         sys.stdout.write(data.decode("utf-8", "replace"))
         return
 
-    dest = deliver(args.maildir, data, args.flag)
+    # Original lives in <maildir>/{cur,new}/
+    dest = deliver(args.maildir or original.resolve().parent.parent, data, args.flag)
     if args.flag:
         unflag(original)
     print(dest)
