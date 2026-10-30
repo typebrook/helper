@@ -2,10 +2,10 @@
 # Pipe a raw message from mutt; hand its Message-ID to `pi -p` with the mail skill.
 # -n: only print the command, do not run pi
 #
-# Returns at once, so mutt is not blocked. A detached session (setsid -f) then:
-#   1. delivers a flagged "[Claim]" reply, so the issue is marked as taken
-#   2. runs pi, logged into ~/.cache/mail-agent/<SESSION>.log
-#   3. if pi succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
+# Delivers a flagged "[Claim]" reply, so the issue is marked as taken and mutt
+# shows it as soon as the pipe returns. A detached session (setsid -f) then:
+#   1. runs pi, logged into ~/.cache/mail-agent/<SESSION>.log
+#   2. if pi succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
 #      on failure the claim stays, to show the resume command
 set -euo pipefail
 
@@ -17,24 +17,8 @@ agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-per
 
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
-  id=$2 session=$3
+  id=$2 session=$3 claim_id=$4
   cd "$SKILL"
-  # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
-  orig=$(./find.py "$id")
-  claim_id=$(date +%s.%N).claim@$(hostname)
-  mmime -r <<EOF | mdeliver -c -X F "$(dirname "$(dirname "$orig")")"
-From: none@$(hostname)
-To: $(mhdr -h reply-to "$orig" || mhdr -h from "$orig")
-Subject: [Claim] pi --session $session  # on $(hostname)
-Date: $(mdate)
-Message-ID: <$claim_id>
-In-Reply-To: <$id>
-References: $(mhdr -h references "$orig" || mhdr -h in-reply-to "$orig" || true) <$id>
-Agent-Model: none
-
-EOF
-  mflag -f "$orig" >/dev/null
-
   since=$(date +%s) status=0
   result=$(agent "$id" "$session") || status=$?
   echo "$result"
@@ -56,6 +40,23 @@ cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 session=$(uuidgen)
 [ "${1:-}" = -n ] && { DRY=echo agent "$id" "$session"; exit; }
 
+# Claim: flagged reply in the original's Maildir; the flag moves from original to claim
+cd "$SKILL"
+orig=$(./find.py "$id")
+claim_id=$(date +%s.%N).claim@$(hostname)
+mmime -r <<EOF | mdeliver -c -X F "$(dirname "$(dirname "$orig")")" >/dev/null
+From: none@$(hostname)
+To: $(mhdr -h reply-to "$orig" || mhdr -h from "$orig")
+Subject: [Claim] pi --session $session  # on $(hostname)
+Date: $(mdate)
+Message-ID: <$claim_id>
+In-Reply-To: <$id>
+References: $(mhdr -h references "$orig" || mhdr -h in-reply-to "$orig" || true) <$id>
+Agent-Model: none
+
+EOF
+mflag -f "$orig" >/dev/null
+
 log=$LOGDIR/$session.log
 mkdir -p "$LOGDIR"
-setsid -f "$(realpath "$0")" --run "$id" "$session" >"$log" 2>&1 </dev/null
+setsid -f "$(realpath "$0")" --run "$id" "$session" "$claim_id" >"$log" 2>&1 </dev/null
