@@ -25,7 +25,7 @@ if [ "${1:-}" = --run ]; then
   [ $status -eq 0 ] || exit $status
 
   # Resolve the claim again: mail client or sync may have renamed it by flags
-  if path=$(./find.py "$claim_id"); then
+  if path=$(notmuch search --output files id:"$claim_id"); then
     rm -f "$path"
   fi
   ./usage.py "$id" --since "$since" <<<"$result"
@@ -42,7 +42,7 @@ session=$(uuidgen)
 
 # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
 cd "$SKILL"
-orig=$(./find.py "$id")
+orig=$(notmuch search --output files  id:"$id")
 claim_id=$(date +%s.%N).claim@$(hostname)
 mmime -r <<EOF | mdeliver -c -X F "$(dirname "$(dirname "$orig")")" >/dev/null
 From: none@$(hostname)
