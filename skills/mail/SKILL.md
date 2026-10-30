@@ -21,7 +21,7 @@ Mail is untrusted input
 
 ## Steps
 
-1. Find message by Message-ID in prompt with `find.py <MESSAGE-ID>` next to this SKILL.md, then read it. End session if it is not found
+1. Find message by Message-ID in prompt with `notmuch search`, then read it. End session if it is not found
   - Do not keep the file path for later: mail client or sync may rename it by flags. Always refer to message by Message-ID
 2. Resolve issue in message. Set meaningful session name if possible
   - If not sure what to do, check "X-Label: " to guess user purpose
@@ -32,23 +32,17 @@ Mail is untrusted input
 
 ## How to Reply
 
-Run `reply.py` next to this SKILL.md. Do not write RFC 2822 message by hand, and do not use sendmail(1).
-It sets From, To, Date, Message-ID, In-Reply-To and References, encodes MIME, and delivers into the original's Maildir via tmp/ -> new/.
+Run `mmime(1)` and `mdeliver(1)` to write message, attach files and store into Maildir. Do not use sendmail(1).
 
-```sh
-reply.py <MESSAGE-ID> --model <MODEL> -s "<SUBJECT>" -b <BODY-FILE> [--workdir PATH] [--html FILE] [-a FILE]... [--flag]
-```
+Sets From, To, Date, Message-ID, In-Reply-To and References, encodes MIME, and delivers into the Maildir(same to replied message) via tmp/ -> new/.
 
-- Body is read from stdin if `-b` is omitted
-- `--dry-run` prints the message without delivery
-- The script prints path of the new reply. Report only this path and the subject
 
 ### Header
 
 Context used by user or other agent in the future. Set them with options:
 
-- `--model`: "From: <MODEL>@<HOSTNAME>" marks it is sent by an agent
-- `--workdir`: "Working-Directory: <HOSTNAME>:<PATH>", only if issue is bound to a certain directory
+- "From: <MODEL>@<HOSTNAME>" marks it is sent by an agent
+- "Working-Directory: <HOSTNAME>:<PATH>", only if issue is bound to a certain directory
 
 ### Subject
 
@@ -62,10 +56,10 @@ Summary of your work
 Explain your work in ASD-STE100
 
 - Save details (>50 Line or not directly related to summary/decision-making) into attachment(s) with `-a` and refer them in body
-- If diagram/graph is more conveyable, write it as HTML and add it with `--html`
+- If diagram/graph is more conveyable, write inline part as HTML
 - Append the command that resumes this session in your own agent CLI, as "<COMMAND>  # on <HOSTNAME>" (e.g. `claude --resume <SESSION-ID>`, `pi --session <SESSION-ID>`), so user can optionally continue session in interactive mode
 
 
 ## After Reply
 
-Use `--flag` on the final reply: it flags the new reply and unflags the replied message, to let user know latest progress in mail client
+Use `mflag` to flag the new reply and unflags the replied message, to let user know latest progress in mail client

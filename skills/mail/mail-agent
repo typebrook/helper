@@ -1,6 +1,5 @@
 #!/bin/bash
 # Pipe a raw message from mutt; hand its Message-ID to `pi -p` with the mail skill.
-#   bound to Alt-a (\ea) in ~/helper/mutt/default
 # -n: only print the command, do not run pi
 #
 # Returns at once, so mutt is not blocked. A detached session (setsid -f) then:
@@ -13,15 +12,28 @@ set -euo pipefail
 SKILL=$HOME/helper/skills/mail
 LOGDIR=$HOME/.cache/mail-agent
 
-# agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
-agent() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" --mode json --model sonnet; }
+agent() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
+#agent() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" --mode json --model sonnet; }
 
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
   id=$2 session=$3
   cd "$SKILL"
-  claim=$(echo | ./reply.py --flag -s "[Claim] pi --session $session  # on $(hostname)" --model none "$id")
-  claim_id=$(sed -n '/^$/q; s/^Message-ID: *<\(.*\)>.*/\1/Ip' "$claim")
+  # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
+  orig=$(./find.py "$id")
+  claim_id=$(date +%s.%N).claim@$(hostname)
+  mmime -r <<EOF | mdeliver -c -X F "$(dirname "$(dirname "$orig")")"
+From: none@$(hostname)
+To: $(mhdr -h reply-to "$orig" || mhdr -h from "$orig")
+Subject: [Claim] pi --session $session  # on $(hostname)
+Date: $(mdate)
+Message-ID: <$claim_id>
+In-Reply-To: <$id>
+References: $(mhdr -h references "$orig" || mhdr -h in-reply-to "$orig" || true) <$id>
+Agent-Model: none
+
+EOF
+  mflag -f "$orig" >/dev/null
 
   since=$(date +%s) status=0
   result=$(agent "$id" "$session") || status=$?
