@@ -41,6 +41,7 @@ Sets From, To, Date, Message-ID, In-Reply-To and References, encodes MIME, and d
 
 Context used by user or other agent in the future. Set them with options:
 
+- "Date: " for RFC 2822
 - "From: <MODEL>@<HOSTNAME>" marks it is sent by an agent
 - "Working-Directory: <HOSTNAME>:<PATH>", only if issue is bound to a certain directory
 

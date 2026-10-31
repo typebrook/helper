@@ -25,8 +25,8 @@ if [ "${1:-}" = --run ]; then
   [ $status -eq 0 ] || exit $status
 
   # Resolve the claim again: mail client or sync may have renamed it by flags
-  if path=$(notmuch search --output files id:"$claim_id"); then
-    rm -f "$path"
+  if claim_msg=$(notmuch search --output files id:"$claim_id"); then
+    rm -f "$claim_msg"
   fi
   ./usage.py "$id" --since "$since" <<<"$result"
   exit
