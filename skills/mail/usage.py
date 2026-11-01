@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Add token usage of a `pi -p --mode json` run to the agent's reply, for mail-agent.
+"""Add token usage of a `claude -p --output-format json` (or `pi -p --mode json`) run to the agent's reply, for mail-agent.
 
-Reads the JSONL event stream from stdin, finds the newest flagged message delivered since
+Reads the JSON result (or JSONL event stream) from stdin, finds the newest flagged message delivered since
 --since in the thread of MESSAGE-ID, and puts usage into its Subject ("... (123k tokens)")
 and Token: header. Only the header block changes; the body bytes are kept as-is.
 The new copy keeps Message-ID and flags but gets a new file name, so a synced Maildir
@@ -23,18 +23,25 @@ from find import normalize
 from reply import HOST
 
 
+CLAUDE_TOKENS = ("inputTokens", "outputTokens", "cacheReadInputTokens", "cacheCreationInputTokens")
+
+
 def usages(events):
-    # Each completed message carries the usage of its own response; compaction reports its own
     for e in events:
+        # pi: each completed message carries the usage of its own response; compaction reports its own
         if e.get("type") == "message_end":
-            yield e["message"].get("usage")
+            yield (e["message"].get("usage") or {}).get("totalTokens")
         elif e.get("type") == "compaction_end":
-            yield (e.get("result") or {}).get("usage")
+            yield ((e.get("result") or {}).get("usage") or {}).get("totalTokens")
+        # claude: the final result sums the whole session, per model (subagents included)
+        elif e.get("type") == "result":
+            for u in (e.get("modelUsage") or {}).values():
+                yield sum(u.get(k, 0) for k in CLAUDE_TOKENS)
 
 
 def total_tokens(stream):
     events = (json.loads(line) for line in stream.split(b"\n") if line.strip())
-    return sum(u.get("totalTokens", 0) for u in usages(events) if u)
+    return sum(n for n in usages(events) if n)
 
 
 def human(n):
