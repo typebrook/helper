@@ -28,6 +28,12 @@ set postponed = "+Drafts"
 #set move = yes
 set mask="!(tmp|new|cur|dovecot.*|\\..*|maildirfolder)"
 # }}}
+# Mailing Lists {{{
+subscribe arch-general@lists\\.archlinux\\.org
+subscribe mutt-users@mutt\\.org
+subscribe ~rjarry/aerc-discuss@lists\\.sr\\.ht
+subscribe talk-ja@openstreetmap\\.org
+# }}}
 # Sidebar {{{
 # }}}
 # Go to other mailboxes {{{
