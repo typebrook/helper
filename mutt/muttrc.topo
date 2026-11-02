@@ -33,6 +33,9 @@ subscribe arch-general@lists\\.archlinux\\.org
 subscribe mutt-users@mutt\\.org
 subscribe ~rjarry/aerc-discuss@lists\\.sr\\.ht
 subscribe talk-ja@openstreetmap\\.org
+subscribe talk-tw@openstreetmap\\.org
+subscribe git@vger\\.kernel\\.org
+subscribe linux-kernel-announce@vger\\.kernel\\.org
 # }}}
 # Sidebar {{{
 # }}}
