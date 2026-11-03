@@ -154,7 +154,7 @@ bind index \Cj next-entry
 bind index \Ck previous-entry
 bind index \Ce next-line
 bind index \Cy previous-line
-macro index d '<tag-prefix><delete-message>' 'Delete'
+macro index d '<tag-prefix><delete-message><undelete-pattern>~D ~F<enter>' 'Delete (except flagged)'
 macro index h "\\all\n" "All messages"
 macro index I  "<search>~F\n"   "Search for next important"
 bind index \\ limit
