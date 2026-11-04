@@ -40,7 +40,7 @@ subscribe linux-kernel-announce@vger\\.kernel\\.org
 # Sidebar {{{
 # }}}
 # Go to other mailboxes {{{
-macro index,pager   gi      "<change-folder>+<Return>" "Switch to INBOX folder"
+macro index,pager   gi      "<change-folder>+INBOX<Return>" "Switch to INBOX folder"
 macro index,pager   ga      "<change-folder>+Archive<Return>"
 macro index,pager   gb      "<change-folder>+BOX<Return>"
 macro index,pager   gd      "<change-folder>+Drafts<Return>"

@@ -7,7 +7,7 @@
 #   mbsync -a          # every channel, i.e. topo + a redundant topo-fetch
 #   mbsync -l topo     # list-only: show which folders would sync
 #
-# Local maildir lives under ~/Maildir
+# Local maildir lives under ~/Maildir, INBOX in ~/Maildir/INBOX (same as on v)
 #
 # Login note: muttrc's imaps://pham@mail.topo.tw:993 means the LOGIN user is
 # "pham" on host mail.topo.tw; "pham@mail.topo.tw" is only the `pass` entry name.
@@ -25,25 +25,22 @@ Account topo
 
 MaildirStore topo-local
 SubFolders Verbatim
-Inbox ~/Maildir/
+Inbox ~/Maildir/INBOX
 Path ~/Maildir/
 
 Channel topo
 Far :topo-remote:
 Near :topo-local:
-# Sync every folder except the non-selectable mbox namespace container/tree.
-# To skip scratch folders too, append e.g.: !"tmp" !"test" !"imap" !"zl*"
-# "tmp" (and cur/new) collide with the Inbox maildir's reserved staging dirs
-# because Inbox lives at the maildir root, so they must never sync as folders.
-#Patterns * !"mbox" !"mbox/*" !"imap" !"tmp" !"cur" !"new"
-Patterns * !"mbox" !"mbox/*"
+# Sync every folder. On v, INBOX is ~/Maildir/INBOX (Dovecot Maildir, fs layout).
+# To skip scratch folders, append e.g.: !"tmp" !"test" !"zl*"
+Patterns *
 Create Both
 Expunge Both
 SyncState *
 
 # INBOX-only pull used by the goimapnotify onNewMail hook: it just needs the
 # new message on disk so the hook can read its Subject header, so nothing is
-# ever pushed or expunged upstream. Shares ~/Maildir/.mbsyncstate with "topo"
+# ever pushed or expunged upstream. Shares ~/Maildir/INBOX/.mbsyncstate with "topo"
 # (SyncState lives with the mailbox, not the channel), so the two stay in step.
 Channel topo-fetch
 Far :topo-remote:
