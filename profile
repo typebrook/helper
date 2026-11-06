@@ -42,11 +42,18 @@ fi
 # Set config for interactive mode {{{
 [[ ! $- =~ i ]] && return 0
 
-# attch to tmux session if exists {{{
+# cd to working directory to adjacent pane
+if [ -n "$TMUX_PANE" ]; then
+  up=$(tmux display-message -p -t '{up}' '#{pane_current_path}')
+  left=$(tmux display-message -p -t '{left}' '#{pane_current_path}')
+  dir=${up:-${left}}
+  [ -n "$dir" ] && cd $dir
+fi
+
+# attch to tmux session if exists
 if which tmux &>/dev/null && [ -z $HERDR_ENV ]; then
   test -z "$TMUX" && tmux attach
 fi
-# }}}
 
 if [[ $shell == zsh ]]; then
   setopt extended_glob interactive_comments
