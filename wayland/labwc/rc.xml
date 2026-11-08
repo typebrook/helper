@@ -395,7 +395,8 @@
 
     <!-- ################################ Launch Applications ################################ -->
 
-    <keybind key="C-S-semicolon"><action name="Execute" command="omarchy menu clipboard" /></keybind>
+    <keybind key="C-S-semicolon"><action name="Execute" command="rofimoji --selector rofi --action type copy" /></keybind>
+
 
     <!-- Main work terminal (run-or-raise on the @Work title) -->
     <keybind key="W-Return">
