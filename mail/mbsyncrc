@@ -16,7 +16,7 @@ IMAPAccount topo
 Host mail.topo.tw
 Port 993
 User pham
-PassCmd "pass mail/pham@mail.topo.tw"
+PassCmd "pass pham@mail.topo.tw.mail"
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
