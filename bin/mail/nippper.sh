@@ -67,13 +67,13 @@ for item in ET.parse(sys.argv[1]).getroot().iter('item'):
 PY
 # }}}
 # extract article content, rewrite <img> to cid: {{{
-extract() { # $1=page.html $2=link $3=title $4=creator $5=outdir
+extract() { # $1=page.html $2=link $3=title $4=creator $5=outdir $6=date
 python3 -I - "$@" <<'PY'
-import sys, os, html
+import sys, os, html, email.utils
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 
-page, link, title, creator, out = sys.argv[1:6]
+page, link, title, creator, out, date = sys.argv[1:7]
 DROP_CLASS = ('sd-sharing', 'robots-nocontent', 'pochipp-box', 'sharedaddy', 'jp-relatedposts')
 DROP_TAG = {'script', 'style', 'iframe', 'noscript', 'form', 'button', 'svg'}
 VOID = {'img', 'br', 'hr', 'meta', 'link', 'input', 'source', 'wbr', 'area', 'col', 'embed'}
@@ -154,16 +154,43 @@ if not body.strip():
     sys.exit('no article_content in ' + link)
 
 t = html.escape(title)
+u = html.escape(link, quote=True)
+try:
+    d = email.utils.parsedate_to_datetime(date)
+    date = f'{d.year}/{d.month}/{d.day}'
+except (TypeError, ValueError):
+    pass
+# Mimic nippper.com theme (css/nippper.webflow.css, mobile layout)
 doc = f'''<!DOCTYPE html>
-<html lang="ja"><head><meta charset="utf-8"><title>{t}</title>
-<style>body{{max-width:46em;margin:auto;padding:0 1em;line-height:1.7;font-family:sans-serif}}
-img{{max-width:100%;height:auto}}</style></head>
-<body>
-<h1><a href="{html.escape(link, quote=True)}">{t}</a></h1>
-<p><small>{html.escape(creator)} · <a href="{html.escape(link, quote=True)}">nippper.com</a></small></p>
-{p.hero}
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>{t}</title>
+<style>
+body{{margin:0;padding:0 .5rem;color:#333;background:#f4f4f4;
+  font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:14px;line-height:20px}}
+main{{max-width:800px;margin:auto}}
+a{{color:#000;text-decoration:none}}
+img{{max-width:100%;height:auto}}
+h1{{font-size:20px;line-height:30px;margin:0 0 10px}}
+h1 img{{display:block;margin:0 auto 20px}}
+h1 span{{background-image:repeating-linear-gradient(-45deg,#ff6 0,#ff6 4px,transparent 4px,transparent 8px);
+  background-position:center bottom;background-repeat:repeat-x;background-size:auto .75em}}
+.info{{display:flex;justify-content:space-between;margin:0 0 20px;font-size:14px;color:#696969}}
+.content{{font-size:16px;line-height:2em}}
+.content a{{color:#c00}}
+.content p{{margin:0 0 30px}}
+.content h2,.content h3{{font-size:22px;line-height:1.5em;margin:20px 0 16px}}
+.content figure{{margin:20px 0;text-align:center}}
+.content figcaption{{font-size:.8em;color:#474747;line-height:1.5em}}
+.content blockquote{{margin:0 0 30px;padding:0 1em;border-left:4px solid #ccc;color:#555}}
+</style></head>
+<body><main>
+<h1>{p.hero}<a href="{u}"><span>{t}</span></a></h1>
+<div class="info"><span>投稿者／{html.escape(creator)}</span><span>{html.escape(date)}</span></div>
+<div class="content">
 {body}
-</body></html>
+</div>
+<p class="info"><a href="{u}">nippper.com で読む</a></p>
+</main></body></html>
 '''
 with open(os.path.join(out, 'body.html'), 'w', encoding='utf-8') as f:
     f.write(doc)
@@ -178,7 +205,7 @@ deliver() { # id link title date creator
   local id=$1 link=$2 title=$3 date=$4 creator=$5
   local dir=$work/$id; mkdir -p "$dir"
   fetch "$link" >"$dir/page.html" || return 1
-  extract "$dir/page.html" "$link" "$title" "$creator" "$dir" || return 1
+  extract "$dir/page.html" "$link" "$title" "$creator" "$dir" "$date" || return 1
 
   # download images; on failure fall back to remote URL in HTML
   local url name mime parts=()
