@@ -1,2 +1,5 @@
 # Push changes on ~/.task
 */20 * * * * cd ~/.task && git add * && git commit -am update && git push origin 2>&1
+
+# Deliver new nippper.com articles into ~/Maildir/INBOX
+0 8 * * * ~/helper/bin/mail/nippper.sh 2>&1 | logger -t nippper
