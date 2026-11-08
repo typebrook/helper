@@ -8,7 +8,7 @@
 #   -r  resend items already delivered (all items in feed, or only given IDs),
 #       replacing earlier copies in MAILDIR_TARGET
 # Env:
-#   SMTP_SERVER     server for smtp(1) (default: smtp+notls://localhost:2525)
+#   SMTP_SERVER     server for smtp(1) (default: smtp+notls://127.0.0.1:2525)
 #   MAIL_FROM       sender address (default: rss@nippper.com)
 #   MAIL_TO         recipient address (default: $USER@localhost)
 #   MAILDIR_TARGET  maildir where SMTP_SERVER delivers MAIL_TO, used by -r to
@@ -23,7 +23,7 @@
 set -euo pipefail
 
 FEED=https://nippper.com/feed/
-SMTP_SERVER=${SMTP_SERVER:-smtp+notls://localhost:2525}
+SMTP_SERVER=${SMTP_SERVER:-smtp+notls://127.0.0.1:2525}
 MAIL_FROM=${MAIL_FROM:-rss@nippper.com}
 MAIL_TO=${MAIL_TO:-$USER@localhost}
 MAILDIR_TARGET=${MAILDIR_TARGET:-$HOME/Maildir/INBOX}
