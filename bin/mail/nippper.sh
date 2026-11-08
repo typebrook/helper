@@ -8,7 +8,11 @@
 #   -r  resend items already delivered (all items in feed, or only given IDs),
 #       replacing earlier copies in MAILDIR_TARGET
 # Env:
-#   MAILDIR_TARGET  target maildir (default: ~/Maildir/INBOX)
+#   SMTP_SERVER     server for smtp(1) (default: smtp+notls://localhost:2525)
+#   MAIL_FROM       sender address (default: rss@nippper.com)
+#   MAIL_TO         recipient address (default: $USER@localhost)
+#   MAILDIR_TARGET  maildir where SMTP_SERVER delivers MAIL_TO, used by -r to
+#                   remove earlier copies (default: ~/Maildir/INBOX)
 #   IMG_MAX         max width/height of images in px (default: 1000)
 # State:
 #   $XDG_STATE_HOME/nippper/seen  delivered item IDs, one per line.
@@ -19,6 +23,9 @@
 set -euo pipefail
 
 FEED=https://nippper.com/feed/
+SMTP_SERVER=${SMTP_SERVER:-smtp+notls://localhost:2525}
+MAIL_FROM=${MAIL_FROM:-rss@nippper.com}
+MAIL_TO=${MAIL_TO:-$USER@localhost}
 MAILDIR_TARGET=${MAILDIR_TARGET:-$HOME/Maildir/INBOX}
 STATE_DIR=${XDG_STATE_HOME:-$HOME/.local/state}/nippper
 SEEN=$STATE_DIR/seen
@@ -208,32 +215,51 @@ deliver() { # id link title date creator
   extract "$dir/page.html" "$link" "$title" "$creator" "$dir" "$date" || return 1
 
   # download images; on failure fall back to remote URL in HTML
-  local url name mime parts=()
+  local url name mime
+  : >"$dir/parts.tsv"
   while IFS=$'\t' read -r url name mime; do
     if fetch -e "$link" -o "$dir/$name" "$url"; then
       shrink "$dir/$name"
-      parts+=("#$mime#inline $dir/$name>$name")
+      printf '%s\t%s\n' "$name" "$mime" >>"$dir/parts.tsv"
     else
       echo "image failed: $url" >&2
       sed -i "s#src=\"cid:$name@nippper\"#src=\"$url\"#" "$dir/body.html"
     fi
   done <"$dir/images.tsv"
 
-  {
-    printf 'From: nippper <rss@nippper.com>\n'
-    printf 'To: %s\n' "${USER}@localhost"
-    printf 'Subject: %s\n' "$title"
-    printf 'Date: %s\n' "$(date -R -d "$date" 2>/dev/null || date -R)"
-    printf 'Message-ID: <nippper-%s@nippper.com>\n' "$id"
-    printf 'List-Id: nippper <nippper.com>\n'
-    printf 'X-Original-URL: %s\n\n' "$link"
-    printf '#text/html;charset=utf-8#inline %s>index.html\n' "$dir/body.html"
-    [ ${#parts[@]} -eq 0 ] || printf '%s\n' "${parts[@]}"
-  } | mmime -t 'multipart/related; type="text/html"' \
-    | sed -E '/^Content-Disposition: inline; filename="?index\.html"?$/d' \
-    | sed -E '/^Content-Disposition: inline; filename="?(img-[0-9]+\.[a-z]+)"?$/{p;s//Content-ID: <\1@nippper>/}' \
-    | mdeliver "$MAILDIR_TARGET" >/dev/null || return 1
+  compose "$dir" "$id" "$link" "$title" "$date" \
+    | smtp -s "$SMTP_SERVER" -F "$MAIL_FROM" "$MAIL_TO" || return 1
   echo "delivered: $id $title"
+}
+
+# print message: multipart/related with HTML body and cid: images
+compose() { # $1=dir $2=id $3=link $4=title $5=date
+python3 -I - "$@" "$MAIL_FROM" "$MAIL_TO" <<'PY'
+import sys, os, email.utils
+from email.message import EmailMessage
+
+dir, pid, link, title, date, mfrom, mto = sys.argv[1:8]
+try:
+    date = email.utils.format_datetime(email.utils.parsedate_to_datetime(date))
+except (TypeError, ValueError):
+    date = email.utils.formatdate(localtime=True)
+m = EmailMessage()
+m['From'] = 'nippper <%s>' % mfrom
+m['To'] = mto
+m['Subject'] = title
+m['Date'] = date
+m['Message-ID'] = '<nippper-%s@nippper.com>' % pid
+m['List-Id'] = 'nippper <nippper.com>'
+m['X-Original-URL'] = link
+with open(os.path.join(dir, 'body.html'), encoding='utf-8') as f:
+    m.set_content(f.read(), subtype='html')
+with open(os.path.join(dir, 'parts.tsv')) as f:
+    for line in f:
+        name, mime = line.rstrip('\n').split('\t')
+        with open(os.path.join(dir, name), 'rb') as img:
+            m.add_related(img.read(), *mime.split('/'), cid='<%s@nippper>' % name)
+sys.stdout.buffer.write(m.as_bytes())
+PY
 }
 # }}}
 
