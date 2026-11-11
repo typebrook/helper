@@ -78,8 +78,9 @@ crontab:
 libinput:
 	sudo ln -sf `pwd`/X11/libinput/* /etc/X11/xorg.conf.d/
 
-# Swap Ctrl-Caps in tty2~6
+# Map Caps Lock to Ctrl in tty
 console:
+	sudo install -Dm644 misc/keymap /usr/local/share/kbd/keymaps/caps-ctrl.map
 	sudo ln -sf `pwd`/misc/vconsole.conf /etc/vconsole.conf
 	sudo systemctl restart systemd-vconsole-setup.service
 
