@@ -526,8 +526,7 @@
           sh -c '
             xdotool search --name "@Work" windowactivate || \
             alacritty --title @Work \
-            --working-directory ~/Downloads \
-            -e  bash --rcfile ~pham/.profile
+            --working-directory ~/Downloads
           '
         </command>
       </action>

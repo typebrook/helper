@@ -26,8 +26,9 @@ source $HELPER_DIR/alias
 
 # sourcr rc files in private/ and bin/
 [[ -d $HELPER_DIR/private ]] && for f in $HELPER_DIR/private/*; do source $f; done
-find $HELPER_DIR/bin -not -executable -name '*rc' | while read rcfile; do source $rcfile; done
-find $HELPER_DIR/bin -mindepth 1 -type d | while read dir; do PATH+=:${dir}; done
+# Use process substitution, not a pipe: in bash, `cmd | while` runs the loop in a subshell
+while read rcfile; do source $rcfile; done < <(find $HELPER_DIR/bin -not -executable -name '*rc')
+while read dir; do PATH+=:${dir}; done < <(find $HELPER_DIR/bin -mindepth 1 -type d)
 
 # }}}
 # fzf {{{
