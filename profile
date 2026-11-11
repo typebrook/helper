@@ -50,6 +50,11 @@ if [ -n "$TMUX_PANE" ]; then
   [ -n "$dir" ] && cd $dir
 fi
 
+# Start X11 session on tty1 (autologin via getty@tty1 override, see make xinit)
+if [ -z "$DISPLAY" ] && [ "$(tty)" = /dev/tty1 ] && which startx &>/dev/null; then
+  exec startx
+fi
+
 # attch to tmux session if exists
 if which tmux &>/dev/null && [ -z $HERDR_ENV ]; then
   test -z "$TMUX" && tmux attach

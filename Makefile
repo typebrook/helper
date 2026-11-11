@@ -110,6 +110,16 @@ openbox: theme
 	~/.fechbg
 	EOF
 
+# Boot into X11 (Openbox): autologin on tty1, then profile runs startx
+xinit:
+	sudo pacman -S --needed xorg-server xorg-xinit
+	ln -sf `pwd`/X11/xinitrc ~/.xinitrc
+	sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
+	printf '%s\n' '[Service]' 'ExecStart=' \
+		"ExecStart=-/usr/bin/agetty -o '-p -f -- \\\\u' --noclear --autologin $(USER) %I \$$TERM" \
+		| sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf
+	sudo systemctl daemon-reload
+
 rofi:
 	ln -sf `pwd`/X11/rofi/config.rasi ~/.config/rofi/config.rasi
 
