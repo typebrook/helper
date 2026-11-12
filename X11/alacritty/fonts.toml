@@ -1,14 +1,18 @@
 [font]
 size = 18
 
-[font.bold]
-family = "SauceCodePro Nerd Font Mono"
+[font.normal]
+family = "NotoSansM Nerd Font Mono"
+style = "Regular"
 
-[font.bold_italic]
-family = "SauceCodePro Nerd Font Mono"
+[font.bold]
+family = "NotoSansM Nerd Font Mono"
+style = "Bold"
 
 [font.italic]
-family = "SauceCodePro Nerd Font Mono"
+family = "NotoSansM Nerd Font Mono"
+style = "Regular"
 
-[font.normal]
-family = "SauceCodePro Nerd Font Mono"
+[font.bold_italic]
+family = "NotoSansM Nerd Font Mono"
+style = "Bold"
