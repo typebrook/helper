@@ -33,6 +33,15 @@ regex = "([-_./0-9@-Za-z]{4,})"
 key = "I"
 mods = "Control|Shift"
 
+[[hints.enabled]]
+action = "Copy"
+post_processing = true
+regex = "([^ ]{3,}.+)"
+
+[hints.enabled.binding]
+key = "L"
+mods = "Control|Shift"
+
 [[keyboard.bindings]]
 action = "SemanticRight"
 key = "W"
