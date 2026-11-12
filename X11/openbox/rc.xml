@@ -823,6 +823,11 @@
     <keybind key="C-S-R">
       <action name="Reconfigure"/>
     </keybind>
+    <keybind key="C-S-semicolon">
+      <action name="Execute">
+        <command>rofimoji</command>
+      </action>
+    </keybind>
     <keybind key="W-S-Escape">
       <action name="Execute">
         <command>xkill</command>

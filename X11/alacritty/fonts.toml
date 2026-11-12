@@ -2,17 +2,17 @@
 size = 18
 
 [font.normal]
-family = "NotoSansM Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [font.bold]
-family = "NotoSansM Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Bold"
 
 [font.italic]
-family = "NotoSansM Nerd Font Mono"
-style = "Regular"
+family = "JetBrainsMono Nerd Font Mono"
+style = "Italic"
 
 [font.bold_italic]
-family = "NotoSansM Nerd Font Mono"
-style = "Bold"
+family = "JetBrainsMono Nerd Font Mono"
+style = "Bold Italic"
