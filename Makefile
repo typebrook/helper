@@ -60,6 +60,11 @@ mutt: ~/.local/share/applications
 mbsync:
 	ln -sf `pwd`/mail/mbsyncrc ~/.mbsyncrc
 
+# FQDN for mgenmid(1): <hostname>.topo.tw
+mblaze:
+	mkdir -p ~/.mblaze
+	grep -qs '^FQDN:' ~/.mblaze/profile || echo "FQDN: $$(uname -n).topo.tw" >>~/.mblaze/profile
+
 goimapnotify: mbsync
 	mkdir -p ~/.config/goimapnotify ~/.config/systemd/user
 	ln -sf `pwd`/mail/goimapnotify.yaml ~/.config/goimapnotify/goimapnotify.yaml
