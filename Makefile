@@ -65,6 +65,11 @@ mblaze:
 	mkdir -p ~/.mblaze
 	grep -qs '^FQDN:' ~/.mblaze/profile || echo "FQDN: $$(uname -n).topo.tw" >>~/.mblaze/profile
 
+notmuch:
+	mkdir -p ~/.config/notmuch/default
+	ln -sf `pwd`/mail/notmuch-config ~/.config/notmuch/default/config
+	[ -d ~/.local/share/notmuch/default ] || notmuch new
+
 goimapnotify: mbsync
 	mkdir -p ~/.config/goimapnotify ~/.config/systemd/user
 	ln -sf `pwd`/mail/goimapnotify.yaml ~/.config/goimapnotify/goimapnotify.yaml

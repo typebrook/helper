@@ -1,0 +1,24 @@
+# notmuch configuration for ~/Maildir (synced by mbsync, see mbsyncrc)
+# Installed by `make notmuch` as ~/.config/notmuch/default/config
+# Mail in ~/Maildir, Xapian database kept outside it (XDG data dir)
+
+[database]
+path=/home/pham/.local/share/notmuch/default
+mail_root=/home/pham/Maildir
+
+[user]
+name=謝晉凡 Hsieh Chin Fan
+primary_email=pham@topo.tw
+
+[new]
+tags=unread;inbox;
+# mbsync bookkeeping, not mail
+ignore=.mbsyncstate;.uidvalidity;.isyncuidmap.db;
+
+[search]
+exclude_tags=deleted;spam;
+
+[maildir]
+# Map Maildir flags (S, F, R, T, D) <-> notmuch tags both ways,
+# so mutt/mbsync and notmuch agree on read/flagged/replied.
+synchronize_flags=true

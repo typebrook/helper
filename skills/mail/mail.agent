@@ -9,6 +9,7 @@
 #   2. if it succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
 #      on failure the claim stays, to show the resume command
 set -euo pipefail
+set -x
 
 SKILL=$HOME/helper/skills/mail
 LOGDIR=$HOME/.cache/mail-agent

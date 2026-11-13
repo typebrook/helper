@@ -1,6 +1,6 @@
 ---
 name: mail
-description: Work on a task and report by writing an RFC 2822 message into a synced Maildir. If the prompt gives a Message-ID, the task comes from that message and the result is a reply. If not, the task comes from the prompt and the result is a new message in ~/Maildir/new/.
+description: Work on a task and report by writing an RFC 2822 message into a synced Maildir. If the prompt gives a Message-ID, the task comes from that message (Or its X-Label) and the result is a reply. If not, the task comes from the prompt and the result is a new message in ~/Maildir/new/.
 ---
 
 ## First Principle
