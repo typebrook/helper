@@ -103,5 +103,8 @@ fi
 # claude code {{{
 export CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1
 #}}}
+# for setting <C-W> in ~/.inputrc {{{
+stty werase undef
+# }}}
 
 true

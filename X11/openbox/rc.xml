@@ -500,22 +500,17 @@
     <!-- Screenshot Keys -->
     <keybind key="Print">
       <action name="Execute">
-        <command>~/helper/X11/image/takeshot --now</command>
+        <command>bash -c 'cd ~/d/; maim $(date +%Y%m%d.%H%M%S.png) &amp;&amp; notify-send "screenshot saved"'</command>
       </action>
     </keybind>
     <keybind key="W-5">
       <action name="Execute">
-        <command>~/helper/X11/image/takeshot --in5</command>
-      </action>
-    </keybind>
-    <keybind key="C-Print">
-      <action name="Execute">
-        <command>~/helper/X11/image/takeshot --win</command>
+        <command>bash -c 'cd ~/d/; sleep 3; maim $(date +%Y%m%d.%H%M%S.png) &amp;&amp; notify-send "screenshot saved"'</command>
       </action>
     </keybind>
     <keybind key="W-s">
       <action name="Execute">
-        <command>~/helper/X11/image/takeshot --area</command>
+        <command>bash -c 'cd ~/d/; maim -s $(date +%Y%m%d.%H%M%S.png) &amp;&amp; notify-send "screenshot saved"'</command>
       </action>
     </keybind>
     <!-- ################################ Launch Applications ################################ -->
@@ -646,6 +641,11 @@
         <command>bash -c 'rofi -show drun -modes run -p "$(acpi -b | grep -oP \"[\d]+%\" | head -1)"'</command>
       </action>
     </keybind>
+    <keybind key="A-F2">
+      <action name="Execute">
+        <command>env ROFI_PLUGIN_PATH=/home/pham/.local/lib/rofi rofi -show json-dict -sort -sorting-method normal</command>
+      </action>
+    </keybind>
     <keybind key="W-n">
       <action name="Execute">
         <command>networkmanager_dmenu</command>
@@ -661,7 +661,11 @@
     </keybind>
     <keybind key="W-a">
       <action name="Execute">
-        <command>alacritty -e pulsemixer</command>
+        <command>
+          sh -c '
+            xdotool search --name "@Audio" windowactivate || alacritty --title @Audio -e pulsemixer;
+          '
+        </command>
       </action>
     </keybind>
     <keybind key="W-S-a">
