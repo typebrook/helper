@@ -60,17 +60,30 @@ shrink() {
   rm -f "$tmp"
 }
 
-# parse feed into TSV: id link title date creator {{{
+# parse feed into TSV: id link title date creator prev {{{
+# prev: ID of the previous (older) post in feed, '-' if none
 fetch "$FEED" >"$work/feed.xml"
 python3 -I - "$work/feed.xml" >"$work/items.tsv" <<'PY'
-import sys, re, xml.etree.ElementTree as ET
+import sys, re, email.utils, xml.etree.ElementTree as ET
 dc = '{http://purl.org/dc/elements/1.1/}'
+rows = []
 for item in ET.parse(sys.argv[1]).getroot().iter('item'):
     get = lambda tag: ' '.join((item.findtext(tag) or '').split())
     guid = get('guid')
     m = re.search(r'[?&]p=(\d+)', guid) or re.search(r'/(\d+)/?$', get('link'))
     pid = m.group(1) if m else guid
-    print('\t'.join([pid, get('link'), get('title'), get('pubDate'), get(dc + 'creator')]))
+    rows.append([pid, get('link'), get('title'), get('pubDate'), get(dc + 'creator')])
+def ts(row):
+    try:
+        return email.utils.parsedate_to_datetime(row[3]).timestamp()
+    except (TypeError, ValueError):
+        return 0
+order = sorted(range(len(rows)), key=lambda i: (ts(rows[i]), -i))  # oldest first
+prev = {}
+for a, b in zip(order, order[1:]):
+    prev[b] = rows[a][0]
+for i, row in enumerate(rows):
+    print('\t'.join(row + [prev.get(i, '-')]))
 PY
 # }}}
 # extract article content, rewrite <img> to cid: {{{
@@ -208,8 +221,8 @@ PY
 }
 # }}}
 # build and deliver one message {{{
-deliver() { # id link title date creator
-  local id=$1 link=$2 title=$3 date=$4 creator=$5
+deliver() { # id link title date creator prev
+  local id=$1 link=$2 title=$3 date=$4 creator=$5 prev=$6
   local dir=$work/$id; mkdir -p "$dir"
   fetch "$link" >"$dir/page.html" || return 1
   extract "$dir/page.html" "$link" "$title" "$creator" "$dir" "$date" || return 1
@@ -227,18 +240,18 @@ deliver() { # id link title date creator
     fi
   done <"$dir/images.tsv"
 
-  compose "$dir" "$id" "$link" "$title" "$date" \
+  compose "$dir" "$id" "$link" "$title" "$date" "$prev" \
     | smtp -s "$SMTP_SERVER" -F "$MAIL_FROM" "$MAIL_TO" || return 1
   echo "delivered: $id $title"
 }
 
 # print message: multipart/related with HTML body and cid: images
-compose() { # $1=dir $2=id $3=link $4=title $5=date
+compose() { # $1=dir $2=id $3=link $4=title $5=date $6=prev
 python3 -I - "$@" "$MAIL_FROM" "$MAIL_TO" <<'PY'
 import sys, os, email.utils
 from email.message import EmailMessage
 
-dir, pid, link, title, date, mfrom, mto = sys.argv[1:8]
+dir, pid, link, title, date, prev, mfrom, mto = sys.argv[1:9]
 try:
     date = email.utils.format_datetime(email.utils.parsedate_to_datetime(date))
 except (TypeError, ValueError):
@@ -249,6 +262,8 @@ m['To'] = mto
 m['Subject'] = title
 m['Date'] = date
 m['Message-ID'] = '<nippper-%s@nippper.com>' % pid
+if prev != '-':
+    m['In-Reply-To'] = '<nippper-%s@nippper.com>' % prev
 m['List-Id'] = 'nippper <nippper.com>'
 m['X-Original-URL'] = link
 with open(os.path.join(dir, 'body.html'), encoding='utf-8') as f:
@@ -270,7 +285,7 @@ old_copies() {
 }
 
 now=$(date +%s)
-while IFS=$'\t' read -r id link title date creator; do
+while IFS=$'\t' read -r id link title date creator prev; do
   [ "$ONLY" = '  ' ] || [[ $ONLY == *" $id "* ]] || continue
   old=()
   if grep -qxF "$id" "$SEEN"; then
@@ -281,7 +296,7 @@ while IFS=$'\t' read -r id link title date creator; do
      && [ $(( now - $(date +%s -d "$date") )) -gt 86400 ]; then
     echo "$id" >>"$SEEN"; continue
   fi
-  if deliver "$id" "$link" "$title" "$date" "$creator"; then
+  if deliver "$id" "$link" "$title" "$date" "$creator" "$prev"; then
     [ ${#old[@]} -eq 0 ] || rm -f -- "${old[@]}"
     grep -qxF "$id" "$SEEN" || echo "$id" >>"$SEEN"
   else
