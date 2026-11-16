@@ -167,14 +167,12 @@ bind index,pager,browser,attach \Cd half-down
 bind index,pager,browser,attach \Cf next-page
 bind index,pager,browser,attach \Cu half-up
 macro index,pager c '<change-folder>='
-bind index,pager <Return> sync-mailbox
 bind index,pager <Tab> next-new-then-unread
 bind index p parent-message
 bind index P print-message
 macro index q '<change-folder>?'
-macro index <Return> ":exec sync-mailbox\n" "Sync Mailbox"
 bind index R group-chat-reply
-macro index s '<tag-prefix><save-message>' 'Saved'
+macro index s '<tag-prefix><save-message><kill-line>=' 'Saved'
 macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
 bind index x tag-entry
