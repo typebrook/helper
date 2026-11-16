@@ -13,9 +13,10 @@ set -x
 
 SKILL=$HOME/helper/skills/mail
 LOGDIR=$HOME/.cache/mail-agent
+MODEL=$(grep -vE '^#' ~/.models | head -1)
 
-agent_claude() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model sonnet; }
-agent_pi() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" --mode json --model sonnet; }
+agent_claude() { ${DRY:-} claude -p "/mail $1" --session-id "$2" --dangerously-skip-permissions --output-format json --model "$MODEL"; }
+agent_pi() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" --mode json --model "$MODEL"; }
 
 # Command to resume a session, shown in the claim
 resume_claude() { echo "claude --resume $1"; }
@@ -34,11 +35,12 @@ if [ "${1:-}" = --run ]; then
   if claim_msg=$(notmuch search --output files id:"$claim_id"); then
     rm -f "$claim_msg"
   fi
-  ./usage.py "$id" --since "$since" <<<"$result"
+  #./usage.py "$id" --since "$since" <<<"$result"
+  jq . $result
   exit
 fi
 
-AGENT=claude DRY=
+AGENT=pi DRY=
 while getopts a:n opt; do
   case $opt in
     a) AGENT=$OPTARG ;;
@@ -57,6 +59,7 @@ cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 [ -n "$id" ] || { echo "mail-agent: no Message-ID" >&2; exit 1; }
 
 session=$(uuidgen)
+# Dry run with echo
 [ -n "$DRY" ] && { agent_$AGENT "$id" "$session"; exit; }
 
 # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
