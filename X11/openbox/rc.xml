@@ -775,6 +775,11 @@
         <command>~/helper/X11/rofi/rofi-pass</command>
       </action>
     </keybind>
+    <keybind key="A-F3">
+      <action name="Execute">
+        <command>rofi -show model -modes "model:/home/pham/helper/X11/rofi/toggle.agent"</command>
+      </action>
+    </keybind>
     <keybind key="W-3">
       <action name="Execute">
         <command>alacritty --title FLASHCARDS

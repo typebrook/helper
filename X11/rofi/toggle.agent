@@ -1,0 +1,43 @@
+#! /bin/bash
+#
+# rofi script mode: pick a model from ~/.models and uncomment it
+#   rofi -show agent -modes "agent:$PWD/toggle.agent"
+
+MODELS=~/.models
+
+if [ ! -f "$MODELS" ]; then
+  echo "File not found: $MODELS" >&2
+  exit 1
+fi
+
+# Entry name of each line, without leading hash and spaces
+_entries() {
+  sed -E 's/^[[:space:]]*#+[[:space:]]*//' "$MODELS"
+}
+
+# Give rofi available entries and exit
+if [ $# -eq 0 ]; then
+  echo -e "\0prompt\x1fModel"
+
+  # Highlight entries which are already uncommented
+  active="$(grep -nvE '^[[:space:]]*#' "$MODELS" | cut -d: -f1 | awk '{printf "%s%d", sep, $1-1; sep=","}')"
+  [ -n "$active" ] && echo -e "\0active\x1f$active"
+
+  _entries
+  exit 0
+fi
+
+# Uncomment the line whose entry name matches the selection, comment all others
+SELECTED="$1"
+_entries | grep -qxF -- "$SELECTED" || exit 0
+
+tmp="$(mktemp)"
+awk -v sel="$SELECTED" '{
+  name = $0
+  sub(/^[[:space:]]*#+[[:space:]]*/, "", name)
+  if (name == sel)                print name
+  else if (name == "")            print
+  else if ($0 ~ /^[[:space:]]*#/) print
+  else                            print "# " $0
+}' "$MODELS" >"$tmp" && cat "$tmp" >"$MODELS"
+rm -f "$tmp"
