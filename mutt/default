@@ -135,6 +135,7 @@ macro pager l "v/(html|zip)<Return>xq<Return>" "Open html file"
 set abort_unmodified = ask-no
 
 # Vim-style key binding, \C means Ctrl
+bind index,pager <Return> sync-mailbox
 macro attach e "<pipe-entry>vim -<Return>" "edit attachment with vim"
 bind attach g exit
 bind attach x view-mailcap
