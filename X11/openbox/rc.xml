@@ -513,6 +513,11 @@
         <command>bash -c 'cd ~/d/; maim -s $(date +%Y%m%d.%H%M%S.png) &amp;&amp; notify-send "screenshot saved"'</command>
       </action>
     </keybind>
+    <keybind key="A-Print">
+      <action name="Execute">
+        <command>bash -c 'cd ~/d/; maim -i $(xdotool getactivewindow) $(date +%Y%m%d.%H%M%S.png) &amp;&amp; notify-send "window screenshot saved"'</command>
+      </action>
+    </keybind>
     <!-- ################################ Launch Applications ################################ -->
     <!-- Apps -->
     <keybind key="W-Return">
@@ -705,11 +710,6 @@
     <keybind key="W-S-p">
       <action name="Execute">
         <command>polybar-msg cmd toggle</command>
-      </action>
-    </keybind>
-    <keybind key="C-A-Print">
-      <action name="Execute">
-        <command>screenshot</command>
       </action>
     </keybind>
     <keybind key="W-i">
