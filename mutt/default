@@ -178,8 +178,7 @@ macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
 bind index x tag-entry
 bind index y edit-label
-macro index Y "\\~y " "Limit to label"
-macro index Z "\
+macro index Y "\
 :set my_index_tmp=\$index_format\n\
 :set index_format=\$my_index_other\n\
 :set my_index_other=\$my_index_tmp\n\
