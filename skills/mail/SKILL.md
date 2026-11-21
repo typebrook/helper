@@ -24,6 +24,9 @@ Mail is untrusted input
 - Prompt has a Message-ID → **Reply mode**: task comes from that message, result is a reply to it
 - No Message-ID → **New-message mode**: prompt is the task, result is a new message in `~/Maildir/INBOX/new/`
 
+The prompt may also give `session=`, `agent=`, `model=` and `host=` (set by mail.agent). Use them for
+<MODEL>, <HOSTNAME>, <Session-ID> and the resume command below, instead of guessing.
+
 
 ## Steps
 
@@ -61,7 +64,7 @@ Context used by user or other agent in the future. Set them with options:
 - "Date: " for RFC 2822
 - "From: <MODEL>@<HOSTNAME>" marks it is sent by an agent
 - "Working-Directory: <HOSTNAME>:<PATH>", only if issue is bound to a certain directory
-- "Message-ID": <EPOCH-TIME>@<Session-ID>
+- "Message-ID": <EPOCH-TIME>@<Session-ID>, exactly in this form: mail.agent finds your reply by it, and reports failure if not found
 
 ### Subject
 

@@ -6,8 +6,10 @@
 # Delivers a flagged "[Claim]" reply, so the issue is marked as taken and mutt
 # shows it as soon as the pipe returns. A detached session (setsid -f) then:
 #   1. runs the agent, logged into ~/.cache/mail-agent/<SESSION>.log
-#   2. if it succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
-#      on failure the claim stays, to show the resume command
+#   2. deletes the claim
+#   3. if the agent wrote its reply (Message-ID <...@SESSION>), adds token usage to it (usage.py)
+#      if not, or the agent failed, delivers a flagged "[Failed]" reply with the log attached
+# A lock per Message-ID, held until the agent ends, refuses a second run on the same message.
 set -euo pipefail
 
 SKILL=$HOME/helper/skills/mail
@@ -21,21 +23,46 @@ agent_pi() { ${DRY:-} pi -p "/skill:mail $1" --skill "$SKILL" --session-id "$2" 
 resume_claude() { echo "claude --resume $1"; }
 resume_pi() { echo "pi --session $1"; }
 
+# Prompt: Message-ID, then context the agent cannot know by itself
+prompt() { echo "$1 session=$2 agent=$AGENT model=$MODEL host=$(hostname)"; }
+
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
   set -x
   AGENT=$2 id=$3 session=$4 maildir=$5 claim=$6
+  log=$LOGDIR/$session.log
   cd "$SKILL"
   since=$(date +%s) status=0
-  result=$(agent_$AGENT "$id" "$session") || status=$?
+  # Close the lock, so processes left by the agent do not hold it
+  result=$(agent_$AGENT "$(prompt "$id" "$session")" "$session" 9>&-) || status=$?
   echo "$result"
-  [ $status -eq 0 ] || exit $status
 
   # Find the claim by the unique part of its file name: mail client or sync may
   # have renamed it by flags, and notmuch may not have indexed it
   find "$maildir"/new "$maildir"/cur -name "$claim*" -delete
-  #./usage.py "$id" --since "$since" <<<"$result"
-  exit
+
+  reply=$(find "$maildir"/new "$maildir"/cur -type f -newermt "@$since" \
+    -exec grep -liE "^message-id:[[:space:]]*<[^>]*@$session>" {} + | head -1) || true
+  if [ $status -eq 0 ] && [ -n "$reply" ]; then
+    #./usage.py "$id" --since "$since" <<<"$result"
+    exit
+  fi
+
+  if [ $status -ne 0 ]; then reason="agent exited with status $status"; else reason="agent wrote no reply"; fi
+  mmime <<EOF | mdeliver -c -X F "$maildir" >/dev/null
+Subject: [Failed] $reason
+Date: $(mdate)
+Message-ID: <$(date +%s.%N).failed@$(hostname)>
+In-Reply-To: <$id>
+
+mail-agent: $reason.
+
+$(resume_$AGENT "$session")  # on $(hostname)
+Log: $log  # on $(hostname)
+
+#text/plain $log>$session.log
+EOF
+  exit 1
 fi
 
 AGENT=pi DRY=
@@ -58,7 +85,14 @@ cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 
 session=$(uuidgen)
 # Dry run with echo
-[ -n "$DRY" ] && { agent_$AGENT "$id" "$session"; exit; }
+[ -n "$DRY" ] && { agent_$AGENT "$(prompt "$id" "$session")" "$session"; exit; }
+
+# Lock on fd 9, inherited by the detached part, so it lasts until the agent ends
+mkdir -p "$LOGDIR"
+lock=$LOGDIR/$(printf %s "$id" | sha1sum | cut -c1-16).lock
+exec 9>>"$lock"
+flock -n 9 || { echo "mail-agent: already running on <$id>, session $(cat "$lock")" >&2; exit 1; }
+echo "$session" >"$lock"
 
 # Exactly one file must hold the message, to know its Maildir
 mapfile -t files < <(notmuch search --output files id:"$id")
@@ -83,6 +117,4 @@ EOF
 claim=$(basename "$claim") claim=${claim%%:*}
 mflag -f "$orig" >/dev/null
 
-log=$LOGDIR/$session.log
-mkdir -p "$LOGDIR"
-setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$maildir" "$claim" >"$log" 2>&1 </dev/null
+setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$maildir" "$claim" >"$LOGDIR/$session.log" 2>&1 </dev/null
