@@ -5,10 +5,12 @@
 #
 # Delivers a flagged "[Claim]" reply, so the issue is marked as taken and mutt
 # shows it as soon as the pipe returns. A detached session (setsid -f) then:
-#   1. runs the agent, logged into ~/.cache/mail-agent/<SESSION>.log
+#   1. runs the agent, logged into ~/.cache/mail-agent/<SESSION>.log, in the newest
+#      "Working-Directory: <HOST>:<PATH>" of the thread on this host, or in the skill directory
 #   2. deletes the claim
-#   3. if the agent wrote its reply (Message-ID <...@SESSION>), adds token usage to it (usage.py)
+#   3. if the agent wrote its reply (Message-ID <EPOCH@SESSION>), adds token usage to it (usage.py)
 #      if not, or the agent failed, delivers a flagged "[Failed]" reply with the log attached
+#   4. indexes new mail with notmuch and sends a desktop notification
 # A lock per Message-ID, held until the agent ends, refuses a second run on the same message.
 set -euo pipefail
 
@@ -26,25 +28,34 @@ resume_pi() { echo "pi --session $1"; }
 # Prompt: Message-ID, then context the agent cannot know by itself
 prompt() { echo "$1 session=$2 agent=$AGENT model=$MODEL host=$(hostname)"; }
 
+notify() { notify-send "$@" 2>/dev/null || true; }
+
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
   set -x
-  AGENT=$2 id=$3 session=$4 maildir=$5 claim=$6
+  AGENT=$2 id=$3 session=$4 maildir=$5 claim=$6 workdir=$7
   log=$LOGDIR/$session.log
-  cd "$SKILL"
+  notmuch new --quiet || true  # index the claim
+  cd "$workdir"
   since=$(date +%s) status=0
   # Close the lock, so processes left by the agent do not hold it
   result=$(agent_$AGENT "$(prompt "$id" "$session")" "$session" 9>&-) || status=$?
   echo "$result"
+  cd "$SKILL"
 
   # Find the claim by the unique part of its file name: mail client or sync may
   # have renamed it by flags, and notmuch may not have indexed it
   find "$maildir"/new "$maildir"/cur -name "$claim*" -delete
 
-  reply=$(find "$maildir"/new "$maildir"/cur -type f -newermt "@$since" \
-    -exec grep -liE "^message-id:[[:space:]]*<[^>]*@$session>" {} + | head -1) || true
+  # Claim and failure IDs start with a word, so only the agent's reply matches;
+  # mhdr unfolds the header, which mmime may have folded
+  reply=$(find "$maildir"/new "$maildir"/cur -type f -newermt "@$since" | while read -r f; do
+    mhdr -h message-id "$f" | grep -qE "^<[0-9][0-9.]*@$session>$" && { echo "$f"; break; }
+  done 2>/dev/null) || true
   if [ $status -eq 0 ] && [ -n "$reply" ]; then
     #./usage.py "$id" --since "$since" <<<"$result"
+    notmuch new --quiet || true
+    notify "mail-agent" "$(mhdr -d -h subject "$reply" || true)"
     exit
   fi
 
@@ -52,7 +63,7 @@ if [ "${1:-}" = --run ]; then
   mmime <<EOF | mdeliver -c -X F "$maildir" >/dev/null
 Subject: [Failed] $reason
 Date: $(mdate)
-Message-ID: <$(date +%s.%N).failed@$(hostname)>
+Message-ID: <failed.$(date +%s.%N)@$session>
 In-Reply-To: <$id>
 
 mail-agent: $reason.
@@ -62,6 +73,8 @@ Log: $log  # on $(hostname)
 
 #text/plain $log>$session.log
 EOF
+  notmuch new --quiet || true
+  notify -u critical "mail-agent" "[Failed] $reason"
   exit 1
 fi
 
@@ -104,12 +117,21 @@ fi
 orig=${files[0]}
 maildir=$(dirname "$(dirname "$orig")")
 
+# Working directory: the newest one in the thread, if it is on this host
+workdir=$SKILL
+wd=$(notmuch search --output files --sort newest-first "thread:{id:$id}" |
+  while read -r f; do mhdr -h working-directory "$f" && break; done 2>/dev/null) || true
+wd=${wd%%$'\n'*}
+if [ "${wd%%:*}" = "$(hostname)" ] && [ -d "${wd#*:}" ]; then
+  workdir=${wd#*:}
+fi
+
 # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
 cd "$SKILL"
 claim=$(mmime -r <<EOF | mdeliver -v -c -X F "$maildir"
 Subject: [Claim] $(resume_$AGENT "$session")  # on $(hostname)
 Date: $(mdate)
-Message-ID: <$(date +%s.%N).claim@$(hostname)>
+Message-ID: <claim.$(date +%s.%N)@$session>
 In-Reply-To: <$id>
 
 EOF
@@ -117,4 +139,4 @@ EOF
 claim=$(basename "$claim") claim=${claim%%:*}
 mflag -f "$orig" >/dev/null
 
-setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$maildir" "$claim" >"$LOGDIR/$session.log" 2>&1 </dev/null
+setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$maildir" "$claim" "$workdir" >"$LOGDIR/$session.log" 2>&1 </dev/null

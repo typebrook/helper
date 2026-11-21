@@ -84,4 +84,4 @@ Explain your work in ASD-STE100
 
 ## After Writing
 
-Use `mflag` to flag the new message, to let user know latest progress in mail client. In reply mode, also unflag the replied message
+Use `mflag` to flag the new message, to let user know latest progress in mail client. In reply mode, also unflag the replied message, unless prompt gives `session=` (mail.agent already did it)
