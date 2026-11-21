@@ -1,6 +1,6 @@
 #!/bin/bash
-# Pipe a raw message from mutt; hand its Message-ID to an agent (claude or pi) with the mail skill.
-# -a AGENT: claude (default) or pi
+# Pipe a raw message from mutt; hand its Message-ID to an agent (pi or claude) with the mail skill.
+# -a AGENT: pi (default) or claude
 # -n: only print the command, do not run the agent
 #
 # Delivers a flagged "[Claim]" reply, so the issue is marked as taken and mutt
@@ -9,7 +9,6 @@
 #   2. if it succeeds, deletes the claim and adds token usage to the agent's reply (usage.py)
 #      on failure the claim stays, to show the resume command
 set -euo pipefail
-set -x
 
 SKILL=$HOME/helper/skills/mail
 LOGDIR=$HOME/.cache/mail-agent
@@ -24,19 +23,18 @@ resume_pi() { echo "pi --session $1"; }
 
 # Detached part, re-executed by the part below
 if [ "${1:-}" = --run ]; then
-  AGENT=$2 id=$3 session=$4 claim_id=$5
+  set -x
+  AGENT=$2 id=$3 session=$4 maildir=$5 claim=$6
   cd "$SKILL"
   since=$(date +%s) status=0
   result=$(agent_$AGENT "$id" "$session") || status=$?
   echo "$result"
   [ $status -eq 0 ] || exit $status
 
-  # Resolve the claim again: mail client or sync may have renamed it by flags
-  if claim_msg=$(notmuch search --output files id:"$claim_id"); then
-    rm -f "$claim_msg"
-  fi
+  # Find the claim by the unique part of its file name: mail client or sync may
+  # have renamed it by flags, and notmuch may not have indexed it
+  find "$maildir"/new "$maildir"/cur -name "$claim*" -delete
   #./usage.py "$id" --since "$since" <<<"$result"
-  jq . $result
   exit
 fi
 
@@ -50,11 +48,11 @@ while getopts a:n opt; do
 done
 case $AGENT in
   claude|pi) ;;
-  *) echo "mail-agent: unknown agent: $AGENT (claude or pi)" >&2; exit 2 ;;
+  *) echo "mail-agent: unknown agent: $AGENT (pi or claude)" >&2; exit 2 ;;
 esac
 
 # Message-ID from stdin (handles folded headers and any capitalization)
-id=$(sed -En '/^Message-I[dD]/{p;n;/^ /{p};q}' | tr -d '[<> \n]' | cut -d: -f2)
+id=$(sed -En '/^$/q; /^message-id:/I{p;n;/^[ \t]/p;q}' | tr -d '<> \t\n' | sed 's/^[^:]*://')
 cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 [ -n "$id" ] || { echo "mail-agent: no Message-ID" >&2; exit 1; }
 
@@ -62,19 +60,29 @@ session=$(uuidgen)
 # Dry run with echo
 [ -n "$DRY" ] && { agent_$AGENT "$id" "$session"; exit; }
 
+# Exactly one file must hold the message, to know its Maildir
+mapfile -t files < <(notmuch search --output files id:"$id")
+if [ ${#files[@]} -ne 1 ]; then
+  echo "mail-agent: ${#files[@]} files with Message-ID <$id>, need exactly 1" >&2
+  printf '  %s\n' "${files[@]}" >&2
+  exit 1
+fi
+orig=${files[0]}
+maildir=$(dirname "$(dirname "$orig")")
+
 # Claim: flagged reply in the original's Maildir; the flag moves from original to claim
 cd "$SKILL"
-orig=$(notmuch search --output files  id:"$id")
-claim_id=$(date +%s.%N).claim@$(hostname)
-mmime -r <<EOF | mdeliver -c -X F "$(dirname "$(dirname "$orig")")" >/dev/null
+claim=$(mmime -r <<EOF | mdeliver -v -c -X F "$maildir"
 Subject: [Claim] $(resume_$AGENT "$session")  # on $(hostname)
 Date: $(mdate)
-Message-ID: <$claim_id>
+Message-ID: <$(date +%s.%N).claim@$(hostname)>
 In-Reply-To: <$id>
 
 EOF
+)
+claim=$(basename "$claim") claim=${claim%%:*}
 mflag -f "$orig" >/dev/null
 
 log=$LOGDIR/$session.log
 mkdir -p "$LOGDIR"
-setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$claim_id" >"$log" 2>&1 </dev/null
+setsid -f "$(realpath "$0")" --run "$AGENT" "$id" "$session" "$maildir" "$claim" >"$log" 2>&1 </dev/null
