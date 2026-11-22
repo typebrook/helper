@@ -12,6 +12,7 @@
 #      if not, or the agent failed, delivers a flagged "[Failed]" reply with the log attached
 #   4. indexes new mail with notmuch and sends a desktop notification
 # A lock per Message-ID, held until the agent ends, refuses a second run on the same message.
+# Piping the claim itself, once unflagged, cancels: it stops the session, deletes the claim and flags the original again.
 set -euo pipefail
 
 SKILL=$HOME/helper/skills/mail
@@ -95,6 +96,35 @@ esac
 id=$(sed -En '/^$/q; /^message-id:/I{p;n;/^[ \t]/p;q}' | tr -d '<> \t\n' | sed 's/^[^:]*://')
 cat >/dev/null  # drain the rest, so mutt does not get SIGPIPE
 [ -n "$id" ] || { echo "mail-agent: no Message-ID" >&2; exit 1; }
+
+# An unflagged claim cancels its session: stop the agent, remove the claim, flag the original again
+if [[ $id =~ ^claim\.[0-9.]+@(.+)$ ]]; then
+  session=${BASH_REMATCH[1]}
+  notmuch new --quiet || true  # the claim may not be indexed yet
+  mapfile -t files < <(notmuch search --output files id:"$id")
+  # Flagged claims (as delivered) are left alone; Maildir flags follow ":2," in the file name
+  for f in "${files[@]}"; do
+    [[ ${f##*/} == *:2,*F* ]] && { echo "mail-agent: claim is flagged, unflag it to cancel" >&2; exit; }
+  done
+  [ ${#files[@]} -gt 0 ] || { echo "mail-agent: claim <$id> not found" >&2; exit; }
+
+  # The detached part leads its own session (setsid), which holds the agent and its children
+  for pid in $(pgrep -f -- " --run [a-z]+ .* $session " || true); do
+    ${DRY:-} pkill -TERM -s "$pid" && echo "mail-agent: cancelled" >>"$LOGDIR/$session.log"
+  done
+  [ -n "${pid:-}" ] || echo "mail-agent: session $session is not running" >&2
+
+  for f in "${files[@]}"; do
+    irt=$(mhdr -h in-reply-to "$f" 2>/dev/null | tr -d '<> \t') || true
+    [ -n "$irt" ] && notmuch search --output files id:"$irt" | while read -r o; do
+      ${DRY:-} mflag -F "$o" >/dev/null
+    done
+    ${DRY:-} rm -f "$f"
+  done
+  [ -n "$DRY" ] || notmuch new --quiet || true
+  notify "mail-agent" "Cancelled session $session"
+  exit
+fi
 
 session=$(uuidgen)
 # Dry run with echo

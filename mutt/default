@@ -205,6 +205,7 @@ macro index A \
 #macro pager U "<pipe-message>less<enter>" "CHECK"
 # Hand current message to claude with mail skill, in background
 macro index,pager \ea "\
+<sync-mailbox>\
 :set my_tmp_pipe_decode=\$pipe_decode\n\
 :unset pipe_decode wait_key\n\
 <pipe-message>mail.agent\n\
