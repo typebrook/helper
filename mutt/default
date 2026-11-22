@@ -136,14 +136,6 @@ auto_view text/html
 macro pager l "v/text.plain<Return>/(html|zip)<Return>xq<Return>" "Open html file"
 set abort_unmodified = ask-no
 
-# Vim-style key binding, \C means Ctrl
-bind index,pager <Return> sync-mailbox
-macro attach e "<pipe-entry>vim -<Return>" "edit attachment with vim"
-bind attach g exit
-bind attach x view-mailcap
-macro browser \Cn "q\cn"
-macro browser \Cp "q\cp"
-bind browser h descend-directory
 macro generic,index,pager \Cr ":source ~/.muttrc<Return>" "Reload mutt's configuration file"
 macro index *a "Tall\n" "Select All"
 bind index } bottom-page
@@ -153,9 +145,9 @@ bind index,browser g noop
 bind index,browser l select-entry
 macro index,browser,pager i ':toggle sidebar_new_mail_only<enter>'
 macro index \Ca "Tall\n" "Select All"
+bind index \Ce next-line
 bind index \Cj next-entry
 bind index \Ck previous-entry
-bind index \Ce next-line
 bind index \Cy previous-line
 macro index d '<tag-prefix><delete-message><undelete-pattern>~D ~F<enter>' 'Delete (except flagged)'
 macro index h "\\all\n" "All messages"
@@ -170,6 +162,7 @@ bind index,pager,browser,attach \Cd half-down
 bind index,pager,browser,attach \Cf next-page
 bind index,pager,browser,attach \Cu half-up
 macro index,pager c '<change-folder>='
+bind index,pager <Return> sync-mailbox
 bind index,pager <Tab> next-new-then-unread
 bind index p parent-message
 bind index P print-message
@@ -179,7 +172,18 @@ macro index s '<tag-prefix><save-message><kill-line>=' 'Saved'
 macro index W '<tag-prefix><clear-flag>' 'Clear flag'
 macro index w '<tag-prefix><set-flag>' 'Set flag'
 bind index x tag-entry
-bind index y edit-label
+macro attach e "<pipe-entry>vim -<Return>" "edit attachment with vim"
+bind attach g exit
+bind attach x view-mailcap
+macro browser \Cn "q\cn"
+macro browser \Cp "q\cp"
+bind browser h descend-directory
+# Edit label, then sync. Keys after <edit-label> in a macro would be eaten by
+# the Label: prompt, so make Return in that prompt submit (\n), restore
+# itself, and run sync-mailbox
+macro index y "\
+:macro editor \\r \"\\n:bind editor \\\\r noop\\n:exec sync-mailbox\\n\"\n\
+<edit-label>" "Edit label, then sync mailbox"
 macro index Y "\
 :set my_index_tmp=\$index_format\n\
 :set index_format=\$my_index_other\n\
