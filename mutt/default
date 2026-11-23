@@ -39,6 +39,7 @@ set markers = no # Remove '+' for long links with limited terminal width
 set text_flowed = yes
 unignore in-reply-to: list-archive:
 hdr_order date from to cc in-reply-to list-archive subject:
+set sort_aux = last-date-sent
 
 # Index format
 # Sender / recipient {{{
@@ -147,7 +148,17 @@ bind index,browser G last-entry
 bind index,browser g noop
 bind index,browser l select-entry
 macro index,browser,pager i ':toggle sidebar_new_mail_only<enter>'
-macro index \Ca "Tall\n" "Select All"
+
+# Toggle select all: run the stored action, then swap it with the opposite one
+# macro index \Ca "Tall\n" "Select All"
+set my_tagall_cmd = '<tag-pattern>~A<enter>'
+set my_tagall_alt = '<untag-pattern>~A<enter>'
+macro index \Ca "\
+:set my_tagall_tmp=\$my_tagall_cmd\n\
+:set my_tagall_cmd=\$my_tagall_alt\n\
+:set my_tagall_alt=\$my_tagall_tmp\n\
+:push \$my_tagall_tmp\n" "Toggle select all"
+
 bind index \Ce next-line
 bind index \Cj next-entry
 bind index \Ck previous-entry
