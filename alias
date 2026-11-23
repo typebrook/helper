@@ -21,7 +21,7 @@ alias zsh.sourced='zsh -o SOURCE_TRACE'
 # }}}
 # CUSTOM HELPER {{{
 
-cdh() { IFS=/; cd ~/helper/"$*"; IFS=' '; }
+cdh() { local IFS=/; cd ~/helper/"$*"; }
 alias chh="tig -C $HELPER_DIR status"
 alias profile='$EDITOR ~/helper/profile'
 
@@ -34,8 +34,9 @@ utf82big5() {
   iconv -t BIG-5 -f UTF-8
 }
 urldecode() {
-  encoded="$(cat)"
-  echo ${encoded//\%/\\x}
+  local encoded="$(cat)"
+  encoded="${encoded//+/ }"
+  printf '%b\n' "${encoded//\%/\\x}"
 }
 urlencode() {
   perl -lpe 's/([^A-Za-z0-9.\/:])/sprintf("%%%02X", ord($1))/seg'
@@ -57,8 +58,9 @@ alias vps.test='curl -sL https://yabs.sh | bash'
 # Nginx{{{
 alias vgx='sudo vim /etc/nginx/sites-enabled/vps -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx"'
 alias ng{.,''}conf='sudo vim /etc/nginx/nginx.conf -c "autocmd BufWritePost * !nginx -t && sudo systemctl reload nginx" -c "set shiftwidth=4"'
-ng.log() { setterm --linewrap off; tail -n ${1:-30} -f /var/log/nginx/access.log; setterm --linewrap on; }
-alias ng.error='setterm --linewrap off; tail -f /var/log/nginx/error.log; setterm --linewrap on'
+# Subshell traps Ctrl-C so linewrap is restored afterwards
+ng.log() { setterm --linewrap off; (trap 'exit 0' INT; tail -n ${1:-30} -f /var/log/nginx/access.log); setterm --linewrap on; }
+ng.error() { setterm --linewrap off; (trap 'exit 0' INT; tail -f /var/log/nginx/error.log); setterm --linewrap on; }
 alias cdngx='cd /etc/nginx'
 
 # }}}
@@ -75,67 +77,29 @@ alias www.rss='make -f ~/site/www/Makefile rss'
 alias www{.,''}conf='vim ~/site/www/scripts/build.sh'
 alias cdwww='cd ~/site/www'
 cds() { cd ~/site/${*// //}; }
-vp() {
-  [[ $HOST = vultr ]] || PREFIX='ssh -qt vps'
-
-  filename="${1%.md}.md"
-  post=$(eval $PREFIX find ~/blog/content -name $filename | head -1 | sed 's/\r//')
-
-  if [ -z "$post" ]; then
-    echo "sh -c 'cd ~/blog && hugo new posts/$filename'" | eval ${PREFIX}
-    post="~/blog/content/posts/$filename"
-  fi
-
-  shift
-  if [[ $HOST = vultr ]]; then
-    vim $@ "$post"
-  else
-    # Copy from vps
-    tmpfile=$(mktemp --suffix .md)
-    scp vps:"$post" $tmpfile
-
-    # Edit locally
-    vim $tmpfile --cmd "autocmd BufWritePost $tmpfile silent! :!setsid scp % vps:$post &"  && \
-    cat $tmpfile | ssh vps "cd ~/blog && cat >$post && git add $post && git commit -m 'Update with vim'" && \
-    rm $tmpfile
-  fi
-}
-# Swap protocol for every git remotes, for example:
-#   git@gitlab.com:me/repo ->
-#   https://gitlab.com/me/repo
-function git.swapprotocol {
-  login=${1:-git}
-  extra=''
-
-# For each remote
-  git remote -v | tr '\t' ' ' | while read remote url etc; do
-    # Set fetch/push URL seperately
-    [[ $etc =~ push ]] && extra='--push' || extra=''
-
-    if [[ $url =~ :[^/] ]]; then
-      # git@ -> https://
-      <<<$url sed -E 's#^.+@(.+):(.+)$#https://\1/\2#' | xargs git remote set-url ${extra} ${remote}
-    elif [[ $url =~ ^http ]]; then
-      # http[s]:// -> git@
-      <<<$url sed -E "s#^https?://([^/]+)/(.+)\$#${login}@\1:\2#" | xargs git remote set-url ${extra} ${remote}
-    fi
-  done
-
-  # Print current remotes
-  git remote -v
-}
 # }}}
 # UNIX {{{
 
 alias p='parallel'
+# Refuse recursive removal of anything listed in ~/helper/.unremovable
 rm() {
-  target=${@: -1}
-  list=~/helper/.unremovable
-  if [[ $@ =~ '-rf' ]] && [ -f "${list}" ]; then
-    grep target $list && echo target unremovable && exit 1
+  local list=~/helper/.unremovable arg name recursive=''
+  for arg in "$@"; do
+    [[ $arg == --recursive || ( $arg == -[!-]* && $arg == *[rR]* ) ]] && recursive=1
+  done
+
+  if [ -n "$recursive" ] && [ -f "$list" ]; then
+    for arg in "$@"; do
+      [[ $arg == -* ]] && continue
+      arg="${arg%/}"; name="${arg##*/}"
+      if grep -Fxq -e "$arg" -e "$name" "$list"; then
+        echo "$arg is unremovable (see $list)" >&2
+        return 1
+      fi
+    done
   fi
 
-  /bin/rm $@
+  command rm "$@"
 }
 config(){ cd ~/.config/$1; }
 alias cdapp='cd /usr/share/applications/'
@@ -194,15 +158,12 @@ alias unlock='sudo chattr -i'
 alias chx='chmod +x'
 alias chr='chmod +r'
 alias name='find . -iname'
-trash() { mv $@ /tmp/ 2>/dev/null || rm -rf $@; }
 rmrf() { rm -rf $@; }
 alias df{,h}='df -h'
 bak() { cp $1 $1.bak; }
 cdp() {
-  [[ ! -d $1 && ! -z "$1" ]] && \
-  mkdir -p "$1" && \
-  cd ~/public/"$1" || \
-  cd ~/public
+  [ -n "$1" ] && mkdir -p ~/public/"$1"
+  cd ~/public/"$1"
 }
 file.sort() {
   find $1 -type f -print0 |\
@@ -276,8 +237,6 @@ imap.save() {
       -T $2
 }
 imap.save_attachment() {
-  #TEMPFILE=$(mktemp)
-  trap 'rm $TEMPFILE' EXIT
   mail -a $1 -Sexpandaddr /dev/stdout | \
   curl imaps://mail.topo.tw/INBOX \
       --user pham:`pass mail/pham@mail.topo.tw` \
@@ -306,13 +265,16 @@ alias cdssh='cd ~/.ssh'
 alias ptt='ssh bbsu@ptt.cc'
 alias sshv='ssh -t vps'
 ssh.tar() {
-  prompt-vim "FOLDER=foo TARGET=~/Downloads tar cf - $FOLDER | pv -s $(du -sb $FOLDER | cut -f1) | ssh vps \"cd $TARGET; tar xf -\" \nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+  # Single quotes: variables are expanded only when the edited command runs
+  local template
+  template='FOLDER=foo TARGET=~/Downloads; tar cf - $FOLDER | pv -s $(du -sb $FOLDER | cut -f1) | ssh vps "cd $TARGET; tar xf -"'
+  template+="\nssh vps 'tar czf - --directory=/working/path target' | tar xvzf -"
+  prompt-vim "$template"
 }
 ssh.up() {
-  set -o pipefail
-  filename=${3:-`basename $1`}
-  # Upload to absolution path
-  if [[ $2 =~ '^/' ]]; then
+  local filename=${3:-`basename $1`} folder
+  # Upload to absolute path
+  if [[ $2 == /* ]]; then
     folder=${2%/}
     cat $1 | ssh vps "mkdir -p $folder; cat >${folder}/${filename}" || return 1
     echo Uploaded to ${folder}/${filename}
@@ -405,7 +367,7 @@ vll() { vim -c 'Telescope oldfiles'; }
 alias vS="vim -S /tmp/vim.session"
 alias cdv='cd ~/.config/nvim'
 vs() { which $1 && vim $(which $1); }
-[ ${0##*/} = 'zsh' ] && compdef vs=which
+[ -n "$ZSH_VERSION" ] && whence compdef >/dev/null && compdef vs=which
 alias vim.dos2unix="vim '+set ff=unix' '+x'"
 vvv() {
   while true; do
@@ -428,7 +390,6 @@ cde() { cd /etc/$@; }
 alias cdetc='cde'
 alias cdpu='cd ~/public'
 alias cdd='cd ~/Downloads'
-alias cdtrash='cd ~/.local/share/Trash'
 # }}}
 # GIT: config {{{
 alias git.config="$EDITOR ~/.gitconfig"
@@ -453,54 +414,43 @@ alias git.buggy-files='git log -i -E --grep="fix|bug|broken" --name-only --forma
 alias git.monthly-commits="git log --format='%ad' --date=format:'%Y-%m' | sort | uniq -c"
 alias git.hotfix='git log --oneline --since="1 year ago" | grep -iE "revert|hotfix|emergency|rollback"'
 
+# Swap protocol for every git remotes, for example:
+#   git@gitlab.com:me/repo ->
+#   https://gitlab.com/me/repo
+function git.swapprotocol {
+  login=${1:-git}
+  extra=''
+
+# For each remote
+  git remote -v | tr '\t' ' ' | while read remote url etc; do
+    # Set fetch/push URL seperately
+    [[ $etc =~ push ]] && extra='--push' || extra=''
+
+    if [[ $url =~ :[^/] ]]; then
+      # git@ -> https://
+      <<<$url sed -E 's#^.+@(.+):(.+)$#https://\1/\2#' | xargs git remote set-url ${extra} ${remote}
+    elif [[ $url =~ ^http ]]; then
+      # http[s]:// -> git@
+      <<<$url sed -E "s#^https?://([^/]+)/(.+)\$#${login}@\1:\2#" | xargs git remote set-url ${extra} ${remote}
+    fi
+  done
+
+  # Print current remotes
+  git remote -v
+}
+
 # }}}
 # GIT: TIG {{{
 alias t='tig'
 alias ts='tig status'
 alias tig{.,''}rc="$EDITOR ~/.tigrc"
 alias ta='tig --all'
-upload_tig() {
-  github-release.sh \
-    github_api_token=$GITHUB_API_TOKEN \
-    repo=typebrook/tig \
-    tag=LATEST \
-    type=asset \
-    filename=$(which tig)
-    action=overwrite
-}
-# }}}
-# GIT: GIST {{{
-alias g='gist'
-alias gl='gist last'
-unalias gg &>/dev/null
-alias gg='gist grep'
-
 # }}}
 # GIT: GITHUB {{{
-export GITHUB_API='https://api.github.com'
-export GITHUB_API_TOKEN="~/.ssh/tokens/github 2>/dev/null)"
-alias hub="GITHUB_TOKEN=$GITHUB_API_TOKEN hub"
-github() {
-  xdg-open https://github.com/$1/$2
-}
-github_api() {
-  curl --header "Authorization: token $GITHUB_API_TOKEN" $GITHUB_API/$@
-}
 gcg() {
   local user=$1; local repo=$2; shift; shift
   git clone git@github.com:$user/$repo.git $@ && cd $(basename $repo)
 }
-release() {
-  command="github-release.sh\n  github_api_token=$GITHUB_API_TOKEN\n  repo=typebrook/mapstew\n  tag=daily-taiwan-pbf\n  type=asset\n  filename=taiwan-latest.osm.pbf\n  action=upload|overwrite|rename|delete\n  extra="
-  prompt "$command"
-}
-github.asset() {
-  curl -LO https://github.com/$1/$2/releases/download/$3/$4
-}
-github.raw() {
-  curl -O https://raw.githubusercontent.com/$1/$2/$3
-}
-
 # }}}
 # GIS {{{
 alias oo='ogr2ogr'
@@ -512,15 +462,6 @@ TAIPEI_BBOX='121.346,24.926,121.676,25.209'
 TAIPEI_BBOX_V='24.926,121.346,25.209,121.676'
 pbf() {
   protoc --decode_raw
-}
-mvt.decode() {
-  if [[ ! -t 0 ]]; then
-    cat >$tmp
-    tmp=$(mktemp)
-  else
-    tmp=$1
-  fi
-  mvt_decode.py $tmp | tr \' \" | sed 's/True/true/g; s/False/false/g'
 }
 wrap2geojson() { jq -s '{ type: "FeatureCollection", features: . }'; }
 # }}}
@@ -614,7 +555,7 @@ alias cdpass='cd ~/.password-store'
 alias pgn='pass generate --in-place --clip'
 alias pgc='pass generate --clip'
 words() {
-    cat /usr/share/dict/usa | grep -E "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
+    cat /usr/share/dict/words | grep -E "^[a-z]{4,8}$" | shuf | head -40 | xargs -n${1:-2}
 }
 
 # }}}
@@ -640,7 +581,7 @@ img.vertical() {
 
 # Concatenate image horizontally
 img.horizontal() {
-  if [ ! $# = 0 ]; then
+  if [ $# = 0 ]; then
     echo 'Usage: image.horizontal input1.jpg input2.jpg'
     return 0
   fi
@@ -670,16 +611,16 @@ img.resize() {
 
 # Create an image contains text
 img.text() {
-  convert \
+  magick \
     -size 230x130 \
     -background lightblue \
     -font Noto-Sans-Bold \
     -pointsize 25 \
     -fill black \
     -gravity Center \
-    caption:"${1:=foo}" \
+    caption:"${1:-foo}" \
     -flatten \
-    "${2:=foo}".jpg
+    "${2:-foo}".jpg
 }
 # }}}
 # Misc{{{
