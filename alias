@@ -731,6 +731,7 @@ app() {
 }
 alias cdb='cd ~/log/public'
 alias cdc='cd ~/.claude'
+alias mime.edit='vim ~/.config/mimeapps.list'
 # }}}
 
 # vim:fdm=marker fdl=0
